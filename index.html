@@ -1,157 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storage Analytics</title>
-
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storage Analytics</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
 <header class="navbar">
-
-    <div class="logo">
-        <h1>STORAGE ANALYTICS</h1>
-        <p>FV + BESS Analytics Platform</p>
+  <div class="brand">
+    <div class="logo-icon">▥</div>
+    <div>
+      <h1>STORAGE ANALYTICS</h1>
+      <p>FV + BESS Analytics Platform</p>
     </div>
+  </div>
 
-    <nav>
-        <a href="#">Inicio</a>
-        <a href="#">Metodología</a>
-        <a href="#">Escenarios</a>
-        <a href="#">Resultados</a>
-        <a href="#">Dashboard</a>
-        <a href="#">Contacto</a>
-    </nav>
-
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#">Proyecto</a>
+    <a href="#">Metodología</a>
+    <a href="#">Resultados</a>
+    <a href="#">Dashboard</a>
+    <a href="#">Contacto</a>
+  </nav>
 </header>
 
 <section class="hero">
+  <div class="hero-text">
+    <h2>Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación</h2>
+    <p>
+      Plataforma desarrollada en el marco de la Actividad de Graduación del Magíster en Ingeniería de la Energía UC.
+    </p>
+  </div>
 
-    <div>
-        <h2>
-            Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación
-        </h2>
-
-        <p>
-            Plataforma asociada a la Actividad de Graduación del Magíster en Ingeniería de la Energía UC.
-        </p>
-
-        <div class="tags">
-            <span>María Elena</span>
-            <span>Mirage 220</span>
-            <span>Price-Taker</span>
-            <span>SAM / PySAM</span>
-        </div>
-    </div>
-
-    <div class="question-card">
-        <h3>Pregunta de investigación</h3>
-
-        <p>
-            ¿Cuál es el costo real de degradación de un sistema BESS cuando se utiliza para recuperar energía fotovoltaica vertida y realizar arbitraje energético bajo condiciones reales del mercado eléctrico chileno?
-        </p>
-    </div>
-
+  <div class="hero-tags">
+    <span>📍 María Elena</span>
+    <span>⚡ Mirage 220</span>
+    <span>📈 Price-Taker</span>
+    <span>⚙️ SAM / PySAM</span>
+  </div>
 </section>
 
-<main class="container">
+<main>
 
-    <h2 class="section-title">
-        Resultados principales
-    </h2>
+<section class="project">
+  <div class="project-text">
+    <h2>Descripción del Proyecto</h2>
+    <p>
+      El proyecto cuantifica el costo real de degradación de un sistema BESS cuando se utiliza para recuperar energía fotovoltaica restringida y realizar arbitraje energético bajo condiciones reales del mercado eléctrico chileno.
+    </p>
+    <p>
+      A través de simulaciones año a año y un modelo de degradación, se evalúan ingresos, ciclos, SOH y costo nivelado de degradación en distintos escenarios de operación.
+    </p>
+  </div>
 
-    <section class="kpis">
+  <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80" alt="Planta fotovoltaica">
+</section>
 
-        <div class="card kpi">
-            <h4>Energía recuperada</h4>
-            <h3>122 GWh</h3>
-        </div>
+<section class="methodology">
+  <h2>Metodología</h2>
+  <p class="subtitle">La evaluación se estructura en cinco etapas principales.</p>
 
-        <div class="card kpi">
-            <h4>Ingresos</h4>
-            <h3>18,7 MM USD</h3>
-        </div>
+  <div class="steps">
+    <div class="step">
+      <div class="circle">1</div>
+      <h3>Definición de escenarios</h3>
+      <p>Se definen escenarios de operación: curtailment, arbitraje y mixto.</p>
+    </div>
 
-        <div class="card kpi">
-            <h4>Costo degradación</h4>
-            <h3>3,2 MM USD</h3>
-        </div>
+    <div class="step">
+      <div class="circle">2</div>
+      <h3>Simulación energética</h3>
+      <p>Modelación en SAM / PySAM para obtener generación FV y operación BESS.</p>
+    </div>
 
-        <div class="card kpi">
-            <h4>USD/MWh</h4>
-            <h3>26,2</h3>
-        </div>
+    <div class="step">
+      <div class="circle">3</div>
+      <h3>Modelo de degradación</h3>
+      <p>Cálculo año a año del SOH usando un modelo validado.</p>
+    </div>
 
-        <div class="card kpi">
-            <h4>Ciclos</h4>
-            <h3>478</h3>
-        </div>
+    <div class="step">
+      <div class="circle">4</div>
+      <h3>Análisis económico</h3>
+      <p>Cálculo de ingresos, costos de degradación y métricas financieras.</p>
+    </div>
 
-        <div class="card kpi">
-            <h4>SOH Final</h4>
-            <h3>82,6%</h3>
-        </div>
+    <div class="step">
+      <div class="circle">5</div>
+      <h3>Comparación de resultados</h3>
+      <p>Comparación de escenarios y sensibilidad de parámetros clave.</p>
+    </div>
+  </div>
+</section>
 
-    </section>
+<section class="benefits">
+  <h2>¿Qué permite esta plataforma?</h2>
 
-    <section class="grid">
-
-        <div class="card">
-            <h3>Comparación de escenarios</h3>
-
-            <table>
-                <tr>
-                    <th>Escenario</th>
-                    <th>Ingreso</th>
-                    <th>SOH</th>
-                </tr>
-
-                <tr>
-                    <td>Curtailment</td>
-                    <td>10,2</td>
-                    <td>88,9%</td>
-                </tr>
-
-                <tr>
-                    <td>Arbitraje</td>
-                    <td>11,6</td>
-                    <td>78,3%</td>
-                </tr>
-
-                <tr>
-                    <td>Mixto</td>
-                    <td>15,5</td>
-                    <td>82,6%</td>
-                </tr>
-            </table>
-
-        </div>
-
-        <div class="card">
-            <h3>Ingresos netos</h3>
-            <div class="placeholder-chart">
-                Gráfico Plotly
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>Evolución SOH</h3>
-            <div class="placeholder-chart">
-                Gráfico Plotly
-            </div>
-        </div>
-
-    </section>
+  <div class="benefit-grid">
+    <div>📋 Evaluar estrategias operativas</div>
+    <div>💰 Cuantificar el costo real de degradación</div>
+    <div>📊 Apoyar decisiones de inversión BESS</div>
+    <div>📈 Analizar sensibilidad en condiciones reales</div>
+  </div>
+</section>
 
 </main>
 
 <footer>
-
-    <p>Storage Analytics © 2026</p>
-
+  <p>Storage Analytics © 2026</p>
+  <p>Magíster en Ingeniería de la Energía UC</p>
 </footer>
 
 </body>
