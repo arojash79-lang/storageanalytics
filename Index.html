@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storage Analytics</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">▥</div>
+    <div>
+      <h1>STORAGE ANALYTICS</h1>
+      <p>BESS + FV INTELLIGENCE</p>
+    </div>
+  </div>
+
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#">Metodología</a>
+    <a href="#">Escenarios</a>
+    <a href="#">Resultados</a>
+    <a href="#">Dashboards</a>
+    <a href="#">Documentación</a>
+    <a href="#">Sobre el proyecto</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h2>Costo real de degradación de sistemas BESS bajo condiciones reales del SEN de Chile</h2>
+    <p>
+      Evaluamos estrategias de operación de un sistema de almacenamiento asociado a una planta fotovoltaica utility-scale utilizando datos históricos reales de curtailment y precios de la barra Mirage 220.
+    </p>
+
+    <div class="hero-tags">
+      <span>📍 María Elena, Chile</span>
+      <span>📅 Histórico 2021–2025</span>
+      <span>📈 Precios Mirage 220</span>
+      <span>⚡ Enfoque Price-Taker</span>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h3>Pregunta central</h3>
+    <p>
+      “¿Cuál es el costo real de degradación de un sistema BESS cuando se utiliza para recuperar energía fotovoltaica vertida y realizar arbitraje energético bajo condiciones reales del mercado eléctrico chileno?”
+    </p>
+  </div>
+</section>
+
+<main class="container">
+
+  <h2 class="section-title">Resultados principales</h2>
+
+  <section class="kpis">
+    <div class="card kpi green">
+      <span>⚡</span>
+      <p>Energía recuperada anual</p>
+      <h3>122,4 GWh</h3>
+      <small>Promedio escenario mixto</small>
+    </div>
+
+    <div class="card kpi blue">
+      <span>💰</span>
+      <p>Ingreso bruto anual</p>
+      <h3>18,7 MM USD</h3>
+      <small>Promedio escenario mixto</small>
+    </div>
+
+    <div class="card kpi orange">
+      <span>📉</span>
+      <p>Costo de degradación anual</p>
+      <h3>3,21 MM USD</h3>
+      <small>Promedio escenario mixto</small>
+    </div>
+
+    <div class="card kpi purple">
+      <span>🔋</span>
+      <p>Costo de degradación</p>
+      <h3>26,2 USD/MWh</h3>
+      <small>Descargado</small>
+    </div>
+
+    <div class="card kpi teal">
+      <span>🔄</span>
+      <p>Ciclos equivalentes anuales</p>
+      <h3>478</h3>
+      <small>Promedio escenario mixto</small>
+    </div>
+
+    <div class="card kpi indigo">
+      <span>♡</span>
+      <p>SOH al final del período</p>
+      <h3>82,6 %</h3>
+      <small>Capacidad remanente</small>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card table-card">
+      <h3>Comparación de escenarios</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Escenario</th>
+            <th>Energía recuperada</th>
+            <th>Ingreso neto</th>
+            <th>Costo degradación</th>
+            <th>SOH final</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Sin BESS</td><td>0</td><td>0,0</td><td>-</td><td>100,0%</td></tr>
+          <tr><td>Recuperación curtailment</td><td>86,1 GWh</td><td>10,2</td><td>18,7</td><td>88,9%</td></tr>
+          <tr><td>Arbitraje energético</td><td>94,7 GWh</td><td>11,6</td><td>28,4</td><td>78,3%</td></tr>
+          <tr class="highlight"><td>Estrategia mixta</td><td>122,4 GWh</td><td>15,5</td><td>26,2</td><td>82,6%</td></tr>
+          <tr><td>Uso intensivo</td><td>148,3 GWh</td><td>15,0</td><td>39,8</td><td>71,4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Ingresos netos anuales por escenario</h3>
+      <div class="bar-chart">
+        <div style="height:0%">0,0</div>
+        <div style="height:55%">10,2</div>
+        <div style="height:63%">11,6</div>
+        <div style="height:85%">15,5</div>
+        <div style="height:82%">15,0</div>
+      </div>
+      <div class="chart-labels">
+        <span>Sin</span><span>Curt.</span><span>Arb.</span><span>Mixto</span><span>Int.</span>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <h3>Evolución del SOH</h3>
+      <div class="line-chart"></div>
+      <p class="chart-note">SOH estimado 2021–2025</p>
+    </div>
+  </section>
+
+  <section class="insights">
+    <div class="card insight">📊 La estrategia mixta logra el mejor equilibrio entre ingresos y degradación.</div>
+    <div class="card insight">💵 El costo de degradación representa cerca del 17% del spread bruto.</div>
+    <div class="card insight">🔋 La operación intensiva maximiza ingresos, pero reduce más rápido el SOH.</div>
+    <div class="card insight">🎯 El enfoque price-taker permite evaluar el BESS con datos reales del SEN.</div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Storage Analytics — Actividad de Graduación MIE UC</p>
+  <p>GitHub · Descargar memoria · Contacto</p>
+</footer>
+
+</body>
+</html>
