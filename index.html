@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Storage Analytics | Proyecto de AG</title>
+
   <meta
     name="description"
-    content="Plataforma de documentación para la evaluación del costo de degradación de sistemas BESS asociados a plantas fotovoltaicas bajo condiciones reales de operación del SEN chileno."
+    content="Plataforma profesional para documentar la evaluación técnico-económica del costo de degradación de sistemas BESS asociados a plantas fotovoltaicas bajo condiciones reales de operación del Sistema Eléctrico Nacional chileno."
   />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a href="#inicio" class="brand" aria-label="Storage Analytics">
       <div class="brand-icon">⚡</div>
       <div>
         <h1>Storage Analytics</h1>
         <p>FV + BESS Performance Platform</p>
       </div>
-    </div>
+    </a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegación principal">
       <a href="#inicio" class="active">Inicio</a>
       <a href="#proyecto-ag">Proyecto de AG</a>
       <a href="#metodologia">Metodología</a>
@@ -45,9 +48,7 @@
         </p>
 
         <h2>
-          Evaluación del costo de degradación<br />
-          de sistemas BESS bajo condiciones<br />
-          reales de operación
+          Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación
         </h2>
 
         <p class="hero-text">
@@ -62,7 +63,7 @@
         </div>
       </div>
 
-      <div class="hero-metrics">
+      <div class="hero-metrics" aria-label="Indicadores generales del proyecto">
         <div class="hero-metric">
           <div class="metric-symbol">⌖</div>
           <div>
@@ -115,15 +116,14 @@
           Se utilizarán datos históricos reales del Sistema Eléctrico Nacional,
           incluyendo energía inyectada, niveles de curtailment fotovoltaico y
           precios marginales de la barra Mirage 220 durante un horizonte de
-          varios años.
+          tres a cinco años.
         </p>
 
         <p>
           El análisis se realiza bajo un enfoque price-taker, donde el sistema
           FV+BESS no influye sobre los precios del mercado. Se compararán
-          estrategias orientadas al aprovechamiento de energía vertida y al
-          desplazamiento temporal de energía hacia periodos de mayor valor
-          económico.
+          estrategias orientadas al aprovechamiento de energía vertida, al
+          arbitraje energético y a una operación mixta.
         </p>
 
         <div class="mini-kpis">
@@ -131,17 +131,20 @@
             <strong>3–5</strong>
             <span>Años históricos</span>
           </div>
+
           <div>
             <strong>FV + BESS</strong>
             <span>Sistema analizado</span>
           </div>
+
           <div>
             <strong>Múltiples</strong>
             <span>Estrategias</span>
           </div>
+
           <div>
             <strong>USD/MWh</strong>
-            <span>Costo de degradación</span>
+            <span>Costo degradación</span>
           </div>
         </div>
       </article>
@@ -184,8 +187,8 @@
             <div class="step-icon">⇅</div>
             <h3>Operación BESS</h3>
             <p>
-              Definición de estrategias de recuperación de curtailment, arbitraje
-              y operación mixta.
+              Definición de estrategias de recuperación de curtailment,
+              arbitraje energético y operación mixta.
             </p>
           </div>
 
@@ -194,8 +197,8 @@
             <div class="step-icon">⌁</div>
             <h3>Degradación</h3>
             <p>
-              Estimación de pérdida de capacidad, ciclos equivalentes, throughput
-              y estado de salud.
+              Estimación de pérdida de capacidad, ciclos equivalentes,
+              throughput y estado de salud.
             </p>
           </div>
 
@@ -204,8 +207,8 @@
             <div class="step-icon">$</div>
             <h3>Evaluación económica</h3>
             <p>
-              Cuantificación de ingresos, costo de degradación y comparación
-              técnico-económica de escenarios.
+              Cuantificación de ingresos, costo de degradación e ingreso neto
+              por escenario.
             </p>
           </div>
         </div>
@@ -293,7 +296,9 @@
             <div class="tool-icon">▣</div>
             <div>
               <h3>SAM</h3>
-              <p>System Advisor Model para simulación energética y técnico-económica.</p>
+              <p>
+                System Advisor Model para simulación energética y técnico-económica.
+              </p>
             </div>
           </div>
 
@@ -301,7 +306,9 @@
             <div class="tool-icon">🐍</div>
             <div>
               <h3>Python</h3>
-              <p>Procesamiento de datos, cálculo de indicadores y visualización de resultados.</p>
+              <p>
+                Procesamiento de datos, cálculo de indicadores y visualización de resultados.
+              </p>
             </div>
           </div>
 
@@ -309,7 +316,9 @@
             <div class="tool-icon">⌁</div>
             <div>
               <h3>Price-Taker</h3>
-              <p>Uso de señales históricas reales sin influir en los precios del mercado eléctrico.</p>
+              <p>
+                Uso de señales históricas reales sin influir en los precios del mercado eléctrico.
+              </p>
             </div>
           </div>
         </div>
@@ -331,6 +340,15 @@
             <em>↗</em>
           </a>
 
+          <a href="https://www.coordinador.cl/sistema-electrico/" target="_blank" rel="noopener">
+            <div class="link-icon">♜</div>
+            <div>
+              <strong>Sistema Eléctrico Nacional</strong>
+              <span>Información del SEN</span>
+            </div>
+            <em>↗</em>
+          </a>
+
           <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank" rel="noopener">
             <div class="link-icon">▥</div>
             <div>
@@ -340,8 +358,10 @@
             <em>↗</em>
           </a>
 
-          <a href="https://sam.nlr.gov/" target="_blank" rel="noopener">
-            <div class="sam-logo">SAM</div>
+          <a href="https://sam.nrel.gov/" target="_blank" rel="noopener">
+            <div class="link-logo-box">
+              <img src="assets/sam-logo.png" alt="Logo SAM" class="sam-logo-img" />
+            </div>
             <div>
               <strong>System Advisor Model</strong>
               <span>Herramienta de simulación</span>
@@ -363,13 +383,13 @@
           <div class="progress-step done">
             <span>✓</span>
             <strong>Definición del enfoque</strong>
-            <p>En progreso</p>
+            <p>Completado</p>
           </div>
 
           <div class="progress-step current">
             <span>2</span>
             <strong>Base de datos histórica</strong>
-             <p>Pendiente</p>
+            <p>En progreso</p>
           </div>
 
           <div class="progress-step">
@@ -392,7 +412,7 @@
 
   <footer class="footer">
     <p>Storage Analytics © 2026</p>
-    <p>Actividad de Graduación · Magíster en Ingeniería de la Energía 2025/2027</p>
+    <p>Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
   </footer>
 </body>
 </html>
