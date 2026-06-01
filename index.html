@@ -6,166 +6,146 @@
   <title>Storage Analytics</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <div class="brand-icon">⚡</div>
+    <div class="logo">⚡</div>
     <div>
       <h1>STORAGE ANALYTICS</h1>
-      <p>FV + BESS Performance Platform</p>
+      <p>FV + BESS PERFORMANCE PLATFORM</p>
     </div>
   </div>
 
   <nav>
-    <a href="#inicio">Inicio</a>
+    <a class="active" href="#">Inicio</a>
     <a href="#proyecto">Proyecto</a>
     <a href="#metodologia">Metodología</a>
+    <a href="#herramientas">Herramientas</a>
     <a href="#links">Links</a>
+    <a href="#avances">Avances</a>
+    <a href="#dashboard">Dashboard</a>
   </nav>
+
+  <a class="bitacora" href="#avances">▣ Bitácora del proyecto</a>
 </header>
 
-<section id="inicio" class="hero">
-  <div class="hero-content">
-    <p class="eyebrow">Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
-
+<section class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">ACTIVIDAD DE GRADUACIÓN · MAGÍSTER EN INGENIERÍA DE LA ENERGÍA</p>
     <h2>Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación</h2>
-
-    <p class="hero-text">
+    <p class="summary">
       Plataforma para documentar el avance metodológico, técnico y económico de un estudio FV+BESS orientado a cuantificar degradación, valorización energética y estrategias de operación bajo enfoque price-taker.
     </p>
 
-    <div class="hero-buttons">
+    <div class="buttons">
       <a href="#proyecto">Ver proyecto</a>
-      <a href="#metodologia" class="outline">Ver metodología</a>
+      <a class="outline" href="#metodologia">Ver metodología</a>
     </div>
 
-    <div class="hero-facts">
-      <div>
-        <span>📍</span>
-        <strong>María Elena</strong>
-        <small>Zona de estudio</small>
-      </div>
-
-      <div>
-        <span>🔌</span>
-        <strong>Mirage 220</strong>
-        <small>Barra de precios</small>
-      </div>
-
-      <div>
-        <span>📈</span>
-        <strong>Price-Taker</strong>
-        <small>Enfoque de mercado</small>
-      </div>
-
-      <div>
-        <span>🧪</span>
-        <strong>SAM</strong>
-        <small>Simulación energética</small>
-      </div>
+    <div class="facts">
+      <div><span>⌖</span><strong>María Elena</strong><small>Zona de estudio</small></div>
+      <div><span>♜</span><strong>Mirage 220</strong><small>Barra de precios</small></div>
+      <div><span>⌁</span><strong>Price-Taker</strong><small>Enfoque de mercado</small></div>
+      <div><span>▣</span><strong>SAM</strong><small>Simulación energética</small></div>
     </div>
   </div>
 </section>
 
-<main class="container">
+<main class="page-grid">
 
-<section id="proyecto" class="card">
-  <h2>Descripción del proyecto</h2>
+  <section id="proyecto" class="card project">
+    <h2>Descripción del proyecto</h2>
+    <p>Este proyecto evalúa el impacto de distintas estrategias de operación sobre la degradación y el desempeño económico de un sistema BESS asociado a una planta fotovoltaica utility-scale ubicada en el norte de Chile.</p>
+    <p>Se utilizarán datos históricos reales del Sistema Eléctrico Nacional, incluyendo energía inyectada, niveles de curtailment fotovoltaico y precios marginales de la barra Mirage 220 durante un horizonte de varios años.</p>
+    <p>El análisis se realiza bajo un enfoque price-taker, donde el sistema FV+BESS no influye sobre los precios del mercado. Se compararán estrategias orientadas al aprovechamiento de energía vertida y al desplazamiento temporal de energía hacia períodos de mayor valor económico.</p>
 
-  <p>
-    Este proyecto evalúa el impacto de distintas estrategias de operación sobre la degradación y el desempeño económico de un sistema BESS asociado a una planta fotovoltaica utility-scale ubicada en el norte de Chile.
-  </p>
+    <div class="mini-kpis">
+      <div><span>▣</span><strong>3–5</strong><small>Años históricos</small></div>
+      <div><span>▦</span><strong>FV + BESS</strong><small>Sistema analizado</small></div>
+      <div><span>☷</span><strong>Múltiples</strong><small>Estrategias</small></div>
+      <div><span>$</span><strong>USD/MWh</strong><small>Costo de degradación</small></div>
+    </div>
+  </section>
 
-  <p>
-    Se utilizarán datos históricos reales del Sistema Eléctrico Nacional, incluyendo información de energía inyectada, niveles de curtailment fotovoltaico y precios marginales de la barra Mirage 220 durante un horizonte de varios años.
-  </p>
+  <section id="metodologia" class="card methodology">
+    <h2>Metodología</h2>
+    <p class="sub">La evaluación se estructura en cinco etapas principales.</p>
 
-  <p>
-    El análisis se realiza bajo un enfoque price-taker, donde el sistema FV+BESS no influye sobre los precios del mercado. Se compararán estrategias operacionales orientadas al aprovechamiento de energía vertida y al desplazamiento temporal de energía hacia períodos de mayor valor económico.
-  </p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div><div class="circle">▱</div>
+        <h3>Datos históricos</h3>
+        <p>Recopilación y procesamiento de energía inyectada, curtailment y precios marginales Mirage 220.</p>
+      </div>
 
-  <div class="mini-grid">
-    <div><strong>3–5</strong><small>Años históricos</small></div>
-    <div><strong>FV + BESS</strong><small>Sistema analizado</small></div>
-    <div><strong>Múltiples</strong><small>Estrategias</small></div>
-    <div><strong>USD/MWh</strong><small>Costo de degradación</small></div>
-  </div>
-</section>
+      <div class="step">
+        <div class="num">2</div><div class="circle">▦</div>
+        <h3>Simulación FV</h3>
+        <p>Modelación de una planta fotovoltaica representativa mediante SAM y datos meteorológicos de referencia.</p>
+      </div>
 
-<section id="metodologia" class="card">
-  <h2>Metodología</h2>
-  <p class="intro">La evaluación se estructura en cinco etapas principales.</p>
+      <div class="step">
+        <div class="num">3</div><div class="circle">▣</div>
+        <h3>Operación BESS</h3>
+        <p>Definición de estrategias de recuperación de curtailment, arbitraje y operación mixta.</p>
+      </div>
 
-  <div class="method-grid">
-    <div class="method-step">
-      <span>01</span>
-      <div class="icon">🗄️</div>
-      <h3>Datos históricos</h3>
-      <p>Procesamiento de energía inyectada, curtailment y precios marginales Mirage 220.</p>
+      <div class="step">
+        <div class="num">4</div><div class="circle">⌁</div>
+        <h3>Degradación</h3>
+        <p>Estimación de pérdida de capacidad, ciclos equivalentes, throughput y estado de salud.</p>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div><div class="circle">$</div>
+        <h3>Evaluación económica</h3>
+        <p>Cuantificación de ingresos, costo de degradación y comparación técnico-económica de escenarios.</p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="card indicators">
+    <h2>Indicadores clave (ejemplo)</h2>
+
+    <div class="indicator"><span>▦</span><div><strong>Energía recuperada</strong><small>GWh</small></div><b>--</b><i class="spark blue"></i></div>
+    <div class="indicator"><span>💵</span><div><strong>Ingresos brutos</strong><small>USD</small></div><b>--</b><i class="spark green"></i></div>
+    <div class="indicator"><span>📉</span><div><strong>Costo degradación</strong><small>USD/MWh</small></div><b>--</b><i class="spark orange"></i></div>
+    <div class="indicator"><span>🔋</span><div><strong>SOH final</strong><small>%</small></div><b>--</b><i class="spark purple"></i></div>
+    <div class="indicator"><span>☷</span><div><strong>Ciclos equivalentes</strong><small>#</small></div><b>--</b><i class="spark blue"></i></div>
+  </aside>
+
+  <section id="herramientas" class="card tools">
+    <h2>Herramientas utilizadas</h2>
+    <div class="tool-grid">
+      <div><span>▭</span><h3>SAM</h3><p>System Advisor Model para simulación energética y técnico-económica.</p></div>
+      <div><span>🐍</span><h3>Python</h3><p>Procesamiento de datos, cálculo de indicadores y visualización de resultados.</p></div>
+      <div><span>◎</span><h3>Price-Taker</h3><p>Uso de señales históricas reales sin influir en los precios del mercado eléctrico.</p></div>
+    </div>
+  </section>
+
+  <section id="links" class="card links">
+    <h2>Links de interés</h2>
+    <div class="links-grid">
+      <a href="https://www.coordinador.cl/" target="_blank"><span>⚡</span><strong>Coordinador Eléctrico Nacional</strong><small>Sitio oficial del CEN</small></a>
+      <a href="https://www.coordinador.cl/sistema-electrico/" target="_blank"><span>♜</span><strong>Sistema Eléctrico Nacional</strong><small>Información del SEN</small></a>
+      <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank"><span>▥</span><strong>Reportes y Estadísticas CEN</strong><small>Datos y reportes oficiales</small></a>
+      <a href="https://sam.nrel.gov/" target="_blank"><span class="sam">SAM</span><strong>System Advisor Model</strong><small>Herramienta de simulación</small></a>
+    </div>
+  </section>
+
+  <section id="avances" class="card progress">
+    <h2>Avances del proyecto</h2>
+
+    <div class="timeline">
+      <div class="done"><span>✓</span><strong>Definición del enfoque</strong><small>Completado</small></div>
+      <div class="active"><span>2</span><strong>Base de datos histórica</strong><small>En progreso</small></div>
+      <div><span>3</span><strong>Modelo SAM</strong><small>Pendiente</small></div>
+      <div><span>4</span><strong>Dashboard de resultados</strong><small>Pendiente</small></div>
     </div>
 
-    <div class="method-step">
-      <span>02</span>
-      <div class="icon">☀️</div>
-      <h3>Simulación FV</h3>
-      <p>Modelación de la planta fotovoltaica mediante SAM y datos meteorológicos.</p>
-    </div>
-
-    <div class="method-step">
-      <span>03</span>
-      <div class="icon">🔋</div>
-      <h3>Operación BESS</h3>
-      <p>Definición de estrategias de curtailment, arbitraje y operación mixta.</p>
-    </div>
-
-    <div class="method-step">
-      <span>04</span>
-      <div class="icon">📉</div>
-      <h3>Degradación</h3>
-      <p>Estimación de pérdida de capacidad, ciclos equivalentes, throughput y SOH.</p>
-    </div>
-
-    <div class="method-step">
-      <span>05</span>
-      <div class="icon">💵</div>
-      <h3>Evaluación económica</h3>
-      <p>Cálculo de ingresos, costo de desgaste y comparación de escenarios.</p>
-    </div>
-  </div>
-</section>
-
-<section id="links" class="card">
-  <h2>Links de interés</h2>
-  <p class="intro">Accesos directos a fuentes oficiales y herramientas utilizadas en el proyecto.</p>
-
-  <div class="links-grid">
-    <a href="https://www.coordinador.cl/" target="_blank">
-      <span>⚡</span>
-      <h3>Coordinador Eléctrico Nacional</h3>
-      <p>Sitio oficial del CEN.</p>
-    </a>
-
-    <a href="https://www.coordinador.cl/sistema-electrico/" target="_blank">
-      <span>🔌</span>
-      <h3>Sistema Eléctrico Nacional</h3>
-      <p>Información general del SEN.</p>
-    </a>
-
-    <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank">
-      <span>📊</span>
-      <h3>Reportes y estadísticas CEN</h3>
-      <p>Datos, reportes y estadísticas oficiales.</p>
-    </a>
-
-    <a href="https://sam.nrel.gov/" target="_blank">
-      <span>🧪</span>
-      <h3>SAM - NREL</h3>
-      <p>System Advisor Model.</p>
-    </a>
-  </div>
-</section>
+    <a class="timeline-btn" href="#">Ver bitácora completa →</a>
+  </section>
 
 </main>
 
