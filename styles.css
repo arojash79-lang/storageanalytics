@@ -290,7 +290,7 @@ a {
 
 .bottom-grid {
   display: grid;
-  grid-template-columns: 1.04fr 1.2fr 1.04fr;
+  grid-template-columns: 0.95fr 1.05fr 1fr 1fr;
   gap: 14px;
   margin-top: 14px;
 }
@@ -430,6 +430,55 @@ a {
   color: var(--muted);
 }
 
+.objective-card {
+  background:
+    linear-gradient(180deg, rgba(234, 242, 255, 0.68), rgba(255, 255, 255, 1) 42%),
+    var(--white);
+}
+
+.objective-box {
+  padding: 18px;
+  border-radius: 10px;
+  background: var(--navy);
+  box-shadow: 0 12px 28px rgba(6, 27, 61, 0.12);
+}
+
+.objective-box p {
+  font-size: 13px;
+  line-height: 1.75;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.objective-points {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.objective-points div {
+  padding: 13px 14px;
+  border: 1px solid #e4edf9;
+  border-radius: 9px;
+  background: #fbfdff;
+}
+
+.objective-points strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  font-weight: 900;
+  color: var(--blue);
+}
+
+.objective-points span {
+  display: block;
+  font-size: 10.8px;
+  line-height: 1.45;
+  font-weight: 650;
+  color: var(--muted);
+}
+
 .indicator-list {
   display: grid;
   gap: 14px;
@@ -530,20 +579,21 @@ a {
 
 .tool-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
 
 .tool-item {
   display: grid;
   grid-template-columns: 46px 1fr;
   gap: 14px;
-  padding: 4px 18px 4px 0;
-  border-right: 1px solid var(--line);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
 }
 
 .tool-item:last-child {
-  border-right: 0;
-  padding-right: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 .tool-icon {
@@ -574,18 +624,18 @@ a {
 
 .link-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
 .link-grid a {
   position: relative;
-  min-height: 112px;
+  min-height: 88px;
   display: grid;
   grid-template-columns: 42px 1fr 18px;
   align-items: center;
   gap: 12px;
-  padding: 16px 14px;
+  padding: 14px;
   border-radius: 8px;
   border: 1px solid #eef3fb;
   background: #fbfdff;
@@ -661,37 +711,21 @@ a {
 .progress-line {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin: 8px 8px 20px;
-  padding-top: 6px;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin: 4px 0 20px;
 }
 
-.progress-line::before {
-  content: "";
-  position: absolute;
-  left: 9%;
-  right: 9%;
-  top: 20px;
-  height: 3px;
-  border-radius: 999px;
-  background: #dce5f2;
-}
-
+.progress-line::before,
 .progress-fill {
-  position: absolute;
-  left: 9%;
-  top: 20px;
-  width: 30%;
-  height: 3px;
-  border-radius: 999px;
-  background: var(--green);
+  display: none;
 }
 
 .progress-step {
-  position: relative;
-  z-index: 1;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  text-align: left;
 }
 
 .progress-step span {
@@ -699,7 +733,8 @@ a {
   height: 26px;
   display: grid;
   place-items: center;
-  margin: 0 auto 12px;
+  margin: 0;
+  grid-row: span 2;
   border-radius: 50%;
   color: var(--white);
   background: #b9c6d9;
@@ -717,7 +752,7 @@ a {
 
 .progress-step strong {
   display: block;
-  min-height: 30px;
+  min-height: 0;
   font-size: 10.5px;
   line-height: 1.35;
   font-weight: 900;
@@ -725,7 +760,7 @@ a {
 }
 
 .progress-step p {
-  margin-top: 5px;
+  margin-top: 2px;
   font-size: 10px;
   font-weight: 800;
   color: var(--muted);
@@ -814,8 +849,9 @@ a {
     display: none;
   }
 
+  .tool-list,
   .link-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 }
 
@@ -930,54 +966,6 @@ a {
 
   .indicator-item svg {
     display: none;
-  }
-
-  .tool-list,
-  .link-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .tool-item {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    padding: 0 0 16px;
-  }
-
-  .tool-item:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .link-grid a {
-    min-height: 92px;
-  }
-
-  .progress-line {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .progress-line::before,
-  .progress-fill {
-    display: none;
-  }
-
-  .progress-step {
-    display: grid;
-    grid-template-columns: 32px 1fr;
-    gap: 10px;
-    text-align: left;
-  }
-
-  .progress-step span {
-    margin: 0;
-    grid-row: span 2;
-  }
-
-  .progress-step strong {
-    min-height: 0;
   }
 
   .footer {
