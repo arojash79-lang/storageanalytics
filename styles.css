@@ -505,12 +505,11 @@ svg {
   justify-self: center;
 }
 
-.tool-python {
-  border-radius: 14px;
-  background: linear-gradient(135deg, #3776ab 0%, #3776ab 50%, #ffd343 51%, #ffd343 100%);
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: 900;
+.tool-logo img {
+  max-width: 58px;
+  max-height: 48px;
+  object-fit: contain;
+  display: block;
 }
 
 .tool-icon svg {
