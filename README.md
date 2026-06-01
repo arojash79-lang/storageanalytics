@@ -33,7 +33,7 @@ Arturo Ignacio Rojas Hermosilla
 
 ### Programa
 
-Magíster en Ingeniería de la Energía (MIE UC)
+Magíster en Ingeniería de la Energía 2025/2027
 
 ---
 
