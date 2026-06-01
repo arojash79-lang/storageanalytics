@@ -837,4 +837,127 @@ svg {
     border-bottom: 0;
     padding-bottom: 0;
   }
+  /* =========================
+   HERRAMIENTAS UTILIZADAS
+========================= */
+
+.tool-list {
+    display: grid;
+    gap: 12px;
+}
+
+.tool-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    gap: 18px;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--line);
+}
+
+.tool-item:last-child {
+    border-bottom: none;
+}
+
+.tool-logo {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.tool-logo img {
+    display: block;
+    object-fit: contain;
+}
+
+/* Logo Python */
+
+.python-img {
+    width: 52px;
+    height: 52px;
+}
+
+/* Logo SAM */
+
+.sam-img {
+    width: 60px;
+    height: auto;
+    max-height: 44px;
+}
+
+/* Ícono Price-Taker */
+
+.tool-icon svg {
+    width: 46px;
+    height: 46px;
+    color: var(--muted);
+}
+
+.tool-item p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.tool-item b {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--text);
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Tablet */
+
+@media (max-width: 992px) {
+
+    .tool-item {
+        grid-template-columns: 70px 1fr;
+    }
+
+    .python-img {
+        width: 46px;
+        height: 46px;
+    }
+
+    .sam-img {
+        width: 54px;
+    }
+}
+
+/* Celular */
+
+@media (max-width: 576px) {
+
+    .tool-item {
+        grid-template-columns: 60px 1fr;
+        gap: 14px;
+    }
+
+    .python-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .sam-img {
+        width: 48px;
+    }
+
+    .tool-item p {
+        font-size: 12px;
+    }
+}
 }
