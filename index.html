@@ -3,116 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Storage Analytics</title>
+
+  <title>Storage Analytics | Actividad de Graduación</title>
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-<header class="navbar">
+<header class="topbar">
   <div class="brand">
-    <div class="logo-icon">▥</div>
+    <div class="brand-icon">▧</div>
     <div>
       <h1>STORAGE ANALYTICS</h1>
-      <p>FV + BESS Analytics Platform</p>
+      <p>Analytics & Energy Solutions</p>
     </div>
   </div>
 
-  <nav>
-    <a href="#">Inicio</a>
-    <a href="#">Proyecto</a>
-    <a href="#">Metodología</a>
-    <a href="#">Resultados</a>
-    <a href="#">Dashboard</a>
-    <a href="#">Contacto</a>
+  <nav class="nav">
+    <a href="#inicio">Inicio</a>
+    <a href="#proyecto">Proyecto</a>
+    <a href="#metodologia">Metodología</a>
+    <a href="#herramientas">Herramientas</a>
+    <a href="#avances">Avances</a>
+    <a href="#resultados">Resultados</a>
+    <a href="#dashboard">Dashboard</a>
   </nav>
+
+  <a class="btn-nav" href="#avances">Bitácora</a>
 </header>
-
-<section class="hero">
-  <div class="hero-text">
-    <h2>Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación</h2>
-    <p>
-      Plataforma desarrollada en el marco de la Actividad de Graduación AG /2026-2027.
-    </p>
-  </div>
-
-  <div class="hero-tags">
-    <span>📍 María Elena</span>
-    <span>⚡ Mirage 220</span>
-    <span>📈 Price-Taker</span>
-    <span>⚙️ SAM / PySAM</span>
-  </div>
-</section>
 
 <main>
 
-<section class="project">
-  <div class="project-text">
-    <h2>Descripción del Proyecto</h2>
-    <p>
-      El proyecto cuantifica el costo real de degradación de un sistema BESS cuando se utiliza para recuperar energía fotovoltaica restringida y realizar arbitraje energético bajo condiciones reales del mercado eléctrico chileno.
-    </p>
-    <p>
-      A través de simulaciones año a año y un modelo de degradación, se evalúan ingresos, ciclos, SOH y costo nivelado de degradación en distintos escenarios de operación.
-    </p>
-  </div>
+<section id="inicio" class="hero">
+  <div class="hero-overlay">
+    <div class="hero-content">
+      <h2>Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación</h2>
+      <p>
+        Plataforma desarrollada como Actividad de Graduación del Magíster en Ingeniería de la Energía.
+      </p>
 
-  <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=80" alt="Planta fotovoltaica">
-</section>
+      <div class="hero-facts">
+        <div class="fact">
+          <span>📍</span>
+          <div>
+            <strong>María Elena</strong>
+            <small>Región de Antofagasta</small>
+          </div>
+        </div>
 
-<section class="methodology">
-  <h2>Metodología</h2>
-  <p class="subtitle">La evaluación se estructura en cinco etapas principales.</p>
+        <div class="fact">
+          <span>☀️</span>
+          <div>
+            <strong>Mirage 220</strong>
+            <small>Planta fotovoltaica</small>
+          </div>
+        </div>
 
-  <div class="steps">
-    <div class="step">
-      <div class="circle">1</div>
-      <h3>Definición de escenarios</h3>
-      <p>Se definen escenarios de operación: curtailment, arbitraje y mixto.</p>
-    </div>
+        <div class="fact">
+          <span>📈</span>
+          <div>
+            <strong>Price-Taker</strong>
+            <small>Modelo de mercado</small>
+          </div>
+        </div>
 
-    <div class="step">
-      <div class="circle">2</div>
-      <h3>Simulación energética</h3>
-      <p>Modelación en SAM / PySAM para obtener generación FV y operación BESS.</p>
-    </div>
-
-    <div class="step">
-      <div class="circle">3</div>
-      <h3>Modelo de degradación</h3>
-      <p>Cálculo año a año del SOH usando un modelo validado.</p>
-    </div>
-
-    <div class="step">
-      <div class="circle">4</div>
-      <h3>Análisis económico</h3>
-      <p>Cálculo de ingresos, costos de degradación y métricas financieras.</p>
-    </div>
-
-    <div class="step">
-      <div class="circle">5</div>
-      <h3>Comparación de resultados</h3>
-      <p>Comparación de escenarios y sensibilidad de parámetros clave.</p>
+        <div class="fact">
+          <span>⚙️</span>
+          <div>
+            <strong>SAM</strong>
+            <small>Herramienta de simulación</small>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="benefits">
-  <h2>¿Qué permite esta plataforma?</h2>
+<section id="proyecto" class="section two-columns">
+  <article class="card description-card">
+    <h2>Descripción del proyecto</h2>
 
-  <div class="benefit-grid">
-    <div>📋 Evaluar estrategias operativas</div>
-    <div>💰 Cuantificar el costo real de degradación</div>
-    <div>📊 Apoyar decisiones de inversión BESS</div>
-    <div>📈 Analizar sensibilidad en condiciones reales</div>
+    <p>
+      Este proyecto evalúa el impacto de distintas estrategias de operación sobre la degradación y el desempeño económico de un sistema BESS asociado a una planta fotovoltaica utility-scale ubicada en el norte de Chile.
+    </p>
+
+    <p>
+      Se utilizarán datos históricos reales del Sistema Eléctrico Nacional, incluyendo energía inyectada, niveles de curtailment fotovoltaico y precios marginales de la barra Mirage 220 durante un horizonte de varios años.
+    </p>
+
+    <p>
+      El análisis se realiza bajo un enfoque price-taker, donde el sistema FV+BESS no influye sobre los precios del mercado. Se compararán estrategias operacionales orientadas al aprovechamiento de energía vertida y al desplazamiento temporal de energía hacia períodos de mayor valor económico.
+    </p>
+
+    <div class="mini-kpis">
+      <div>
+        <strong>3–5</strong>
+        <small>Años históricos</small>
+      </div>
+      <div>
+        <strong>FV + BESS</strong>
+        <small>Sistema analizado</small>
+      </div>
+      <div>
+        <strong>Múltiples</strong>
+        <small>Estrategias</small>
+      </div>
+      <div>
+        <strong>Degradación</strong>
+        <small>Costo económico</small>
+      </div>
+    </div>
+  </article>
+
+  <article id="metodologia" class="card methodology-card">
+    <h2>Metodología</h2>
+    <p class="subtitle">La evaluación se estructura en cinco etapas principales.</p>
+
+    <div class="method-grid">
+      <div class="method-step">
+        <div class="step-number">1</div>
+        <div class="method-icon">🗄️</div>
+        <h3>Datos históricos</h3>
+        <p>Recopilación y procesamiento de energía inyectada, curtailment y precios marginales Mirage 220.</p>
+      </div>
+
+      <div class="method-step">
+        <div class="step-number">2</div>
+        <div class="method-icon">☀️</div>
+        <h3>Modelación FV en SAM</h3>
+        <p>Simulación de la planta fotovoltaica utility-scale con datos meteorológicos de referencia.</p>
+      </div>
+
+      <div class="method-step">
+        <div class="step-number">3</div>
+        <div class="method-icon">🔋</div>
+        <h3>Estrategias de operación</h3>
+        <p>Definición y evaluación de recuperación de curtailment, arbitraje y operación mixta.</p>
+      </div>
+
+      <div class="method-step">
+        <div class="step-number">4</div>
+        <div class="method-icon">📉</div>
+        <h3>Degradación del BESS</h3>
+        <p>Estimación de degradación mediante indicadores de envejecimiento y utilización del activo.</p>
+      </div>
+
+      <div class="method-step">
+        <div class="step-number">5</div>
+        <div class="method-icon">💵</div>
+        <h3>Evaluación económica</h3>
+        <p>Cuantificación de ingresos, costos de degradación y comparación del desempeño por escenario.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section id="herramientas" class="tools-section">
+  <div class="tool">
+    <div class="tool-icon">🖥️</div>
+    <div>
+      <h3>SAM</h3>
+      <p>System Advisor Model para simulación energética y técnico-económica.</p>
+    </div>
+  </div>
+
+  <div class="tool">
+    <div class="tool-icon">🐍</div>
+    <div>
+      <h3>Python</h3>
+      <p>Procesamiento de datos, análisis, cálculo de indicadores y visualización.</p>
+    </div>
+  </div>
+
+  <div class="tool">
+    <div class="tool-icon">🎯</div>
+    <div>
+      <h3>Enfoque Price-Taker</h3>
+      <p>El sistema FV+BESS no influye en los precios del mercado y utiliza señales históricas observadas.</p>
+    </div>
+  </div>
+</section>
+
+<section id="avances" class="progress-section">
+  <div class="section-title">
+    <h2>Avances del proyecto</h2>
+    <p>Espacio para documentar hitos, decisiones metodológicas y resultados preliminares.</p>
+  </div>
+
+  <div class="progress-grid">
+    <div class="progress-card done">
+      <strong>01</strong>
+      <h3>Definición del problema</h3>
+      <p>Caracterización del curtailment FV y rol del BESS.</p>
+    </div>
+
+    <div class="progress-card active">
+      <strong>02</strong>
+      <h3>Base de datos histórica</h3>
+      <p>Procesamiento de inyección, curtailment y precios Mirage 220.</p>
+    </div>
+
+    <div class="progress-card">
+      <strong>03</strong>
+      <h3>Simulación en SAM</h3>
+      <p>Modelo energético de planta FV y almacenamiento.</p>
+    </div>
+
+    <div class="progress-card">
+      <strong>04</strong>
+      <h3>Resultados y dashboard</h3>
+      <p>Visualización de indicadores técnicos y económicos.</p>
+    </div>
   </div>
 </section>
 
 </main>
 
-<footer>
+<footer class="footer">
   <p>Storage Analytics © 2026</p>
-  <p>Actividad de Graduación / Magíster en Ingeniería de la Energía</p>
+  <p>Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
 </footer>
 
 </body>
