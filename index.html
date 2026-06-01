@@ -3,26 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Storage Analytics | Proyecto de AG</title>
+
+  <meta
+    name="description"
+    content="Actividad de Graduación orientada a evaluar el costo real de degradación de sistemas BESS bajo condiciones reales de operación del Sistema Eléctrico Nacional de Chile."
+  />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
-  <link rel="stylesheet" href="./styles.css?v=final-dark-01" />
+  <link rel="stylesheet" href="./styles.css?v=final-2026-03" />
 </head>
 
 <body>
   <header class="header">
-    <a class="brand" href="#inicio">
-      <div class="brand-icon"><i data-lucide="box"></i></div>
+    <a class="brand" href="#inicio" aria-label="Storage Analytics">
+      <div class="brand-icon">
+        <i data-lucide="box"></i>
+      </div>
+
       <div>
         <h1>Storage Analytics</h1>
         <p>FV + BESS Performance Platform</p>
       </div>
     </a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegación principal">
       <a href="#inicio" class="active">Inicio</a>
       <a href="#proyecto">Proyecto de AG</a>
       <a href="#metodologia">Metodología</a>
@@ -41,9 +53,13 @@
   <main>
     <section class="hero" id="inicio">
       <div class="hero-content">
-        <p class="eyebrow">Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
+        <p class="eyebrow">
+          Actividad de Graduación · Magíster en Ingeniería de la Energía
+        </p>
 
-        <h2>Evaluación del costo real de degradación de sistemas BESS bajo condiciones reales de operación</h2>
+        <h2>
+          Evaluación del costo real de degradación de sistemas BESS bajo condiciones reales de operación
+        </h2>
 
         <p>
           Plataforma académica para documentar el avance metodológico, técnico y económico
@@ -52,30 +68,49 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#proyecto" class="btn primary"><i data-lucide="clipboard-list"></i>Ver proyecto</a>
-          <a href="#metodologia" class="btn secondary"><i data-lucide="book-open"></i>Ver metodología</a>
+          <a href="#proyecto" class="btn primary">
+            <i data-lucide="clipboard-list"></i>
+            Ver proyecto
+          </a>
+
+          <a href="#metodologia" class="btn secondary">
+            <i data-lucide="book-open"></i>
+            Ver metodología
+          </a>
         </div>
       </div>
 
       <div class="hero-strip">
         <div class="strip-item">
           <i data-lucide="map-pin"></i>
-          <div><strong>Zona de estudio</strong><span>María Elena · CEME1</span></div>
+          <div>
+            <strong>Zona de estudio</strong>
+            <span>María Elena · CEME1</span>
+          </div>
         </div>
 
         <div class="strip-item">
           <i data-lucide="chart-column-increasing"></i>
-          <div><strong>Barra de precios</strong><span>Mirage 220</span></div>
+          <div>
+            <strong>Barra de precios</strong>
+            <span>Mirage 220</span>
+          </div>
         </div>
 
         <div class="strip-item">
           <i data-lucide="user-round"></i>
-          <div><strong>Enfoque de mercado</strong><span>Price-Taker</span></div>
+          <div>
+            <strong>Enfoque de mercado</strong>
+            <span>Price-Taker</span>
+          </div>
         </div>
 
         <div class="strip-item">
           <i data-lucide="box"></i>
-          <div><strong>Simulación energética</strong><span>SAM</span></div>
+          <div>
+            <strong>Simulación energética</strong>
+            <span>SAM</span>
+          </div>
         </div>
       </div>
     </section>
@@ -87,29 +122,43 @@
           <h3>Descripción del proyecto</h3>
         </div>
 
-        <p>
-Esta Actividad de Graduación estudia el impacto de distintas estrategias de operación sobre la degradación y el desempeño económico de un sistema BESS asociado a una planta fotovoltaica utility-scale.
-Utilizando datos históricos reales de energía inyectada, curtailment fotovoltaico y precios marginales, se analiza cómo la operación del sistema influye en su desgaste y capacidad de generar valor a lo largo de su vida útil.
-El objetivo es cuantificar el costo real de degradación del BESS y evaluar en qué medida los beneficios obtenidos mediante recuperación de energía vertida, arbitraje energético y operación mixta justifican la inversión en almacenamiento energético.
+        <p class="project-summary">
+          Esta Actividad de Graduación estudia el impacto de distintas estrategias
+          de operación sobre la degradación y el desempeño económico de un sistema
+          BESS asociado a una planta fotovoltaica utility-scale ubicada en el norte
+          de Chile.
+        </p>
+
+        <p class="project-summary">
+          Utilizando datos históricos reales de energía inyectada, curtailment
+          fotovoltaico y precios marginales de la barra Mirage 220, se analiza cómo
+          la operación del sistema influye en su desgaste, rentabilidad y capacidad
+          de generar valor a lo largo de su vida útil.
         </p>
 
         <div class="project-points">
           <div>
             <i data-lucide="battery-charging"></i>
-            <strong>Enfoque técnico</strong>
-            <small>Cuantificación del desgaste de la batería bajo distintos escenarios de operación.</small>
+            <strong>Cuantificación del desgaste</strong>
+            <small>
+              Evaluación del impacto de distintas estrategias de operación sobre la degradación del sistema BESS.
+            </small>
           </div>
 
           <div>
             <i data-lucide="trending-up"></i>
-            <strong>Enfoque económico</strong>
-            <small>Análisis de ingresos, costos y degradación asociados a la operación del sistema.</small>
+            <strong>Valor económico</strong>
+            <small>
+              Estimación de ingresos, costos de degradación y rentabilidad bajo condiciones reales de mercado.
+            </small>
           </div>
 
           <div>
             <i data-lucide="scale"></i>
-            <strong>Decisión informada</strong>
-            <small>Evaluación de la conveniencia económica del BESS para recuperar valor.</small>
+            <strong>Justificación de inversión</strong>
+            <small>
+              Determinación del equilibrio entre beneficio económico, energía recuperada y desgaste del activo.
+            </small>
           </div>
         </div>
       </article>
@@ -123,7 +172,7 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         <div class="method-flow">
           <div class="method-step">
             <b>1</b>
-            <div><i data-lucide="database"></i></div>
+            <div class="method-icon"><i data-lucide="database"></i></div>
             <strong>Datos históricos SEN</strong>
             <ul>
               <li>Energía inyectada CEME1</li>
@@ -134,18 +183,18 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
 
           <div class="method-step">
             <b>2</b>
-            <div><i data-lucide="sun"></i></div>
+            <div class="method-icon"><i data-lucide="sun"></i></div>
             <strong>Simulación FV (SAM)</strong>
             <ul>
               <li>Modelación de planta FV</li>
-              <li>Simulación energética horaria</li>
+              <li>Producción horaria</li>
               <li>Validación energética</li>
             </ul>
           </div>
 
           <div class="method-step">
             <b>3</b>
-            <div><i data-lucide="battery-charging"></i></div>
+            <div class="method-icon"><i data-lucide="battery-charging"></i></div>
             <strong>Operación BESS</strong>
             <ul>
               <li>Recuperación de curtailment</li>
@@ -156,7 +205,7 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
 
           <div class="method-step">
             <b>4</b>
-            <div><i data-lucide="bar-chart-3"></i></div>
+            <div class="method-icon"><i data-lucide="bar-chart-3"></i></div>
             <strong>Indicadores operacionales</strong>
             <ul>
               <li>Throughput acumulado</li>
@@ -167,7 +216,7 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
 
           <div class="method-step">
             <b>5</b>
-            <div><i data-lucide="circle-dollar-sign"></i></div>
+            <div class="method-icon"><i data-lucide="circle-dollar-sign"></i></div>
             <strong>Evaluación económica</strong>
             <ul>
               <li>Beneficio neto</li>
@@ -185,12 +234,13 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         </div>
 
         <p>
-          Determinar el costo real de degradación de un sistema BESS bajo distintos escenarios
-          de operación asociados a una planta fotovoltaica utility-scale, cuantificando el impacto
-          del desgaste sobre la vida útil y la rentabilidad del activo, y evaluando en qué medida
-          los beneficios económicos obtenidos mediante recuperación de curtailment, arbitraje
-          energético y operación mixta compensan dicho desgaste y justifican la inversión en
-          almacenamiento energético.
+          Determinar el costo real de degradación de un sistema BESS bajo distintos
+          escenarios de operación asociados a una planta fotovoltaica utility-scale,
+          cuantificando el impacto del desgaste sobre la vida útil y la rentabilidad
+          del activo, y evaluando en qué medida los beneficios económicos obtenidos
+          mediante recuperación de curtailment, arbitraje energético y operación
+          mixta compensan dicho desgaste y justifican la inversión en almacenamiento
+          energético.
         </p>
 
         <div class="objective-items">
@@ -223,19 +273,34 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         </div>
 
         <div class="tool-list">
-          <div>
-            <strong class="tool-word">Python</strong>
-            <p><b>Python</b><br>Procesamiento de datos, automatización y visualización.</p>
+          <div class="tool-item">
+            <div class="tool-logo tool-python">
+              <span>Py</span>
+            </div>
+            <p>
+              <b>Python</b>
+              Procesamiento de datos, automatización, cálculo de indicadores y visualización.
+            </p>
           </div>
 
-          <div>
-            <strong class="tool-icon"><i data-lucide="home"></i></strong>
-            <p><b>Price-Taker</b><br>Modelo de operación sin influencia sobre el precio spot.</p>
+          <div class="tool-item">
+            <div class="tool-logo tool-icon">
+              <i data-lucide="home"></i>
+            </div>
+            <p>
+              <b>Price-Taker</b>
+              Modelo de operación sin influencia sobre el precio spot.
+            </p>
           </div>
 
-          <div>
-            <strong class="tool-word">SAM</strong>
-            <p><b>System Advisor Model</b><br>Simulación energética y análisis financiero FV+BESS.</p>
+          <div class="tool-item">
+            <div class="tool-logo tool-sam">
+              SAM
+            </div>
+            <p>
+              <b>System Advisor Model</b>
+              Simulación energética y análisis financiero FV+BESS.
+            </p>
           </div>
         </div>
       </article>
@@ -249,19 +314,28 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         <div class="source-list">
           <a href="https://www.coordinador.cl/" target="_blank" rel="noopener">
             <i data-lucide="database"></i>
-            <div><strong>Coordinador Eléctrico Nacional</strong><small>Sitio oficial del CEN</small></div>
+            <div>
+              <strong>Coordinador Eléctrico Nacional</strong>
+              <small>Sitio oficial del CEN</small>
+            </div>
             <em>↗</em>
           </a>
 
           <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank" rel="noopener">
             <i data-lucide="database"></i>
-            <div><strong>Reportes y Estadísticas CEN</strong><small>Datos y reportes del mercado eléctrico</small></div>
+            <div>
+              <strong>Reportes y Estadísticas CEN</strong>
+              <small>Datos y reportes del mercado eléctrico</small>
+            </div>
             <em>↗</em>
           </a>
 
           <a href="https://www.coordinador.cl/open-data/" target="_blank" rel="noopener">
             <i data-lucide="cloud"></i>
-            <div><strong>Open Data CEN</strong><small>Datos abiertos del Sistema Eléctrico Nacional</small></div>
+            <div>
+              <strong>Open Data CEN</strong>
+              <small>Datos abiertos del Sistema Eléctrico Nacional</small>
+            </div>
             <em>↗</em>
           </a>
         </div>
@@ -274,11 +348,35 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         </div>
 
         <div class="metric-grid">
-          <div><strong>Curtailment recuperado</strong><span>GWh</span><i></i></div>
-          <div><strong>Beneficio neto</strong><span>MM USD</span><i></i></div>
-          <div><strong>Costo degradación</strong><span>USD/MWh</span><i></i></div>
-          <div><strong>SOH final</strong><span>%</span><i></i></div>
-          <div><strong>Ciclos equivalentes</strong><span>ciclos</span><i></i></div>
+          <div>
+            <strong>Curtailment recuperado</strong>
+            <span>GWh</span>
+            <i></i>
+          </div>
+
+          <div>
+            <strong>Beneficio neto</strong>
+            <span>MM USD</span>
+            <i></i>
+          </div>
+
+          <div>
+            <strong>Costo degradación</strong>
+            <span>USD/MWh</span>
+            <i></i>
+          </div>
+
+          <div>
+            <strong>SOH final</strong>
+            <span>%</span>
+            <i></i>
+          </div>
+
+          <div>
+            <strong>Ciclos equivalentes</strong>
+            <span>ciclos</span>
+            <i></i>
+          </div>
         </div>
 
         <p>Indicadores referenciales · Los valores se actualizarán con cada simulación.</p>
@@ -291,10 +389,29 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
         </div>
 
         <div class="progress-list">
-          <div class="active"><span></span><strong>Definición del enfoque</strong><em>En progreso</em></div>
-          <div><span></span><strong>Base de datos histórica</strong><em>Pendiente</em></div>
-          <div><span></span><strong>Modelo SAM</strong><em>Pendiente</em></div>
-          <div><span></span><strong>Dashboard de resultados</strong><em>Pendiente</em></div>
+          <div class="active">
+            <span></span>
+            <strong>Definición del enfoque</strong>
+            <em>En progreso</em>
+          </div>
+
+          <div>
+            <span></span>
+            <strong>Base de datos histórica</strong>
+            <em>Pendiente</em>
+          </div>
+
+          <div>
+            <span></span>
+            <strong>Modelo SAM</strong>
+            <em>Pendiente</em>
+          </div>
+
+          <div>
+            <span></span>
+            <strong>Dashboard de resultados</strong>
+            <em>Pendiente</em>
+          </div>
         </div>
       </article>
     </section>
@@ -318,7 +435,11 @@ El objetivo es cuantificar el costo real de degradación del BESS y evaluar en q
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    lucide.createIcons();
+    lucide.createIcons({
+      attrs: {
+        strokeWidth: 2
+      }
+    });
   </script>
 </body>
 </html>
