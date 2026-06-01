@@ -1,60 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Storage Analytics</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Analytics</title>
 
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <link rel="stylesheet" href="styles.css">
+</head>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #0f172a;
-      overflow-x: hidden;
-    }
+<body>
 
-    .navbar {
-      background: #071a2f;
-      color: white;
-      padding: 18px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+<header class="navbar">
 
-    .logo h1 { font-size: 22px; }
-    .logo p { font-size: 12px; color: #cbd5e1; margin-top: 3px; }
+    <div class="logo">
+        <h1>STORAGE ANALYTICS</h1>
+        <p>FV + BESS Analytics Platform</p>
+    </div>
 
-    nav {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
+    <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Metodología</a>
+        <a href="#">Escenarios</a>
+        <a href="#">Resultados</a>
+        <a href="#">Dashboard</a>
+        <a href="#">Contacto</a>
+    </nav>
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-    }
+</header>
 
-    .hero {
-      background: linear-gradient(rgba(5,15,30,.78), rgba(5,15,30,.78)),
-      url("https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1800&q=80");
-      background-size: cover;
-      background-position: center;
-      color: white;
-      padding: 55px 45px;
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 35px;
-    }
+<section class="hero">
 
-    .hero h2 {
-      font-size: 38px;
-      line-height: 1.15;
-      margin-bottom: 18px;
-      max-width: 800px;
+    <div>
+        <h2>
+            Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación
+        </h2>
+
+        <p>
+            Plataforma asociada a la Actividad de Graduación del Magíster en Ingeniería de la Energía UC.
+        </p>
+
+        <div class="tags">
+            <span>María Elena</span>
+            <span>Mirage 220</span>
+            <span>Price-Taker</span>
+            <span>SAM / PySAM</span>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <h3>Pregunta de investigación</h3>
+
+        <p>
+            ¿Cuál es el costo real de degradación de un sistema BESS cuando se utiliza para recuperar energía fotovoltaica vertida y realizar arbitraje energético bajo condiciones reales del mercado eléctrico chileno?
+        </p>
+    </div>
+
+</section>
+
+<main class="container">
+
+    <h2 class="section-title">
+        Resultados principales
+    </h2>
+
+    <section class="kpis">
+
+        <div class="card kpi">
+            <h4>Energía recuperada</h4>
+            <h3>122 GWh</h3>
+        </div>
+
+        <div class="card kpi">
+            <h4>Ingresos</h4>
+            <h3>18,7 MM USD</h3>
+        </div>
+
+        <div class="card kpi">
+            <h4>Costo degradación</h4>
+            <h3>3,2 MM USD</h3>
+        </div>
+
+        <div class="card kpi">
+            <h4>USD/MWh</h4>
+            <h3>26,2</h3>
+        </div>
+
+        <div class="card kpi">
+            <h4>Ciclos</h4>
+            <h3>478</h3>
+        </div>
+
+        <div class="card kpi">
+            <h4>SOH Final</h4>
+            <h3>82,6%</h3>
+        </div>
+
+    </section>
+
+    <section class="grid">
+
+        <div class="card">
+            <h3>Comparación de escenarios</h3>
+
+            <table>
+                <tr>
+                    <th>Escenario</th>
+                    <th>Ingreso</th>
+                    <th>SOH</th>
+                </tr>
+
+                <tr>
+                    <td>Curtailment</td>
+                    <td>10,2</td>
+                    <td>88,9%</td>
+                </tr>
+
+                <tr>
+                    <td>Arbitraje</td>
+                    <td>11,6</td>
+                    <td>78,3%</td>
+                </tr>
+
+                <tr>
+                    <td>Mixto</td>
+                    <td>15,5</td>
+                    <td>82,6%</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="card">
+            <h3>Ingresos netos</h3>
+            <div class="placeholder-chart">
+                Gráfico Plotly
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Evolución SOH</h3>
+            <div class="placeholder-chart">
+                Gráfico Plotly
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <p>Storage Analytics © 2026</p>
+
+</footer>
+
+</body>
+</html>
