@@ -8,25 +8,31 @@
 
   <meta
     name="description"
-    content="Plataforma profesional para documentar la evaluación técnico-económica del costo de degradación de sistemas BESS asociados a plantas fotovoltaicas bajo condiciones reales de operación del Sistema Eléctrico Nacional chileno."
+    content="Plataforma académica para documentar el avance metodológico, técnico y económico de un estudio FV+BESS orientado a cuantificar degradación, valorización energética y estrategias de operación bajo enfoque price-taker."
   />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <header class="topbar">
-    <a href="#inicio" class="brand" aria-label="Storage Analytics">
-      <div class="brand-icon">⚡</div>
-      <div>
-        <h1>Storage Analytics</h1>
-        <p>FV + BESS Performance Platform</p>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Storage Analytics">
+      <div class="brand-mark">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 4 42 14v20L24 44 6 34V14L24 4Z" />
+          <path d="M24 4v14M6 14l18 10 18-10M24 24v20M12 18v12l12 7 12-7V18" />
+        </svg>
+      </div>
+
+      <div class="brand-text">
+        <strong>Storage Analytics</strong>
+        <span>FV + BESS Performance Platform</span>
       </div>
     </a>
 
-    <nav class="nav" aria-label="Navegación principal">
+    <nav class="main-nav" aria-label="Navegación principal">
       <a href="#inicio" class="active">Inicio</a>
-      <a href="#proyecto-ag">Proyecto de AG</a>
+      <a href="#proyecto">Proyecto de AG</a>
       <a href="#metodologia">Metodología</a>
       <a href="#herramientas">Herramientas</a>
       <a href="#links">Links</a>
@@ -34,62 +40,90 @@
       <a href="#dashboard">Dashboard</a>
     </nav>
 
-    <a class="log-button" href="#avances">
-      <span>▣</span>
+    <a class="header-button" href="#avances">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 4h10a4 4 0 0 1 4 4v12H8a3 3 0 0 0-3-3V4Z" />
+        <path d="M5 17V7a3 3 0 0 1 3-3" />
+      </svg>
       Bitácora del proyecto
     </a>
   </header>
 
-  <main class="page">
+  <main>
     <section class="hero" id="inicio">
+      <div class="hero-overlay"></div>
+
       <div class="hero-content">
         <p class="eyebrow">
           Actividad de Graduación · Magíster en Ingeniería de la Energía
         </p>
 
-        <h2>
+        <h1>
           Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación
-        </h2>
+        </h1>
 
-        <p class="hero-text">
-          Plataforma para documentar el avance metodológico, técnico y económico
-          de un estudio FV+BESS orientado a cuantificar degradación, valorización
-          energética y estrategias de operación bajo enfoque price-taker.
+        <p class="hero-description">
+          Plataforma académica para documentar el avance metodológico, técnico
+          y económico de un estudio FV+BESS bajo un enfoque price-taker,
+          utilizando datos reales del Sistema Eléctrico Nacional de Chile.
         </p>
 
         <div class="hero-actions">
-          <a href="#proyecto-ag" class="btn-primary">Ver proyecto</a>
-          <a href="#metodologia" class="btn-secondary">Ver metodología</a>
+          <a class="btn btn-primary" href="#proyecto">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 3h7l4 4v14H8V3Z" />
+              <path d="M14 3v5h5M10 13h7M10 17h5" />
+            </svg>
+            Ver proyecto
+          </a>
+
+          <a class="btn btn-secondary" href="#metodologia">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6h4v4H6V6ZM14 6h4v4h-4V6ZM6 14h4v4H6v-4ZM14 14h4v4h-4v-4Z" />
+              <path d="M10 8h4M8 10v4M16 10v4M10 16h4" />
+            </svg>
+            Ver metodología
+          </a>
         </div>
       </div>
 
-      <div class="hero-metrics" aria-label="Indicadores generales del proyecto">
-        <div class="hero-metric">
-          <div class="metric-symbol">⌖</div>
+      <div class="hero-strip">
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12Z" />
+            <circle cx="12" cy="9" r="2.4" />
+          </svg>
           <div>
             <strong>María Elena</strong>
             <span>Zona de estudio</span>
           </div>
         </div>
 
-        <div class="hero-metric">
-          <div class="metric-symbol">♜</div>
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 20V10M10 20V5M16 20v-8M22 20H2" />
+          </svg>
           <div>
             <strong>Mirage 220</strong>
             <span>Barra de precios</span>
           </div>
         </div>
 
-        <div class="hero-metric">
-          <div class="metric-symbol">⌁</div>
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21a8 8 0 0 1 16 0" />
+          </svg>
           <div>
             <strong>Price-Taker</strong>
             <span>Enfoque de mercado</span>
           </div>
         </div>
 
-        <div class="hero-metric">
-          <div class="metric-symbol">▣</div>
+        <div class="strip-item">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3 21 8v10l-9 5-9-5V8l9-5Z" />
+            <path d="M12 13 3 8M12 13l9-5M12 13v10" />
+          </svg>
           <div>
             <strong>SAM</strong>
             <span>Simulación energética</span>
@@ -98,25 +132,32 @@
       </div>
     </section>
 
-    <section class="dashboard-grid">
-      <article class="card project-card" id="proyecto-ag">
-        <div class="section-heading">
+    <section class="top-grid">
+      <article class="card project-card" id="proyecto">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 3h8v5h3v13H5V8h3V3Z" />
+              <path d="M9 13h6M9 17h6M10 3v5M14 3v5" />
+            </svg>
+          </span>
           <h2>Descripción del proyecto</h2>
-          <span></span>
         </div>
 
         <p>
-          Este proyecto evalúa el impacto de distintas estrategias de operación
-          sobre la degradación y el desempeño económico de un sistema BESS
-          asociado a una planta fotovoltaica utility-scale ubicada en el norte
-          de Chile.
+          Esta actividad de graduación evalúa el impacto debido a las distintas
+          estrategias de operación sobre la degradación y el desempeño económico
+          de un sistema BESS y cómo esta degradación debe ser compensada
+          económicamente para justificar la inversión y la operación de este
+          sistema BESS asociada a una planta fotovoltaica utility-scale ubicada
+          en el norte de Chile.
         </p>
 
         <p>
           Se utilizarán datos históricos reales del Sistema Eléctrico Nacional,
           incluyendo energía inyectada, niveles de curtailment fotovoltaico y
-          precios marginales de la barra Mirage 220 durante un horizonte de
-          tres a cinco años.
+          precios marginales de la barra Mirage 220 durante un horizonte de tres
+          a cinco años y cómo estos inputs modelan el despacho.
         </p>
 
         <p>
@@ -125,318 +166,325 @@
           estrategias orientadas al aprovechamiento de energía vertida, al
           arbitraje energético y a una operación mixta.
         </p>
-
-        <div class="mini-kpis">
-          <div>
-            <strong>3–5</strong>
-            <span>Años históricos</span>
-          </div>
-
-          <div>
-            <strong>FV + BESS</strong>
-            <span>Sistema analizado</span>
-          </div>
-
-          <div>
-            <strong>Múltiples</strong>
-            <span>Estrategias</span>
-          </div>
-
-          <div>
-            <strong>USD/MWh</strong>
-            <span>Costo degradación</span>
-          </div>
-        </div>
       </article>
 
       <article class="card methodology-card" id="metodologia">
-        <div class="section-heading">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6h4v4H6V6ZM14 6h4v4h-4V6ZM6 14h4v4H6v-4ZM14 14h4v4h-4v-4Z" />
+              <path d="M10 8h4M8 10v4M16 10v4M10 16h4" />
+            </svg>
+          </span>
           <h2>Metodología</h2>
-          <span></span>
         </div>
 
-        <p class="method-intro">
-          La evaluación se estructura en cinco etapas principales.
-        </p>
-
-        <div class="method-line"></div>
-
-        <div class="method-steps">
+        <div class="method-flow">
           <div class="method-step">
-            <div class="step-number">1</div>
-            <div class="step-icon">▰</div>
-            <h3>Datos históricos</h3>
-            <p>
-              Recopilación y procesamiento de energía inyectada, curtailment y
-              precios marginales Mirage 220.
-            </p>
+            <span class="step-number">1</span>
+            <div class="step-circle">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <ellipse cx="12" cy="6" rx="7" ry="3" />
+                <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" />
+                <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+              </svg>
+            </div>
+            <strong>Datos históricos</strong>
           </div>
 
           <div class="method-step">
-            <div class="step-number">2</div>
-            <div class="step-icon">♜</div>
-            <h3>Simulación FV</h3>
-            <p>
-              Modelación de una planta fotovoltaica representativa mediante SAM
-              y datos meteorológicos de referencia.
-            </p>
+            <span class="step-number">2</span>
+            <div class="step-circle">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 14h16M6 10h12M8 6h8M5 18h14" />
+                <path d="M8 6 4 18M16 6l4 12M12 6v12" />
+              </svg>
+            </div>
+            <strong>Simulación FV</strong>
           </div>
 
           <div class="method-step">
-            <div class="step-number">3</div>
-            <div class="step-icon">⇅</div>
-            <h3>Operación BESS</h3>
-            <p>
-              Definición de estrategias de recuperación de curtailment,
-              arbitraje energético y operación mixta.
-            </p>
+            <span class="step-number">3</span>
+            <div class="step-circle">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 7h8v13H8V7Z" />
+                <path d="M10 4h4v3M11 13h2M12 10v6" />
+              </svg>
+            </div>
+            <strong>Operación BESS</strong>
           </div>
 
           <div class="method-step">
-            <div class="step-number">4</div>
-            <div class="step-icon">⌁</div>
-            <h3>Degradación</h3>
-            <p>
-              Estimación de pérdida de capacidad, ciclos equivalentes,
-              throughput y estado de salud.
-            </p>
+            <span class="step-number">4</span>
+            <div class="step-circle">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m4 8 5 5 4-4 7 7" />
+                <path d="M17 16h3v-3" />
+              </svg>
+            </div>
+            <strong>Degradación</strong>
           </div>
 
           <div class="method-step">
-            <div class="step-number">5</div>
-            <div class="step-icon">$</div>
-            <h3>Evaluación económica</h3>
-            <p>
-              Cuantificación de ingresos, costo de degradación e ingreso neto
-              por escenario.
-            </p>
+            <span class="step-number">5</span>
+            <div class="step-circle">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="8" />
+                <path d="M12 7v10M15 9.5c-.7-.6-1.7-1-3-1-1.5 0-2.5.8-2.5 1.9 0 3 5 1.3 5 4.2 0 1.1-1 1.9-2.6 1.9-1.2 0-2.3-.4-3.1-1.2" />
+              </svg>
+            </div>
+            <strong>Evaluación económica</strong>
           </div>
         </div>
       </article>
 
-      <aside class="card objective-card">
-        <div class="section-heading">
+      <article class="objective-card">
+        <div class="objective-title">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8" />
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v4M22 12h-4" />
+          </svg>
           <h2>Objetivo general del AG</h2>
-          <span></span>
         </div>
 
-        <div class="objective-box">
-          <p>
-            Determinar el costo técnico y económico asociado a la degradación de
-            un sistema BESS bajo distintas estrategias de operación aplicadas a
-            una planta fotovoltaica utility-scale, utilizando condiciones reales
-            de operación del Sistema Eléctrico Nacional de Chile.
-          </p>
-        </div>
+        <p class="objective-main">
+          Determinar el costo técnico y económico asociado a la degradación de
+          un sistema BESS bajo distintas estrategias de operación aplicadas a
+          una planta fotovoltaica utility-scale, utilizando condiciones reales
+          de operación del Sistema Eléctrico Nacional de Chile.
+        </p>
 
-        <div class="objective-points">
+        <div class="objective-details">
           <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
             <strong>Enfoque</strong>
-            <span>Price-taker con señales históricas reales.</span>
+            <span>Análisis técnico-económico bajo enfoque price-taker.</span>
           </div>
 
           <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 20V5h11l-2 4 2 4H5" />
+            </svg>
             <strong>Propósito</strong>
-            <span>Cuantificar el equilibrio entre ingresos, energía recuperada y desgaste del activo.</span>
+            <span>Cuantificar el impacto de la degradación en la rentabilidad.</span>
           </div>
 
           <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 19h16M6 16l4-4 3 3 5-7" />
+              <path d="M15 8h3v3" />
+            </svg>
             <strong>Resultado esperado</strong>
-            <span>Comparación técnico-económica de estrategias de operación FV+BESS.</span>
+            <span>Estrategias operacionales y costo de degradación por unidad de energía.</span>
           </div>
         </div>
-      </aside>
+      </article>
     </section>
 
     <section class="bottom-grid">
       <article class="card tools-card" id="herramientas">
-        <div class="section-heading">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14 7 3 3M5 19l8-8M15 5l4 4-2.5 2.5-4-4L15 5Z" />
+              <path d="M8 5a4 4 0 0 0-3 6.7L3 14l3 3 2.3-2A4 4 0 0 0 15 11" />
+            </svg>
+          </span>
           <h2>Herramientas utilizadas</h2>
-          <span></span>
         </div>
 
         <div class="tool-list">
           <div class="tool-item">
-            <div class="tool-icon">▣</div>
+            <div class="sam-wordmark">
+              <img src="assets/sam-logo.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <span>SAM</span>
+            </div>
             <div>
-              <h3>SAM</h3>
-              <p>
-                System Advisor Model para simulación energética y técnico-económica.
-              </p>
+              <strong>System Advisor Model</strong>
+              <p>Simulación integral de sistemas FV+BESS y análisis financiero.</p>
             </div>
           </div>
 
           <div class="tool-item">
-            <div class="tool-icon">🐍</div>
+            <div class="python-mark">Py</div>
             <div>
-              <h3>Python</h3>
-              <p>
-                Procesamiento de datos, cálculo de indicadores y visualización de resultados.
-              </p>
+              <strong>Python</strong>
+              <p>Procesamiento de datos, automatización y análisis de resultados.</p>
             </div>
           </div>
 
           <div class="tool-item">
-            <div class="tool-icon">⌁</div>
+            <div class="chart-mark">
+              <svg viewBox="0 0 44 44" aria-hidden="true">
+                <path d="M6 34h32M8 30l9-9 7 6 10-15" />
+                <circle cx="17" cy="21" r="2" />
+                <circle cx="24" cy="27" r="2" />
+                <circle cx="34" cy="12" r="2" />
+              </svg>
+            </div>
             <div>
-              <h3>Price-Taker</h3>
-              <p>
-                Uso de señales históricas reales sin influir en los precios del mercado eléctrico.
-              </p>
+              <strong>Price-Taker</strong>
+              <p>Modelo de operación en mercado spot bajo condición price-taker.</p>
             </div>
           </div>
         </div>
       </article>
 
       <article class="card links-card" id="links">
-        <div class="section-heading">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1" />
+              <path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1" />
+            </svg>
+          </span>
           <h2>Links de interés</h2>
-          <span></span>
         </div>
 
-        <div class="link-grid">
+        <div class="link-list">
           <a href="https://www.coordinador.cl/" target="_blank" rel="noopener">
-            <div class="link-icon">⚡</div>
-            <div>
+            <span class="link-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18M5 8h4M15 8h4M5 16h4M15 16h4" />
+                <path d="M9 8c0 2 6 2 6 0M9 16c0 2 6 2 6 0" />
+              </svg>
+            </span>
+            <span>
               <strong>Coordinador Eléctrico Nacional</strong>
-              <span>Sitio oficial del CEN</span>
-            </div>
-            <em>↗</em>
+              <small>Sitio oficial del CEN</small>
+            </span>
+            <em>›</em>
           </a>
 
           <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank" rel="noopener">
-            <div class="link-icon">▥</div>
-            <div>
+            <span class="link-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12v18H6V3Z" />
+                <path d="M9 8h6M9 12h6M9 16h4" />
+              </svg>
+            </span>
+            <span>
               <strong>Reportes y Estadísticas CEN</strong>
-              <span>Datos y reportes oficiales</span>
-            </div>
-            <em>↗</em>
+              <small>Datos y reportes del mercado eléctrico</small>
+            </span>
+            <em>›</em>
           </a>
 
-          <a href="https://sam.nlr.gov/" target="_blank" rel="noopener">
-            <div class="link-logo-box">
-              <img src="assets/sam-logo.png" alt="Logo SAM" class="sam-logo-img" />
-            </div>
-            <div>
+          <a href="https://sam.nrel.gov/" target="_blank" rel="noopener">
+            <span class="link-sam">SAM</span>
+            <span>
               <strong>System Advisor Model</strong>
-              <span>Herramienta de simulación</span>
-            </div>
-            <em>↗</em>
+              <small>Documentación oficial de NREL</small>
+            </span>
+            <em>›</em>
           </a>
         </div>
       </article>
 
-      <aside class="card indicator-card" id="dashboard">
-        <div class="section-heading">
+      <article class="card indicators-card" id="dashboard">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 20V10M10 20V5M16 20v-8M22 20H2" />
+            </svg>
+          </span>
           <h2>Indicadores clave</h2>
-          <span></span>
         </div>
 
-        <div class="indicator-list">
-          <div class="indicator-item">
-            <div class="indicator-icon blue">▦</div>
-            <div>
-              <strong>Energía recuperada</strong>
-              <span>GWh</span>
-            </div>
-            <b>--</b>
-            <svg viewBox="0 0 80 28">
-              <polyline points="0,23 10,21 20,18 30,20 40,11 50,15 60,6 70,12 80,9" />
+        <div class="metrics-panel">
+          <div class="metric-tile">
+            <span>Energía recuperada</span>
+            <strong>1,432</strong>
+            <small>MWh</small>
+            <svg viewBox="0 0 80 28" aria-hidden="true">
+              <polyline points="0,20 8,24 16,13 24,22 32,14 40,18 48,8 56,20 64,15 72,7 80,5" />
             </svg>
           </div>
 
-          <div class="indicator-item">
-            <div class="indicator-icon green">$</div>
-            <div>
-              <strong>Ingresos brutos</strong>
-              <span>USD</span>
-            </div>
-            <b>--</b>
-            <svg viewBox="0 0 80 28">
-              <polyline points="0,22 10,19 20,17 30,15 40,9 50,13 60,8 70,6 80,14" />
+          <div class="metric-tile">
+            <span>Ingresos brutos</span>
+            <strong>2.48</strong>
+            <small>MM USD</small>
+            <svg viewBox="0 0 80 28" aria-hidden="true">
+              <polyline points="0,22 8,17 16,24 24,19 32,21 40,13 48,18 56,10 64,20 72,5 80,14" />
             </svg>
           </div>
 
-          <div class="indicator-item">
-            <div class="indicator-icon orange">◈</div>
-            <div>
-              <strong>Costo degradación</strong>
-              <span>USD/MWh</span>
-            </div>
-            <b>--</b>
-            <svg viewBox="0 0 80 28">
-              <polyline points="0,8 10,17 20,13 30,19 40,14 50,16 60,9 70,18 80,20" />
+          <div class="metric-tile">
+            <span>Costo degradación</span>
+            <strong>18.6</strong>
+            <small>USD/MWh</small>
+            <svg viewBox="0 0 80 28" aria-hidden="true">
+              <polyline points="0,20 8,22 16,12 24,18 32,8 40,10 48,6 56,12 64,9 72,15 80,16" />
             </svg>
           </div>
 
-          <div class="indicator-item">
-            <div class="indicator-icon purple">◌</div>
-            <div>
-              <strong>SOH final</strong>
-              <span>%</span>
-            </div>
-            <b>--</b>
-            <svg viewBox="0 0 80 28">
-              <polyline points="0,7 10,13 20,18 30,16 40,20 50,17 60,13 70,18 80,15" />
+          <div class="metric-tile">
+            <span>SOH final</span>
+            <strong>86.2%</strong>
+            <small>%</small>
+            <svg viewBox="0 0 80 28" aria-hidden="true">
+              <polyline points="0,6 8,8 16,11 24,9 32,13 40,12 48,16 56,17 64,20 72,19 80,23" />
             </svg>
           </div>
 
-          <div class="indicator-item">
-            <div class="indicator-icon cyan">⇄</div>
-            <div>
-              <strong>Ciclos equivalentes</strong>
-              <span>#</span>
-            </div>
-            <b>--</b>
-            <svg viewBox="0 0 80 28">
-              <polyline points="0,15 10,13 20,18 30,22 40,17 50,11 60,15 70,8 80,12" />
+          <div class="metric-tile">
+            <span>Ciclos equivalentes</span>
+            <strong>1,248</strong>
+            <small>ciclos</small>
+            <svg viewBox="0 0 80 28" aria-hidden="true">
+              <polyline points="0,19 8,21 16,13 24,18 32,10 40,22 48,16 56,19 64,8 72,14 80,6" />
             </svg>
           </div>
         </div>
-      </aside>
+
+        <p class="metric-note">
+          Indicadores referenciales · Los valores se actualizarán con cada simulación.
+        </p>
+      </article>
 
       <article class="card progress-card" id="avances">
-        <div class="section-heading">
+        <div class="card-title">
+          <span class="title-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 19c4-1 8-4 12-12l-4-4C5 7 2 11 1 15l5 1 2 5Z" />
+              <path d="M13 3l8 8M6 16l-3 5 5-3" />
+            </svg>
+          </span>
           <h2>Avances del proyecto</h2>
-          <span></span>
         </div>
 
-        <div class="progress-line">
-          <div class="progress-fill"></div>
-
-          <div class="progress-step done">
-            <span>✓</span>
+        <div class="progress-list">
+          <div class="progress-item complete">
+            <span></span>
             <strong>Definición del enfoque</strong>
-            <p>Completado</p>
+            <em>100%</em>
           </div>
 
-          <div class="progress-step current">
-            <span>2</span>
+          <div class="progress-item complete">
+            <span></span>
             <strong>Base de datos histórica</strong>
-            <p>En progreso</p>
+            <em>100%</em>
           </div>
 
-          <div class="progress-step">
-            <span>3</span>
+          <div class="progress-item current">
+            <span></span>
             <strong>Modelo SAM</strong>
-            <p>Pendiente</p>
+            <em>70%</em>
           </div>
 
-          <div class="progress-step">
-            <span>4</span>
+          <div class="progress-item pending">
+            <span></span>
             <strong>Dashboard de resultados</strong>
-            <p>Pendiente</p>
+            <em>0%</em>
           </div>
         </div>
-
-        <a class="small-button" href="#inicio">Ver bitácora completa →</a>
       </article>
     </section>
   </main>
-
-  <footer class="footer">
-    <p>Storage Analytics © 2026</p>
-    <p>Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
-  </footer>
 </body>
 </html>
