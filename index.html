@@ -3,28 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Storage Analytics | Proyecto de AG</title>
 
-  <meta
-    name="description"
-    content="Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación del Sistema Eléctrico Nacional de Chile."
-  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="./styles.css?v=20" />
+  <link rel="stylesheet" href="./styles.css?v=final-dark-01" />
 </head>
 
 <body>
-  <header class="site-header">
-    <a href="#inicio" class="brand">
-      <div class="brand-icon">
-        <i data-lucide="box"></i>
-      </div>
-
+  <header class="header">
+    <a class="brand" href="#inicio">
+      <div class="brand-icon"><i data-lucide="box"></i></div>
       <div>
         <h1>Storage Analytics</h1>
         <p>FV + BESS Performance Platform</p>
@@ -41,8 +32,8 @@
       <a href="#dashboard">Dashboard</a>
     </nav>
 
-    <a href="#avances" class="header-cta">
-      <i data-lucide="book-open"></i>
+    <a class="header-button" href="#avances">
+      <i data-lucide="mail"></i>
       Bitácora del proyecto
     </a>
   </header>
@@ -50,101 +41,81 @@
   <main>
     <section class="hero" id="inicio">
       <div class="hero-content">
-        <p class="eyebrow">
-          Actividad de Graduación · Magíster en Ingeniería de la Energía
-        </p>
+        <p class="eyebrow">Actividad de Graduación · Magíster en Ingeniería de la Energía</p>
 
-        <h2>
-          Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación
-        </h2>
+        <h2>Evaluación del costo real de degradación de sistemas BESS bajo condiciones reales de operación</h2>
 
-        <p class="hero-text">
-          Plataforma académica para documentar el avance metodológico, técnico
-          y económico de un estudio FV+BESS bajo un enfoque price-taker,
-          utilizando datos reales del Sistema Eléctrico Nacional de Chile.
+        <p>
+          Plataforma académica para documentar el avance metodológico, técnico y económico
+          de un estudio FV+BESS bajo un enfoque price-taker, utilizando datos reales del
+          Sistema Eléctrico Nacional de Chile.
         </p>
 
         <div class="hero-actions">
-          <a href="#proyecto" class="btn btn-primary">
-            <i data-lucide="clipboard-list"></i>
-            Ver proyecto
-          </a>
-
-          <a href="#metodologia" class="btn btn-secondary">
-            <i data-lucide="workflow"></i>
-            Ver metodología
-          </a>
+          <a href="#proyecto" class="btn primary"><i data-lucide="clipboard-list"></i>Ver proyecto</a>
+          <a href="#metodologia" class="btn secondary"><i data-lucide="book-open"></i>Ver metodología</a>
         </div>
       </div>
 
       <div class="hero-strip">
         <div class="strip-item">
           <i data-lucide="map-pin"></i>
-          <div>
-            <strong>María Elena</strong>
-            <span>Zona de estudio</span>
-          </div>
+          <div><strong>Zona de estudio</strong><span>María Elena · CEME1</span></div>
         </div>
 
         <div class="strip-item">
-          <i data-lucide="bar-chart-3"></i>
-          <div>
-            <strong>Mirage 220</strong>
-            <span>Barra de precios</span>
-          </div>
+          <i data-lucide="chart-column-increasing"></i>
+          <div><strong>Barra de precios</strong><span>Mirage 220</span></div>
         </div>
 
         <div class="strip-item">
           <i data-lucide="user-round"></i>
-          <div>
-            <strong>Price-Taker</strong>
-            <span>Enfoque de mercado</span>
-          </div>
+          <div><strong>Enfoque de mercado</strong><span>Price-Taker</span></div>
         </div>
 
         <div class="strip-item">
           <i data-lucide="box"></i>
-          <div>
-            <strong>SAM</strong>
-            <span>Simulación energética</span>
-          </div>
+          <div><strong>Simulación energética</strong><span>SAM</span></div>
         </div>
       </div>
     </section>
 
     <section class="top-grid">
-      <article class="card project-card" id="proyecto">
-        <div class="section-title">
+      <article class="panel project-panel" id="proyecto">
+        <div class="title-row">
           <span><i data-lucide="file-text"></i></span>
           <h3>Descripción del proyecto</h3>
         </div>
 
         <p>
-          Esta actividad de graduación evalúa el impacto debido a las distintas
-          estrategias de operación sobre la degradación y el desempeño económico
-          de un sistema BESS y cómo esta degradación debe ser compensada
-          económicamente para justificar la inversión y la operación de este
-          sistema BESS asociada a una planta fotovoltaica utility-scale ubicada
-          en el norte de Chile.
+          Evaluamos el impacto técnico y económico de distintas estrategias de operación de
+          un sistema FV+BESS sobre la degradación de la batería y su rentabilidad, utilizando
+          datos reales del SEN.
         </p>
 
-        <p>
-          Se utilizarán datos históricos reales del Sistema Eléctrico Nacional,
-          incluyendo energía inyectada, niveles de curtailment fotovoltaico y
-          precios marginales de la barra Mirage 220 durante un horizonte de tres
-          a cinco años y cómo estos inputs modelan el despacho.
-        </p>
+        <div class="project-points">
+          <div>
+            <i data-lucide="battery-charging"></i>
+            <strong>Enfoque técnico</strong>
+            <small>Cuantificación del desgaste de la batería bajo distintos escenarios de operación.</small>
+          </div>
 
-        <p>
-          El análisis se realiza bajo un enfoque price-taker, donde el sistema
-          FV+BESS no influye sobre los precios del mercado. Se compararán
-          estrategias orientadas al aprovechamiento de energía vertida, al
-          arbitraje energético y a una operación mixta.
-        </p>
+          <div>
+            <i data-lucide="trending-up"></i>
+            <strong>Enfoque económico</strong>
+            <small>Análisis de ingresos, costos y degradación asociados a la operación del sistema.</small>
+          </div>
+
+          <div>
+            <i data-lucide="scale"></i>
+            <strong>Decisión informada</strong>
+            <small>Evaluación de la conveniencia económica del BESS para recuperar valor.</small>
+          </div>
+        </div>
       </article>
 
-      <article class="card methodology-card" id="metodologia">
-        <div class="section-title">
+      <article class="panel methodology-panel" id="metodologia">
+        <div class="title-row">
           <span><i data-lucide="network"></i></span>
           <h3>Metodología</h3>
         </div>
@@ -152,50 +123,77 @@
         <div class="method-flow">
           <div class="method-step">
             <b>1</b>
-            <div class="method-icon"><i data-lucide="database"></i></div>
-            <strong>Datos históricos</strong>
+            <div><i data-lucide="database"></i></div>
+            <strong>Datos históricos SEN</strong>
+            <ul>
+              <li>Energía inyectada CEME1</li>
+              <li>Curtailment fotovoltaico</li>
+              <li>Precios marginales Mirage 220</li>
+            </ul>
           </div>
 
           <div class="method-step">
             <b>2</b>
-            <div class="method-icon"><i data-lucide="sun"></i></div>
-            <strong>Simulación FV</strong>
+            <div><i data-lucide="sun"></i></div>
+            <strong>Simulación FV (SAM)</strong>
+            <ul>
+              <li>Modelación de planta FV</li>
+              <li>Simulación energética horaria</li>
+              <li>Validación energética</li>
+            </ul>
           </div>
 
           <div class="method-step">
             <b>3</b>
-            <div class="method-icon"><i data-lucide="battery-charging"></i></div>
+            <div><i data-lucide="battery-charging"></i></div>
             <strong>Operación BESS</strong>
+            <ul>
+              <li>Recuperación de curtailment</li>
+              <li>Arbitraje energético</li>
+              <li>SOC y carga/descarga</li>
+            </ul>
           </div>
 
           <div class="method-step">
             <b>4</b>
-            <div class="method-icon"><i data-lucide="trending-down"></i></div>
-            <strong>Degradación</strong>
+            <div><i data-lucide="bar-chart-3"></i></div>
+            <strong>Indicadores operacionales</strong>
+            <ul>
+              <li>Throughput acumulado</li>
+              <li>Ciclos equivalentes</li>
+              <li>Utilización del BESS</li>
+            </ul>
           </div>
 
           <div class="method-step">
             <b>5</b>
-            <div class="method-icon"><i data-lucide="circle-dollar-sign"></i></div>
+            <div><i data-lucide="circle-dollar-sign"></i></div>
             <strong>Evaluación económica</strong>
+            <ul>
+              <li>Beneficio neto</li>
+              <li>Costo de degradación</li>
+              <li>USD/MWh y USD/ciclo</li>
+            </ul>
           </div>
         </div>
       </article>
 
-      <article class="objective-card">
-        <div class="objective-title">
-          <i data-lucide="target"></i>
+      <article class="panel objective-panel">
+        <div class="title-row objective-title">
+          <span><i data-lucide="target"></i></span>
           <h3>Objetivo general del AG</h3>
         </div>
 
         <p>
-          Determinar el costo técnico y económico asociado a la degradación de
-          un sistema BESS bajo distintas estrategias de operación aplicadas a
-          una planta fotovoltaica utility-scale, utilizando condiciones reales
-          de operación del Sistema Eléctrico Nacional de Chile.
+          Determinar el costo real de degradación de un sistema BESS bajo distintos escenarios
+          de operación asociados a una planta fotovoltaica utility-scale, cuantificando el impacto
+          del desgaste sobre la vida útil y la rentabilidad del activo, y evaluando en qué medida
+          los beneficios económicos obtenidos mediante recuperación de curtailment, arbitraje
+          energético y operación mixta compensan dicho desgaste y justifican la inversión en
+          almacenamiento energético.
         </p>
 
-        <div class="objective-bottom">
+        <div class="objective-items">
           <div>
             <i data-lucide="line-chart"></i>
             <strong>Enfoque</strong>
@@ -205,166 +203,98 @@
           <div>
             <i data-lucide="flag"></i>
             <strong>Propósito</strong>
-            <small>Cuantificar el impacto de la degradación en la rentabilidad.</small>
+            <small>Evaluar si los beneficios económicos compensan el desgaste del BESS.</small>
           </div>
 
           <div>
             <i data-lucide="chart-no-axes-combined"></i>
             <strong>Resultado esperado</strong>
-            <small>Costo de degradación por unidad de energía.</small>
+            <small>Costo real de degradación por unidad de energía y su impacto en la rentabilidad.</small>
           </div>
         </div>
       </article>
     </section>
 
     <section class="bottom-grid">
-      <article class="card tools-card" id="herramientas">
-        <div class="section-title">
+      <article class="panel tools-panel" id="herramientas">
+        <div class="title-row">
           <span><i data-lucide="wrench"></i></span>
           <h3>Herramientas utilizadas</h3>
         </div>
 
         <div class="tool-list">
-          <div class="tool-item">
-            <div class="sam-logo">SAM</div>
-            <div>
-              <strong>System Advisor Model</strong>
-              <p>Simulación energética y análisis financiero FV+BESS.</p>
-            </div>
+          <div>
+            <strong class="tool-word">Python</strong>
+            <p><b>Python</b><br>Procesamiento de datos, automatización y visualización.</p>
           </div>
 
-          <div class="tool-item">
-            <div class="python-logo">Py</div>
-            <div>
-              <strong>Python</strong>
-              <p>Procesamiento de datos, automatización y visualización.</p>
-            </div>
+          <div>
+            <strong class="tool-icon"><i data-lucide="home"></i></strong>
+            <p><b>Price-Taker</b><br>Modelo de operación sin influencia sobre el precio spot.</p>
           </div>
 
-          <div class="tool-item">
-            <div class="tool-chart"><i data-lucide="chart-line"></i></div>
-            <div>
-              <strong>Price-Taker</strong>
-              <p>Modelo de operación sin influencia sobre el precio spot.</p>
-            </div>
+          <div>
+            <strong class="tool-word">SAM</strong>
+            <p><b>System Advisor Model</b><br>Simulación energética y análisis financiero FV+BESS.</p>
           </div>
         </div>
       </article>
 
-      <article class="card links-card" id="links">
-        <div class="section-title">
-          <span><i data-lucide="link"></i></span>
-          <h3>Links de interés</h3>
+      <article class="panel sources-panel" id="links">
+        <div class="title-row">
+          <span><i data-lucide="database"></i></span>
+          <h3>Fuentes de datos</h3>
         </div>
 
-        <div class="link-list">
+        <div class="source-list">
           <a href="https://www.coordinador.cl/" target="_blank" rel="noopener">
-            <div class="link-icon"><i data-lucide="network"></i></div>
-            <div>
-              <strong>Coordinador Eléctrico Nacional</strong>
-              <small>Sitio oficial del CEN</small>
-            </div>
-            <em>›</em>
+            <i data-lucide="database"></i>
+            <div><strong>Coordinador Eléctrico Nacional</strong><small>Sitio oficial del CEN</small></div>
+            <em>↗</em>
           </a>
 
           <a href="https://www.coordinador.cl/reportes-y-estadisticas/" target="_blank" rel="noopener">
-            <div class="link-icon"><i data-lucide="clipboard-list"></i></div>
-            <div>
-              <strong>Reportes y Estadísticas CEN</strong>
-              <small>Datos y reportes del mercado eléctrico</small>
-            </div>
-            <em>›</em>
+            <i data-lucide="database"></i>
+            <div><strong>Reportes y Estadísticas CEN</strong><small>Datos y reportes del mercado eléctrico</small></div>
+            <em>↗</em>
           </a>
 
-          <a href="https://sam.nrel.gov/" target="_blank" rel="noopener">
-            <div class="link-sam">SAM</div>
-            <div>
-              <strong>System Advisor Model</strong>
-              <small>Documentación oficial de NREL</small>
-            </div>
-            <em>›</em>
+          <a href="https://www.coordinador.cl/open-data/" target="_blank" rel="noopener">
+            <i data-lucide="cloud"></i>
+            <div><strong>Open Data CEN</strong><small>Datos abiertos del Sistema Eléctrico Nacional</small></div>
+            <em>↗</em>
           </a>
         </div>
       </article>
 
-      <article class="card indicators-card" id="dashboard">
-        <div class="section-title">
-          <span><i data-lucide="bar-chart-3"></i></span>
+      <article class="panel indicators-panel" id="dashboard">
+        <div class="title-row">
+          <span><i data-lucide="chart-column"></i></span>
           <h3>Indicadores clave</h3>
         </div>
 
-        <div class="metrics-grid">
-          <div class="metric">
-            <span>Energía recuperada</span>
-            <strong>--</strong>
-            <small>MWh</small>
-            <i></i>
-          </div>
-
-          <div class="metric">
-            <span>Ingresos brutos</span>
-            <strong>--</strong>
-            <small>USD</small>
-            <i></i>
-          </div>
-
-          <div class="metric">
-            <span>Costo degradación</span>
-            <strong>--</strong>
-            <small>USD/MWh</small>
-            <i></i>
-          </div>
-
-          <div class="metric">
-            <span>SOH final</span>
-            <strong>--</strong>
-            <small>%</small>
-            <i></i>
-          </div>
-
-          <div class="metric">
-            <span>Ciclos equivalentes</span>
-            <strong>--</strong>
-            <small>ciclos</small>
-            <i></i>
-          </div>
+        <div class="metric-grid">
+          <div><strong>Curtailment recuperado</strong><span>GWh</span><i></i></div>
+          <div><strong>Beneficio neto</strong><span>MM USD</span><i></i></div>
+          <div><strong>Costo degradación</strong><span>USD/MWh</span><i></i></div>
+          <div><strong>SOH final</strong><span>%</span><i></i></div>
+          <div><strong>Ciclos equivalentes</strong><span>ciclos</span><i></i></div>
         </div>
 
-        <p class="metric-note">
-          Indicadores referenciales · Los valores se actualizarán con cada simulación.
-        </p>
+        <p>Indicadores referenciales · Los valores se actualizarán con cada simulación.</p>
       </article>
 
-      <article class="card progress-card" id="avances">
-        <div class="section-title">
+      <article class="panel progress-panel" id="avances">
+        <div class="title-row">
           <span><i data-lucide="rocket"></i></span>
-          <h3>Avances del proyecto</h3>
+          <h3>Avances del proyecto de AG</h3>
         </div>
 
         <div class="progress-list">
-          <div class="progress-item done">
-            <span></span>
-            <strong>Definición del enfoque</strong>
-            <em>100%</em>
-          </div>
-
-          <div class="progress-item done">
-            <span></span>
-            <strong>Base de datos histórica</strong>
-            <em>100%</em>
-          </div>
-
-          <div class="progress-item current">
-            <span></span>
-            <strong>Modelo SAM</strong>
-            <em>70%</em>
-          </div>
-
-          <div class="progress-item">
-            <span></span>
-            <strong>Dashboard de resultados</strong>
-            <em>0%</em>
-          </div>
+          <div class="active"><span></span><strong>Definición del enfoque</strong><em>En progreso</em></div>
+          <div><span></span><strong>Base de datos histórica</strong><em>Pendiente</em></div>
+          <div><span></span><strong>Modelo SAM</strong><em>Pendiente</em></div>
+          <div><span></span><strong>Dashboard de resultados</strong><em>Pendiente</em></div>
         </div>
       </article>
     </section>
@@ -375,25 +305,20 @@
         <span>FV + BESS Performance Platform</span>
       </div>
 
-      <div>
-        <strong>Magíster en Ingeniería de la Energía</strong>
-        <span>Pontificia Universidad Católica de Chile</span>
-      </div>
+      <p>
+        Sitio desarrollado por el autor con apoyo de IA (GPT),
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        y
+        <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">Cloudflare</a>.
+      </p>
 
-      <div>
-        <strong>Contacto: ignacio.storage@uc.cl</strong>
-        <span>Santiago, Chile · 2025</span>
-      </div>
+      <small>© 2026</small>
     </footer>
   </main>
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    lucide.createIcons({
-      attrs: {
-        strokeWidth: 2
-      }
-    });
+    lucide.createIcons();
   </script>
 </body>
 </html>
