@@ -1,1 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metodología | Storage Analytics</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
 
+<body>
+  <header class="header">
+    <a href="/" class="brand">
+      <div class="brand-icon">▱</div>
+      <div>
+        <h1>Storage Analytics</h1>
+        <p>FV + BESS Performance Platform</p>
+      </div>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+      <a href="/#proyecto">Proyecto de AG</a>
+      <a href="/metodologia/" class="active">Metodología</a>
+      <a href="/#herramientas">Herramientas</a>
+      <a href="/#links">Links</a>
+      <a href="/#avances">Avances</a>
+      <a href="/#Gantt">Gantt Proyecto AG</a>
+      <a href="/#dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="method-page">
+
+    <section class="method-hero">
+      <div class="method-hero-text">
+        <span class="eyebrow">Metodología</span>
+        <h1>Enfoque metodológico del proyecto</h1>
+        <p>
+          La metodología integra modelación fotovoltaica, datos reales del Sistema
+          Eléctrico Nacional, operación de almacenamiento BESS y evaluación del
+          costo asociado a la degradación del activo bajo condiciones reales de
+          operación en Chile.
+        </p>
+        <p>
+          El enfoque se desarrolla en etapas consecutivas que permiten transformar
+          datos climáticos y operacionales en perfiles de uso del BESS, indicadores
+          de degradación y métricas económicas asociadas al desgaste del sistema.
+        </p>
+      </div>
+
+      <div class="method-highlight">
+        <div class="highlight-icon">☀</div>
+        <span>Primera etapa completada</span>
+        <h2>Modelación FV en SAM</h2>
+        <strong>1.001,49 GWh/año</strong>
+        <p>
+          Generación AC anual simulada para CEME1 utilizando seis subcampos
+          independientes y recurso meteorológico horario 2025 para María Elena.
+        </p>
+      </div>
+    </section>
+
+    <section class="method-section">
+      <div class="section-title">
+        <span class="eyebrow">Diagrama metodológico</span>
+        <h2>Secuencia general de análisis</h2>
+      </div>
+
+      <div class="method-flow">
+
+        <article class="method-step">
+          <div class="step-number">01</div>
+          <div class="step-icon">☁</div>
+          <h3>Datos de entrada</h3>
+          <p>
+            Recurso solar horario, variables meteorológicas, generación real,
+            curtailment y precios marginales del CEN.
+          </p>
+        </article>
+
+        <article class="method-step">
+          <div class="step-number">02</div>
+          <div class="step-icon">▣</div>
+          <h3>Modelo FV en SAM</h3>
+          <p>
+            Representación de CEME1 mediante seis subcampos equivalentes a la
+            arquitectura técnica de la planta.
+          </p>
+        </article>
+
+        <article class="method-step">
+          <div class="step-number">03</div>
+          <div class="step-icon">▤</div>
+          <h3>Series horarias FV</h3>
+          <p>
+            Exportación y agregación de la generación fotovoltaica simulada a
+            nivel de planta.
+          </p>
+        </article>
+
+        <article class="method-step">
+          <div class="step-number">04</div>
+          <div class="step-icon">▯</div>
+          <h3>Operación BESS</h3>
+          <p>
+            Construcción de perfiles de carga y descarga bajo recuperación de
+            curtailment, arbitraje y operación mixta.
+          </p>
+        </article>
+
+        <article class="method-step">
+          <div class="step-number">05</div>
+          <div class="step-icon">⌁</div>
+          <h3>Degradación</h3>
+          <p>
+            Evaluación del uso del BESS mediante SOC, throughput, ciclos
+            equivalentes, pérdida de capacidad y SOH.
+          </p>
+        </article>
+
+        <article class="method-step">
+          <div class="step-number">06</div>
+          <div class="step-icon">$</div>
+          <h3>Costo real</h3>
+          <p>
+            Estimación del costo técnico-económico asociado al desgaste del
+            sistema de almacenamiento.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="method-grid-section">
+
+      <div class="method-panel">
+        <span class="eyebrow">Datos y herramientas</span>
+        <h2>Herramientas principales</h2>
+
+        <div class="tool-list">
+          <div>
+            <strong>NASA POWER</strong>
+            <p>GHI, DNI, DHI, temperatura, viento, presión y albedo.</p>
+          </div>
+
+          <div>
+            <strong>CEN</strong>
+            <p>Generación real, curtailment y precios marginales.</p>
+          </div>
+
+          <div>
+            <strong>SAM</strong>
+            <p>Modelación fotovoltaica de CEME1 mediante seis subcampos.</p>
+          </div>
+
+          <div>
+            <strong>Python / Pandas</strong>
+            <p>Procesamiento, agregación y análisis de series horarias.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-panel">
+        <span class="eyebrow">Flujo de datos</span>
+        <h2>Integración del modelo</h2>
+
+        <div class="data-flow">
+          <div class="data-box">Recurso solar horario</div>
+          <div class="data-box">Datos CEN históricos</div>
+          <div class="data-box">Parámetros BESS</div>
+          <div class="data-arrow">→</div>
+          <div class="data-box main">Modelo FV en SAM</div>
+          <div class="data-arrow">→</div>
+          <div class="data-box bess">Despacho BESS</div>
+          <div class="data-arrow">→</div>
+          <div class="data-box cost">Evaluación económica y degradación</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="method-section">
+      <div class="section-title">
+        <span class="eyebrow">Resultados evaluados</span>
+        <h2>Indicadores de operación y degradación</h2>
+      </div>
+
+      <div class="mini-chart-grid">
+
+        <div class="mini-chart-card">
+          <h3>Generación FV diaria</h3>
+          <div class="curve-chart"></div>
+          <p>Perfil referencial de generación FV durante un día típico.</p>
+        </div>
+
+        <div class="mini-chart-card">
+          <h3>SOC del BESS</h3>
+          <div class="soc-chart">
+            <span style="height:55%"></span>
+            <span style="height:65%"></span>
+            <span style="height:90%"></span>
+            <span style="height:90%"></span>
+            <span style="height:60%"></span>
+            <span style="height:75%"></span>
+          </div>
+          <p>Evolución referencial del estado de carga.</p>
+        </div>
+
+        <div class="mini-chart-card">
+          <h3>Energía recuperada</h3>
+          <div class="bar-chart">
+            <span style="height:30%"></span>
+            <span style="height:55%"></span>
+            <span style="height:80%"></span>
+            <span style="height:65%"></span>
+            <span style="height:45%"></span>
+          </div>
+          <p>Recuperación mensual asociada a curtailment.</p>
+        </div>
+
+        <div class="mini-chart-card">
+          <h3>Costo de degradación</h3>
+          <div class="bar-chart purple">
+            <span style="height:45%"></span>
+            <span style="height:62%"></span>
+            <span style="height:78%"></span>
+          </div>
+          <p>Comparación entre estrategias de operación.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="method-objective">
+      <div class="objective-icon">◎</div>
+      <div>
+        <span>Objetivo general</span>
+        <p>
+          Determinar el costo técnico y económico asociado a la degradación de
+          sistemas de almacenamiento mediante baterías operando junto a plantas
+          fotovoltaicas utility-scale bajo condiciones reales del Sistema
+          Eléctrico Nacional de Chile.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
