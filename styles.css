@@ -55,11 +55,12 @@ a {
    ========================================================= */
 
 .site-header {
-  height: 92px;
+  min-height: 92px;
   padding: 0 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 44px;
   background: rgba(2, 9, 19, 0.88);
   border-bottom: 1px solid rgba(70, 151, 255, 0.13);
   backdrop-filter: blur(18px);
@@ -73,6 +74,7 @@ a {
   align-items: center;
   gap: 18px;
   text-decoration: none;
+  flex: 0 0 auto;
 }
 
 .brand-icon {
@@ -106,16 +108,19 @@ a {
 }
 
 /* =========================================================
-   Main navigation + simple methodology dropdown
+   Navigation
    ========================================================= */
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 34px;
+  justify-content: flex-end;
+  gap: clamp(34px, 2.6vw, 58px);
+  margin-left: auto;
+  flex: 1 1 auto;
 }
 
-.nav a,
+.nav > a,
 .nav-dropdown-trigger {
   position: relative;
   text-decoration: none;
@@ -124,19 +129,19 @@ a {
   font-weight: 600;
   padding: 34px 2px;
   transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
-.nav a:hover,
-.nav a.active,
-.nav-dropdown-trigger:hover,
-.nav-dropdown.open .nav-dropdown-trigger,
-.nav-dropdown:hover .nav-dropdown-trigger {
+.nav > a:hover,
+.nav > a.active,
+.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown.open .nav-dropdown-trigger {
   color: var(--blue);
 }
 
-.nav a.active::after,
-.nav-dropdown.open .nav-dropdown-trigger::after,
-.nav-dropdown:hover .nav-dropdown-trigger::after {
+.nav > a.active::after,
+.nav-dropdown:hover .nav-dropdown-trigger::after,
+.nav-dropdown.open .nav-dropdown-trigger::after {
   content: "";
   position: absolute;
   left: 0;
@@ -151,6 +156,7 @@ a {
   position: relative;
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .nav-dropdown-trigger {
@@ -160,31 +166,45 @@ a {
   cursor: pointer;
 }
 
-/* Menú simple, sin caja enmarcada */
+/* =========================================================
+   Methodology dropdown
+   ========================================================= */
 
 .methodology-menu {
   position: absolute;
   top: 100%;
   left: 50%;
-  width: 680px;
-  transform: translate(-50%, 18px);
+  width: 620px;
+  transform: translate(-50%, 12px);
+
+  display: block;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+
+  padding: 8px 0;
+  z-index: 9999;
+
+  background: rgba(1, 8, 18, 0.96);
+  backdrop-filter: blur(16px);
+  border-radius: 14px;
+  box-shadow:
+    0 24px 65px rgba(0, 0, 0, 0.62),
+    0 0 34px rgba(22, 139, 255, 0.08);
+
   transition:
     opacity 0.22s ease,
     visibility 0.22s ease,
     transform 0.22s ease;
-  z-index: 999;
 }
 
 .methodology-menu::before {
   content: "";
   position: absolute;
-  top: -22px;
+  top: -18px;
   left: 0;
   right: 0;
-  height: 22px;
+  height: 18px;
 }
 
 .nav-dropdown:hover .methodology-menu,
@@ -195,90 +215,43 @@ a {
   transform: translate(-50%, 0);
 }
 
-.methodology-menu-content {
-  padding: 26px 0 20px;
-  color: #ffffff;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+.nav .methodology-menu a {
+  padding: 0;
+  text-decoration: none;
 }
 
-.methodology-parent {
-  margin-bottom: 24px;
+.nav .methodology-menu a::after {
+  display: none !important;
 }
 
-.methodology-parent-link,
 .methodology-block {
-  display: flex;
+  display: flex !important;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  width: 100%;
-  text-decoration: none;
-  color: #ffffff;
-}
+  justify-content: flex-start;
+  gap: 16px;
 
-.methodology-parent-link {
-  color: var(--blue);
-  font-size: 1.08rem;
-  font-weight: 900;
-  line-height: 1.3;
-  padding: 4px 0 14px;
-}
+  padding: 14px 18px !important;
+  margin: 0;
 
-.methodology-parent-link strong {
-  color: var(--blue);
-  font-size: 1.2rem;
-  font-weight: 900;
-}
+  border-top: 1px solid rgba(185, 200, 216, 0.11);
 
-.methodology-submenu {
-  padding-left: 42px;
-  display: grid;
-  gap: 18px;
-}
-
-.methodology-subitem {
-  display: block;
-  width: fit-content;
-  color: #f4f7fb;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.4;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.methodology-subitem:hover {
-  color: var(--blue);
-  transform: translateX(6px);
-}
-
-.methodology-block {
-  padding: 15px 0;
-  font-size: 1.03rem;
-  font-weight: 750;
+  color: #ffffff !important;
+  font-size: 0.94rem;
+  font-weight: 760;
   line-height: 1.35;
-  border-top: 1px solid rgba(185, 200, 216, 0.16);
+
   transition:
     color 0.2s ease,
-    transform 0.2s ease;
+    background 0.2s ease;
+}
+
+.methodology-block:first-child {
+  border-top: 0;
 }
 
 .methodology-block:hover {
-  color: var(--blue);
-  transform: translateX(6px);
-}
-
-.methodology-block strong {
-  font-size: 1.7rem;
-  line-height: 1;
-  font-weight: 300;
-  color: #ffffff;
-}
-
-.methodology-block:hover strong {
-  color: var(--blue);
+  color: var(--blue) !important;
+  background: rgba(22, 139, 255, 0.09);
 }
 
 /* =========================================================
@@ -920,6 +893,15 @@ a {
    ========================================================= */
 
 @media (max-width: 1450px) {
+  .site-header {
+    padding: 0 36px;
+    gap: 34px;
+  }
+
+  .nav {
+    gap: clamp(28px, 2.2vw, 44px);
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
   }
@@ -940,33 +922,35 @@ a {
     padding: 18px 26px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 18px;
   }
 
   .nav {
     width: 100%;
+    justify-content: flex-start;
     flex-wrap: wrap;
     overflow: visible;
-    gap: 22px;
+    gap: 26px 34px;
     padding-bottom: 4px;
+    margin-left: 0;
   }
 
-  .nav a,
+  .nav > a,
   .nav-dropdown-trigger {
     padding: 8px 0 14px;
     white-space: nowrap;
   }
 
-  .nav a.active::after,
-  .nav-dropdown.open .nav-dropdown-trigger::after,
-  .nav-dropdown:hover .nav-dropdown-trigger::after {
+  .nav > a.active::after,
+  .nav-dropdown:hover .nav-dropdown-trigger::after,
+  .nav-dropdown.open .nav-dropdown-trigger::after {
     bottom: 4px;
   }
 
   .methodology-menu {
     left: 0;
-    width: min(680px, calc(100vw - 52px));
-    transform: translate(0, 18px);
+    width: min(620px, calc(100vw - 52px));
+    transform: translate(0, 12px);
   }
 
   .nav-dropdown:hover .methodology-menu,
@@ -1013,6 +997,10 @@ a {
     padding: 16px;
   }
 
+  .brand {
+    gap: 14px;
+  }
+
   .brand-icon {
     width: 44px;
     height: 54px;
@@ -1025,42 +1013,52 @@ a {
 
   .brand-text p {
     font-size: 0.88rem;
+    line-height: 1.3;
   }
 
   .nav {
-    gap: 18px;
+    gap: 14px 24px;
+  }
+
+  .nav-dropdown {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .methodology-menu {
-    position: fixed;
-    top: 118px;
-    left: 16px;
-    right: 16px;
-    width: auto;
-    transform: translateY(18px);
+    position: static;
+    width: 100%;
+    transform: none;
+
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    margin-top: 2px;
+    background: rgba(1, 8, 18, 0.97);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
   }
 
-  .nav-dropdown:hover .methodology-menu,
+  .methodology-menu::before {
+    display: none;
+  }
+
+  .nav-dropdown:hover .methodology-menu {
+    display: none;
+  }
+
   .nav-dropdown.open .methodology-menu {
-    transform: translateY(0);
+    display: block;
+    transform: none;
   }
 
-  .methodology-menu-content {
-    padding: 20px 0 12px;
-  }
-
-  .methodology-parent-link {
-    font-size: 0.98rem;
-  }
-
-  .methodology-submenu {
-    padding-left: 20px;
-    gap: 14px;
-  }
-
-  .methodology-subitem,
   .methodology-block {
-    font-size: 0.92rem;
+    padding: 12px 14px !important;
+    font-size: 0.86rem;
   }
 
   .hero-text {
@@ -1103,536 +1101,5 @@ a {
 
   .site-footer p {
     line-height: 1.8;
-  }
-}
-/* =========================================================
-   Ajuste visual menú Metodología
-   Fondo legible + menor separación entre bloques
-   ========================================================= */
-
-.methodology-menu {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 620px;
-  transform: translate(-50%, 12px);
-
-  display: block;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  padding: 0;
-  z-index: 9999;
-
-  text-shadow: none;
-
-  transition:
-    opacity 0.22s ease,
-    visibility 0.22s ease,
-    transform 0.22s ease;
-}
-
-.methodology-menu::before {
-  content: "";
-  position: absolute;
-  top: -18px;
-  left: 0;
-  right: 0;
-  height: 18px;
-}
-
-.nav-dropdown:hover .methodology-menu,
-.nav-dropdown.open .methodology-menu {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translate(-50%, 0);
-}
-
-/* Fondo del menú: visible pero liviano */
-.methodology-menu {
-  background: rgba(3, 13, 27, 0.88);
-  backdrop-filter: blur(14px);
-  border-radius: 14px;
-  box-shadow:
-    0 20px 55px rgba(0, 0, 0, 0.48),
-    0 0 28px rgba(22, 139, 255, 0.08);
-}
-
-/* Contenido compacto */
-.methodology-main-item,
-.methodology-block {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.methodology-main-item {
-  padding: 14px 18px 10px !important;
-  margin: 0;
-  color: var(--blue) !important;
-  font-size: 0.96rem;
-  font-weight: 850;
-  line-height: 1.35;
-}
-
-.methodology-main-item strong {
-  color: var(--blue);
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.methodology-subitem {
-  display: block;
-  width: fit-content;
-
-  margin: 0 0 0 34px;
-  padding: 8px 18px 8px 0 !important;
-
-  color: #f4f7fb !important;
-  font-size: 0.92rem;
-  font-weight: 550;
-  line-height: 1.35;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.methodology-subitem:hover {
-  color: var(--blue) !important;
-  transform: translateX(5px);
-}
-
-.methodology-block {
-  padding: 11px 18px !important;
-  margin: 0;
-
-  border-top: 1px solid rgba(185, 200, 216, 0.13);
-
-  color: #ffffff !important;
-  font-size: 0.94rem;
-  font-weight: 700;
-  line-height: 1.35;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.methodology-block:hover {
-  color: var(--blue) !important;
-  background: rgba(22, 139, 255, 0.08);
-  transform: none;
-}
-
-.methodology-block strong {
-  color: #ffffff;
-  font-size: 1.25rem;
-  line-height: 1;
-  font-weight: 300;
-}
-
-.methodology-block:hover strong {
-  color: var(--blue);
-}
-
-/* Evita que los enlaces internos hereden el subrayado del menú principal */
-.nav .methodology-menu a::after {
-  display: none !important;
-}
-
-/* =========================================================
-   Tablet
-   ========================================================= */
-
-@media (max-width: 1180px) {
-  .methodology-menu {
-    left: 0;
-    width: min(620px, calc(100vw - 52px));
-    transform: translate(0, 12px);
-  }
-
-  .nav-dropdown:hover .methodology-menu,
-  .nav-dropdown.open .methodology-menu {
-    transform: translate(0, 0);
-  }
-}
-
-/* =========================================================
-   Celular
-   ========================================================= */
-
-@media (max-width: 720px) {
-  .nav-dropdown {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .methodology-menu {
-    position: static;
-    width: 100%;
-    transform: none;
-
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-
-    margin-top: 2px;
-    background: rgba(3, 13, 27, 0.92);
-    border-radius: 12px;
-    box-shadow: none;
-    backdrop-filter: blur(10px);
-  }
-
-  .methodology-menu::before {
-    display: none;
-  }
-
-  .nav-dropdown:hover .methodology-menu {
-    display: none;
-  }
-
-  .nav-dropdown.open .methodology-menu {
-    display: block;
-    transform: none;
-  }
-
-  .methodology-main-item {
-    padding: 12px 14px 8px !important;
-    font-size: 0.9rem;
-  }
-
-  .methodology-subitem {
-    margin-left: 22px;
-    padding: 7px 14px 7px 0 !important;
-    font-size: 0.86rem;
-  }
-
-  .methodology-block {
-    padding: 10px 14px !important;
-    font-size: 0.86rem;
-  }
-
-  .methodology-block strong {
-    font-size: 1.1rem;
-  }
-}
-/* =========================================================
-   Menú Metodología oscuro + submenú lateral Bloque 1
-   ========================================================= */
-
-.methodology-menu {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 620px;
-  transform: translate(-50%, 12px);
-
-  display: block;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  padding: 8px 0;
-  z-index: 9999;
-
-  background: rgba(1, 8, 18, 0.96);
-  backdrop-filter: blur(16px);
-  border-radius: 14px;
-  box-shadow:
-    0 24px 65px rgba(0, 0, 0, 0.62),
-    0 0 34px rgba(22, 139, 255, 0.08);
-
-  text-shadow: none;
-
-  transition:
-    opacity 0.22s ease,
-    visibility 0.22s ease,
-    transform 0.22s ease;
-}
-
-.methodology-menu::before {
-  content: "";
-  position: absolute;
-  top: -18px;
-  left: 0;
-  right: 0;
-  height: 18px;
-}
-
-.nav-dropdown:hover .methodology-menu,
-.nav-dropdown.open .methodology-menu {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translate(-50%, 0);
-}
-
-/* Evita heredar estilos de los links principales del header */
-
-.nav .methodology-menu a {
-  padding: 0;
-  text-decoration: none;
-}
-
-.nav .methodology-menu a::after {
-  display: none !important;
-}
-
-/* Bloque 1 como ítem padre */
-
-.methodology-main-group {
-  position: relative;
-}
-
-.methodology-main-item,
-.methodology-block {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.methodology-main-item {
-  padding: 13px 18px !important;
-  margin: 0;
-
-  color: #ffffff !important;
-  font-size: 0.94rem;
-  font-weight: 800;
-  line-height: 1.35;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease;
-}
-
-.methodology-main-item strong {
-  color: var(--blue);
-  font-size: 1.2rem;
-  line-height: 1;
-  font-weight: 500;
-}
-
-.methodology-main-group:hover .methodology-main-item {
-  color: var(--blue) !important;
-  background: rgba(22, 139, 255, 0.09);
-}
-
-/* Submenú lateral Bloque 1.1 y 1.2 */
-
-.methodology-flyout {
-  position: absolute;
-  top: 0;
-  left: calc(100% + 10px);
-  width: 360px;
-
-  padding: 8px 0;
-
-  background: rgba(1, 8, 18, 0.97);
-  backdrop-filter: blur(16px);
-  border-radius: 12px;
-  box-shadow:
-    0 24px 65px rgba(0, 0, 0, 0.62),
-    0 0 28px rgba(22, 139, 255, 0.08);
-
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateX(-8px);
-
-  transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease,
-    transform 0.2s ease;
-
-  z-index: 10000;
-}
-
-.methodology-main-group:hover .methodology-flyout {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(0);
-}
-
-.methodology-flyout::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -14px;
-  width: 14px;
-  height: 100%;
-}
-
-.methodology-flyout-item {
-  display: block;
-  padding: 12px 16px !important;
-
-  color: #f4f7fb !important;
-  font-size: 0.92rem;
-  font-weight: 650;
-  line-height: 1.35;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    padding-left 0.2s ease;
-}
-
-.methodology-flyout-item:hover {
-  color: var(--blue) !important;
-  background: rgba(22, 139, 255, 0.1);
-  padding-left: 22px !important;
-}
-
-/* Bloques 2, 3 y 4 más compactos */
-
-.methodology-block {
-  padding: 12px 18px !important;
-  margin: 0;
-
-  border-top: 1px solid rgba(185, 200, 216, 0.11);
-
-  color: #ffffff !important;
-  font-size: 0.94rem;
-  font-weight: 750;
-  line-height: 1.35;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease;
-}
-
-.methodology-block:hover {
-  color: var(--blue) !important;
-  background: rgba(22, 139, 255, 0.09);
-}
-
-.methodology-block strong {
-  color: #ffffff;
-  font-size: 1.25rem;
-  line-height: 1;
-  font-weight: 300;
-}
-
-.methodology-block:hover strong {
-  color: var(--blue);
-}
-
-/* =========================================================
-   Tablet
-   ========================================================= */
-
-@media (max-width: 1180px) {
-  .methodology-menu {
-    left: 0;
-    width: min(620px, calc(100vw - 52px));
-    transform: translate(0, 12px);
-  }
-
-  .nav-dropdown:hover .methodology-menu,
-  .nav-dropdown.open .methodology-menu {
-    transform: translate(0, 0);
-  }
-
-  .methodology-flyout {
-    left: 0;
-    top: calc(100% + 6px);
-    width: min(360px, calc(100vw - 52px));
-  }
-}
-
-/* =========================================================
-   Celular
-   ========================================================= */
-
-@media (max-width: 720px) {
-  .nav-dropdown {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .methodology-menu {
-    position: static;
-    width: 100%;
-    transform: none;
-
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-
-    margin-top: 2px;
-    background: rgba(1, 8, 18, 0.97);
-    border-radius: 12px;
-    box-shadow: none;
-    backdrop-filter: blur(10px);
-  }
-
-  .methodology-menu::before {
-    display: none;
-  }
-
-  .nav-dropdown:hover .methodology-menu {
-    display: none;
-  }
-
-  .nav-dropdown.open .methodology-menu {
-    display: block;
-    transform: none;
-  }
-
-  .methodology-main-item {
-    padding: 12px 14px !important;
-    font-size: 0.9rem;
-  }
-
-  .methodology-flyout {
-    position: static;
-    width: 100%;
-
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: none;
-
-    margin: 0;
-    padding: 0 0 6px;
-    background: rgba(0, 6, 14, 0.78);
-    box-shadow: none;
-    border-radius: 0;
-  }
-
-  .methodology-main-group:hover .methodology-flyout,
-  .methodology-main-group:focus-within .methodology-flyout {
-    display: block;
-    transform: none;
-  }
-
-  .methodology-flyout::before {
-    display: none;
-  }
-
-  .methodology-flyout-item {
-    padding: 10px 14px 10px 28px !important;
-    font-size: 0.86rem;
-  }
-
-  .methodology-block {
-    padding: 11px 14px !important;
-    font-size: 0.86rem;
-  }
-
-  .methodology-block strong {
-    font-size: 1.1rem;
   }
 }
