@@ -22,7 +22,53 @@
 
     <nav class="nav" aria-label="Navegación principal">
       <a href="/" class="active">Inicio</a>
-      <a href="/metodologia/">Metodología</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Metodología
+          <span class="dropdown-chevron">▾</span>
+        </button>
+
+        <div class="dropdown-card" role="menu">
+          <a
+            href="/metodologia/bloque-1-1/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-option"
+            role="menuitem"
+          >
+            <span class="dropdown-icon">☀</span>
+
+            <span class="dropdown-copy">
+              <span class="dropdown-block">Bloque 1.1</span>
+              <strong>Datos meteorológicos y generación potencial</strong>
+              <small>Explorador Solar y NASA POWER.</small>
+            </span>
+          </a>
+
+          <a
+            href="/metodologia/bloque-1-2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-option"
+            role="menuitem"
+          >
+            <span class="dropdown-icon">▥</span>
+
+            <span class="dropdown-copy">
+              <span class="dropdown-block">Bloque 1.2</span>
+              <strong>Modelo de simulación en SAM</strong>
+              <small>Diseño CEME1, carga horaria y cálculo de EGrid.</small>
+            </span>
+          </a>
+        </div>
+      </div>
+
       <a href="/objetivos/">Objetivos</a>
       <a href="/avances/">Avances</a>
       <a href="/links/">Links de interés</a>
@@ -302,5 +348,37 @@
       Magíster en Ingeniería de la Energía
     </p>
   </footer>
+
+  <script>
+    const methodologyDropdown = document.querySelector(".nav-dropdown");
+    const methodologyTrigger = document.querySelector(".nav-dropdown-trigger");
+
+    if (methodologyDropdown && methodologyTrigger) {
+      methodologyTrigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        methodologyDropdown.classList.toggle("open");
+
+        const isOpen = methodologyDropdown.classList.contains("open");
+        methodologyTrigger.setAttribute("aria-expanded", isOpen);
+      });
+
+      methodologyDropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+
+      document.addEventListener("click", function () {
+        methodologyDropdown.classList.remove("open");
+        methodologyTrigger.setAttribute("aria-expanded", "false");
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          methodologyDropdown.classList.remove("open");
+          methodologyTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
