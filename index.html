@@ -33,75 +33,49 @@
           Metodología
         </button>
 
-      <div class="methodology-menu" role="menu">
-  <div class="methodology-main-group">
-    <a
-      href="/metodologia/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="methodology-main-item"
-      role="menuitem"
-    >
-      <span>Bloque 1 · Data meteorológica y Simulación en SAM</span>
-      <strong>›</strong>
-    </a>
+        <div class="methodology-menu" role="menu">
+          <a
+            href="/metodologia/bloque-1/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="methodology-block"
+            role="menuitem"
+          >
+            <span>Bloque 1 · Data meteorológica y Simulación en SAM</span>
+          </a>
 
-    <div class="methodology-flyout" role="menu">
-      <a
-        href="/metodologia/bloque-1-1/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="methodology-flyout-item"
-        role="menuitem"
-      >
-        Bloque 1.1 · Datos meteorológicos
-      </a>
+          <a
+            href="/metodologia/bloque-2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="methodology-block"
+            role="menuitem"
+          >
+            <span>Bloque 2 · Operación del sistema BESS</span>
+          </a>
 
-      <a
-        href="/metodologia/bloque-1-2/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="methodology-flyout-item"
-        role="menuitem"
-      >
-        Bloque 1.2 · Simulación en SAM
-      </a>
-    </div>
-  </div>
+          <a
+            href="/metodologia/bloque-3/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="methodology-block"
+            role="menuitem"
+          >
+            <span>Bloque 3 · Degradación del sistema BESS</span>
+          </a>
 
-  <a
-    href="/metodologia/bloque-2/"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="methodology-block pending"
-    role="menuitem"
-  >
-    <span>Bloque 2 · Operación del sistema BESS</span>
-    <strong>›</strong>
-  </a>
+          <a
+            href="/metodologia/bloque-4/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="methodology-block"
+            role="menuitem"
+          >
+            <span>Bloque 4 · Estimación del costo de degradación del sistema BESS</span>
+          </a>
+        </div>
+      </div>
 
-  <a
-    href="/metodologia/bloque-3/"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="methodology-block pending"
-    role="menuitem"
-  >
-    <span>Bloque 3 · Degradación del sistema BESS</span>
-    <strong>›</strong>
-  </a>
-
-  <a
-    href="/metodologia/bloque-4/"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="methodology-block pending"
-    role="menuitem"
-  >
-    <span>Bloque 4 · Estimación del costo de degradación del sistema BESS</span>
-    <strong>›</strong>
-  </a>
-</div>
       <a href="/objetivos/">Objetivos</a>
       <a href="/avances/">Avances</a>
       <a href="/links/">Links de interés</a>
@@ -393,7 +367,7 @@
         methodologyDropdown.classList.toggle("open");
 
         const isOpen = methodologyDropdown.classList.contains("open");
-        methodologyTrigger.setAttribute("aria-expanded", isOpen);
+        methodologyTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
       });
 
       methodologyDropdown.addEventListener("click", function (event) {
