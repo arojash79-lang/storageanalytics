@@ -86,8 +86,8 @@
         Este bloque desarrolla la base energética inicial del estudio. Su propósito
         es recopilar, procesar y validar datos meteorológicos y operacionales para
         estimar la generación fotovoltaica potencial de CEME1 en SAM, compararla
-        con registros reales del Coordinador Eléctrico Nacional y generar los
-        insumos que posteriormente permitirán definir escenarios de operación del BESS.
+        con registros reales del Coordinador Eléctrico Nacional (CEN) y generar los
+        inpunts o parámetros que posteriormente permitirán definir escenarios de operación del BESS.
       </p>
     </section>
 
@@ -103,14 +103,15 @@
           El Bloque 1 busca construir una representación energética de la planta
           fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
           operacionales reales. Para ello, se utilizarán datos del Explorador Solar
-          de Chile y NASA POWER, los cuales serán procesados en Python para generar
-          archivos meteorológicos horarios compatibles con SAM.
+          de Chile para una serie horaria de un año meteorológico típico (TMY) y 
+          NASA POWER serie horaria 2025, los cuales serán procesados en Python para 
+          generar archivos meteorológicos horarios en formato CSV compatibles con SAM.
         </p>
 
         <p>
           Posteriormente, estos archivos serán utilizados en SAM junto con la
           arquitectura técnica de CEME1, considerando paneles, strings e inversores,
-          para obtener estimaciones de energía potencial esperada. Dichas simulaciones
+          para obtener las estimaciones de energía esperada. Dichas simulaciones
           serán contrastadas con la energía real inyectada a la red y con los registros
           de curtailment publicados por el Coordinador Eléctrico Nacional.
         </p>
@@ -178,8 +179,7 @@
           <h4>Procesamiento en Python</h4>
           <p>
             Las series se limpian, ordenan y validan mediante Python y Pandas,
-            revisando formato horario, unidades, variables disponibles y registros
-            faltantes.
+            revisando formato horario y unidades.
           </p>
         </article>
 
