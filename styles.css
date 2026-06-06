@@ -1727,3 +1727,66 @@ a {
     font-size: 0.86rem;
   }
 }
+/* =========================================================
+   Ajuste ancho menú Links de interés
+   Caja más compacta y alineada al encabezado
+   ========================================================= */
+
+.links-menu {
+  width: 340px;
+  left: 0;
+  transform: translate(0, 12px);
+}
+
+.links-dropdown:hover .links-menu,
+.links-dropdown.open .links-menu {
+  transform: translate(0, 0);
+}
+
+.links-menu-item {
+  padding: 12px 16px !important;
+}
+
+.links-menu-item span {
+  font-size: 0.9rem;
+  font-weight: 540;
+}
+
+.links-menu-item small {
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+/* Tablet */
+@media (max-width: 1180px) {
+  .links-menu {
+    width: min(340px, calc(100vw - 52px));
+    left: 0;
+    transform: translate(0, 12px);
+  }
+
+  .links-dropdown:hover .links-menu,
+  .links-dropdown.open .links-menu {
+    transform: translate(0, 0);
+  }
+}
+
+/* Celular */
+@media (max-width: 720px) {
+  .links-menu {
+    width: 100%;
+  }
+
+  .links-menu-item {
+    padding: 12px 14px !important;
+  }
+
+  .links-menu-item span {
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
+
+  .links-menu-item small {
+    font-size: 0.75rem;
+  }
+}
