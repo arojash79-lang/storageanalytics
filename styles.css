@@ -1680,3 +1680,50 @@ a {
     font-size: 0.76rem;
   }
 }
+/* =========================================================
+   Ajuste ancho menú Metodología
+   Caja más compacta
+   ========================================================= */
+
+.methodology-menu {
+  width: 430px;
+  left: 0;
+  transform: translate(0, 12px);
+}
+
+.nav-dropdown:hover .methodology-menu,
+.nav-dropdown.open .methodology-menu {
+  transform: translate(0, 0);
+}
+
+.methodology-block {
+  padding: 13px 16px !important;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* Tablet */
+@media (max-width: 1180px) {
+  .methodology-menu {
+    width: min(430px, calc(100vw - 52px));
+    left: 0;
+    transform: translate(0, 12px);
+  }
+
+  .nav-dropdown:hover .methodology-menu,
+  .nav-dropdown.open .methodology-menu {
+    transform: translate(0, 0);
+  }
+}
+
+/* Celular */
+@media (max-width: 720px) {
+  .methodology-menu {
+    width: 100%;
+  }
+
+  .methodology-block {
+    padding: 12px 14px !important;
+    font-size: 0.86rem;
+  }
+}
