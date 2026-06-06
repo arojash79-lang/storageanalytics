@@ -1790,3 +1790,62 @@ a {
     font-size: 0.75rem;
   }
 }
+/* =========================================================
+   Corrección móvil dropdown Links de interés
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .links-dropdown {
+    width: 100%;
+    display: block;
+  }
+
+  .links-dropdown .nav-dropdown-trigger {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+
+  .links-menu {
+    position: static;
+    width: 100%;
+    transform: none;
+
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    margin-top: 4px;
+    background: rgba(1, 8, 18, 0.97);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+  }
+
+  .links-menu::before {
+    display: none;
+  }
+
+  .links-dropdown:hover .links-menu {
+    display: none;
+  }
+
+  .links-dropdown.open .links-menu {
+    display: block;
+    transform: none;
+  }
+
+  .links-menu-item {
+    padding: 12px 14px !important;
+  }
+
+  .links-menu-item span {
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
+
+  .links-menu-item small {
+    font-size: 0.75rem;
+  }
+}
