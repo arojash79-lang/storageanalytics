@@ -1424,3 +1424,89 @@ a {
     width: 100%;
   }
 }
+/* =========================================================
+   Corrección menú móvil
+   Alinear Metodología a la izquierda
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .nav > a,
+  .nav-dropdown-trigger {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    text-align: left;
+    font-size: 0.94rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .nav-dropdown {
+    width: 100%;
+    display: block;
+  }
+
+  .nav-dropdown-trigger {
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    color: #f4f7fb;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .nav > a.active::after,
+  .nav-dropdown:hover .nav-dropdown-trigger::after,
+  .nav-dropdown.open .nav-dropdown-trigger::after {
+    left: 0;
+    right: auto;
+    bottom: 6px;
+    width: 42px;
+  }
+
+  .methodology-menu {
+    position: static;
+    width: 100%;
+    transform: none;
+
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    margin-top: 4px;
+    background: rgba(1, 8, 18, 0.97);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+  }
+
+  .methodology-menu::before {
+    display: none;
+  }
+
+  .nav-dropdown:hover .methodology-menu {
+    display: none;
+  }
+
+  .nav-dropdown.open .methodology-menu {
+    display: block;
+    transform: none;
+  }
+
+  .methodology-block {
+    padding: 12px 14px !important;
+    font-size: 0.86rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+}
