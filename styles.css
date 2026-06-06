@@ -1105,3 +1105,221 @@ a {
     line-height: 1.8;
   }
 }
+/* =========================================================
+   Ajuste visual menú Metodología
+   Fondo legible + menor separación entre bloques
+   ========================================================= */
+
+.methodology-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 620px;
+  transform: translate(-50%, 12px);
+
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  padding: 0;
+  z-index: 9999;
+
+  text-shadow: none;
+
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease;
+}
+
+.methodology-menu::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 0;
+  right: 0;
+  height: 18px;
+}
+
+.nav-dropdown:hover .methodology-menu,
+.nav-dropdown.open .methodology-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+/* Fondo del menú: visible pero liviano */
+.methodology-menu {
+  background: rgba(3, 13, 27, 0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.48),
+    0 0 28px rgba(22, 139, 255, 0.08);
+}
+
+/* Contenido compacto */
+.methodology-main-item,
+.methodology-block {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.methodology-main-item {
+  padding: 14px 18px 10px !important;
+  margin: 0;
+  color: var(--blue) !important;
+  font-size: 0.96rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.methodology-main-item strong {
+  color: var(--blue);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.methodology-subitem {
+  display: block;
+  width: fit-content;
+
+  margin: 0 0 0 34px;
+  padding: 8px 18px 8px 0 !important;
+
+  color: #f4f7fb !important;
+  font-size: 0.92rem;
+  font-weight: 550;
+  line-height: 1.35;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.methodology-subitem:hover {
+  color: var(--blue) !important;
+  transform: translateX(5px);
+}
+
+.methodology-block {
+  padding: 11px 18px !important;
+  margin: 0;
+
+  border-top: 1px solid rgba(185, 200, 216, 0.13);
+
+  color: #ffffff !important;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.35;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.methodology-block:hover {
+  color: var(--blue) !important;
+  background: rgba(22, 139, 255, 0.08);
+  transform: none;
+}
+
+.methodology-block strong {
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.methodology-block:hover strong {
+  color: var(--blue);
+}
+
+/* Evita que los enlaces internos hereden el subrayado del menú principal */
+.nav .methodology-menu a::after {
+  display: none !important;
+}
+
+/* =========================================================
+   Tablet
+   ========================================================= */
+
+@media (max-width: 1180px) {
+  .methodology-menu {
+    left: 0;
+    width: min(620px, calc(100vw - 52px));
+    transform: translate(0, 12px);
+  }
+
+  .nav-dropdown:hover .methodology-menu,
+  .nav-dropdown.open .methodology-menu {
+    transform: translate(0, 0);
+  }
+}
+
+/* =========================================================
+   Celular
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .nav-dropdown {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .methodology-menu {
+    position: static;
+    width: 100%;
+    transform: none;
+
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    margin-top: 2px;
+    background: rgba(3, 13, 27, 0.92);
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+  }
+
+  .methodology-menu::before {
+    display: none;
+  }
+
+  .nav-dropdown:hover .methodology-menu {
+    display: none;
+  }
+
+  .nav-dropdown.open .methodology-menu {
+    display: block;
+    transform: none;
+  }
+
+  .methodology-main-item {
+    padding: 12px 14px 8px !important;
+    font-size: 0.9rem;
+  }
+
+  .methodology-subitem {
+    margin-left: 22px;
+    padding: 7px 14px 7px 0 !important;
+    font-size: 0.86rem;
+  }
+
+  .methodology-block {
+    padding: 10px 14px !important;
+    font-size: 0.86rem;
+  }
+
+  .methodology-block strong {
+    font-size: 1.1rem;
+  }
+}
