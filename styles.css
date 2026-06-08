@@ -1142,7 +1142,7 @@ a {
   border-radius: 18px;
   background:
     linear-gradient(90deg, rgba(2, 11, 22, 0.92), rgba(2, 11, 22, 0.58)),
-    url("/assets/ceme1-hero.jpg") center/cover no-repeat;
+    url("/assets/hero-bess.jpg") center/cover no-repeat;
   box-shadow: 0 0 34px rgba(0, 157, 255, 0.11);
 }
 
