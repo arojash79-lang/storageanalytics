@@ -2520,3 +2520,482 @@ a {
 .sam-advance-hero-image {
   display: none !important;
 }
+/* =========================================================
+   AVANCE COMPARACIÓN DE DATOS METEOROLÓGICOS
+   Mismo formato visual que Configuración CEME1 en SAM
+   ========================================================= */
+
+.meteo-page {
+  width: min(100%, 1780px);
+  margin: 0 auto;
+  padding: 38px 30px 0;
+}
+
+.meteo-hero {
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 58px 56px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 10, 20, 0.62) 0%,
+      rgba(2, 10, 20, 0.56) 30%,
+      rgba(2, 10, 20, 0.36) 58%,
+      rgba(2, 10, 20, 0.18) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 20, 0.08) 0%,
+      rgba(2, 10, 20, 0.16) 100%
+    ),
+    url("/assets/ceme1-v-invertida-atardecer.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.meteo-hero-text {
+  width: 100%;
+  max-width: 760px;
+  position: relative;
+  z-index: 2;
+  padding: 20px 28px 24px;
+}
+
+.meteo-hero-text h2 {
+  max-width: 790px;
+  margin: 0;
+  font-size: clamp(2.35rem, 4vw, 4.65rem);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+.meteo-hero-text p {
+  max-width: 760px;
+  margin: 22px 0 28px;
+  color: #d7e3ef;
+  line-height: 1.62;
+  font-size: 1.04rem;
+}
+
+.meteo-overview-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.meteo-card {
+  padding: 28px;
+  border-radius: var(--radius-md);
+  background: rgba(4, 16, 31, 0.82);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.meteo-card-large {
+  grid-row: span 2;
+}
+
+.meteo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.meteo-card-header span {
+  color: var(--blue);
+  font-size: 1.5rem;
+}
+
+.meteo-card-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.meteo-card p {
+  margin: 0 0 16px;
+  color: #cbd8e8;
+  font-size: 1.04rem;
+  line-height: 1.62;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.meteo-card p:last-child {
+  margin-bottom: 0;
+}
+
+.meteo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.meteo-list li {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(8, 30, 56, 0.7);
+  border: 1px solid rgba(70, 151, 255, 0.22);
+}
+
+.meteo-list strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.meteo-list span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.92rem;
+}
+
+.meteo-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.meteo-metric {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(8, 30, 56, 0.7);
+  border: 1px solid rgba(70, 151, 255, 0.22);
+}
+
+.meteo-metric strong {
+  display: block;
+  color: #ffffff;
+  font-size: 1.55rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.meteo-metric span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.meteo-workflow,
+.meteo-kpi-section,
+.meteo-carousel-section {
+  margin-top: 24px;
+  padding: 30px 38px 34px;
+  border-radius: var(--radius-md);
+  background: rgba(4, 16, 31, 0.78);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+
+.meteo-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.meteo-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.meteo-step,
+.meteo-kpi-card {
+  min-height: 210px;
+  padding: 22px 18px;
+  border-radius: 14px;
+  background: rgba(8, 30, 56, 0.82);
+  border: 1px solid rgba(70, 151, 255, 0.28);
+}
+
+.meteo-step span {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: rgba(22, 139, 255, 0.18);
+  border: 1px solid rgba(70, 151, 255, 0.48);
+  color: var(--blue);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.meteo-step h4 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.meteo-step p,
+.meteo-kpi-card p {
+  margin: 0;
+  color: #c6d5e6;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.meteo-kpi-card span {
+  display: block;
+  color: var(--blue);
+  font-size: 0.88rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.meteo-kpi-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 1.55rem;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.meteo-config-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.meteo-table-wrap {
+  overflow-x: auto;
+}
+
+.meteo-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #d9e8f5;
+  font-size: 0.95rem;
+}
+
+.meteo-table th,
+.meteo-table td {
+  border: 1px solid rgba(70, 151, 255, 0.22);
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.meteo-table th {
+  color: #cdeeff;
+  background: rgba(22, 139, 255, 0.16);
+  font-weight: 800;
+}
+
+.meteo-table td:first-child {
+  color: var(--cyan);
+  font-weight: 800;
+}
+
+.meteo-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 24px;
+  padding: 34px;
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(22, 139, 255, 0.16), rgba(4, 16, 31, 0.92));
+  border: 1px solid rgba(70, 151, 255, 0.34);
+  box-shadow: var(--shadow);
+}
+
+.meteo-result h3 {
+  margin: 0 0 12px;
+  font-size: 1.6rem;
+}
+
+.meteo-result p {
+  max-width: 920px;
+  margin: 0;
+  color: #cbd8e8;
+  font-size: 1.04rem;
+  line-height: 1.62;
+}
+
+.meteo-result-check {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  font-size: 1.8rem;
+  font-weight: 900;
+  box-shadow: 0 0 22px rgba(22, 139, 255, 0.26);
+}
+
+.meteo-carousel {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
+  gap: 18px;
+}
+
+.meteo-carousel-btn {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(20, 31, 45, 0.94);
+  color: #ffffff;
+  font-size: 2.3rem;
+  cursor: pointer;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+.meteo-slide {
+  display: none;
+  max-width: 920px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(8, 30, 56, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.meteo-slide.active {
+  display: block;
+}
+
+.meteo-slide img {
+  display: block;
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  background: #ffffff;
+}
+
+.meteo-slide div {
+  padding: 16px 20px;
+  background: rgba(3, 10, 20, 0.96);
+  color: #f4f8ff;
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.meteo-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.meteo-dot {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(160, 178, 198, 0.42);
+  cursor: pointer;
+}
+
+.meteo-dot.active {
+  background: var(--blue);
+}
+
+/* Responsive */
+
+@media (max-width: 1450px) {
+  .meteo-flow-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .meteo-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1180px) {
+  .meteo-overview-grid,
+  .meteo-config-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meteo-card-large {
+    grid-row: auto;
+  }
+
+  .meteo-result {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .meteo-page {
+    padding: 24px 16px 0;
+  }
+
+  .meteo-hero {
+    min-height: 420px;
+    padding: 38px 24px;
+  }
+
+  .meteo-hero-text {
+    padding: 8px 4px 18px;
+  }
+
+  .meteo-hero-text h2 {
+    font-size: 2.3rem;
+  }
+
+  .meteo-hero-text p {
+    font-size: 0.96rem;
+  }
+
+  .meteo-card,
+  .meteo-workflow,
+  .meteo-kpi-section,
+  .meteo-carousel-section,
+  .meteo-result {
+    padding: 22px 18px;
+  }
+
+  .meteo-metric-grid,
+  .meteo-flow-grid,
+  .meteo-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meteo-carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .meteo-carousel-btn {
+    display: none;
+  }
+
+  .meteo-slide img {
+    height: 260px;
+  }
+}
