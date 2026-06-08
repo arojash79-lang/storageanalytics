@@ -1,1 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Comparación de Datos Meteorológicos | Storage Analytics</title>
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="brand" aria-label="Storage Analytics">
+      <div class="brand-icon">
+        <span>ϟ</span>
+      </div>
+
+      <div class="brand-text">
+        <h1>Storage Analytics</h1>
+        <p>Plataforma de análisis en costos por degradación en sistemas BESS</p>
+      </div>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Metodología
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/metodologia/bloque-1/" class="dropdown-item" role="menuitem">
+            <span>Bloque 1</span>
+            <small>Data Meteorológica y Simulación en SAM</small>
+          </a>
+
+          <a href="/metodologia/bloque-2/" class="dropdown-item" role="menuitem">
+            <span>Bloque 2</span>
+            <small>Operación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-3/" class="dropdown-item" role="menuitem">
+            <span>Bloque 3</span>
+            <small>Degradación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-4/" class="dropdown-item" role="menuitem">
+            <span>Bloque 4</span>
+            <small>Estimación del Costo de Degradación del Sistema BESS</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/objetivos/">Objetivos</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Avances
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/avances/" class="dropdown-item" role="menuitem">
+            <span>Todos los avances</span>
+            <small>Resumen general de avances técnicos</small>
+          </a>
+
+          <a href="/avances/configuracion-CEME1-SAM/" class="dropdown-item" role="menuitem">
+            <span>Configuración CEME1 en SAM</span>
+            <small>Arquitectura real de planta en System Advisor Model</small>
+          </a>
+
+          <a href="/avances/comparacion-datos-meteorologicos/" class="dropdown-item" role="menuitem">
+            <span>Comparación de datos meteorológicos</span>
+            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Generación de Energía Horaria</span>
+            <small>Simulación en SAM</small>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Links de interés
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-small" role="menu">
+          <a
+            href="https://www.coordinador.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>CEN</span>
+            <small>Coordinador Eléctrico Nacional</small>
+          </a>
+
+          <a
+            href="https://solar.minenergia.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Explorador Solar</span>
+            <small>Recurso solar y datos meteorológicos de Chile</small>
+          </a>
+
+          <a
+            href="https://power.larc.nasa.gov/data-access-viewer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>NASA POWER</span>
+            <small>Datos meteorológicos y solares horarios</small>
+          </a>
+
+          <a
+            href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Arquitectura CEME1</span>
+            <small>Informe CEN de potencia máxima PFV CEME1</small>
+          </a>
+
+          <a
+            href="https://www.python.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Python</span>
+            <small>Programación y procesamiento de datos</small>
+          </a>
+
+          <a
+            href="https://sam.nrel.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>SAM</span>
+            <small>Software de simulación energética</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/dashboard/">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="meteo-page">
+
+    <section class="meteo-hero">
+      <div class="meteo-hero-text">
+        <span class="block-kicker">Avance técnico</span>
+
+        <h2>Comparación de Datos Meteorológicos</h2>
+
+        <p>
+          Este avance analiza y compara dos fuentes públicas de datos meteorológicos utilizadas
+          para estimar la generación fotovoltaica potencial de CEME1 en SAM: el Explorador Solar
+          de Chile y NASA POWER. La comparación se centra en las principales variables de irradiancia
+          solar: GHI, DNI y DHI.
+        </p>
+
+        <a class="btn btn-primary" href="#" target="_blank">
+          Descargar PDF de respaldo
+        </a>
+      </div>
+    </section>
+
+    <section class="meteo-overview-grid">
+      <article class="meteo-card meteo-card-large">
+        <div class="meteo-card-header">
+          <span>◎</span>
+          <h3>Objetivo y alcance del avance</h3>
+        </div>
+
+        <p>
+          En esta etapa del trabajo se analiza la información meteorológica utilizada para estimar
+          la energía fotovoltaica potencial de la planta CEME1 mediante el software SAM. El objetivo
+          principal es comparar dos fuentes públicas de datos meteorológicos reconocidas y utilizadas
+          en análisis energéticos: el Explorador Solar de Chile y NASA POWER.
+        </p>
+
+        <p>
+          El Explorador Solar de Chile permite obtener información meteorológica asociada a la
+          ubicación de CEME1, en la comuna de María Elena, considerando coordenadas geográficas,
+          altitud y variables solares relevantes para simulación fotovoltaica. Sin embargo, la
+          información disponible corresponde a un año meteorológico típico, por lo que no representa
+          directamente las condiciones específicas del año 2025.
+        </p>
+
+        <p>
+          Por otra parte, NASA POWER permite descargar datos meteorológicos horarios recientes para
+          la zona de estudio, incluyendo información correspondiente al año 2025. Esta fuente se
+          incorpora debido a que permite reconstruir una serie meteorológica contemporánea al período
+          de análisis operacional considerado en el proyecto.
+        </p>
+
+        <p>
+          A partir de ambas bases de datos se realizará una comparación de variables relevantes,
+          principalmente GHI, DNI y DHI, con el propósito de evaluar diferencias entre fuentes,
+          revisar su coherencia y determinar cómo dichas diferencias pueden afectar la estimación
+          de generación fotovoltaica potencial en SAM.
+        </p>
+      </article>
+
+      <article class="meteo-card">
+        <div class="meteo-card-header">
+          <span>☀</span>
+          <h3>Fuentes comparadas</h3>
+        </div>
+
+        <ul class="meteo-list">
+          <li>
+            <strong>Explorador Solar de Chile</strong>
+            <span>Año meteorológico típico para la zona de María Elena.</span>
+          </li>
+
+          <li>
+            <strong>NASA POWER 2025</strong>
+            <span>Serie horaria reciente para reconstruir condiciones meteorológicas del año 2025.</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="meteo-card">
+        <div class="meteo-card-header">
+          <span>▦</span>
+          <h3>Variables principales</h3>
+        </div>
+
+        <div class="meteo-metric-grid">
+          <div class="meteo-metric">
+            <strong>GHI</strong>
+            <span>Irradiancia global horizontal</span>
+          </div>
+
+          <div class="meteo-metric">
+            <strong>DNI</strong>
+            <span>Irradiancia normal directa</span>
+          </div>
+
+          <div class="meteo-metric">
+            <strong>DHI</strong>
+            <span>Irradiancia difusa horizontal</span>
+          </div>
+
+          <div class="meteo-metric">
+            <strong>Tdry</strong>
+            <span>Temperatura ambiente</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="meteo-workflow">
+      <div class="section-heading">
+        <span>⛓</span>
+        <h3>Flujo de trabajo de comparación meteorológica</h3>
+      </div>
+
+      <div class="meteo-flow-grid">
+        <article class="meteo-step">
+          <span>01</span>
+          <h4>Selección de fuentes</h4>
+          <p>Se definen dos bases meteorológicas públicas: Explorador Solar de Chile y NASA POWER.</p>
+        </article>
+
+        <article class="meteo-step">
+          <span>02</span>
+          <h4>Descarga de datos</h4>
+          <p>Se descargan datos meteorológicos para la ubicación de CEME1 en María Elena.</p>
+        </article>
+
+        <article class="meteo-step">
+          <span>03</span>
+          <h4>Procesamiento NASA POWER</h4>
+          <p>Se utiliza Python para transformar la serie 2025 en un archivo CSV compatible con SAM.</p>
+        </article>
+
+        <article class="meteo-step">
+          <span>04</span>
+          <h4>Carga en SAM</h4>
+          <p>Ambos archivos meteorológicos se cargan sobre la arquitectura de CEME1 previamente configurada.</p>
+        </article>
+
+        <article class="meteo-step">
+          <span>05</span>
+          <h4>Comparación de variables</h4>
+          <p>Se comparan GHI, DNI y DHI mediante métricas anuales, mensuales y perfiles horarios.</p>
+        </article>
+
+        <article class="meteo-step">
+          <span>06</span>
+          <h4>Análisis posterior</h4>
+          <p>Las diferencias entre fuentes serán vinculadas con la generación energética estimada en SAM.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="meteo-kpi-section">
+      <div class="section-heading">
+        <span>▤</span>
+        <h3>Indicadores comparativos principales</h3>
+      </div>
+
+      <div class="meteo-kpi-grid">
+        <article class="meteo-kpi-card">
+          <span>GHI promedio diario anual</span>
+          <strong>7,216 vs 7,068</strong>
+          <p>kWh/m²/día · Explorador Solar TMY vs NASA POWER 2025</p>
+        </article>
+
+        <article class="meteo-kpi-card">
+          <span>DNI promedio diario anual</span>
+          <strong>10,367 vs 8,907</strong>
+          <p>kWh/m²/día · diferencia relevante en componente directa</p>
+        </article>
+
+        <article class="meteo-kpi-card">
+          <span>DHI promedio diario anual</span>
+          <strong>0,761 vs 1,217</strong>
+          <p>kWh/m²/día · mayor componente difusa en NASA POWER 2025</p>
+        </article>
+
+        <article class="meteo-kpi-card">
+          <span>Temperatura promedio anual</span>
+          <strong>19,526 vs 18,397</strong>
+          <p>°C · Explorador Solar TMY vs NASA POWER 2025</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="meteo-config-grid">
+      <article class="meteo-card">
+        <div class="meteo-card-header">
+          <span>▧</span>
+          <h3>Resumen comparativo anual</h3>
+        </div>
+
+        <div class="meteo-table-wrap">
+          <table class="meteo-table">
+            <thead>
+              <tr>
+                <th>KPI</th>
+                <th>Explorador Solar TMY</th>
+                <th>NASA POWER 2025</th>
+                <th>Diferencia NASA - Explorador</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>GHI promedio diario anual</td>
+                <td>7,216 kWh/m²/día</td>
+                <td>7,068 kWh/m²/día</td>
+                <td>-2,06%</td>
+              </tr>
+
+              <tr>
+                <td>DNI promedio diario anual</td>
+                <td>10,367 kWh/m²/día</td>
+                <td>8,907 kWh/m²/día</td>
+                <td>-14,08%</td>
+              </tr>
+
+              <tr>
+                <td>DHI promedio diario anual</td>
+                <td>0,761 kWh/m²/día</td>
+                <td>1,217 kWh/m²/día</td>
+                <td>+60,00%</td>
+              </tr>
+
+              <tr>
+                <td>Temperatura promedio anual</td>
+                <td>19,526 °C</td>
+                <td>18,397 °C</td>
+                <td>-1,129 °C</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="meteo-card">
+        <div class="meteo-card-header">
+          <span>⚙</span>
+          <h3>Relación con SAM</h3>
+        </div>
+
+        <p>
+          El archivo del Explorador Solar presenta la ventaja de estar disponible en un formato
+          directamente compatible con SAM, por lo que puede ser cargado sin un procesamiento
+          significativo.
+        </p>
+
+        <p>
+          En cambio, los datos descargados desde NASA POWER requieren ser procesados previamente.
+          Para ello, se utiliza un script desarrollado en Python, ejecutado desde Visual Studio Code,
+          cuyo objetivo es transformar la base meteorológica descargada en un archivo CSV compatible
+          con SAM.
+        </p>
+
+        <p>
+          Finalmente, se obtienen dos archivos meteorológicos de entrada: uno basado en el año
+          meteorológico típico del Explorador Solar y otro construido a partir de la serie horaria
+          2025 de NASA POWER.
+        </p>
+      </article>
+    </section>
+
+    <section class="meteo-result">
+      <div>
+        <span class="block-kicker">Resultado del avance</span>
+        <h3>Base meteorológica comparativa para simulación energética</h3>
+
+        <p>
+          La comparación entre Explorador Solar TMY y NASA POWER 2025 permite construir una base
+          meteorológica trazable para evaluar posteriormente el impacto de la fuente de datos sobre
+          la generación energética simulada de CEME1 en SAM.
+        </p>
+      </div>
+
+      <div class="meteo-result-check">✓</div>
+    </section>
+
+    <section class="meteo-carousel-section">
+      <div class="section-heading">
+        <span>▧</span>
+        <h3>Gráficos comparativos</h3>
+      </div>
+
+      <div class="meteo-carousel">
+        <button class="meteo-carousel-btn" type="button" id="prevSlide">‹</button>
+
+        <div class="meteo-slides">
+          <article class="meteo-slide active">
+            <img src="/assets/meteo-grafico-01.png" alt="Comparación mensual GHI">
+            <div>Gráfico 1 · Comparación mensual de GHI entre Explorador Solar TMY y NASA POWER 2025.</div>
+          </article>
+
+          <article class="meteo-slide">
+            <img src="/assets/meteo-grafico-02.png" alt="Comparación mensual DNI">
+            <div>Gráfico 2 · Comparación mensual de DNI entre Explorador Solar TMY y NASA POWER 2025.</div>
+          </article>
+
+          <article class="meteo-slide">
+            <img src="/assets/meteo-grafico-03.png" alt="Comparación mensual DHI">
+            <div>Gráfico 3 · Comparación mensual de DHI entre Explorador Solar TMY y NASA POWER 2025.</div>
+          </article>
+        </div>
+
+        <button class="meteo-carousel-btn" type="button" id="nextSlide">›</button>
+      </div>
+
+      <div class="meteo-dots" id="carouselDots"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Storage Analytics © 2025
+      <span>•</span>
+      Actividad de Graduación
+      <span>•</span>
+      Magíster en Ingeniería de la Energía
+    </p>
+  </footer>
+
+  <script>
+    const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+      if (!trigger) return;
+
+      trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        dropdowns.forEach(function (otherDropdown) {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove("open");
+
+            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
+
+            if (otherTrigger) {
+              otherTrigger.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+
+        dropdown.classList.toggle("open");
+
+        const isOpen = dropdown.classList.contains("open");
+        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      dropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+    });
+
+    document.addEventListener("click", function () {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.classList.remove("open");
+
+        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        dropdowns.forEach(function (dropdown) {
+          dropdown.classList.remove("open");
+
+          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+          if (trigger) {
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    });
+
+    const slides = Array.from(document.querySelectorAll(".meteo-slide"));
+    const dotsContainer = document.getElementById("carouselDots");
+    const prevButton = document.getElementById("prevSlide");
+    const nextButton = document.getElementById("nextSlide");
+
+    let currentSlide = 0;
+
+    function createDots() {
+      slides.forEach(function (_, index) {
+        const dot = document.createElement("button");
+        dot.className = "meteo-dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", "Ir a gráfico " + (index + 1));
+        dot.addEventListener("click", function () {
+          showSlide(index);
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function showSlide(index) {
+      currentSlide = (index + slides.length) % slides.length;
+
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle("active", i === currentSlide);
+      });
+
+      const dots = Array.from(document.querySelectorAll(".meteo-dot"));
+
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle("active", i === currentSlide);
+      });
+    }
+
+    if (slides.length > 0 && dotsContainer && prevButton && nextButton) {
+      createDots();
+      showSlide(0);
+
+      prevButton.addEventListener("click", function () {
+        showSlide(currentSlide - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        showSlide(currentSlide + 1);
+      });
+    }
+  </script>
+</body>
+</html>
