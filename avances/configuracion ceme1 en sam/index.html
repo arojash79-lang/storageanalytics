@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Avances | Storage Analytics</title>
+
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">
+      <div class="brand-icon">ϟ</div>
+      <div>
+        <div class="brand-title">Storage Analytics</div>
+        <div class="brand-subtitle">Plataforma de análisis en almacenamiento BESS</div>
+      </div>
+    </a>
+
+    <nav class="main-nav">
+      <a href="../index.html">Inicio</a>
+      <a href="../index.html#metodologia">Metodología</a>
+      <a href="../index.html#objetivos">Objetivos</a>
+      <a class="active" href="index.html">Avances</a>
+      <a href="../index.html#links">Links de interés</a>
+      <a href="../index.html#dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="advances-page">
+    <section class="advances-hero">
+      <div class="advances-hero-content">
+        <span class="section-kicker">AVANCES DEL PROYECTO</span>
+
+        <h1>Avances técnicos del modelo FV+BESS</h1>
+
+        <p>
+          Esta sección reúne los avances parciales del trabajo de titulación, incluyendo
+          configuraciones técnicas, procesamiento de datos, modelación fotovoltaica,
+          comparación meteorológica y futuros resultados operacionales del sistema BESS.
+        </p>
+      </div>
+    </section>
+
+    <section class="advances-grid-section">
+      <div class="section-heading">
+        <span class="section-kicker">BLOQUE 1</span>
+        <h2>Data meteorológica y configuración fotovoltaica</h2>
+        <p>
+          Avances asociados a la construcción de la base energética inicial de CEME1
+          y su representación técnica en SAM.
+        </p>
+      </div>
+
+      <div class="advances-grid">
+        <article class="advance-card featured">
+          <div class="advance-card-top">
+            <span class="advance-status done">Terminado</span>
+            <span class="advance-code">SAM · CEME1</span>
+          </div>
+
+          <h3>Configuración de la arquitectura de CEME1 en SAM</h3>
+
+          <p>
+            Traducción de la arquitectura real de CEME1 a seis configuraciones
+            representativas en System Advisor Model, preservando familias de módulos,
+            strings, inversores, orientaciones y subcampos equivalentes.
+          </p>
+
+          <div class="advance-kpis">
+            <div>
+              <strong>480,19</strong>
+              <span>MWdc</span>
+            </div>
+            <div>
+              <strong>882.720</strong>
+              <span>módulos</span>
+            </div>
+            <div>
+              <strong>6</strong>
+              <span>configuraciones</span>
+            </div>
+          </div>
+
+          <a class="advance-link" href="configuracion%20ceme1%20en%20sam/index.html">
+            Ver avance
+            <span>→</span>
+          </a>
+        </article>
+
+        <article class="advance-card">
+          <div class="advance-card-top">
+            <span class="advance-status progress">En desarrollo</span>
+            <span class="advance-code">Meteorología</span>
+          </div>
+
+          <h3>Comparación de fuentes meteorológicas</h3>
+
+          <p>
+            Comparación entre Explorador Solar TMY y NASA POWER 2025 para evaluar
+            diferencias en GHI, DNI, DHI, temperatura y viento antes de su uso en SAM.
+          </p>
+
+          <div class="advance-kpis">
+            <div>
+              <strong>GHI</strong>
+              <span>global</span>
+            </div>
+            <div>
+              <strong>DNI</strong>
+              <span>directa</span>
+            </div>
+            <div>
+              <strong>DHI</strong>
+              <span>difusa</span>
+            </div>
+          </div>
+
+          <a class="advance-link disabled" href="#">
+            Próximamente
+            <span>·</span>
+          </a>
+        </article>
+
+        <article class="advance-card">
+          <div class="advance-card-top">
+            <span class="advance-status pending">Pendiente</span>
+            <span class="advance-code">SAM</span>
+          </div>
+
+          <h3>Generación AC horaria de CEME1</h3>
+
+          <p>
+            Exportación y agregación de series horarias de generación AC a nivel planta,
+            para ser contrastadas posteriormente con inyección real, curtailment y precios.
+          </p>
+
+          <div class="advance-kpis">
+            <div>
+              <strong>8760</strong>
+              <span>horas</span>
+            </div>
+            <div>
+              <strong>AC</strong>
+              <span>planta</span>
+            </div>
+            <div>
+              <strong>CEN</strong>
+              <span>contraste</span>
+            </div>
+          </div>
+
+          <a class="advance-link disabled" href="#">
+            Próximamente
+            <span>·</span>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="advances-roadmap">
+      <div class="section-heading">
+        <span class="section-kicker">SECUENCIA DE TRABAJO</span>
+        <h2>Ruta de avance del Bloque 1</h2>
+      </div>
+
+      <div class="roadmap-flow">
+        <div class="roadmap-step active">
+          <span>01</span>
+          <strong>Arquitectura CEME1</strong>
+          <p>Configuración técnica en SAM.</p>
+        </div>
+
+        <div class="roadmap-step">
+          <span>02</span>
+          <strong>Meteorología</strong>
+          <p>Comparación NASA POWER y Explorador Solar.</p>
+        </div>
+
+        <div class="roadmap-step">
+          <span>03</span>
+          <strong>Simulación FV</strong>
+          <p>Obtención de generación AC horaria.</p>
+        </div>
+
+        <div class="roadmap-step">
+          <span>04</span>
+          <strong>Contraste CEN</strong>
+          <p>Comparación con datos reales de operación.</p>
+        </div>
+
+        <div class="roadmap-step">
+          <span>05</span>
+          <strong>Perfil BESS</strong>
+          <p>Construcción de escenarios de operación.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <div class="brand-icon">ϟ</div>
+      <span>Storage Analytics</span>
+    </div>
+
+    <p>© 2024 Storage Analytics. Todos los derechos reservados.</p>
+
+    <div class="footer-links">
+      <a href="#">Política de privacidad</a>
+      <a href="#">Términos de uso</a>
+      <a href="#">Contacto</a>
+    </div>
+  </footer>
+</body>
+</html>
