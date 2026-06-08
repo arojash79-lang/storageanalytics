@@ -2999,3 +2999,98 @@ a {
     height: 260px;
   }
 }
+/* ===== TABLA KPI COMPARATIVA METEOROLÓGICA ===== */
+
+.meteo-kpi-table-wrap {
+  margin-top: 8px;
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(70, 151, 255, 0.28);
+  background: rgba(8, 30, 56, 0.88);
+  box-shadow: var(--shadow);
+}
+
+.meteo-kpi-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e9f3ff;
+  min-width: 980px;
+}
+
+.meteo-kpi-table thead th {
+  padding: 16px 14px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #dff4ff;
+  border-bottom: 1px solid rgba(70, 151, 255, 0.25);
+  border-right: 1px solid rgba(70, 151, 255, 0.18);
+  background: linear-gradient(180deg, rgba(19, 74, 135, 0.95), rgba(8, 30, 56, 0.92));
+}
+
+.meteo-kpi-table thead th:first-child {
+  text-align: left;
+  color: #66cfff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meteo-kpi-table tbody td {
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(70, 151, 255, 0.18);
+  border-right: 1px solid rgba(70, 151, 255, 0.14);
+  text-align: center;
+  font-size: 0.98rem;
+  background: rgba(5, 19, 37, 0.96);
+}
+
+.meteo-kpi-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.meteo-kpi-table tbody td strong {
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.meteo-kpi-table tbody td small {
+  color: #c6d8ec;
+  font-size: 0.92rem;
+  margin-left: 4px;
+}
+
+.meteo-kpi-table .kpi-name {
+  text-align: left;
+  color: #ffffff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.kpi-icon {
+  display: inline-block;
+  width: 24px;
+  margin-right: 10px;
+  text-align: center;
+  color: #ffcc4d;
+  font-size: 1.15rem;
+}
+
+.kpi-negative strong {
+  color: #ff5b5b !important;
+}
+
+.kpi-positive strong {
+  color: #3ddc84 !important;
+}
+
+.meteo-card-full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+  .meteo-kpi-table thead th,
+  .meteo-kpi-table tbody td {
+    padding: 12px 10px;
+  }
+}
