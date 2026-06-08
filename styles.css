@@ -1872,7 +1872,7 @@ a {
   }
 }
 /* =========================================================
-   AVANCE CONFIGURACIÓN CEME1 EN SAM
+   AVANCE CONFIGURACIÓN CEME1 EN 
    Misma proporción visual que página de inicio
    ========================================================= */
 
@@ -1892,17 +1892,19 @@ a {
   position: relative;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-
+   
   background:
-    linear-gradient(90deg,
-      rgba(2, 10, 20, 0.78) 0%,
-      rgba(2, 10, 20, 0.72) 28%,
-      rgba(2, 10, 20, 0.58) 52%,
-      rgba(2, 10, 20, 0.45) 100%
+    linear-gradient(
+      90deg,
+      rgba(2, 10, 20, 0.62) 0%,
+      rgba(2, 10, 20, 0.56) 30%,
+      rgba(2, 10, 20, 0.36) 58%,
+      rgba(2, 10, 20, 0.18) 100%
     ),
-    linear-gradient(180deg,
-      rgba(2, 10, 20, 0.18) 0%,
-      rgba(2, 10, 20, 0.28) 100%
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 20, 0.08) 0%,
+      rgba(2, 10, 20, 0.16) 100%
     ),
     url("/assets/ceme1-v-invertida-atardecer.png");
 
