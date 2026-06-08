@@ -1849,3 +1849,435 @@ a {
     font-size: 0.75rem;
   }
 }
+/* ============================================================
+   PÁGINA AVANCES
+   ============================================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  padding: 14px 34px;
+  background: rgba(2, 11, 22, 0.94);
+  border-bottom: 1px solid rgba(0, 157, 255, 0.22);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #f4f8ff;
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #009dff;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #009dff;
+  font-weight: 900;
+  font-size: 22px;
+  box-shadow: 0 0 18px rgba(0, 157, 255, 0.25);
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 1.12rem;
+  letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+  color: #00c2ff;
+  font-size: 0.72rem;
+  margin-top: -2px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 0.86rem;
+}
+
+.main-nav a {
+  color: #f4f8ff;
+  text-decoration: none;
+  opacity: 0.86;
+  padding: 18px 0 12px;
+  border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: #00c2ff;
+  opacity: 1;
+  border-bottom-color: #009dff;
+}
+
+.advances-page {
+  min-height: 100vh;
+  padding: 34px 22px 70px;
+  background:
+    radial-gradient(circle at top left, rgba(0, 157, 255, 0.13), transparent 34%),
+    radial-gradient(circle at top right, rgba(0, 194, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #020b16, #041427);
+  color: #f4f8ff;
+}
+
+.advances-hero,
+.advances-grid-section,
+.advances-roadmap {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.advances-hero {
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  padding: 42px;
+  border: 1px solid rgba(0, 157, 255, 0.28);
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, rgba(2, 11, 22, 0.92), rgba(2, 11, 22, 0.58)),
+    url("assets/ceme1-hero.jpg") center/cover no-repeat;
+  box-shadow: 0 0 34px rgba(0, 157, 255, 0.11);
+}
+
+.advances-hero-content {
+  max-width: 760px;
+}
+
+.section-kicker {
+  display: inline-block;
+  color: #00c2ff;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.advances-hero h1,
+.section-heading h2 {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.advances-hero h1 {
+  font-size: clamp(2.3rem, 5vw, 4.7rem);
+}
+
+.advances-hero p {
+  max-width: 700px;
+  color: #d4e4f2;
+  font-size: 1rem;
+  margin: 18px 0 0;
+}
+
+.advances-grid-section,
+.advances-roadmap {
+  margin-top: 34px;
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  color: #f4f8ff;
+}
+
+.section-heading p {
+  max-width: 780px;
+  color: #a9bfd6;
+  margin: 10px 0 0;
+}
+
+.advances-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 18px;
+}
+
+.advance-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  padding: 24px;
+  border: 1px solid rgba(0, 157, 255, 0.24);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(7, 30, 55, 0.9), rgba(3, 15, 29, 0.92));
+  box-shadow: 0 0 34px rgba(0, 157, 255, 0.09);
+}
+
+.advance-card.featured {
+  border-color: rgba(0, 157, 255, 0.55);
+  box-shadow: 0 0 38px rgba(0, 157, 255, 0.16);
+}
+
+.advance-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.advance-status {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.advance-status.done {
+  color: #00d59b;
+  background: rgba(0, 213, 155, 0.12);
+  border: 1px solid rgba(0, 213, 155, 0.35);
+}
+
+.advance-status.progress {
+  color: #ffd04a;
+  background: rgba(255, 208, 74, 0.12);
+  border: 1px solid rgba(255, 208, 74, 0.35);
+}
+
+.advance-status.pending {
+  color: #a9bfd6;
+  background: rgba(169, 191, 214, 0.10);
+  border: 1px solid rgba(169, 191, 214, 0.25);
+}
+
+.advance-code {
+  color: #00c2ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.advance-card h3 {
+  margin: 0 0 12px;
+  color: #f4f8ff;
+  font-size: 1.35rem;
+  line-height: 1.18;
+}
+
+.advance-card p {
+  color: #c8d8e8;
+  font-size: 0.93rem;
+  margin: 0;
+}
+
+.advance-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 11px;
+  margin: 22px 0;
+}
+
+.advance-kpis div {
+  padding: 12px;
+  border: 1px solid rgba(0, 157, 255, 0.24);
+  border-radius: 10px;
+  background: rgba(0, 157, 255, 0.055);
+  text-align: center;
+}
+
+.advance-kpis strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 1rem;
+}
+
+.advance-kpis span {
+  display: block;
+  color: #a9bfd6;
+  font-size: 0.72rem;
+  margin-top: 3px;
+}
+
+.advance-link {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 15px;
+  border: 1px solid rgba(0, 157, 255, 0.45);
+  border-radius: 10px;
+  color: #00c2ff;
+  background: rgba(0, 157, 255, 0.075);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.advance-link:hover {
+  border-color: #009dff;
+  box-shadow: 0 0 24px rgba(0, 157, 255, 0.18);
+}
+
+.advance-link.disabled {
+  pointer-events: none;
+  color: #6f879f;
+  border-color: rgba(111, 135, 159, 0.25);
+  background: rgba(111, 135, 159, 0.06);
+}
+
+.roadmap-flow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.roadmap-step {
+  position: relative;
+  min-height: 160px;
+  padding: 20px;
+  border: 1px solid rgba(0, 157, 255, 0.22);
+  border-radius: 14px;
+  background: rgba(7, 30, 55, 0.72);
+}
+
+.roadmap-step.active {
+  border-color: rgba(0, 157, 255, 0.58);
+  box-shadow: 0 0 26px rgba(0, 157, 255, 0.15);
+}
+
+.roadmap-step span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #f4f8ff;
+  font-weight: 900;
+  background: rgba(0, 157, 255, 0.20);
+  border: 1px solid rgba(0, 157, 255, 0.42);
+  margin-bottom: 12px;
+}
+
+.roadmap-step strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.roadmap-step p {
+  color: #a9bfd6;
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.site-footer {
+  border-top: 1px solid rgba(0, 157, 255, 0.18);
+  background: rgba(2, 11, 22, 0.96);
+  color: #a9bfd6;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 34px;
+  font-size: 0.84rem;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f4f8ff;
+  font-weight: 800;
+}
+
+.footer-brand .brand-icon {
+  width: 34px;
+  height: 34px;
+  font-size: 17px;
+}
+
+.site-footer p {
+  text-align: center;
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 22px;
+}
+
+.footer-links a {
+  color: #a9bfd6;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #00c2ff;
+}
+
+/* ============================================================
+   RESPONSIVE AVANCES
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .main-nav {
+    display: none;
+  }
+
+  .advances-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-flow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .site-footer p {
+    text-align: left;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .site-header {
+    padding: 12px 18px;
+  }
+
+  .advances-page {
+    padding: 22px 14px 56px;
+  }
+
+  .advances-hero {
+    padding: 26px 20px;
+    min-height: 300px;
+  }
+
+  .advance-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-flow {
+    grid-template-columns: 1fr;
+  }
+}
