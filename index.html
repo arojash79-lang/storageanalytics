@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Storage Analytics | Plataforma de análisis en costos por degradación en sistemas BESS</title>
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -34,38 +36,22 @@
         </button>
 
         <div class="methodology-menu" role="menu">
-          <a
-            href="/metodologia/bloque-1/"
-            class="links-menu-item"
-            role="menuitem"
-          >
+          <a href="/metodologia/bloque-1/" class="links-menu-item" role="menuitem">
             <span>Bloque 1</span>
             <small>Data Meteorológica y Simulación en SAM</small>
           </a>
 
-          <a
-            href="/metodologia/bloque-2/"
-            class="links-menu-item"
-            role="menuitem"
-          >
+          <a href="/metodologia/bloque-2/" class="links-menu-item" role="menuitem">
             <span>Bloque 2</span>
             <small>Operación del Sistema BESS</small>
           </a>
 
-          <a
-            href="/metodologia/bloque-3/"
-            class="links-menu-item"
-            role="menuitem"
-          >
+          <a href="/metodologia/bloque-3/" class="links-menu-item" role="menuitem">
             <span>Bloque 3</span>
             <small>Degradación del Sistema BESS</small>
           </a>
 
-          <a
-            href="/metodologia/bloque-4/"
-            class="links-menu-item"
-            role="menuitem"
-          >
+          <a href="/metodologia/bloque-4/" class="links-menu-item" role="menuitem">
             <span>Bloque 4</span>
             <small>Estimación del Costo de Degradación del Sistema BESS</small>
           </a>
@@ -73,104 +59,119 @@
       </div>
 
       <a href="/objetivos/">Objetivos</a>
-     <div class="nav-dropdown">
-  <button class="nav-link nav-dropdown-toggle" type="button">
-    Avances
-  </button>
 
-  <div class="nav-dropdown-menu">
-    <a href="avances/index.html" class="nav-dropdown-item">
-      <strong>Todos los avances</strong>
-      <span>Resumen general de avances técnicos</span>
-    </a>
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Avances
+        </button>
 
-    <a href="avances/configuracion%20ceme1%20en%20sam/index.html" class="nav-dropdown-item">
-      <strong>Configuración CEME1 en SAM</strong>
-      <span>Arquitectura real de planta en System Advisor Model</span>
-    </a>
+        <div class="methodology-menu advances-menu" role="menu">
+          <a href="/avances/" class="links-menu-item" role="menuitem">
+            <span>Todos los avances</span>
+            <small>Resumen general de avances técnicos</small>
+          </a>
 
-    <a href="#" class="nav-dropdown-item">
-      <strong>Comparación meteorológica</strong>
-      <span>NASA POWER 2025 vs Explorador Solar TMY</span>
-    </a>
+          <a href="/avances/configuracion%20ceme1%20en%20sam/" class="links-menu-item" role="menuitem">
+            <span>Configuración CEME1 en SAM</span>
+            <small>Arquitectura real de planta en System Advisor Model</small>
+          </a>
 
-    <a href="#" class="nav-dropdown-item">
-      <strong>Generación AC horaria</strong>
-      <span>Exportación y agregación de resultados SAM</span>
-    </a>
-  </div>
-</div>
-    Links de interés
-  </button>
+          <a href="#" class="links-menu-item" role="menuitem">
+            <span>Comparación meteorológica</span>
+            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
 
-  <div class="links-menu" role="menu">
-    <a
-      href="https://www.coordinador.cl/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>CEN</span>
-      <small>Coordinador Eléctrico Nacional</small>
-    </a>
+          <a href="#" class="links-menu-item" role="menuitem">
+            <span>Generación AC horaria</span>
+            <small>Exportación y agregación de resultados SAM</small>
+          </a>
+        </div>
+      </div>
 
-    <a
-      href="https://solar.minenergia.cl/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>Explorador Solar</span>
-      <small>Recurso solar y datos meteorológicos de Chile</small>
-    </a>
+      <div class="nav-dropdown links-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Links de interés
+        </button>
 
-    <a
-      href="https://power.larc.nasa.gov/data-access-viewer/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>NASA POWER</span>
-      <small>Datos meteorológicos y solares horarios</small>
-    </a>
+        <div class="links-menu" role="menu">
+          <a
+            href="https://www.coordinador.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>CEN</span>
+            <small>Coordinador Eléctrico Nacional</small>
+          </a>
 
-    <a
-      href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>Arquitectura CEME1</span>
-      <small>Informe CEN de potencia máxima PFV CEME1</small>
-    </a>
+          <a
+            href="https://solar.minenergia.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>Explorador Solar</span>
+            <small>Recurso solar y datos meteorológicos de Chile</small>
+          </a>
 
-    <a
-      href="https://www.python.org/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>Python</span>
-      <small>Programación y procesamiento de datos</small>
-    </a>
+          <a
+            href="https://power.larc.nasa.gov/data-access-viewer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>NASA POWER</span>
+            <small>Datos meteorológicos y solares horarios</small>
+          </a>
 
-    <a
-      href="https://sam.nrel.gov/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="links-menu-item"
-      role="menuitem"
-    >
-      <span>SAM</span>
-      <small>Software de simulación energética</small>
-    </a>
-  </div>
-</div>
+          <a
+            href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>Arquitectura CEME1</span>
+            <small>Informe CEN de potencia máxima PFV CEME1</small>
+          </a>
+
+          <a
+            href="https://www.python.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>Python</span>
+            <small>Programación y procesamiento de datos</small>
+          </a>
+
+          <a
+            href="https://sam.nrel.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="links-menu-item"
+            role="menuitem"
+          >
+            <span>SAM</span>
+            <small>Software de simulación energética</small>
+          </a>
+        </div>
+      </div>
+
       <a href="/dashboard/">Dashboard</a>
     </nav>
   </header>
@@ -435,7 +436,6 @@
         </a>
       </div>
     </section>
-
   </main>
 
   <footer class="site-footer">
@@ -449,61 +449,64 @@
   </footer>
 
   <script>
-  const dropdowns = document.querySelectorAll(".nav-dropdown");
+    const dropdowns = document.querySelectorAll(".nav-dropdown");
 
-  dropdowns.forEach(function (dropdown) {
-    const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+    dropdowns.forEach(function (dropdown) {
+      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
 
-    if (!trigger) return;
+      if (!trigger) return;
 
-    trigger.addEventListener("click", function (event) {
-      event.stopPropagation();
+      trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
 
-      dropdowns.forEach(function (otherDropdown) {
-        if (otherDropdown !== dropdown) {
-          otherDropdown.classList.remove("open");
+        dropdowns.forEach(function (otherDropdown) {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove("open");
 
-          const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
-          if (otherTrigger) {
-            otherTrigger.setAttribute("aria-expanded", "false");
+            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
+
+            if (otherTrigger) {
+              otherTrigger.setAttribute("aria-expanded", "false");
+            }
           }
-        }
+        });
+
+        dropdown.classList.toggle("open");
+
+        const isOpen = dropdown.classList.contains("open");
+        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
       });
 
-      dropdown.classList.toggle("open");
-
-      const isOpen = dropdown.classList.contains("open");
-      trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      dropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
     });
 
-    dropdown.addEventListener("click", function (event) {
-      event.stopPropagation();
-    });
-  });
-
-  document.addEventListener("click", function () {
-    dropdowns.forEach(function (dropdown) {
-      dropdown.classList.remove("open");
-
-      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-      if (trigger) {
-        trigger.setAttribute("aria-expanded", "false");
-      }
-    });
-  });
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
+    document.addEventListener("click", function () {
       dropdowns.forEach(function (dropdown) {
         dropdown.classList.remove("open");
 
         const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
         if (trigger) {
           trigger.setAttribute("aria-expanded", "false");
         }
       });
-    }
-  });
-</script>
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        dropdowns.forEach(function (dropdown) {
+          dropdown.classList.remove("open");
+
+          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+          if (trigger) {
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
