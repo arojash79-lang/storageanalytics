@@ -1,1 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Configuración CEME1 en SAM | Storage Analytics</title>
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="brand" aria-label="Storage Analytics">
+      <div class="brand-icon">
+        <span>ϟ</span>
+      </div>
+
+      <div class="brand-text">
+        <h1>Storage Analytics</h1>
+        <p>Plataforma de análisis en costos por degradación en sistemas BESS</p>
+      </div>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Metodología
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/metodologia/bloque-1/" class="dropdown-item" role="menuitem">
+            <span>Bloque 1</span>
+            <small>Data Meteorológica y Simulación en SAM</small>
+          </a>
+
+          <a href="/metodologia/bloque-2/" class="dropdown-item" role="menuitem">
+            <span>Bloque 2</span>
+            <small>Operación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-3/" class="dropdown-item" role="menuitem">
+            <span>Bloque 3</span>
+            <small>Degradación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-4/" class="dropdown-item" role="menuitem">
+            <span>Bloque 4</span>
+            <small>Estimación del Costo de Degradación del Sistema BESS</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/objetivos/">Objetivos</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Avances
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/avances/configuracion%20ceme1%20en%20sam/" class="dropdown-item" role="menuitem">
+            <span>Configuración de CEME1 en SAM</span>
+            <small>Arquitectura real de planta en System Advisor Model</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Comparación de datos meteorológicos</span>
+            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Generación de Energía Horaria</span>
+            <small>Simulación en SAM</small>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Links de interés
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-small" role="menu">
+          <a
+            href="https://www.coordinador.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>CEN</span>
+            <small>Coordinador Eléctrico Nacional</small>
+          </a>
+
+          <a
+            href="https://solar.minenergia.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Explorador Solar</span>
+            <small>Recurso solar y datos meteorológicos de Chile</small>
+          </a>
+
+          <a
+            href="https://power.larc.nasa.gov/data-access-viewer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>NASA POWER</span>
+            <small>Datos meteorológicos y solares horarios</small>
+          </a>
+
+          <a
+            href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Arquitectura CEME1</span>
+            <small>Informe CEN de potencia máxima PFV CEME1</small>
+          </a>
+
+          <a
+            href="https://www.python.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Python</span>
+            <small>Programación y procesamiento de datos</small>
+          </a>
+
+          <a
+            href="https://sam.nlr.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>SAM</span>
+            <small>Software de simulación energética</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/dashboard/">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="sam-advance-page">
+
+    <section class="sam-advance-hero">
+      <div class="sam-advance-hero-text">
+        <span class="block-kicker">Avance técnico</span>
+
+        <h2>Configuración de la Arquitectura de CEME1 en SAM</h2>
+
+        <p>
+          Este avance resume cómo la arquitectura eléctrica y física real de CEME1 fue traducida
+          a configuraciones representativas en System Advisor Model, preservando familias de módulos,
+          strings, inversores, orientaciones Este/Oeste y subcampos equivalentes. Para más información 
+          y detalles de cómo se procesó la información y cómo se desarrollaron los cálculos base, favor 
+          descargar PDF desde botón "Descargar PDF de Respaldo" habilitado a continuación.
+        </p>
+
+        <a class="btn btn-primary" href="https://drive.google.com/file/d/1EBgSTu_6CRNfxi9k-PT_wk_8_1K_oWTQ/view?usp=drive_link" target="_blank">
+      Descargar PDF de respaldo
+    </a>
+  </div>
+</section>
+    <section class="sam-overview-grid">
+      <article class="sam-card sam-card-large">
+        <div class="sam-card-header">
+          <span>◎</span>
+          <h3>Objetivo y resumen detallado del avance</h3>
+        </div>
+
+        <p>
+          El objetivo de este avance es representar la arquitectura real de CEME1 dentro de un modelo que no busca recrear la ingeniería eléctrica completa de la planta, 
+          sino construir una representación técnica equivalente y suficientemente consistente para ser utilizada posteriormente en simulaciones energéticas dentro del software 
+          SAM.
+        </p>  
+        <p>         
+          La metodología se inició con la descarga del informe de potencia máxima de la planta fotovoltaica CEME1, el cual se encuentra disponible desde la página web del 
+          Coordinador Eléctrico Nacional y enlazado desde la sección de links de interés. Este documento entrega información técnica representativa de CEME1, la cual fue 
+          revisada y procesada para definir una estrategia de modelación que permitiera representar, de manera equivalente y consistente, la arquitectura principal de la 
+          planta dentro de SAM.
+        </p>  
+        
+        <p>
+          Para ello, se identificaron datasheet técnicos de módulos, inversores y la arquitectura de configuración de la planta. Una vez estudiado dicho informe, se logró 
+          identificar tres distintas familias denominadas "Familia A", "Familia B" y "Familia C" agrupadas según el número de subcampos. Se contabiliza un total de 60 subcampos 
+          de los cuales para la "Familia A", "Familia B" y "Familia C" se identifican 12, 21 y 27 subcampos respectivamente. Un subcampo está conformado por strings, inversores 
+          y transformadores de MV/LV.
+        </p>  
+        
+        <p>
+          Una particularidad identificada, es que la arquitectura constructiva establece arreglos de paneles en forma de "v" invertida con una inclinación fija de 5° sin sistemas 
+          de Trackers y con una cara orientada hacia el Este y la opuesta orientada hacia el Oeste. De esta forma, se procede a dividir cada Familia anteriormente identificadas 
+          como "Familia A", "Familia B" y "Familia C" en dos arreglos según orientación. Finalmente y en base a lo anterior, se establecen 6 subconjuntos caracterizados por familias
+          subcampos y orientación.
+        </p>
+        <p>
+          Debido a la configuración propia de la planta CEME1, se definió la construcción de seis simulaciones independientes en SAM. Cada una de estas simulaciones 
+          representa un subconjunto equivalente de la planta, definido según familia de módulos, orientación, número de strings e inversores asociados.
+        </p>
+        <p>
+          Para cada configuración se obtendrá la generación energética inyectada a la red, representada por la variable Egrid. Finalmente, la suma de los resultados 
+          obtenidos en las seis simulaciones corresponderá a la generación total disponible en red de la planta fotovoltaica CEME1. Estos resultados serán analizados 
+          posteriormente en la sección “Generación de Energía Horaria” del menú “Avances”.
+        </p>
+        
+      </article>
+
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▦</span>
+          <h3>Datos técnicos base de CEME1</h3>
+        </div>
+
+        <div class="sam-metric-grid">
+          <div class="sam-metric"><strong>480,19 MWdc</strong><span>Capacidad DC instalada</span></div>
+          <div class="sam-metric"><strong>380MWac</strong><span>Potencia Nominal</span></div>
+          <div class="sam-metric"><strong>882.720</strong><span>Paneles Fotovoltaicos</span></div>
+          <div class="sam-metric"><strong>29.424</strong><span>Strings</span></div>
+          <div class="sam-metric"><strong>120</strong><span>Inversores</span></div>
+          <div class="sam-metric"><strong>60</strong><span>Subcampos</span></div>
+        </div>
+      </article>
+
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>⚙</span>
+          <h3>Criterios de modelación</h3>
+        </div>
+
+        <ul class="sam-list">
+          <li><strong>Estructura fija sin sistema de Treckers</strong><span>Representación de planta sin seguimiento solar.</span></li>
+          <li><strong>Inclinación 5°</strong><span>Ángulo geométrico usado para configurar los submodelos.</span></li>
+          <li><strong>Orientación Este/Oeste</strong><span>Separación por azimut de cada familia técnica.</span></li>
+          <li><strong>Strings de 30 módulos</strong><span>Base eléctrica para construir arreglos equivalentes.</span></li>
+          <li><strong>S/E Miraje 220 kV</strong><span>Punto de referencia eléctrico del proyecto.</span></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="sam-workflow">
+      <div class="section-heading">
+        <span>⛓</span>
+        <h3>Flujo de configuración en SAM</h3>
+      </div>
+
+      <div class="sam-flow-grid">
+        <article class="sam-step">
+          <span>01</span>
+          <h4>Recopilación de arquitectura real</h4>
+          <p>Se levantan datos de módulos, strings, inversores, subcampos y configuración general de planta.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>02</span>
+          <h4>Identificación de familias técnicas</h4>
+          <p>Se agrupan subcampos según tipo de módulo y estructura eléctrica equivalente.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>03</span>
+          <h4>Separación Este/Oeste</h4>
+          <p>Cada familia técnica se divide por orientación para representar la geometría real de CEME1.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>04</span>
+          <h4>Definición de strings e inversores</h4>
+          <p>Se asigna la cantidad de strings e inversores correspondiente a cada submodelo equivalente.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>05</span>
+          <h4>Construcción de 6 configuraciones</h4>
+          <p>Se generan seis archivos o casos independientes en SAM: SC01 a SC06.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>06</span>
+          <h4>Verificación de consistencia</h4>
+          <p>Se revisa que potencia, estructura, strings e inversores mantengan coherencia con la planta real.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="sam-config-grid">
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▰</span>
+          <h3>Configuraciones SAM generadas</h3>
+        </div>
+
+        <div class="sam-family-grid">
+          <div class="sam-family">
+            <strong>Familia A · Módulo JASOLAR JAM72S30-540/MR / Inversor SUNGROW SG6250HV-MV</strong>
+            <div>
+              <span>CEME1_SC01_540W_Este</span>
+              <span>CEME1_SC02_540W_Oeste</span>
+            </div>
+          </div>
+
+          <div class="sam-family family-b">
+            <strong>Familia B · Módulo JASOLAR JAM72S30-545/MR / Inversor SUNGROW SG6250HV-MV</strong>
+            <div>
+              <span>CEME1_SC03_545W_Este</span>
+              <span>CEME1_SC04_545W_Oeste</span>
+            </div>
+          </div>
+
+          <div class="sam-family family-c">
+            <strong>Familia C · Módulo JASOLAR JAM72S30-545/MR / Inversor SUNGROW SG6250HV-MV</strong>
+            <div>
+              <span>CEME1_SC05_545W_Este</span>
+              <span>CEME1_SC06_545W_Oeste</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▤</span>
+          <h3>Resumen de submodelos</h3>
+        </div>
+
+        <div class="sam-table-wrap">
+          <table class="sam-table">
+            <thead>
+              <tr>
+                <th>Submodelo</th>
+                <th>Módulo</th>
+                <th>Orientación</th>
+                <th>Strings</th>
+                <th>Inversores</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td></tr>
+              <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td></tr>
+              <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td></tr>
+              <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td></tr>
+              <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td></tr>
+              <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="sam-summary">
+      <div class="section-heading">
+        <span>▤</span>
+        <h3>Resumen del avance</h3>
+      </div>
+
+      <div class="sam-summary-grid">
+        <article>
+          <span>01</span>
+          <h4>Arquitectura real en SAM</h4>
+          <p>Se representó la arquitectura real de CEME1 respetando la distribución física y eléctrica de la planta.</p>
+        </article>
+
+        <article>
+          <span>02</span>
+          <h4>Familias técnicas</h4>
+          <p>Se identificaron tres familias principales de módulos y configuraciones equivalentes.</p>
+        </article>
+
+        <article>
+          <span>03</span>
+          <h4>Orientación Este/Oeste</h4>
+          <p>La planta fue separada según orientación para conservar la geometría representativa de los arreglos.</p>
+        </article>
+
+        <article>
+          <span>04</span>
+          <h4>Strings e inversores</h4>
+          <p>Se definieron strings, inversores y subcampos equivalentes para cada configuración.</p>
+        </article>
+
+        <article>
+          <span>05</span>
+          <h4>Seis configuraciones</h4>
+          <p>Se construyeron seis submodelos independientes en SAM, desde SC01 hasta SC06.</p>
+        </article>
+
+        <article>
+          <span>06</span>
+          <h4>Sin resultados energéticos</h4>
+          <p>Este avance documenta configuración de arquitectura, no resultados de generación o validación energética.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="sam-result">
+      <div>
+        <span class="block-kicker">Resultado del avance</span>
+        <h3>Arquitectura CEME1 representada en SAM</h3>
+
+        <p>
+          La arquitectura real de CEME1 fue representada mediante seis configuraciones equivalentes,
+          preservando familias técnicas, orientaciones Este/Oeste y estructura eléctrica de planta.
+        </p>
+      </div>
+
+      <div class="sam-result-check">✓</div>
+    </section>
+
+    <section class="sam-carousel-section">
+      <div class="section-heading">
+        <span>▧</span>
+        <h3>Imágenes de configuración en SAM</h3>
+      </div>
+
+      <div class="sam-carousel">
+        <button class="sam-carousel-btn" type="button" id="prevSlide">‹</button>
+
+        <div class="sam-slides">
+          <article class="sam-slide active">
+            <img src="/assets/sam-figura-01.png" alt="Resumen familia A">
+            <div>Metodología de configuración en SAM y archivos de submodelos generados.</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-02.png" alt="Resumen familia B">
+            <div>Configuración de simulación CEME1_SC01_540W_Este en SAM</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-03.png" alt="Resumen familia C">
+            <div>Configuración de simulación CEME1_SC02_540W_Oeste en SAM</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-04.png" alt="Metodología de configuración en SAM">
+            <div>Configuración de simulación CEME1_SC03_545W_Este en SAM</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-05.png" alt="Configuración SAM familia A">
+            <div>Configuración de simulación CEME1_SC04_545W_Oeste en SAM</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-06.png" alt="Configuración SAM familia B">
+            <div>Configuración de simulación CEME1_SC05_545W_Este en SAM</div>
+          </article>
+
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-07.png" alt="Configuración SAM familia C">
+            <div>Configuración de simulación CEME1_SC06_545W_Oeste en SAM</div>
+          </article>
+        </div>
+
+        <button class="sam-carousel-btn" type="button" id="nextSlide">›</button>
+      </div>
+
+      <div class="sam-dots" id="carouselDots"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Storage Analytics © 2025
+      <span>•</span>
+      Actividad de Graduación
+      <span>•</span>
+      Magíster en Ingeniería de la Energía
+    </p>
+  </footer>
+
+  <script>
+    const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+      if (!trigger) return;
+
+      trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        dropdowns.forEach(function (otherDropdown) {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove("open");
+
+            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
+
+            if (otherTrigger) {
+              otherTrigger.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+
+        dropdown.classList.toggle("open");
+
+        const isOpen = dropdown.classList.contains("open");
+        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      dropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+    });
+
+    document.addEventListener("click", function () {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.classList.remove("open");
+
+        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        dropdowns.forEach(function (dropdown) {
+          dropdown.classList.remove("open");
+
+          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+          if (trigger) {
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    });
+
+    const slides = Array.from(document.querySelectorAll(".sam-slide"));
+    const dotsContainer = document.getElementById("carouselDots");
+    const prevButton = document.getElementById("prevSlide");
+    const nextButton = document.getElementById("nextSlide");
+
+    let currentSlide = 0;
+
+    function createDots() {
+      slides.forEach(function (_, index) {
+        const dot = document.createElement("button");
+        dot.className = "sam-dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", "Ir a figura " + (index + 1));
+        dot.addEventListener("click", function () {
+          showSlide(index);
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function showSlide(index) {
+      currentSlide = (index + slides.length) % slides.length;
+
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle("active", i === currentSlide);
+      });
+
+      const dots = Array.from(document.querySelectorAll(".sam-dot"));
+
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle("active", i === currentSlide);
+      });
+    }
+
+    if (slides.length > 0 && dotsContainer && prevButton && nextButton) {
+      createDots();
+      showSlide(0);
+
+      prevButton.addEventListener("click", function () {
+        showSlide(currentSlide - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        showSlide(currentSlide + 1);
+      });
+    }
+  </script>
+</body>
+</html>
