@@ -1687,3 +1687,187 @@ a {
     line-height: 1.8;
   }
 }
+/* =========================================================
+   AJUSTE FINAL BLOQUE 1 - MISMA PROPORCIÓN QUE INICIO
+   ========================================================= */
+
+.block-page {
+  width: min(100%, 1780px);
+  margin: 0 auto;
+  padding: 38px 30px 0;
+}
+
+.block-hero {
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px 58px;
+  border-radius: 0;
+}
+
+.block-hero h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(2.35rem, 4vw, 4.65rem);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+.block-hero p {
+  max-width: 940px;
+  margin: 22px 0 0;
+  color: #d0dbe8;
+  font-size: 1.04rem;
+  line-height: 1.62;
+}
+
+.block-intro-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.block-card,
+.block-workflow,
+.comparison-card {
+  background: rgba(4, 16, 31, 0.78);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.block-card {
+  padding: 28px;
+  border-radius: var(--radius-md);
+}
+
+.block-card-header h3,
+.comparison-card h3,
+.block-output h3 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.block-card p,
+.comparison-card p,
+.block-output p {
+  font-size: 1.04rem;
+  line-height: 1.62;
+}
+
+.block-list strong {
+  font-size: 1rem;
+}
+
+.block-list span {
+  font-size: 0.94rem;
+}
+
+.block-workflow {
+  margin-top: 24px;
+  padding: 30px 38px 34px;
+  border-radius: var(--radius-md);
+}
+
+.block-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.block-step {
+  min-height: 230px;
+  padding: 22px 18px;
+}
+
+.block-step h4 {
+  font-size: 1.05rem;
+}
+
+.block-step p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.block-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.block-output {
+  margin-top: 24px;
+  padding: 34px;
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(22, 139, 255, 0.16), rgba(4, 16, 31, 0.92));
+  border: 1px solid rgba(70, 151, 255, 0.34);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 1280px) {
+  .block-flow-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .block-step {
+    min-height: 190px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .block-intro-grid,
+  .block-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .block-card-large {
+    grid-row: auto;
+  }
+
+  .block-output {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .block-page {
+    padding: 24px 16px 0;
+  }
+
+  .block-hero {
+    min-height: 360px;
+    padding: 38px 24px;
+  }
+
+  .block-hero h2 {
+    font-size: 2.3rem;
+  }
+
+  .block-hero p {
+    font-size: 0.96rem;
+  }
+
+  .block-card,
+  .block-workflow,
+  .comparison-card,
+  .block-output {
+    padding: 22px 18px;
+  }
+
+  .block-flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .block-step {
+    min-height: auto;
+  }
+
+  .block-output .btn {
+    width: 100%;
+  }
+}
