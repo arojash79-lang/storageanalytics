@@ -6,1081 +6,542 @@
 
   <title>Configuración CEME1 en SAM | Storage Analytics</title>
 
-  <style>
-    :root {
-      --bg: #020b16;
-      --bg-2: #041427;
-      --panel: rgba(5, 22, 41, 0.92);
-      --panel-2: rgba(7, 30, 55, 0.92);
-      --line: rgba(0, 157, 255, 0.42);
-      --line-soft: rgba(0, 157, 255, 0.22);
-      --blue: #168bff;
-      --cyan: #04d9ff;
-      --green: #00d59b;
-      --purple: #b15cff;
-      --text: #f4f8ff;
-      --muted: #a9bfd6;
-      --radius: 16px;
-      --radius-lg: 22px;
-      --max: 1780px;
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 0%, rgba(22, 139, 255, 0.16), transparent 32%),
-        radial-gradient(circle at 80% 30%, rgba(0, 210, 255, 0.08), transparent 35%),
-        linear-gradient(135deg, #020815 0%, #061323 45%, #020814 100%);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .topbar {
-      min-height: 92px;
-      padding: 0 48px;
-      display: flex;
-      align-items: center;
-      background: rgba(2, 9, 19, 0.9);
-      border-bottom: 1px solid rgba(70, 151, 255, 0.16);
-      backdrop-filter: blur(18px);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .nav {
-      width: 100%;
-      max-width: none;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 42px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex: 0 0 auto;
-    }
-
-    .brand-icon {
-      width: 52px;
-      height: 64px;
-      border: 3px solid var(--blue);
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      color: var(--blue);
-      font-size: 2rem;
-      font-weight: 900;
-      box-shadow: 0 0 22px rgba(22, 139, 255, 0.22);
-    }
-
-    .brand-title {
-      margin: 0;
-      font-size: 1.85rem;
-      font-weight: 850;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-    }
-
-    .brand-subtitle {
-      margin-top: 6px;
-      color: #48aaff;
-      font-size: 1rem;
-      line-height: 1.2;
-    }
-
-    .menu {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: clamp(18px, 1.7vw, 34px);
-      font-size: 0.96rem;
-      margin-left: auto;
-    }
-
-    .menu a {
-      position: relative;
-      padding: 34px 2px 18px;
-      color: #f4f7fb;
-      opacity: 0.9;
-      white-space: nowrap;
-      transition: color 0.2s ease;
-    }
-
-    .menu a:hover,
-    .menu a.active {
-      color: var(--blue);
-    }
-
-    .menu a.active::after,
-    .menu a:hover::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 12px;
-      height: 2px;
-      background: var(--blue);
-      border-radius: 999px;
-    }
-
-    .page {
-      width: min(100%, var(--max));
-      margin: 0 auto;
-      padding: 38px 30px 0;
-    }
-
-    .panel {
-      background: linear-gradient(180deg, rgba(7, 30, 55, 0.92), rgba(3, 15, 29, 0.94));
-      border: 1px solid var(--line-soft);
-      border-radius: var(--radius);
-      box-shadow: 0 0 30px rgba(0, 157, 255, 0.09);
-    }
-
-    .panel-pad {
-      padding: 24px;
-    }
-
-    .grid-top {
-      display: grid;
-      grid-template-columns: 1.05fr 0.9fr 0.62fr 0.62fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    .hero-copy {
-      padding: 24px 10px 12px;
-    }
-
-    .hero-copy h1 {
-      max-width: 760px;
-      margin: 0;
-      font-size: clamp(2.35rem, 4vw, 4.65rem);
-      line-height: 1.08;
-      letter-spacing: -0.055em;
-      font-weight: 900;
-    }
-
-    .hero-copy p {
-      max-width: 760px;
-      color: #d4e4f2;
-      font-size: 1.04rem;
-      line-height: 1.62;
-      margin: 22px 0 26px;
-    }
-
-    .download-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      min-width: 330px;
-      padding: 14px 18px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--cyan);
-      background: rgba(0, 157, 255, 0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .download-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 22px rgba(0, 157, 255, 0.18);
-    }
-
-    .doc-icon {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--blue);
-      border-radius: 8px;
-      font-size: 1.1rem;
-    }
-
-    .download-card strong {
-      display: block;
-      font-size: 0.94rem;
-    }
-
-    .download-card small {
-      display: block;
-      color: var(--muted);
-      font-size: 0.76rem;
-      margin-top: 2px;
-    }
-
-    .hero-image {
-      min-height: 390px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line-soft);
-      background:
-        linear-gradient(90deg, rgba(2, 11, 22, 0.12), rgba(2, 11, 22, 0.45)),
-        url("../../assets/ceme1-hero.jpg") center/cover no-repeat;
-      box-shadow: var(--shadow);
-    }
-
-    .panel-title {
-      margin: 0 0 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.08rem;
-      line-height: 1.25;
-      font-weight: 850;
-    }
-
-    .panel-title span {
-      color: var(--blue);
-    }
-
-    .panel p {
-      margin: 0;
-      color: #d3e3f2;
-      font-size: 0.94rem;
-      line-height: 1.65;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .metric {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px;
-      border: 1px solid var(--line-soft);
-      border-radius: 11px;
-      background: rgba(0, 157, 255, 0.055);
-    }
-
-    .metric-icon {
-      color: var(--blue);
-      font-size: 1.45rem;
-      width: 30px;
-      text-align: center;
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 1.12rem;
-      line-height: 1;
-    }
-
-    .metric span {
-      display: block;
-      font-size: 0.76rem;
-      color: #d4e5f7;
-      margin-top: 4px;
-    }
-
-    .grid-mid {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: 0.75fr 0.9fr 0.62fr 0.78fr;
-      gap: 18px;
-    }
-
-    .criteria {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .criterion {
-      text-align: center;
-    }
-
-    .criterion-icon {
-      height: 56px;
-      border: 1px solid var(--line-soft);
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      color: var(--blue);
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-      background: rgba(0, 157, 255, 0.055);
-    }
-
-    .criterion span {
-      font-size: 0.82rem;
-      color: #d7e9fa;
-      line-height: 1.35;
-    }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .flow-step {
-      position: relative;
-      min-height: 150px;
-      padding: 10px;
-    }
-
-    .flow-step:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      top: 25px;
-      right: -10px;
-      width: 20px;
-      border-top: 1px dashed var(--blue);
-    }
-
-    .flow-number {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: rgba(0, 157, 255, 0.2);
-      border: 1px solid var(--line);
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .flow-step strong {
-      display: block;
-      font-size: 0.82rem;
-      line-height: 1.22;
-      margin-bottom: 7px;
-    }
-
-    .flow-step span {
-      color: var(--muted);
-      font-size: 0.75rem;
-      line-height: 1.45;
-    }
-
-    .families {
-      display: grid;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .family-row {
-      display: grid;
-      grid-template-columns: 1fr 0.14fr 1fr 1fr;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .family {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 11px 12px;
-      color: var(--cyan);
-      font-size: 0.88rem;
-      font-weight: 850;
-      background: rgba(0, 157, 255, 0.06);
-    }
-
-    .family.b {
-      color: var(--green);
-      border-color: rgba(0, 213, 155, 0.42);
-    }
-
-    .family.c {
-      color: var(--purple);
-      border-color: rgba(177, 92, 255, 0.45);
-    }
-
-    .connector {
-      color: var(--blue);
-      text-align: center;
-    }
-
-    .sc {
-      border: 1px solid var(--line-soft);
-      border-radius: 8px;
-      padding: 10px 8px;
-      text-align: center;
-      font-size: 0.78rem;
-      background: rgba(255, 255, 255, 0.03);
-      font-weight: 750;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-      color: #d9e8f5;
-    }
-
-    th, td {
-      border: 1px solid rgba(0, 157, 255, 0.18);
-      padding: 8px 7px;
-      text-align: center;
-    }
-
-    th {
-      color: #cdeeff;
-      background: rgba(0, 157, 255, 0.12);
-      font-weight: 850;
-    }
-
-    td:first-child {
-      color: var(--cyan);
-      font-weight: 850;
-    }
-
-    .summary-section {
-      margin-top: 18px;
-      padding: 22px;
-    }
-
-    .summary-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 18px;
-      color: var(--cyan);
-      font-size: 1.28rem;
-    }
-
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 14px;
-    }
-
-    .summary-card {
-      min-height: 145px;
-      padding: 16px;
-      border: 1px solid var(--line-soft);
-      border-radius: 12px;
-      background: rgba(0, 157, 255, 0.045);
-    }
-
-    .summary-card .num {
-      width: 28px;
-      height: 28px;
-      display: inline-grid;
-      place-items: center;
-      border-radius: 999px;
-      background: rgba(0, 157, 255, 0.22);
-      border: 1px solid var(--line);
-      font-weight: 900;
-      font-size: 0.8rem;
-      margin-bottom: 10px;
-    }
-
-    .summary-card h4 {
-      margin: 0 0 8px;
-      font-size: 0.9rem;
-      line-height: 1.25;
-    }
-
-    .summary-card p {
-      color: #c9d9e8;
-      font-size: 0.78rem;
-      line-height: 1.55;
-    }
-
-    .result-bar {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: 310px 1fr 70px;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 24px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background:
-        radial-gradient(circle at right, rgba(0, 157, 255, 0.20), transparent 18%),
-        linear-gradient(90deg, rgba(0, 157, 255, 0.14), rgba(2, 11, 22, 0.82));
-      box-shadow: 0 0 26px rgba(0, 157, 255, 0.12);
-    }
-
-    .result-title {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: var(--blue);
-      font-size: 1.35rem;
-      font-weight: 900;
-    }
-
-    .result-title .trophy {
-      font-size: 2rem;
-    }
-
-    .result-bar p {
-      margin: 0;
-      color: #d9e9f8;
-      font-size: 0.98rem;
-      line-height: 1.5;
-    }
-
-    .check {
-      width: 50px;
-      height: 50px;
-      border-radius: 999px;
-      border: 2px solid var(--blue);
-      display: grid;
-      place-items: center;
-      color: var(--blue);
-      font-size: 1.6rem;
-      justify-self: end;
-      box-shadow: 0 0 18px rgba(0, 157, 255, 0.25);
-    }
-
-    .carousel-wrap {
-      margin-top: 18px;
-      padding: 22px 28px 30px;
-      min-height: 390px;
-    }
-
-    .carousel-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 0 16px;
-      font-size: 1.2rem;
-    }
-
-    .carousel {
-      display: grid;
-      grid-template-columns: 80px 1fr 80px;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .arrow-btn {
-      width: 60px;
-      height: 60px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(0, 157, 255, 0.06);
-      color: #fff;
-      font-size: 2.1rem;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: background 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .arrow-btn:hover {
-      background: rgba(0, 157, 255, 0.14);
-      box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
-    }
-
-    .slide {
-      display: none;
-    }
-
-    .slide.active {
-      display: block;
-    }
-
-    .slide-frame {
-      max-width: 860px;
-      margin: 0 auto;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      overflow: hidden;
-      background: #081727;
-      box-shadow: 0 0 30px rgba(0, 157, 255, 0.18);
-    }
-
-    .slide-frame img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      display: block;
-      background: #fff;
-    }
-
-    .slide-caption {
-      padding: 16px 20px;
-      background: rgba(3, 10, 20, 0.96);
-      color: #f4f8ff;
-      font-size: 1rem;
-      font-weight: 650;
-    }
-
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 999px;
-      border: none;
-      background: rgba(255, 255, 255, 0.34);
-      cursor: pointer;
-    }
-
-    .dot.active {
-      background: var(--blue);
-      box-shadow: 0 0 12px rgba(0, 157, 255, 0.8);
-    }
-
-    .footer {
-      margin-top: 22px;
-      border-top: 1px solid var(--line-soft);
-      background: rgba(2, 11, 22, 0.95);
-    }
-
-    .footer-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 22px 30px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 18px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 0.84rem;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #fff;
-      font-weight: 800;
-    }
-
-    .footer-brand .brand-icon {
-      width: 34px;
-      height: 42px;
-      font-size: 1.2rem;
-      border-width: 2px;
-    }
-
-    .footer-links {
-      justify-self: end;
-      display: flex;
-      gap: 24px;
-    }
-
-    @media (max-width: 1450px) {
-      .topbar {
-        padding: 0 36px;
-      }
-
-      .grid-top,
-      .grid-mid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .summary-cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 1180px) {
-      .topbar {
-        height: auto;
-        min-height: 92px;
-        padding: 18px 26px;
-      }
-
-      .nav {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 18px;
-      }
-
-      .menu {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 18px 28px;
-      }
-
-      .menu a {
-        padding: 8px 0 14px;
-      }
-
-      .menu a.active::after,
-      .menu a:hover::after {
-        bottom: 4px;
-      }
-    }
-
-    @media (max-width: 780px) {
-      .topbar {
-        padding: 16px;
-      }
-
-      .brand {
-        gap: 14px;
-      }
-
-      .brand-icon {
-        width: 44px;
-        height: 54px;
-        font-size: 1.6rem;
-      }
-
-      .brand-title {
-        font-size: 1.45rem;
-      }
-
-      .brand-subtitle {
-        font-size: 0.88rem;
-        line-height: 1.3;
-      }
-
-      .menu {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-      }
-
-      .menu a {
-        width: 100%;
-        padding: 12px 0;
-      }
-
-      .page {
-        padding: 24px 16px 0;
-      }
-
-      .grid-top,
-      .grid-mid,
-      .summary-cards,
-      .result-bar,
-      .footer-inner {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-copy {
-        padding: 8px 4px 18px;
-      }
-
-      .hero-copy h1 {
-        font-size: 2.35rem;
-      }
-
-      .hero-image {
-        min-height: 240px;
-      }
-
-      .criteria,
-      .metrics-grid,
-      .flow {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .flow-step:not(:last-child)::after {
-        display: none;
-      }
-
-      .carousel {
-        grid-template-columns: 1fr;
-      }
-
-      .arrow-btn {
-        display: none;
-      }
-
-      .family-row {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-links {
-        justify-self: start;
-        flex-wrap: wrap;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
-  <header class="topbar">
-    <nav class="nav">
-      <a class="brand" href="../../index.html">
-        <div class="brand-icon">ϟ</div>
-        <div>
-          <div class="brand-title">Storage Analytics</div>
-          <div class="brand-subtitle">Plataforma de análisis en costos por degradación en sistemas BESS</div>
-        </div>
-      </a>
-
-      <div class="menu">
-        <a href="../../index.html">Inicio</a>
-        <a href="../../metodologia/bloque-1/">Metodología</a>
-        <a href="../../objetivos/">Objetivos</a>
-        <a class="active" href="../index.html">Avances</a>
-        <a href="../../index.html#links">Links de interés</a>
-        <a href="../../dashboard/">Dashboard</a>
+  <header class="site-header">
+    <a href="/" class="brand" aria-label="Storage Analytics">
+      <div class="brand-icon">
+        <span>ϟ</span>
       </div>
+
+      <div class="brand-text">
+        <h1>Storage Analytics</h1>
+        <p>Plataforma de análisis en costos por degradación en sistemas BESS</p>
+      </div>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Metodología
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/metodologia/bloque-1/" class="dropdown-item" role="menuitem">
+            <span>Bloque 1</span>
+            <small>Data Meteorológica y Simulación en SAM</small>
+          </a>
+
+          <a href="/metodologia/bloque-2/" class="dropdown-item" role="menuitem">
+            <span>Bloque 2</span>
+            <small>Operación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-3/" class="dropdown-item" role="menuitem">
+            <span>Bloque 3</span>
+            <small>Degradación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-4/" class="dropdown-item" role="menuitem">
+            <span>Bloque 4</span>
+            <small>Estimación del Costo de Degradación del Sistema BESS</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/objetivos/">Objetivos</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Avances
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/avances/" class="dropdown-item" role="menuitem">
+            <span>Todos los avances</span>
+            <small>Resumen general de avances técnicos</small>
+          </a>
+
+          <a href="/avances/configuracion%20ceme1%20en%20sam/" class="dropdown-item" role="menuitem">
+            <span>Configuración CEME1 en SAM</span>
+            <small>Arquitectura real de planta en System Advisor Model</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Comparación meteorológica</span>
+            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Generación AC horaria</span>
+            <small>Exportación y agregación de resultados SAM</small>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Links de interés
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-small" role="menu">
+          <a
+            href="https://www.coordinador.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>CEN</span>
+            <small>Coordinador Eléctrico Nacional</small>
+          </a>
+
+          <a
+            href="https://solar.minenergia.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Explorador Solar</span>
+            <small>Recurso solar y datos meteorológicos de Chile</small>
+          </a>
+
+          <a
+            href="https://power.larc.nasa.gov/data-access-viewer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>NASA POWER</span>
+            <small>Datos meteorológicos y solares horarios</small>
+          </a>
+
+          <a
+            href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Arquitectura CEME1</span>
+            <small>Informe CEN de potencia máxima PFV CEME1</small>
+          </a>
+
+          <a
+            href="https://www.python.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Python</span>
+            <small>Programación y procesamiento de datos</small>
+          </a>
+
+          <a
+            href="https://sam.nrel.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>SAM</span>
+            <small>Software de simulación energética</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/dashboard/">Dashboard</a>
     </nav>
   </header>
 
-  <main class="page">
-    <section class="grid-top">
-      <div class="hero-copy">
-        <h1>Configuración de la arquitectura de CEME1 en SAM</h1>
+  <main class="sam-advance-page">
+
+    <section class="sam-advance-hero">
+      <div class="sam-advance-hero-text">
+        <span class="block-kicker">Avance técnico</span>
+
+        <h2>Configuración de la arquitectura de CEME1 en SAM</h2>
 
         <p>
-          Este avance resume cómo la arquitectura eléctrica y física real de CEME1 fue aplicada a
-          configuraciones representativas en System Advisor Model (SAM), preservando familias de
-          módulos, strings, inversores, orientaciones y subcampos equivalentes para la simulación energética final.
+          Este avance resume cómo la arquitectura eléctrica y física real de CEME1 fue traducida
+          a configuraciones representativas en System Advisor Model, preservando familias de módulos,
+          strings, inversores, orientaciones Este/Oeste y subcampos equivalentes.
         </p>
 
-        <a class="download-card" href="https://drive.google.com/file/d/1EBgSTu_6CRNfxi9k-PT_wk_8_1K_oWTQ/view?usp=drive_link" target="_blank">
-          <span class="doc-icon">▤</span>
-          <span>
-            <strong>Descargar PDF de respaldo</strong>
-            <small>Documento de registro y respaldo</small>
-          </span>
+        <a class="btn btn-primary" href="/assets/configuracion-sam-ceme1.pdf" target="_blank">
+          Descargar PDF de respaldo
         </a>
       </div>
 
-      <div class="hero-image"></div>
+      <div class="sam-advance-hero-image" aria-label="Imagen de referencia de CEME1"></div>
+    </section>
 
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>◎</span> Objetivo del avance</h2>
+    <section class="sam-overview-grid">
+      <article class="sam-card sam-card-large">
+        <div class="sam-card-header">
+          <span>◎</span>
+          <h3>Objetivo del avance</h3>
+        </div>
+
         <p>
-          Representar la arquitectura real de CEME1 en SAM definiendo subcampos equivalentes por familia, 
-          orientación Este/Oeste, manteniendo la estructura de strings, inversores y subcampos de la planta.
-          <br><br>
+          El objetivo de este avance fue representar la arquitectura real de CEME1 dentro de SAM,
+          transformando la información de planta en submodelos equivalentes. Para ello, se identificaron
+          familias técnicas de módulos, se separó la planta por orientación Este/Oeste y se definieron
+          configuraciones consistentes de strings, inversores y subcampos.
+        </p>
+
+        <p>
+          Este avance corresponde únicamente a la configuración de arquitectura en SAM. No corresponde
+          todavía a un análisis de resultados energéticos, generación anual ni validación operacional.
         </p>
       </article>
 
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>▦</span> Datos técnicos base</h2>
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▦</span>
+          <h3>Datos técnicos base</h3>
+        </div>
 
-        <div class="metrics-grid">
-          <div class="metric"><span class="metric-icon">ϟ</span><div><strong>480,19</strong><span>MWdc</span></div></div>
-          <div class="metric"><span class="metric-icon">∿</span><div><strong>380</strong><span>MWac</span></div></div>
-          <div class="metric"><span class="metric-icon">▦</span><div><strong>882.720</strong><span>módulos</span></div></div>
-          <div class="metric"><span class="metric-icon">⚡</span><div><strong>29.424</strong><span>strings</span></div></div>
-          <div class="metric"><span class="metric-icon">▣</span><div><strong>120</strong><span>inversores</span></div></div>
-          <div class="metric"><span class="metric-icon">⧉</span><div><strong>60</strong><span>subcampos</span></div></div>
+        <div class="sam-metric-grid">
+          <div class="sam-metric"><strong>480,19</strong><span>MWdc</span></div>
+          <div class="sam-metric"><strong>380</strong><span>MWac</span></div>
+          <div class="sam-metric"><strong>882.720</strong><span>módulos</span></div>
+          <div class="sam-metric"><strong>29.424</strong><span>strings</span></div>
+          <div class="sam-metric"><strong>120</strong><span>inversores</span></div>
+          <div class="sam-metric"><strong>60</strong><span>subcampos</span></div>
+        </div>
+      </article>
+
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>⚙</span>
+          <h3>Criterios de modelación</h3>
+        </div>
+
+        <ul class="sam-list">
+          <li><strong>Estructura fija</strong><span>Representación de planta sin seguimiento solar.</span></li>
+          <li><strong>Inclinación 5°</strong><span>Ángulo geométrico usado para configurar los submodelos.</span></li>
+          <li><strong>Orientación Este/Oeste</strong><span>Separación por azimut de cada familia técnica.</span></li>
+          <li><strong>Strings de 30 módulos</strong><span>Base eléctrica para construir arreglos equivalentes.</span></li>
+          <li><strong>S/E Mirage 220 kV</strong><span>Punto de referencia eléctrico del proyecto.</span></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="sam-workflow">
+      <div class="section-heading">
+        <span>⛓</span>
+        <h3>Flujo de configuración en SAM</h3>
+      </div>
+
+      <div class="sam-flow-grid">
+        <article class="sam-step">
+          <span>01</span>
+          <h4>Recopilación de arquitectura real</h4>
+          <p>Se levantan datos de módulos, strings, inversores, subcampos y configuración general de planta.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>02</span>
+          <h4>Identificación de familias técnicas</h4>
+          <p>Se agrupan subcampos según tipo de módulo y estructura eléctrica equivalente.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>03</span>
+          <h4>Separación Este/Oeste</h4>
+          <p>Cada familia técnica se divide por orientación para representar la geometría real de CEME1.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>04</span>
+          <h4>Definición de strings e inversores</h4>
+          <p>Se asigna la cantidad de strings e inversores correspondiente a cada submodelo equivalente.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>05</span>
+          <h4>Construcción de 6 configuraciones</h4>
+          <p>Se generan seis archivos o casos independientes en SAM: SC01 a SC06.</p>
+        </article>
+
+        <article class="sam-step">
+          <span>06</span>
+          <h4>Verificación de consistencia</h4>
+          <p>Se revisa que potencia, estructura, strings e inversores mantengan coherencia con la planta real.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="sam-config-grid">
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▰</span>
+          <h3>Configuraciones SAM generadas</h3>
+        </div>
+
+        <div class="sam-family-grid">
+          <div class="sam-family">
+            <strong>Familia A · 540 Wp</strong>
+            <div>
+              <span>SC01 · Este</span>
+              <span>SC02 · Oeste</span>
+            </div>
+          </div>
+
+          <div class="sam-family family-b">
+            <strong>Familia B · 545 Wp</strong>
+            <div>
+              <span>SC03 · Este</span>
+              <span>SC04 · Oeste</span>
+            </div>
+          </div>
+
+          <div class="sam-family family-c">
+            <strong>Familia C · 545 Wp</strong>
+            <div>
+              <span>SC05 · Este</span>
+              <span>SC06 · Oeste</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="sam-card">
+        <div class="sam-card-header">
+          <span>▤</span>
+          <h3>Resumen de submodelos</h3>
+        </div>
+
+        <div class="sam-table-wrap">
+          <table class="sam-table">
+            <thead>
+              <tr>
+                <th>Submodelo</th>
+                <th>Módulo</th>
+                <th>Orientación</th>
+                <th>Strings</th>
+                <th>Inversores</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td></tr>
+              <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td></tr>
+              <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td></tr>
+              <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td></tr>
+              <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td></tr>
+              <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td></tr>
+            </tbody>
+          </table>
         </div>
       </article>
     </section>
 
-    <section class="grid-mid">
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>⚙</span> Criterios de modelación</h2>
+    <section class="sam-summary">
+      <div class="section-heading">
+        <span>▤</span>
+        <h3>Resumen del avance</h3>
+      </div>
 
-        <div class="criteria">
-          <div class="criterion"><div class="criterion-icon">⌬</div><span>Estructura<br>fija</span></div>
-          <div class="criterion"><div class="criterion-icon">∠</div><span>Inclinación<br>5°</span></div>
-          <div class="criterion"><div class="criterion-icon">◉</div><span>Orientación<br>Este / Oeste</span></div>
-          <div class="criterion"><div class="criterion-icon">▦</div><span>Strings de<br>30 módulos</span></div>
-        </div>
-      </article>
-
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>⌘</span> Flujo de configuración en SAM</h2>
-
-        <div class="flow">
-          <div class="flow-step"><div class="flow-number">1</div><strong>Recopilación de arquitectura real</strong><span>Datos eléctricos y físicos de planta.</span></div>
-          <div class="flow-step"><div class="flow-number">2</div><strong>Identificación de familias</strong><span>Clasificación por familia y potencia.</span></div>
-          <div class="flow-step"><div class="flow-number">3</div><strong>Separación por orientación Este/Oeste</strong><span>División por orientación de módulos.</span></div>
-          <div class="flow-step"><div class="flow-number">4</div><strong>Definición de strings e inversores</strong><span>Equivalencia de arquitectura real.</span></div>
-          <div class="flow-step"><div class="flow-number">5</div><strong>Construcción de configuraciones SAM</strong><span>Subcampos independientes.</span></div>
-          <div class="flow-step"><div class="flow-number">6</div><strong>Verificación de consistencia</strong><span>Potencia, strings e inversores.</span></div>
-        </div>
-      </article>
-
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>▰</span> Configuraciones SAM generadas</h2>
-
-        <div class="families">
-          <div class="family-row"><div class="family">Familia A<br>540 Wp</div><div class="connector">→</div><div class="sc">SC01 Este</div><div class="sc">SC02 Oeste</div></div>
-          <div class="family-row"><div class="family b">Familia B<br>545 Wp</div><div class="connector">→</div><div class="sc">SC03 Este</div><div class="sc">SC04 Oeste</div></div>
-          <div class="family-row"><div class="family c">Familia C<br>545 Wp</div><div class="connector">→</div><div class="sc">SC05 Este</div><div class="sc">SC06 Oeste</div></div>
-        </div>
-      </article>
-
-      <article class="panel panel-pad">
-        <h2 class="panel-title"><span>▤</span> Resumen de submodelos</h2>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Submodelo</th>
-              <th>Módulo</th>
-              <th>Orientación</th>
-              <th>Strings</th>
-              <th>Inversores</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td></tr>
-            <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td></tr>
-            <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td></tr>
-            <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td></tr>
-            <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td></tr>
-            <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td></tr>
-          </tbody>
-        </table>
-      </article>
-    </section>
-
-    <section class="panel summary-section">
-      <h2 class="summary-title">▤ Resumen del avance</h2>
-
-      <div class="summary-cards">
-        <article class="summary-card">
-          <span class="num">1</span>
+      <div class="sam-summary-grid">
+        <article>
+          <span>01</span>
           <h4>Arquitectura real en SAM</h4>
-          <p>Se representó la arquitectura real de CEME1 en SAM, respetando la distribución física y eléctrica de la planta.</p>
+          <p>Se representó la arquitectura real de CEME1 respetando la distribución física y eléctrica de la planta.</p>
         </article>
 
-        <article class="summary-card">
-          <span class="num">2</span>
-          <h4>Familias técnicas identificadas</h4>
-          <p>Se identificaron tres familias técnicas de módulos con sus características principales.</p>
+        <article>
+          <span>02</span>
+          <h4>Familias técnicas</h4>
+          <p>Se identificaron tres familias principales de módulos y configuraciones equivalentes.</p>
         </article>
 
-        <article class="summary-card">
-          <span class="num">3</span>
-          <h4>Separación por orientación</h4>
-          <p>La planta fue separada por orientaciones Este y Oeste para cada familia técnica.</p>
+        <article>
+          <span>03</span>
+          <h4>Orientación Este/Oeste</h4>
+          <p>La planta fue separada según orientación para conservar la geometría representativa de los arreglos.</p>
         </article>
 
-        <article class="summary-card">
-          <span class="num">4</span>
-          <h4>Strings, inversores y subcampos</h4>
-          <p>Se definieron strings de 30 módulos, inversores y subcampos equivalentes según la configuración real.</p>
+        <article>
+          <span>04</span>
+          <h4>Strings e inversores</h4>
+          <p>Se definieron strings, inversores y subcampos equivalentes para cada configuración.</p>
         </article>
 
-        <article class="summary-card">
-          <span class="num">5</span>
-          <h4>6 configuraciones en SAM</h4>
-          <p>Se construyeron seis configuraciones independientes, desde SC01 hasta SC06.</p>
+        <article>
+          <span>05</span>
+          <h4>Seis configuraciones</h4>
+          <p>Se construyeron seis submodelos independientes en SAM, desde SC01 hasta SC06.</p>
         </article>
 
-        <article class="summary-card">
-          <span class="num">6</span>
-          <h4>No es simulación energética</h4>
-          <p>Este avance corresponde únicamente a configuración de arquitectura, no incluye simulación ni producción.</p>
+        <article>
+          <span>06</span>
+          <h4>Sin resultados energéticos</h4>
+          <p>Este avance documenta configuración de arquitectura, no resultados de generación o validación energética.</p>
         </article>
       </div>
     </section>
 
-    <section class="result-bar">
-      <div class="result-title">
-        <span class="trophy">♕</span>
-        <span>Resultado del avance</span>
+    <section class="sam-result">
+      <div>
+        <span class="block-kicker">Resultado del avance</span>
+        <h3>Arquitectura CEME1 representada en SAM</h3>
+
+        <p>
+          La arquitectura real de CEME1 fue representada mediante seis configuraciones equivalentes,
+          preservando familias técnicas, orientaciones Este/Oeste y estructura eléctrica de planta.
+        </p>
       </div>
 
-      <p>
-        La arquitectura real de CEME1 fue representada en SAM mediante 6 configuraciones equivalentes,
-        preservando familias técnicas, orientaciones y estructura eléctrica de planta.
-      </p>
-
-      <div class="check">✓</div>
+      <div class="sam-result-check">✓</div>
     </section>
 
-    <section class="panel carousel-wrap">
-      <h2 class="carousel-title">▧ Carrusel de evidencia del proceso</h2>
+    <section class="sam-carousel-section">
+      <div class="section-heading">
+        <span>▧</span>
+        <h3>Carrusel de evidencia del proceso</h3>
+      </div>
 
-      <div class="carousel">
-        <button class="arrow-btn" type="button" id="prevSlide">‹</button>
+      <div class="sam-carousel">
+        <button class="sam-carousel-btn" type="button" id="prevSlide">‹</button>
 
-        <div class="slides">
-          <article class="slide active">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-01.png" alt="Resumen familia A">
-              <div class="slide-caption">Figura 1 · Resumen familia A: 12 subcampos, 2 orientaciones y 12 inversores por subcampo.</div>
-            </div>
+        <div class="sam-slides">
+          <article class="sam-slide active">
+            <img src="/assets/sam-figura-01.png" alt="Resumen familia A">
+            <div>Figura 1 · Resumen familia A: 12 subcampos, 2 orientaciones y 12 inversores por subcampo.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-02.png" alt="Resumen familia B">
-              <div class="slide-caption">Figura 2 · Resumen familia B: 21 subcampos, 2 orientaciones y 21 inversores por subcampo.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-02.png" alt="Resumen familia B">
+            <div>Figura 2 · Resumen familia B: 21 subcampos, 2 orientaciones y 21 inversores por subcampo.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-03.png" alt="Resumen familia C">
-              <div class="slide-caption">Figura 3 · Resumen familia C: 27 subcampos, 2 orientaciones y 27 inversores por subcampo.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-03.png" alt="Resumen familia C">
+            <div>Figura 3 · Resumen familia C: 27 subcampos, 2 orientaciones y 27 inversores por subcampo.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-04.png" alt="Metodología de configuración en SAM">
-              <div class="slide-caption">Figura 4 · Metodología de configuración en SAM y archivos de submodelos generados.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-04.png" alt="Metodología de configuración en SAM">
+            <div>Figura 4 · Metodología de configuración en SAM y archivos de submodelos generados.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-05.png" alt="Configuración SAM familia A">
-              <div class="slide-caption">Figura 5 · Configuración SAM familia A: SC01 Este / SC02 Oeste.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-05.png" alt="Configuración SAM familia A">
+            <div>Figura 5 · Configuración SAM familia A: SC01 Este / SC02 Oeste.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-06.png" alt="Configuración SAM familia B">
-              <div class="slide-caption">Figura 6 · Configuración SAM familia B: SC03 Este / SC04 Oeste.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-06.png" alt="Configuración SAM familia B">
+            <div>Figura 6 · Configuración SAM familia B: SC03 Este / SC04 Oeste.</div>
           </article>
 
-          <article class="slide">
-            <div class="slide-frame">
-              <img src="../../assets/sam-figura-07.png" alt="Configuración SAM familia C">
-              <div class="slide-caption">Figura 7 · Configuración SAM familia C: SC05 Este / SC06 Oeste.</div>
-            </div>
+          <article class="sam-slide">
+            <img src="/assets/sam-figura-07.png" alt="Configuración SAM familia C">
+            <div>Figura 7 · Configuración SAM familia C: SC05 Este / SC06 Oeste.</div>
           </article>
         </div>
 
-        <button class="arrow-btn" type="button" id="nextSlide">›</button>
+        <button class="sam-carousel-btn" type="button" id="nextSlide">›</button>
       </div>
 
-      <div class="dots" id="carouselDots"></div>
+      <div class="sam-dots" id="carouselDots"></div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="brand-icon">ϟ</div>
-        <span>Storage Analytics</span>
-      </div>
-
-      <div>© 2025 Storage Analytics. Todos los derechos reservados.</div>
-
-      <div class="footer-links">
-        <a href="#">Política de privacidad</a>
-        <a href="#">Términos de uso</a>
-        <a href="#">Contacto</a>
-      </div>
-    </div>
+  <footer class="site-footer">
+    <p>
+      Storage Analytics © 2025
+      <span>•</span>
+      Actividad de Graduación
+      <span>•</span>
+      Magíster en Ingeniería de la Energía
+    </p>
   </footer>
 
   <script>
-    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+      if (!trigger) return;
+
+      trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        dropdowns.forEach(function (otherDropdown) {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove("open");
+
+            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
+
+            if (otherTrigger) {
+              otherTrigger.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+
+        dropdown.classList.toggle("open");
+
+        const isOpen = dropdown.classList.contains("open");
+        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      dropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+    });
+
+    document.addEventListener("click", function () {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.classList.remove("open");
+
+        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        dropdowns.forEach(function (dropdown) {
+          dropdown.classList.remove("open");
+
+          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+          if (trigger) {
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    });
+
+    const slides = Array.from(document.querySelectorAll(".sam-slide"));
     const dotsContainer = document.getElementById("carouselDots");
     const prevButton = document.getElementById("prevSlide");
     const nextButton = document.getElementById("nextSlide");
@@ -1088,11 +549,14 @@
     let currentSlide = 0;
 
     function createDots() {
-      slides.forEach((_, index) => {
+      slides.forEach(function (_, index) {
         const dot = document.createElement("button");
-        dot.className = "dot";
+        dot.className = "sam-dot";
         dot.type = "button";
-        dot.addEventListener("click", () => showSlide(index));
+        dot.setAttribute("aria-label", "Ir a figura " + (index + 1));
+        dot.addEventListener("click", function () {
+          showSlide(index);
+        });
         dotsContainer.appendChild(dot);
       });
     }
@@ -1100,21 +564,29 @@
     function showSlide(index) {
       currentSlide = (index + slides.length) % slides.length;
 
-      slides.forEach((slide, i) => {
+      slides.forEach(function (slide, i) {
         slide.classList.toggle("active", i === currentSlide);
       });
 
-      const dots = Array.from(document.querySelectorAll(".dot"));
-      dots.forEach((dot, i) => {
+      const dots = Array.from(document.querySelectorAll(".sam-dot"));
+
+      dots.forEach(function (dot, i) {
         dot.classList.toggle("active", i === currentSlide);
       });
     }
 
-    prevButton.addEventListener("click", () => showSlide(currentSlide - 1));
-    nextButton.addEventListener("click", () => showSlide(currentSlide + 1));
+    if (slides.length > 0 && dotsContainer && prevButton && nextButton) {
+      createDots();
+      showSlide(0);
 
-    createDots();
-    showSlide(0);
+      prevButton.addEventListener("click", function () {
+        showSlide(currentSlide - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        showSlide(currentSlide + 1);
+      });
+    }
   </script>
 </body>
 </html>
