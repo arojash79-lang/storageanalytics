@@ -1883,37 +1883,59 @@ a {
 }
 
 .sam-advance-hero {
-  min-height: 480px;
-  display: grid;
-  grid-template-columns: 0.88fr 1.12fr;
-  gap: 58px;
+  min-height: 560px;
+  display: flex;
   align-items: center;
-  position: relative;
+  padding: 58px 56px;
+  border-radius: 24px;
   overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
   background:
-    linear-gradient(90deg, rgba(3, 11, 22, 1) 0%, rgba(3, 11, 22, 0.88) 38%, rgba(3, 11, 22, 0.55) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 1), rgba(3, 11, 22, 0.05) 42%, rgba(3, 11, 22, 0.78));
+    linear-gradient(90deg,
+      rgba(2, 10, 20, 0.78) 0%,
+      rgba(2, 10, 20, 0.72) 28%,
+      rgba(2, 10, 20, 0.58) 52%,
+      rgba(2, 10, 20, 0.45) 100%
+    ),
+    linear-gradient(180deg,
+      rgba(2, 10, 20, 0.18) 0%,
+      rgba(2, 10, 20, 0.28) 100%
+    ),
+    url("/assets/ceme1-v-invertida-atardecer.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .sam-advance-hero-text {
-  padding: 20px 28px 24px;
+  max-width: 760px;
+  position: relative;
   z-index: 2;
+  padding: 0;
 }
 
 .sam-advance-hero-text h2 {
-  max-width: 790px;
   margin: 0;
-  font-size: clamp(2.35rem, 4vw, 4.65rem);
-  line-height: 1.08;
+  font-size: clamp(2.8rem, 5vw, 5.2rem);
+  line-height: 1.05;
   letter-spacing: -0.055em;
 }
 
 .sam-advance-hero-text p {
   max-width: 760px;
-  margin: 22px 0 28px;
-  color: #d0dbe8;
-  line-height: 1.62;
-  font-size: 1.04rem;
+  margin: 24px 0 28px;
+  color: #d7e3ef;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+/* Si aún existe el bloque antiguo, lo ocultas */
+.sam-advance-hero-image {
+  display: none;
 }
 
 .sam-advance-hero-image {
