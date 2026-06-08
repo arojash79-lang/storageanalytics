@@ -2,8 +2,7 @@
 
 ## Evaluación del costo de degradación de sistemas BESS bajo condiciones reales de operación en Chile
 
-Este proyecto corresponde a la Actividad de Graduación del Magíster en Ingeniería de la Energía de la Pontificia Universidad Católica de Chile.
-
+Este proyecto corresponde a la Actividad de Graduación del Magíster en Ingeniería de la Energía.
 ### Objetivo
 
 Determinar el costo técnico y económico asociado a la degradación de sistemas de almacenamiento mediante baterías (BESS) operando junto a plantas fotovoltaicas utility-scale bajo condiciones reales del Sistema Eléctrico Nacional de Chile.
