@@ -2456,3 +2456,65 @@ a {
   object-fit: cover;
   object-position: center;
 }
+/* =========================================================
+   CORRECCIÓN FINAL HERO AVANCE CEME1
+   Imagen como fondo, no como bloque inferior
+   ========================================================= */
+
+.sam-advance-hero {
+  min-height: 560px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 58px 56px !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 10, 20, 0.78) 0%,
+      rgba(2, 10, 20, 0.70) 32%,
+      rgba(2, 10, 20, 0.50) 62%,
+      rgba(2, 10, 20, 0.34) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 20, 0.16) 0%,
+      rgba(2, 10, 20, 0.30) 100%
+    ),
+    url("/assets/ceme1-v-invertida-atardecer.png") !important;
+
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.sam-advance-hero-text {
+  max-width: 760px !important;
+  position: relative !important;
+  z-index: 2 !important;
+  padding: 20px 28px 24px !important;
+}
+
+.sam-advance-hero-text h2 {
+  max-width: 790px !important;
+  margin: 0 !important;
+  font-size: clamp(2.35rem, 4vw, 4.65rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.sam-advance-hero-text p {
+  max-width: 760px !important;
+  margin: 22px 0 28px !important;
+  color: #d7e3ef !important;
+  line-height: 1.62 !important;
+  font-size: 1.04rem !important;
+}
+
+.sam-advance-hero-image {
+  display: none !important;
+}
