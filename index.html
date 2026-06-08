@@ -35,23 +35,23 @@
           Metodología
         </button>
 
-        <div class="methodology-menu" role="menu">
-          <a href="/metodologia/bloque-1/" class="links-menu-item" role="menuitem">
+        <div class="dropdown-menu" role="menu">
+          <a href="/metodologia/bloque-1/" class="dropdown-item" role="menuitem">
             <span>Bloque 1</span>
             <small>Data Meteorológica y Simulación en SAM</small>
           </a>
 
-          <a href="/metodologia/bloque-2/" class="links-menu-item" role="menuitem">
+          <a href="/metodologia/bloque-2/" class="dropdown-item" role="menuitem">
             <span>Bloque 2</span>
             <small>Operación del Sistema BESS</small>
           </a>
 
-          <a href="/metodologia/bloque-3/" class="links-menu-item" role="menuitem">
+          <a href="/metodologia/bloque-3/" class="dropdown-item" role="menuitem">
             <span>Bloque 3</span>
             <small>Degradación del Sistema BESS</small>
           </a>
 
-          <a href="/metodologia/bloque-4/" class="links-menu-item" role="menuitem">
+          <a href="/metodologia/bloque-4/" class="dropdown-item" role="menuitem">
             <span>Bloque 4</span>
             <small>Estimación del Costo de Degradación del Sistema BESS</small>
           </a>
@@ -70,30 +70,30 @@
           Avances
         </button>
 
-        <div class="methodology-menu advances-menu" role="menu">
-          <a href="/avances/" class="links-menu-item" role="menuitem">
+        <div class="dropdown-menu" role="menu">
+          <a href="/avances/" class="dropdown-item" role="menuitem">
             <span>Todos los avances</span>
             <small>Resumen general de avances técnicos</small>
           </a>
 
-          <a href="/avances/configuracion%20ceme1%20en%20sam/" class="links-menu-item" role="menuitem">
+          <a href="/avances/configuracion%20ceme1%20en%20sam/" class="dropdown-item" role="menuitem">
             <span>Configuración CEME1 en SAM</span>
             <small>Arquitectura real de planta en System Advisor Model</small>
           </a>
 
-          <a href="#" class="links-menu-item" role="menuitem">
+          <a href="#" class="dropdown-item" role="menuitem">
             <span>Comparación meteorológica</span>
             <small>NASA POWER 2025 vs Explorador Solar TMY</small>
           </a>
 
-          <a href="#" class="links-menu-item" role="menuitem">
+          <a href="#" class="dropdown-item" role="menuitem">
             <span>Generación AC horaria</span>
             <small>Exportación y agregación de resultados SAM</small>
           </a>
         </div>
       </div>
 
-      <div class="nav-dropdown links-dropdown">
+      <div class="nav-dropdown">
         <button
           class="nav-dropdown-trigger"
           type="button"
@@ -103,12 +103,12 @@
           Links de interés
         </button>
 
-        <div class="links-menu" role="menu">
+        <div class="dropdown-menu dropdown-menu-small" role="menu">
           <a
             href="https://www.coordinador.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>CEN</span>
@@ -119,7 +119,7 @@
             href="https://solar.minenergia.cl/"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>Explorador Solar</span>
@@ -130,7 +130,7 @@
             href="https://power.larc.nasa.gov/data-access-viewer/"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>NASA POWER</span>
@@ -141,7 +141,7 @@
             href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>Arquitectura CEME1</span>
@@ -152,7 +152,7 @@
             href="https://www.python.org/"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>Python</span>
@@ -163,7 +163,7 @@
             href="https://sam.nrel.gov/"
             target="_blank"
             rel="noopener noreferrer"
-            class="links-menu-item"
+            class="dropdown-item"
             role="menuitem"
           >
             <span>SAM</span>
@@ -177,7 +177,6 @@
   </header>
 
   <main class="home">
-
     <section class="hero-section" id="inicio">
       <div class="hero-content">
         <div class="hero-text">
@@ -226,7 +225,7 @@
           </div>
 
           <div class="indicator-carousel">
-            <button class="carousel-btn left" aria-label="Anterior">‹</button>
+            <button class="carousel-btn left" type="button" aria-label="Anterior">‹</button>
 
             <article class="indicator-card metric-card">
               <div class="card-top">
@@ -267,7 +266,7 @@
               </div>
 
               <div class="curve-chart">
-                <svg viewBox="0 0 320 160" preserveAspectRatio="none">
+                <svg viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
                   <path
                     d="M 5 145 C 45 145, 60 142, 78 110 C 98 72, 108 28, 153 22 C 200 16, 220 67, 237 104 C 252 137, 274 145, 315 145"
                     fill="none"
@@ -313,7 +312,7 @@
               </div>
             </article>
 
-            <button class="carousel-btn right" aria-label="Siguiente">›</button>
+            <button class="carousel-btn right" type="button" aria-label="Siguiente">›</button>
           </div>
 
           <div class="carousel-dots" aria-label="Indicadores del carrusel">
