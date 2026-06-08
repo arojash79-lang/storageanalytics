@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Bloque 1 | Data meteorológica y Simulación en SAM</title>
+  <title>Storage Analytics | Plataforma de análisis en costos por degradación en sistemas BESS</title>
 
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -23,7 +23,7 @@
     </a>
 
     <nav class="nav" aria-label="Navegación principal">
-      <a href="/">Inicio</a>
+      <a href="/" class="active">Inicio</a>
 
       <div class="nav-dropdown">
         <button
@@ -176,201 +176,266 @@
     </nav>
   </header>
 
-  <main class="block-page">
+  <main class="home">
 
-    <section class="block-hero">
-      <span class="block-kicker">Bloque 1</span>
+    <section class="hero-section" id="inicio">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2>
+            Evaluación del costo real de degradación de sistemas
+            <span>BESS</span> bajo condiciones reales de operación
+          </h2>
 
-      <h2>Data meteorológica y Simulación en SAM</h2>
+          <div class="title-line"></div>
 
-      <p>
-        Este bloque desarrolla la base energética inicial del estudio. Su propósito
-        es recopilar, procesar y validar datos meteorológicos y operacionales para
-        estimar la generación fotovoltaica potencial de CEME1 en SAM, compararla
-        con registros reales del Coordinador Eléctrico Nacional (CEN) y generar los
-        inputs o parámetros que posteriormente permitirán definir escenarios de operación del BESS.
-      </p>
+          <p>
+            Plataforma académica para documentar el avance técnico y económico de
+            una actividad de graduación del Magíster en Ingeniería de la Energía.
+          </p>
+
+          <p>
+            El proyecto analiza la operación de un sistema FV+BESS en el norte de
+            Chile, integrando generación fotovoltaica simulada, datos reales del
+            SEN, estrategias de operación del BESS y estimación del costo asociado
+            a la degradación del activo.
+          </p>
+
+          <div class="hero-actions">
+            <a href="/metodologia/bloque-1/" class="btn btn-primary">
+              <span>▣</span>
+              Ver metodología
+            </a>
+
+            <a href="/objetivos/" class="btn btn-outline">
+              <span>◎</span>
+              Ver objetivos
+            </a>
+          </div>
+        </div>
+
+        <div class="indicators-panel">
+          <div class="panel-header">
+            <div>
+              <span class="section-kicker">↗</span>
+              <h3>Indicadores rápidos de interés</h3>
+            </div>
+
+            <a href="/dashboard/" class="dashboard-link">
+              Ver dashboard completo →
+            </a>
+          </div>
+
+          <div class="indicator-carousel">
+            <button class="carousel-btn left" type="button" aria-label="Anterior">‹</button>
+
+            <article class="indicator-card metric-card">
+              <div class="card-top">
+                <div>
+                  <span class="small-label">Generación AC anual</span>
+                  <strong>1.001,49</strong>
+                  <em>GWh/año</em>
+                </div>
+
+                <div class="metric-icon">☼</div>
+              </div>
+
+              <p class="positive">↑ 3,8% vs. escenario base</p>
+
+              <div class="mini-line-chart" aria-hidden="true">
+                <span style="height: 25%"></span>
+                <span style="height: 48%"></span>
+                <span style="height: 42%"></span>
+                <span style="height: 55%"></span>
+                <span style="height: 76%"></span>
+                <span style="height: 90%"></span>
+                <span style="height: 82%"></span>
+                <span style="height: 74%"></span>
+                <span style="height: 68%"></span>
+                <span style="height: 45%"></span>
+                <span style="height: 31%"></span>
+              </div>
+            </article>
+
+            <article class="indicator-card chart-card">
+              <div class="card-top compact">
+                <div>
+                  <span class="small-label">Perfil diario típico</span>
+                  <h4>Generación FV</h4>
+                </div>
+
+                <div class="metric-icon sun">☀</div>
+              </div>
+
+              <div class="curve-chart">
+                <svg viewBox="0 0 320 160" preserveAspectRatio="none" aria-hidden="true">
+                  <path
+                    d="M 5 145 C 45 145, 60 142, 78 110 C 98 72, 108 28, 153 22 C 200 16, 220 67, 237 104 C 252 137, 274 145, 315 145"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+
+              <div class="axis-labels">
+                <span>00:00</span>
+                <span>06:00</span>
+                <span>12:00</span>
+                <span>18:00</span>
+                <span>24:00</span>
+              </div>
+            </article>
+
+            <article class="indicator-card cost-card">
+              <div class="card-top">
+                <div>
+                  <span class="small-label">Costo de degradación</span>
+                  <strong>18,6</strong>
+                  <em>USD/MWh</em>
+                </div>
+
+                <div class="metric-icon purple">$</div>
+              </div>
+
+              <p>Escenario operativo actual</p>
+
+              <div class="mini-bar-chart" aria-hidden="true">
+                <span style="height: 42%"></span>
+                <span style="height: 64%"></span>
+                <span style="height: 82%"></span>
+              </div>
+
+              <div class="bar-labels">
+                <span>Curtailment</span>
+                <span>Arbitraje</span>
+                <span>Mixta</span>
+              </div>
+            </article>
+
+            <button class="carousel-btn right" type="button" aria-label="Siguiente">›</button>
+          </div>
+
+          <div class="carousel-dots" aria-label="Indicadores del carrusel">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="block-intro-grid">
-
-      <article class="block-card block-card-large">
-        <div class="block-card-header">
-          <span>☀</span>
-          <h3>Objetivo del Bloque 1</h3>
-        </div>
-
-        <p>
-          El Bloque 1 busca construir una representación energética de la planta
-          fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
-          operacionales reales. Para ello, se utilizarán datos del Explorador Solar
-          de Chile para una serie horaria de un año meteorológico típico (TMY) y
-          NASA POWER serie horaria 2025, los cuales serán procesados en Python para
-          generar archivos meteorológicos horarios en formato CSV compatibles con SAM.
-        </p>
-
-        <p>
-          Posteriormente, estos archivos serán utilizados en SAM junto con la
-          arquitectura técnica de CEME1, considerando paneles, strings e inversores,
-          para obtener las estimaciones de energía esperada. Dichas simulaciones
-          serán contrastadas con la energía real inyectada a la red y con los registros
-          de curtailment publicados por el Coordinador Eléctrico Nacional.
-        </p>
-      </article>
-
-      <article class="block-card">
-        <div class="block-card-header">
-          <span>▤</span>
-          <h3>Fuentes meteorológicas</h3>
-        </div>
-
-        <ul class="block-list">
-          <li>
-            <strong>Explorador Solar de Chile</strong>
-            <span>Archivo TMY representativo para la zona de María Elena.</span>
-          </li>
-
-          <li>
-            <strong>NASA POWER 2025</strong>
-            <span>Serie meteorológica histórica horaria para reconstruir el año 2025.</span>
-          </li>
-        </ul>
-      </article>
-
-      <article class="block-card">
-        <div class="block-card-header">
-          <span>◎</span>
-          <h3>Datos CEN</h3>
-        </div>
-
-        <ul class="block-list">
-          <li>
-            <strong>Precios marginales</strong>
-            <span>Barra Mirage 220, período 2020–2025.</span>
-          </li>
-
-          <li>
-            <strong>Operación real CEME1</strong>
-            <span>Energía inyectada a la red y curtailment horario para el año 2025.</span>
-          </li>
-        </ul>
-      </article>
-
-    </section>
-
-    <section class="block-workflow">
+    <section class="flow-section">
       <div class="section-heading">
         <span>⛓</span>
-        <h3>Flujo metodológico del Bloque 1</h3>
+        <h3>Flujo general del proyecto</h3>
       </div>
 
-      <div class="block-flow-grid">
-
-        <article class="block-step">
-          <span>01</span>
-          <h4>Descarga meteorológica</h4>
-          <p>
-            Se recopilan datos del Explorador Solar de Chile y de NASA POWER para
-            representar las condiciones solares y climáticas de María Elena.
-          </p>
+      <div class="flow-line">
+        <article class="flow-item">
+          <div class="flow-icon blue">☁</div>
+          <span class="flow-number">01</span>
+          <h4>Datos reales</h4>
+          <p>Recurso solar, datos meteorológicos y del SEN.</p>
         </article>
 
-        <article class="block-step">
-          <span>02</span>
-          <h4>Procesamiento en Python</h4>
-          <p>
-            Las series se limpian, ordenan y validan mediante Python y Pandas,
-            revisando formato horario y unidades.
-          </p>
+        <div class="flow-arrow">→</div>
+
+        <article class="flow-item">
+          <div class="flow-icon blue">▥</div>
+          <span class="flow-number">02</span>
+          <h4>Modelo FV</h4>
+          <p>Modelación y simulación de generación fotovoltaica en SAM.</p>
         </article>
 
-        <article class="block-step">
-          <span>03</span>
-          <h4>CSV compatible con SAM</h4>
-          <p>
-            Se genera un archivo meteorológico horario listo para ser importado en
-            SAM, con variables como GHI, DNI, DHI, temperatura ambiente y velocidad
-            de viento.
-          </p>
+        <div class="flow-arrow">→</div>
+
+        <article class="flow-item">
+          <div class="flow-icon cyan">▯</div>
+          <span class="flow-number">03</span>
+          <h4>Operación BESS</h4>
+          <p>Estrategias de carga, descarga y recuperación de energía.</p>
         </article>
 
-        <article class="block-step">
-          <span>04</span>
-          <h4>Configuración CEME1 en SAM</h4>
-          <p>
-            Se incorpora la arquitectura técnica de la planta, incluyendo módulos,
-            strings, inversores, orientación y configuración de los subcampos
-            fotovoltaicos.
-          </p>
+        <div class="flow-arrow">→</div>
+
+        <article class="flow-item">
+          <div class="flow-icon green">⌁</div>
+          <span class="flow-number">04</span>
+          <h4>Degradación</h4>
+          <p>Evaluación del SOH, throughput y ciclos equivalentes.</p>
         </article>
 
-        <article class="block-step">
-          <span>05</span>
-          <h4>Generación potencial</h4>
-          <p>
-            Se simulan los casos basados en Explorador Solar y NASA POWER, obteniendo
-            estimaciones de energía fotovoltaica potencial para la ubicación de la planta.
-          </p>
-        </article>
+        <div class="flow-arrow">→</div>
 
-        <article class="block-step">
-          <span>06</span>
-          <h4>Contraste con datos CEN</h4>
-          <p>
-            La generación simulada se compara con la energía efectivamente inyectada
-            por CEME1 y con el curtailment horario registrado durante el año 2025.
-          </p>
+        <article class="flow-item">
+          <div class="flow-icon orange">$</div>
+          <span class="flow-number">05</span>
+          <h4>Costo real</h4>
+          <p>Estimación técnico-económica del desgaste del sistema.</p>
         </article>
-
       </div>
     </section>
 
-    <section class="block-comparison">
-      <article class="comparison-card">
-        <span class="block-kicker">Simulaciones SAM</span>
-        <h3>Estimación de energía potencial</h3>
-
-        <p>
-          El modelo SAM permitirá obtener dos estimaciones principales de energía
-          potencial esperada: una basada en el archivo TMY del Explorador Solar y
-          otra basada en la reconstrucción meteorológica horaria 2025 de NASA POWER.
-          Ambas simulaciones utilizarán la misma configuración técnica de CEME1, de
-          manera que la comparación se centre en el efecto de la fuente meteorológica.
-        </p>
-      </article>
-
-      <article class="comparison-card">
-        <span class="block-kicker">Datos reales CEN</span>
-        <h3>Validación operacional</h3>
-
-        <p>
-          Los resultados simulados serán contrastados con la energía real inyectada
-          a la red y con los registros de curtailment de CEME1. Este contraste permitirá
-          evaluar la representatividad de las fuentes meteorológicas y construir una
-          base energética coherente para el análisis FV+BESS.
-        </p>
-      </article>
-    </section>
-
-    <section class="block-output">
-      <div>
-        <span class="block-kicker">Resultado esperado</span>
-        <h3>Inputs para el modelo FV+BESS</h3>
-
-        <p>
-          El resultado de este bloque será un conjunto de series horarias procesadas
-          y validadas: generación fotovoltaica potencial, energía real inyectada,
-          curtailment horario y precios marginales de la barra Mirage 220. Estas
-          variables permitirán construir métricas operacionales y definir escenarios
-          de operación del BESS bajo un enfoque price-taker, dando paso al Bloque 2.
-        </p>
+    <section class="quick-section">
+      <div class="section-heading">
+        <span>▦</span>
+        <h3>Accesos rápidos</h3>
       </div>
 
-      <a href="/metodologia/bloque-2/" class="btn btn-primary">
-        Continuar a Bloque 2
-      </a>
-    </section>
+      <div class="quick-grid">
+        <a href="/proyecto/" class="quick-card project-card">
+          <div class="quick-icon">▤</div>
+          <h4>Proyecto de AG</h4>
+          <p>Contexto, alcance y motivación del estudio FV+BESS.</p>
+          <span class="quick-arrow">→</span>
+        </a>
 
+        <a href="/objetivos/" class="quick-card objectives-card">
+          <div class="quick-icon">◎</div>
+          <h4>Objetivos</h4>
+          <p>Objetivo general y objetivos específicos que guían el proyecto.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+
+        <a href="/metodologia/bloque-1/" class="quick-card methodology-card">
+          <div class="quick-icon">▥</div>
+          <h4>Metodología</h4>
+          <p>Enfoque, etapas y flujo de trabajo del análisis técnico-económico.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+
+        <a href="/gantt/" class="quick-card gantt-card">
+          <div class="quick-icon">▦</div>
+          <h4>Carta Gantt</h4>
+          <p>Planificación temporal del proyecto, hitos principales y etapas.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+
+        <a href="/avances/" class="quick-card progress-card">
+          <div class="quick-icon">↗</div>
+          <h4>Avances</h4>
+          <p>Bitácora del proyecto, resultados completados y próximos pasos.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+
+        <a href="/links/" class="quick-card links-card">
+          <div class="quick-icon">∞</div>
+          <h4>Links de interés</h4>
+          <p>Recursos clave: Python, SAM, SEN, CEN, NASA POWER y más.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+
+        <a href="/dashboard/" class="quick-card dashboard-card">
+          <div class="quick-icon">▧</div>
+          <h4>Dashboard</h4>
+          <p>Indicadores, generación, operación BESS y métricas económicas.</p>
+          <span class="quick-arrow">→</span>
+        </a>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
