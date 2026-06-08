@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Storage Analytics | Plataforma de análisis en costos por degradación en sistemas BESS</title>
+  <title>Bloque 1 | Data meteorológica y Simulación en SAM</title>
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
@@ -23,7 +23,7 @@
     </a>
 
     <nav class="nav" aria-label="Navegación principal">
-      <a href="/" class="active">Inicio</a>
+      <a href="/">Inicio</a>
 
       <div class="nav-dropdown">
         <button
@@ -71,15 +71,25 @@
         </button>
 
         <div class="dropdown-menu" role="menu">
-          <a href="#" class="dropdown-item" role="menuitem">
-            <span>Comparación de data meteorológica</span>
-            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          <a href="/avances/" class="dropdown-item" role="menuitem">
+            <span>Todos los avances</span>
+            <small>Resumen general de avances técnicos</small>
           </a>
+
           <a href="/avances/configuracion%20ceme1%20en%20sam/" class="dropdown-item" role="menuitem">
             <span>Configuración CEME1 en SAM</span>
-            <small>Arquitectura real de planta en SAM</small>
+            <small>Arquitectura real de planta en System Advisor Model</small>
           </a>
-          
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Comparación meteorológica</span>
+            <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
+
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Generación AC horaria</span>
+            <small>Exportación y agregación de resultados SAM</small>
+          </a>
         </div>
       </div>
 
@@ -178,12 +188,11 @@
         es recopilar, procesar y validar datos meteorológicos y operacionales para
         estimar la generación fotovoltaica potencial de CEME1 en SAM, compararla
         con registros reales del Coordinador Eléctrico Nacional (CEN) y generar los
-        inpunts o parámetros que posteriormente permitirán definir escenarios de operación del BESS.
+        inputs o parámetros que posteriormente permitirán definir escenarios de operación del BESS.
       </p>
     </section>
 
     <section class="block-intro-grid">
-
       <article class="block-card block-card-large">
         <div class="block-card-header">
           <span>☀</span>
@@ -194,17 +203,17 @@
           El Bloque 1 busca construir una representación energética de la planta
           fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
           operacionales reales. Para ello, se utilizarán datos del Explorador Solar
-          de Chile para una serie horaria de un año meteorológico típico (TMY) y 
-          NASA POWER serie horaria 2025, los cuales serán procesados en Python para 
-          generar archivos meteorológicos horarios en formato CSV compatibles con SAM.
+          de Chile para una serie horaria de un año meteorológico típico (TMY) y
+          NASA POWER serie horaria 2025, los cuales serán procesados en Python para
+          generar archivos meteorológicos horarios compatibles con SAM.
         </p>
 
         <p>
           Posteriormente, estos archivos serán utilizados en SAM junto con la
-          arquitectura técnica de CEME1, considerando paneles, strings e inversores,
-          para obtener las estimaciones de energía esperada. Dichas simulaciones
-          serán contrastadas con la energía real inyectada a la red y con los registros
-          de curtailment publicados por el Coordinador Eléctrico Nacional.
+          arquitectura técnica de CEME1, considerando módulos, strings, inversores,
+          orientación y subcampos, para obtener estimaciones de energía esperada.
+          Dichas simulaciones serán contrastadas con la energía real inyectada a la red
+          y con los registros de curtailment publicados por el Coordinador Eléctrico Nacional.
         </p>
       </article>
 
@@ -236,7 +245,7 @@
         <ul class="block-list">
           <li>
             <strong>Precios marginales</strong>
-            <span>Barra Miraje 220, período 2020–2025.</span>
+            <span>Barra Mirage 220, período 2020–2025.</span>
           </li>
 
           <li>
@@ -245,7 +254,6 @@
           </li>
         </ul>
       </article>
-
     </section>
 
     <section class="block-workflow">
@@ -255,7 +263,6 @@
       </div>
 
       <div class="block-flow-grid">
-
         <article class="block-step">
           <span>01</span>
           <h4>Descarga meteorológica</h4>
@@ -270,7 +277,7 @@
           <h4>Procesamiento en Python</h4>
           <p>
             Las series se limpian, ordenan y validan mediante Python y Pandas,
-            revisando formato horario y unidades.
+            revisando formato horario, unidades y consistencia.
           </p>
         </article>
 
@@ -278,9 +285,8 @@
           <span>03</span>
           <h4>CSV compatible con SAM</h4>
           <p>
-            Se genera un archivo meteorológico horario listo para ser importado en
-            SAM, con variables como GHI, DNI, DHI, temperatura ambiente y velocidad
-            de viento.
+            Se generan archivos meteorológicos horarios listos para ser importados
+            en SAM, incluyendo GHI, DNI, DHI, temperatura ambiente y viento.
           </p>
         </article>
 
@@ -288,9 +294,8 @@
           <span>04</span>
           <h4>Configuración CEME1 en SAM</h4>
           <p>
-            Se incorpora la arquitectura técnica de la planta, incluyendo módulos,
-            strings, inversores, orientación y configuración de los subcampos
-            fotovoltaicos.
+            Se incorpora la arquitectura técnica de la planta: módulos, strings,
+            inversores, orientación Este/Oeste y subcampos equivalentes.
           </p>
         </article>
 
@@ -298,8 +303,8 @@
           <span>05</span>
           <h4>Generación potencial</h4>
           <p>
-            Se simulan los casos basados en Explorador Solar y NASA POWER, obteniendo
-            estimaciones de energía fotovoltaica potencial para la ubicación de la planta.
+            Se simulan casos basados en Explorador Solar y NASA POWER, obteniendo
+            estimaciones de generación fotovoltaica potencial.
           </p>
         </article>
 
@@ -308,10 +313,9 @@
           <h4>Contraste con datos CEN</h4>
           <p>
             La generación simulada se compara con la energía efectivamente inyectada
-            por CEME1 y con el curtailment horario registrado durante el año 2025.
+            por CEME1 y con el curtailment horario registrado durante 2025.
           </p>
         </article>
-
       </div>
     </section>
 
@@ -350,7 +354,7 @@
         <p>
           El resultado de este bloque será un conjunto de series horarias procesadas
           y validadas: generación fotovoltaica potencial, energía real inyectada,
-          curtailment horario y precios marginales de la barra Miraje 220. Estas
+          curtailment horario y precios marginales de la barra Mirage 220. Estas
           variables permitirán construir métricas operacionales y definir escenarios
           de operación del BESS bajo un enfoque price-taker, dando paso al Bloque 2.
         </p>
@@ -360,7 +364,6 @@
         Continuar a Bloque 2
       </a>
     </section>
-
   </main>
 
   <footer class="site-footer">
@@ -374,35 +377,64 @@
   </footer>
 
   <script>
-    const methodologyDropdown = document.querySelector(".nav-dropdown");
-    const methodologyTrigger = document.querySelector(".nav-dropdown-trigger");
+    const dropdowns = document.querySelectorAll(".nav-dropdown");
 
-    if (methodologyDropdown && methodologyTrigger) {
-      methodologyTrigger.addEventListener("click", function (event) {
+    dropdowns.forEach(function (dropdown) {
+      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+      if (!trigger) return;
+
+      trigger.addEventListener("click", function (event) {
         event.stopPropagation();
 
-        methodologyDropdown.classList.toggle("open");
+        dropdowns.forEach(function (otherDropdown) {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove("open");
 
-        const isOpen = methodologyDropdown.classList.contains("open");
-        methodologyTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
+
+            if (otherTrigger) {
+              otherTrigger.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+
+        dropdown.classList.toggle("open");
+
+        const isOpen = dropdown.classList.contains("open");
+        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
       });
 
-      methodologyDropdown.addEventListener("click", function (event) {
+      dropdown.addEventListener("click", function (event) {
         event.stopPropagation();
       });
+    });
 
-      document.addEventListener("click", function () {
-        methodologyDropdown.classList.remove("open");
-        methodologyTrigger.setAttribute("aria-expanded", "false");
-      });
+    document.addEventListener("click", function () {
+      dropdowns.forEach(function (dropdown) {
+        dropdown.classList.remove("open");
 
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-          methodologyDropdown.classList.remove("open");
-          methodologyTrigger.setAttribute("aria-expanded", "false");
+        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+        if (trigger) {
+          trigger.setAttribute("aria-expanded", "false");
         }
       });
-    }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        dropdowns.forEach(function (dropdown) {
+          dropdown.classList.remove("open");
+
+          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
+
+          if (trigger) {
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
