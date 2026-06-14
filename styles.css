@@ -1,5 +1,5 @@
 /* =========================================================
-   Storage Analytics - styles.css principal limpio
+   Storage Analytics - styles.css principal
    ========================================================= */
 
 :root {
@@ -3110,4 +3110,75 @@ a {
   .meteo-kpi-table tbody td {
     padding: 12px 10px;
   }
+}
+
+/* =========================================================
+   CORRECCIÓN FINAL HOME HERO + INDICADORES
+   Mantiene los indicadores rápidos a la derecha en escritorio
+   y solo los baja en tablet/celular.
+   ========================================================= */
+
+@media (min-width: 1181px) {
+  .home {
+    width: min(100%, 1780px);
+    margin: 0 auto;
+    padding: 38px 30px 0;
+  }
+
+  .hero-section {
+    min-height: 560px;
+    display: grid;
+    align-items: center;
+  }
+
+  .hero-content {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.88fr) minmax(520px, 1.12fr) !important;
+    gap: 58px !important;
+    align-items: center !important;
+    width: 100%;
+  }
+
+  .hero-text {
+    grid-column: 1 !important;
+    align-self: center !important;
+    padding: 20px 28px 24px;
+  }
+
+  .indicators-panel {
+    grid-column: 2 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    margin: 0 !important;
+    transform: none !important;
+    max-width: none !important;
+  }
+
+  .indicator-carousel {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .indicator-card:nth-of-type(2),
+  .indicator-card:nth-of-type(3) {
+    display: block !important;
+  }
+}
+
+/* En tablet se permite que los indicadores pasen debajo del texto */
+@media (max-width: 1180px) {
+  .hero-content {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .indicators-panel {
+    margin: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* Ajuste del texto del hero */
+.hero-text p {
+  text-align: justify;
+  text-justify: inter-word;
 }
