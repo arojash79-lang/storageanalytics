@@ -3258,3 +3258,142 @@ a {
     display: block;
   }
 }
+
+
+/* =========================================================
+   CORRECCIÓN DEFINITIVA HOME HERO
+   Texto arriba izquierda + indicadores debajo + imagen libre derecha
+   ========================================================= */
+
+@media (min-width: 1101px) {
+  .home {
+    width: min(100%, 1780px) !important;
+    margin: 0 auto !important;
+    padding: 38px 30px 0 !important;
+  }
+
+  .hero-section {
+    position: relative !important;
+    min-height: 640px !important;
+    display: block !important;
+    align-items: initial !important;
+    overflow: hidden !important;
+  }
+
+  .hero-content {
+    min-height: 640px !important;
+    display: grid !important;
+    grid-template-columns: minmax(430px, 0.86fr) minmax(560px, 1.14fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas:
+      "text visual"
+      "indicators visual" !important;
+    gap: 18px 58px !important;
+    align-content: center !important;
+    align-items: start !important;
+    width: 100% !important;
+  }
+
+  .hero-text {
+    grid-area: text !important;
+    width: 100% !important;
+    max-width: 760px !important;
+    padding: 20px 28px 0 !important;
+    align-self: end !important;
+    justify-self: start !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .hero-text p {
+    max-width: 760px !important;
+    text-align: justify !important;
+    text-justify: inter-word !important;
+  }
+
+  .hero-actions {
+    display: none !important;
+  }
+
+  .indicators-panel {
+    grid-area: indicators !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 760px !important;
+    margin: 0 0 0 28px !important;
+    align-self: start !important;
+    justify-self: start !important;
+    z-index: 3 !important;
+  }
+
+  .indicator-carousel {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  .indicator-card {
+    min-width: 0 !important;
+  }
+}
+
+/* Tablet: baja los indicadores bajo el texto, sin aplastarlos */
+@media (max-width: 1100px) {
+  .hero-section {
+    min-height: auto !important;
+    display: block !important;
+  }
+
+  .hero-content {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .hero-text {
+    width: 100% !important;
+    max-width: 850px !important;
+    padding: 20px 24px 0 !important;
+  }
+
+  .hero-text p {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+  }
+
+  .indicators-panel {
+    position: relative !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .indicator-carousel {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Smartphone */
+@media (max-width: 720px) {
+  .hero-text {
+    padding: 8px 4px 18px !important;
+  }
+
+  .indicator-carousel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .indicator-card:nth-of-type(2),
+  .indicator-card:nth-of-type(3) {
+    display: block !important;
+  }
+
+  .carousel-btn {
+    display: none !important;
+  }
+}
