@@ -740,7 +740,6 @@ a {
    ========================================================= */
 
 .quick-section {
-  width: 100%;
   margin-top: 22px;
 }
 
@@ -749,16 +748,12 @@ a {
 }
 
 .quick-grid {
-  width: 100%;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 16px;
-  align-items: stretch;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .quick-card {
-  width: 100%;
-  min-width: 0;
   position: relative;
   min-height: 180px;
   padding: 22px 20px 20px;
@@ -1402,7 +1397,7 @@ a {
   }
 
   .quick-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -1480,7 +1475,7 @@ a {
   }
 
   .quick-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .block-intro-grid,
@@ -3098,11 +3093,4 @@ a {
   .meteo-kpi-table tbody td {
     padding: 12px 10px;
   }
-}
-.hero-text p {
-  text-align: justify;
-  text-justify: inter-word;
-}
-.hero-text {
-  max-width: 760px;
 }
