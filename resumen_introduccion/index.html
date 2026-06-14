@@ -43,30 +43,42 @@
       </p>
     </section>
 
-    <section class="block-intro-grid">
-      <article class="block-card block-card-large">
-        <div class="block-card-header">
-          <span>☀</span>
-          <h3>Objetivo del Bloque 1</h3>
-        </div>
+<section class="bloque-cards">
+  <article class="info-card">
+    <h2>☀ Objetivo del Bloque 1</h2>
 
-        <p>
-          El Bloque 1 busca construir una representación energética de la planta
-          fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
-          operacionales reales. Para ello, se utilizarán datos del Explorador Solar
-          de Chile para una serie horaria de un año meteorológico típico (TMY) y
-          NASA POWER serie horaria 2025, los cuales serán procesados en Python para
-          generar archivos meteorológicos horarios compatibles con SAM.
-        </p>
+    <p>
+      El Bloque 1 busca construir una representación energética de la planta fotovoltaica CEME1
+      a partir de fuentes meteorológicas públicas y datos operacionales reales. Para ello, se
+      utilizarán datos del Explorador Solar de Chile para una serie horaria de un año meteorológico
+      típico (TMY) y NASA POWER serie horaria 2025, los cuales serán procesados en Python para
+      generar archivos meteorológicos horarios compatibles con SAM.
+    </p>
 
-        <p>
-          Posteriormente, estos archivos serán utilizados en SAM junto con la
-          arquitectura técnica de CEME1, considerando módulos, strings, inversores,
-          orientación y subcampos, para obtener estimaciones de energía esperada.
-          Dichas simulaciones serán contrastadas con la energía real inyectada a la red
-          y con los registros de curtailment publicados por el Coordinador Eléctrico Nacional.
-        </p>
-    </section>
+    <p>
+      Posteriormente, estos archivos serán utilizados en SAM junto con la arquitectura técnica de
+      CEME1, considerando módulos, strings, inversores, orientación y subcampos, para obtener
+      estimaciones de energía esperada. Dichas simulaciones serán contrastadas con la energía real
+      inyectada a la red y con los registros de curtailment publicados por el Coordinador Eléctrico
+      Nacional.
+    </p>
+  </article>
+
+  <article class="info-card">
+    <h2>▦ Alcance del Bloque 1</h2>
+
+    <p>
+      Este bloque considera la recopilación, comparación y validación de datos meteorológicos
+      horarios, junto con la configuración técnica de la planta CEME1 en SAM.
+    </p>
+
+    <p>
+      El resultado principal será una estimación horaria de generación fotovoltaica potencial,
+      que servirá como base para analizar posteriormente la operación del sistema BESS y la
+      recuperación de energía vertida.
+    </p>
+  </article>
+</section>
   </main>
 
   <footer class="site-footer">
