@@ -3183,29 +3183,30 @@ a {
   text-justify: inter-word;
 }
 /* =========================================================
-   CORRECCIÓN DEFINITIVA HERO HOME
-   Indicadores rápidos alineados a la derecha
+   CORRECCIÓN HERO HOME - INDICADORES A LA DERECHA
    ========================================================= */
 
 .hero-section {
   position: relative;
   min-height: 620px;
-  display: block;
-  padding: 0;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
 }
 
 .hero-content {
-  display: block;
-  position: relative;
-  min-height: 620px;
+  display: grid !important;
+  grid-template-columns: minmax(520px, 0.9fr) minmax(720px, 1.1fr);
+  gap: 56px;
+  align-items: center;
+  width: 100%;
 }
 
 .hero-text {
-  position: relative;
-  z-index: 2;
-  width: 48%;
+  width: 100%;
   max-width: 760px;
   padding: 20px 28px 24px;
+  z-index: 2;
 }
 
 .hero-text p {
@@ -3214,45 +3215,46 @@ a {
 }
 
 .indicators-panel {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  right: 32px;
-  transform: translateY(-50%);
-  width: 52%;
-  max-width: 980px;
-  margin: 0;
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 980px !important;
+  margin: 0 !important;
+  justify-self: end;
+  align-self: center;
+}
+
+.indicator-carousel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+  gap: 16px;
 }
 
 @media (max-width: 1450px) {
-  .hero-text {
-    width: 50%;
-  }
-
-  .indicators-panel {
-    width: 48%;
-    right: 24px;
-  }
-}
-
-@media (max-width: 1180px) {
-  .hero-section,
   .hero-content {
-    min-height: auto;
+    grid-template-columns: 1fr;
   }
 
   .hero-text {
-    width: 100%;
     max-width: 850px;
   }
 
   .indicators-panel {
-    position: relative;
-    top: auto;
-    right: auto;
-    transform: none;
-    width: 100%;
-    max-width: none;
-    margin: 24px 0 20px;
+    max-width: 100% !important;
+    justify-self: stretch;
+    margin-top: 24px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .indicator-carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .indicator-card:nth-of-type(2),
+  .indicator-card:nth-of-type(3) {
+    display: block;
   }
 }
