@@ -3099,3 +3099,10 @@ a {
     padding: 12px 10px;
   }
 }
+.hero-text p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+.hero-text {
+  max-width: 760px;
+}
