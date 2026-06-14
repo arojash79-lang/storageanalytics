@@ -3397,3 +3397,126 @@ a {
     display: none !important;
   }
 }
+/* =========================================================
+   FIX DEFINITIVO HOME HERO
+   Texto izquierda + espacio visual derecha + indicadores bajo texto
+   ========================================================= */
+
+.home {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 60px 0 !important;
+}
+
+.hero-section {
+  width: 100% !important;
+  min-height: 820px !important;
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero-content {
+  width: 100% !important;
+  min-height: 760px !important;
+  display: grid !important;
+  grid-template-columns: 46% 54% !important;
+  grid-template-rows: auto auto 1fr !important;
+  grid-template-areas:
+    "text visual"
+    "indicators visual"
+    ". visual" !important;
+  column-gap: 56px !important;
+  row-gap: 24px !important;
+  align-items: start !important;
+}
+
+.hero-text {
+  grid-area: text !important;
+  width: 100% !important;
+  max-width: 820px !important;
+  padding: 0 0 0 32px !important;
+  align-self: start !important;
+}
+
+.hero-text h2 {
+  max-width: 820px !important;
+  font-size: clamp(3rem, 4.7vw, 5.8rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.hero-text p {
+  max-width: 780px !important;
+  text-align: justify !important;
+  text-justify: inter-word !important;
+}
+
+.indicators-panel {
+  grid-area: indicators !important;
+  position: relative !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 0 0 0 32px !important;
+  transform: none !important;
+  align-self: start !important;
+  justify-self: start !important;
+}
+
+.indicator-carousel {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.hero-visual-space {
+  grid-area: visual !important;
+  min-height: 100% !important;
+}
+
+/* Tablet */
+@media (max-width: 1450px) {
+  .home {
+    padding: 0 30px !important;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "text"
+      "indicators" !important;
+    min-height: auto !important;
+  }
+
+  .hero-text,
+  .indicators-panel {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Celular */
+@media (max-width: 720px) {
+  .home {
+    padding: 0 16px !important;
+  }
+
+  .hero-section {
+    min-height: auto !important;
+    padding: 34px 0 !important;
+  }
+
+  .hero-text h2 {
+    font-size: 2.25rem !important;
+  }
+
+  .indicator-carousel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .indicator-card:nth-of-type(2),
+  .indicator-card:nth-of-type(3) {
+    display: block !important;
+  }
+}
