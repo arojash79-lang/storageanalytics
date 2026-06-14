@@ -3234,3 +3234,184 @@ a {
     display: block !important;
   }
 }
+
+
+
+/* =========================================================
+   FIX DEFINITIVO HOME - ESTRUCTURA LIMPIA
+   Texto izquierda, indicadores bajo texto, espacio visual derecha
+   ========================================================= */
+
+.home {
+  width: min(100%, 1780px) !important;
+  margin: 0 auto !important;
+  padding: 38px 30px 0 !important;
+}
+
+.hero-section {
+  position: relative !important;
+  min-height: 680px !important;
+  display: grid !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+}
+
+.hero-content {
+  display: grid !important;
+  grid-template-columns: 0.88fr 1.12fr !important;
+  grid-template-areas:
+    "text visual"
+    "indicators visual" !important;
+  gap: 22px 58px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+.hero-text {
+  grid-area: text !important;
+  max-width: 790px !important;
+  width: 100% !important;
+  padding: 20px 28px 0 !important;
+  margin: 0 !important;
+  align-self: start !important;
+  justify-self: start !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.hero-text h2 {
+  max-width: 790px !important;
+  margin: 0 !important;
+  font-size: clamp(2.35rem, 4vw, 4.65rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.hero-text p {
+  max-width: 760px !important;
+  margin: 0 0 16px !important;
+  color: #d0dbe8 !important;
+  line-height: 1.62 !important;
+  font-size: 1.04rem !important;
+  text-align: justify !important;
+  text-justify: inter-word !important;
+}
+
+.indicators-panel {
+  grid-area: indicators !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 0 0 0 28px !important;
+  transform: none !important;
+  position: relative !important;
+  align-self: start !important;
+  justify-self: start !important;
+  z-index: 3 !important;
+  padding: 24px 22px 26px !important;
+}
+
+.indicator-carousel {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.hero-visual-space {
+  grid-area: visual !important;
+  min-height: 620px !important;
+  display: block !important;
+}
+
+/* Corrige residuos accidentales */
+.hero-content > .hero-text:empty,
+.hero-content > .indicators-panel:empty {
+  display: none !important;
+}
+
+/* Accesos rápidos a todo el ancho */
+.quick-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.quick-card {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* Tablet */
+@media (max-width: 1450px) {
+  .home {
+    padding: 28px 24px 0 !important;
+  }
+
+  .hero-section {
+    min-height: auto !important;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "text"
+      "indicators" !important;
+    gap: 24px !important;
+  }
+
+  .hero-visual-space {
+    display: none !important;
+  }
+
+  .hero-text,
+  .indicators-panel {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .quick-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Tablet pequeña */
+@media (max-width: 1180px) {
+  .indicator-carousel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .indicator-card:nth-of-type(2),
+  .indicator-card:nth-of-type(3) {
+    display: block !important;
+  }
+
+  .quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Celular */
+@media (max-width: 720px) {
+  .home {
+    padding: 24px 16px 0 !important;
+  }
+
+  .hero-text h2 {
+    font-size: 2.3rem !important;
+  }
+
+  .hero-text p {
+    font-size: 0.96rem !important;
+  }
+
+  .indicators-panel {
+    padding: 20px 16px !important;
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
