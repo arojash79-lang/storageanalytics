@@ -314,6 +314,18 @@ a {
   gap: 58px;
   align-items: center;
 }
+.hero-section {
+  align-items: center;
+}
+
+.hero-text {
+  align-self: center;
+}
+
+.indicators-panel {
+  margin-top: 0;
+  transform: translateY(-10px);
+}
 
 .indicators-panel {
   align-self: center;
