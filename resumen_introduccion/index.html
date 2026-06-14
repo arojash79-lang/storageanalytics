@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Resumen e Introducción | Actividad de Graduación</title>
+  <title>Resumen e Introducción</title>
 
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -24,15 +24,158 @@
 
     <nav class="nav" aria-label="Navegación principal">
       <a href="/">Inicio</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Metodología
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/metodologia/bloque-1/" class="dropdown-item" role="menuitem">
+            <span>Bloque 1</span>
+            <small>Data Meteorológica y Simulación en SAM</small>
+          </a>
+
+          <a href="/metodologia/bloque-2/" class="dropdown-item" role="menuitem">
+            <span>Bloque 2</span>
+            <small>Operación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-3/" class="dropdown-item" role="menuitem">
+            <span>Bloque 3</span>
+            <small>Degradación del Sistema BESS</small>
+          </a>
+
+          <a href="/metodologia/bloque-4/" class="dropdown-item" role="menuitem">
+            <span>Bloque 4</span>
+            <small>Estimación del Costo de Degradación del Sistema BESS</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/objetivos/">Objetivos</a>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Avances
+        </button>
+
+        <div class="dropdown-menu" role="menu">
+          <a href="/avances/configuracion-CEME1-SAM/" class="dropdown-item" role="menuitem">
+            <span>Configuración de CEME1 en SAM</span>
+            <small>Arquitectura real de planta en System Advisor Model</small>
+          </a>
+
+       <a href="/avances/comparacion-datos-meteorologicos/" class="dropdown-item" role="menuitem">
+         <span>Comparación de datos meteorológicos</span>
+         <small>NASA POWER 2025 vs Explorador Solar TMY</small>
+          </a>
+          <a href="#" class="dropdown-item" role="menuitem">
+            <span>Generación de Energía Horaria</span>
+            <small>Simulación en SAM</small>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-dropdown">
+        <button
+          class="nav-dropdown-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          Links de interés
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-small" role="menu">
+          <a
+            href="https://www.coordinador.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>CEN</span>
+            <small>Coordinador Eléctrico Nacional</small>
+          </a>
+
+          <a
+            href="https://solar.minenergia.cl/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Explorador Solar</span>
+            <small>Recurso solar y datos meteorológicos de Chile</small>
+          </a>
+
+          <a
+            href="https://power.larc.nasa.gov/data-access-viewer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>NASA POWER</span>
+            <small>Datos meteorológicos y solares horarios</small>
+          </a>
+
+          <a
+            href="https://www.coordinador.cl/wp-content/uploads/2024/06/CEME1-ID-SE-EP-ANR-011-R0_Potencia_Maxima_PFV_CEME1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Arquitectura CEME1</span>
+            <small>Informe CEN de potencia máxima PFV CEME1</small>
+          </a>
+
+          <a
+            href="https://www.python.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>Python</span>
+            <small>Programación y procesamiento de datos</small>
+          </a>
+
+          <a
+            href="https://sam.nrel.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="dropdown-item"
+            role="menuitem"
+          >
+            <span>SAM</span>
+            <small>Software de simulación energética</small>
+          </a>
+        </div>
+      </div>
+
+      <a href="/dashboard/">Dashboard</a>
     </nav>
   </header>
 
   <main class="block-page">
 
     <section class="block-hero">
-      <span class="block-kicker"></span>
+      <span class="block-kicker">Bloque 1</span>
 
-      <h2>Resumen e Introducción de la AG</h2>
+      <h2>Data meteorológica y Simulación en SAM</h2>
 
       <p>
         Este bloque desarrolla la base energética inicial del estudio. Su propósito
@@ -43,42 +186,178 @@
       </p>
     </section>
 
-<section class="bloque-cards">
-  <article class="info-card">
-    <h2>☀ Objetivo del Bloque 1</h2>
+    <section class="block-intro-grid">
+      <article class="block-card block-card-large">
+        <div class="block-card-header">
+          <span>☀</span>
+          <h3>Objetivo del Bloque 1</h3>
+        </div>
 
-    <p>
-      El Bloque 1 busca construir una representación energética de la planta fotovoltaica CEME1
-      a partir de fuentes meteorológicas públicas y datos operacionales reales. Para ello, se
-      utilizarán datos del Explorador Solar de Chile para una serie horaria de un año meteorológico
-      típico (TMY) y NASA POWER serie horaria 2025, los cuales serán procesados en Python para
-      generar archivos meteorológicos horarios compatibles con SAM.
-    </p>
+        <p>
+          El Bloque 1 busca construir una representación energética de la planta
+          fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
+          operacionales reales. Para ello, se utilizarán datos del Explorador Solar
+          de Chile para una serie horaria de un año meteorológico típico (TMY) y
+          NASA POWER serie horaria 2025, los cuales serán procesados en Python para
+          generar archivos meteorológicos horarios compatibles con SAM.
+        </p>
 
-    <p>
-      Posteriormente, estos archivos serán utilizados en SAM junto con la arquitectura técnica de
-      CEME1, considerando módulos, strings, inversores, orientación y subcampos, para obtener
-      estimaciones de energía esperada. Dichas simulaciones serán contrastadas con la energía real
-      inyectada a la red y con los registros de curtailment publicados por el Coordinador Eléctrico
-      Nacional.
-    </p>
-  </article>
+        <p>
+          Posteriormente, estos archivos serán utilizados en SAM junto con la
+          arquitectura técnica de CEME1, considerando módulos, strings, inversores,
+          orientación y subcampos, para obtener estimaciones de energía esperada.
+          Dichas simulaciones serán contrastadas con la energía real inyectada a la red
+          y con los registros de curtailment publicados por el Coordinador Eléctrico Nacional.
+        </p>
+      </article>
 
-  <article class="info-card">
-    <h2>▦ Alcance del Bloque 1</h2>
+      <article class="block-card">
+        <div class="block-card-header">
+          <span>▤</span>
+          <h3>Fuentes meteorológicas</h3>
+        </div>
 
-    <p>
-      Este bloque considera la recopilación, comparación y validación de datos meteorológicos
-      horarios, junto con la configuración técnica de la planta CEME1 en SAM.
-    </p>
+        <ul class="block-list">
+          <li>
+            <strong>Explorador Solar de Chile</strong>
+            <span>Archivo TMY representativo para la zona de María Elena.</span>
+          </li>
 
-    <p>
-      El resultado principal será una estimación horaria de generación fotovoltaica potencial,
-      que servirá como base para analizar posteriormente la operación del sistema BESS y la
-      recuperación de energía vertida.
-    </p>
-  </article>
-</section>
+          <li>
+            <strong>NASA POWER 2025</strong>
+            <span>Serie meteorológica histórica horaria para reconstruir el año 2025.</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="block-card">
+        <div class="block-card-header">
+          <span>◎</span>
+          <h3>Datos CEN</h3>
+        </div>
+
+        <ul class="block-list">
+          <li>
+            <strong>Precios marginales</strong>
+            <span>Barra Mirage 220, período 2020–2025.</span>
+          </li>
+
+          <li>
+            <strong>Operación real CEME1</strong>
+            <span>Energía inyectada a la red y curtailment horario para el año 2025.</span>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="block-workflow">
+      <div class="section-heading">
+        <span>⛓</span>
+        <h3>Flujo metodológico del Bloque 1</h3>
+      </div>
+
+      <div class="block-flow-grid">
+        <article class="block-step">
+          <span>01</span>
+          <h4>Descarga meteorológica</h4>
+          <p>
+            Se recopilan datos del Explorador Solar de Chile y de NASA POWER para
+            representar las condiciones solares y climáticas de María Elena.
+          </p>
+        </article>
+
+        <article class="block-step">
+          <span>02</span>
+          <h4>Procesamiento en Python</h4>
+          <p>
+            Las series se limpian, ordenan y validan mediante Python y Pandas,
+            revisando formato horario, unidades y consistencia.
+          </p>
+        </article>
+
+        <article class="block-step">
+          <span>03</span>
+          <h4>CSV compatible con SAM</h4>
+          <p>
+            Se generan archivos meteorológicos horarios listos para ser importados
+            en SAM, incluyendo GHI, DNI, DHI, temperatura ambiente y viento.
+          </p>
+        </article>
+
+        <article class="block-step">
+          <span>04</span>
+          <h4>Configuración CEME1 en SAM</h4>
+          <p>
+            Se incorpora la arquitectura técnica de la planta: módulos, strings,
+            inversores, orientación Este/Oeste y subcampos equivalentes.
+          </p>
+        </article>
+
+        <article class="block-step">
+          <span>05</span>
+          <h4>Generación potencial</h4>
+          <p>
+            Se simulan casos basados en Explorador Solar y NASA POWER, obteniendo
+            estimaciones de generación fotovoltaica potencial.
+          </p>
+        </article>
+
+        <article class="block-step">
+          <span>06</span>
+          <h4>Contraste con datos CEN</h4>
+          <p>
+            La generación simulada se compara con la energía efectivamente inyectada
+            por CEME1 y con el curtailment horario registrado durante 2025.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block-comparison">
+      <article class="comparison-card">
+        <span class="block-kicker">Simulaciones SAM</span>
+        <h3>Estimación de energía potencial</h3>
+
+        <p>
+          El modelo SAM permitirá obtener dos estimaciones principales de energía
+          potencial esperada: una basada en el archivo TMY del Explorador Solar y
+          otra basada en la reconstrucción meteorológica horaria 2025 de NASA POWER.
+          Ambas simulaciones utilizarán la misma configuración técnica de CEME1, de
+          manera que la comparación se centre en el efecto de la fuente meteorológica.
+        </p>
+      </article>
+
+      <article class="comparison-card">
+        <span class="block-kicker">Datos reales CEN</span>
+        <h3>Validación operacional</h3>
+
+        <p>
+          Los resultados simulados serán contrastados con la energía real inyectada
+          a la red y con los registros de curtailment de CEME1. Este contraste permitirá
+          evaluar la representatividad de las fuentes meteorológicas y construir una
+          base energética coherente para el análisis FV+BESS.
+        </p>
+      </article>
+    </section>
+
+    <section class="block-output">
+      <div>
+        <span class="block-kicker">Resultado esperado</span>
+        <h3>Inputs para el modelo FV+BESS</h3>
+
+        <p>
+          El resultado de este bloque será un conjunto de series horarias procesadas
+          y validadas: generación fotovoltaica potencial, energía real inyectada,
+          curtailment horario y precios marginales de la barra Mirage 220. Estas
+          variables permitirán construir métricas operacionales y definir escenarios
+          de operación del BESS bajo un enfoque price-taker, dando paso al Bloque 2.
+        </p>
+      </div>
+
+      <a href="/metodologia/bloque-2/" class="btn btn-primary">
+        Continuar a Bloque 2
+      </a>
+    </section>
   </main>
 
   <footer class="site-footer">
