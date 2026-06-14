@@ -315,6 +315,11 @@ a {
   align-items: center;
 }
 
+.indicators-panel {
+  align-self: center;
+  justify-self: stretch;
+}
+
 .hero-text {
   padding: 20px 28px 24px;
 }
