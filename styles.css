@@ -3182,3 +3182,77 @@ a {
   text-align: justify;
   text-justify: inter-word;
 }
+/* =========================================================
+   CORRECCIÓN DEFINITIVA HERO HOME
+   Indicadores rápidos alineados a la derecha
+   ========================================================= */
+
+.hero-section {
+  position: relative;
+  min-height: 620px;
+  display: block;
+  padding: 0;
+}
+
+.hero-content {
+  display: block;
+  position: relative;
+  min-height: 620px;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  width: 48%;
+  max-width: 760px;
+  padding: 20px 28px 24px;
+}
+
+.hero-text p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.indicators-panel {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: 32px;
+  transform: translateY(-50%);
+  width: 52%;
+  max-width: 980px;
+  margin: 0;
+}
+
+@media (max-width: 1450px) {
+  .hero-text {
+    width: 50%;
+  }
+
+  .indicators-panel {
+    width: 48%;
+    right: 24px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .hero-section,
+  .hero-content {
+    min-height: auto;
+  }
+
+  .hero-text {
+    width: 100%;
+    max-width: 850px;
+  }
+
+  .indicators-panel {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    margin: 24px 0 20px;
+  }
+}
