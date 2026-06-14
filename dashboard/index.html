@@ -3,205 +3,212 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard CEME1 FV + DUNE BESS</title>
-
+  <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
   <link rel="stylesheet" href="dashboard.css" />
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="dashboard.js" defer></script>
 </head>
-
 <body>
   <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-icon">⚡</div>
-      <div>
-        <h1>STORAGE</h1>
-        <h1>ANALYTICS</h1>
+    <div class="brand">
+      <div class="brand-mark">ϟ</div>
+      <div class="brand-text">
+        <strong>STORAGE</strong>
+        <strong>ANALYTICS</strong>
       </div>
     </div>
 
-    <p class="sidebar-subtitle">SCADA SIMULADOR<br>FV + BESS</p>
+    <div class="side-subtitle">SCADA SIMULADOR<br>FV + BESS</div>
 
-    <nav class="menu">
-      <a class="active" href="#">Vista General</a>
-      <a href="#">Recurso Solar</a>
-      <a href="#">Planta FV</a>
-      <a href="#">Operación BESS</a>
-      <a href="#">Economía</a>
-      <a href="#">Estrategias</a>
-      <a href="#">Comparador</a>
-      <a href="#">Reportes</a>
+    <nav class="side-nav">
+      <a class="active" href="#"><span>⌂</span> Vista General</a>
+      <a href="#"><span>☼</span> Recurso Solar</a>
+      <a href="#"><span>♜</span> Planta FV</a>
+      <a href="#"><span>▣</span> Operación BESS</a>
+      <a href="#"><span>$</span> Economía</a>
+      <a href="#"><span>▦</span> Estrategias</a>
+      <a href="#"><span>⌁</span> Comparador</a>
+      <a href="#"><span>▤</span> Reportes</a>
+      <a href="#"><span>⚙</span> Configuración</a>
+      <a href="#"><span>?</span> Ayuda</a>
     </nav>
 
-    <div class="strategy-card">
+    <section class="active-strategy">
       <p>ESTRATEGIA ACTIVA</p>
-      <h3 id="strategyName">Sin datos</h3>
-      <button id="changeStrategyBtn">Cambiar estrategia</button>
-    </div>
+      <h3 id="strategyName"><span class="badge-dot"></span> Sin datos</h3>
+      <small id="strategyDescription">Seleccione una estrategia o cargue archivos JSON.</small>
+      <button id="changeStrategyBtn" type="button">Cambiar estrategia</button>
+    </section>
   </aside>
 
-  <main class="dashboard">
+  <main class="app-shell">
     <header class="topbar">
-      <div>
-        <h2>CEME1 FV + DUNE BESS</h2>
+      <div class="title-block">
+        <h1>CEME1 FV + DUNE BESS</h1>
         <p>SCADA - OPERACIÓN HORARIA SIMULADA</p>
       </div>
 
-      <div class="controls">
-        <select id="strategySelect">
-          <option value="estrategia_A.json">Estrategia A</option>
-          <option value="estrategia_B.json">Estrategia B</option>
-          <option value="estrategia_C.json">Estrategia C</option>
-        </select>
-
-        <button id="playBtn">▶ Play</button>
-        <button id="pauseBtn">⏸ Pausa</button>
-        <button id="resetBtn">↻ Reiniciar</button>
-
-        <select id="speedSelect">
-          <option value="1500">1x</option>
-          <option value="700">10x</option>
-          <option value="250">50x</option>
+      <div class="top-controls">
+        <label class="date-pill">
+          <input id="dateInput" type="date" value="2025-05-15" />
+        </label>
+        <span class="muted-label">Día seleccionado</span>
+        <button id="playBtn" class="control primary" type="button">▷ Play</button>
+        <button id="pauseBtn" class="control" type="button">Ⅱ Pausa</button>
+        <button id="resetBtn" class="control" type="button">↻ Reiniciar</button>
+        <span class="muted-label">Velocidad</span>
+        <select id="speedSelect" class="control select">
+          <option value="1600">1x</option>
+          <option value="700" selected>10x</option>
+          <option value="300">50x</option>
+          <option value="120">100x</option>
         </select>
       </div>
     </header>
 
-    <section class="simulation-bar">
-      <div>
-        <span class="status">● EN SIMULACIÓN</span>
-        <h3 id="simHour">--:--</h3>
-        <p id="simDate">Sin datos</p>
+    <section class="sim-strip card">
+      <div class="sim-state">
+        <span class="live-dot"></span>
+        <span>EN SIMULACIÓN</span>
+        <small>Hora simulada:</small>
+        <strong id="simHour">--:--</strong>
+        <em id="simDate">Sin datos</em>
       </div>
-
-      <input id="timeSlider" type="range" min="0" max="0" value="0" />
-    </section>
-
-    <section class="kpi-grid">
-      <div class="kpi-card yellow">
-        <p>RADIACIÓN GHI</p>
-        <h3 id="ghi">--</h3>
-        <span>W/m²</span>
-      </div>
-
-      <div class="kpi-card green">
-        <p>PRODUCCIÓN FV</p>
-        <h3 id="fv">--</h3>
-        <span>MW</span>
-      </div>
-
-      <div class="kpi-card orange">
-        <p>CURTAILMENT</p>
-        <h3 id="curtailment">--</h3>
-        <span>MW</span>
-      </div>
-
-      <div class="kpi-card blue">
-        <p>INYECCIÓN A RED</p>
-        <h3 id="inyeccion">--</h3>
-        <span>MW</span>
-      </div>
-
-      <div class="kpi-card cyan">
-        <p>CARGA BESS</p>
-        <h3 id="carga">--</h3>
-        <span>MW</span>
-      </div>
-
-      <div class="kpi-card purple">
-        <p>DESCARGA BESS</p>
-        <h3 id="descarga">--</h3>
-        <span>MW</span>
-      </div>
-
-      <div class="kpi-card green">
-        <p>SOC BESS</p>
-        <h3 id="soc">--</h3>
-        <span>%</span>
-      </div>
-
-      <div class="kpi-card violet">
-        <p>PMg MIRAGE 220</p>
-        <h3 id="pmg">--</h3>
-        <span>USD/MWh</span>
-      </div>
-    </section>
-
-    <section class="main-grid">
-      <div class="panel large">
-        <h3>OPERACIÓN HORARIA DEL SISTEMA</h3>
-        <canvas id="operationChart"></canvas>
-      </div>
-
-      <div class="panel">
-        <h3>ESTADO BESS</h3>
-        <div class="battery">
-          <div id="batteryFill"></div>
+      <div class="time-runner">
+        <div class="bubble" id="sliderBubble">--:--</div>
+        <input id="timeSlider" type="range" min="0" max="0" value="0" />
+        <div class="time-scale">
+          <span>00:00</span><span>03:00</span><span>06:00</span><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span><span>21:00</span><span>24:00</span>
         </div>
-        <h2 id="socLarge">--%</h2>
+      </div>
+    </section>
 
-        <ul class="data-list">
+    <section class="kpi-row">
+      <article class="kpi-card yellow">
+        <div class="kpi-icon">☀</div>
+        <div class="kpi-content"><p>RADIACIÓN GHI</p><h2><span id="ghi">--</span> <small>W/m²</small></h2><small id="ghiSub">Máx. día: -- W/m²</small></div>
+        <canvas id="sparkGhi"></canvas>
+      </article>
+      <article class="kpi-card green">
+        <div class="kpi-icon">▦</div>
+        <div class="kpi-content"><p>PRODUCCIÓN FV (AC)</p><h2><span id="fv">--</span> <small>MW</small></h2><small id="fvSub">Máx. día: -- MW</small></div>
+        <canvas id="sparkFv"></canvas>
+      </article>
+      <article class="kpi-card orange">
+        <div class="kpi-icon">☁</div>
+        <div class="kpi-content"><p>CURTAILMENT</p><h2><span id="curtailment">--</span> <small>MW</small></h2><small id="curtSub">-- % de la producción</small></div>
+        <canvas id="sparkCurt"></canvas>
+      </article>
+      <article class="kpi-card green">
+        <div class="kpi-icon">♜</div>
+        <div class="kpi-content"><p>INYECCIÓN A RED</p><h2><span id="inyeccion">--</span> <small>MW</small></h2><small id="injSub">-- % de la producción</small></div>
+        <canvas id="sparkInj"></canvas>
+      </article>
+      <article class="kpi-card blue">
+        <div class="kpi-icon">▣</div>
+        <div class="kpi-content"><p>CARGA BESS</p><h2><span id="carga">--</span> <small>MW</small></h2><small>Potencia de carga</small></div>
+        <canvas id="sparkCarga"></canvas>
+      </article>
+      <article class="kpi-card purple">
+        <div class="kpi-icon">▣</div>
+        <div class="kpi-content"><p>DESCARGA BESS</p><h2><span id="descarga">--</span> <small>MW</small></h2><small>Potencia de descarga</small></div>
+        <canvas id="sparkDescarga"></canvas>
+      </article>
+      <article class="kpi-card soc-card">
+        <p>SOC BESS</p>
+        <div class="soc-ring"><span id="soc">--</span><small>%</small></div>
+      </article>
+      <article class="kpi-card violet">
+        <div class="kpi-icon">$</div>
+        <div class="kpi-content"><p>PMg MIRAGE 220</p><h2><span id="pmg">--</span> <small>USD/MWh</small></h2><small id="pmgSub">Promedio día: --</small></div>
+        <canvas id="sparkPmg"></canvas>
+      </article>
+    </section>
+
+    <section class="grid-main">
+      <article class="card operation-panel">
+        <div class="panel-head"><h3>OPERACIÓN HORARIA DEL SISTEMA</h3></div>
+        <div class="legend-line">
+          <span class="lg green"></span>Producción FV (AC)
+          <span class="lg cyan"></span>Inyección a Red
+          <span class="lg orange"></span>Curtailment
+          <span class="lg blue"></span>Carga BESS
+          <span class="lg purple"></span>Descarga BESS
+          <span class="lg yellow"></span>PMg Mirage 220
+        </div>
+        <div class="chart-box chart-large"><canvas id="operationChart"></canvas></div>
+      </article>
+
+      <article class="card bess-state">
+        <h3>ESTADO BESS</h3>
+        <div class="battery-wrap">
+          <div class="battery-head"></div>
+          <div class="battery"><div id="batteryFill"></div></div>
+          <strong>SOC<br><span id="socLarge">--%</span></strong>
+        </div>
+        <ul class="kv-list">
           <li><span>Energía almacenada</span><strong id="energiaAlmacenada">-- MWh</strong></li>
+          <li><span>Energía nominal</span><strong id="energiaNominal">-- MWh</strong></li>
+          <li><span>Potencia máx. carga</span><strong id="pMaxCarga">-- MW</strong></li>
+          <li><span>Potencia máx. descarga</span><strong id="pMaxDescarga">-- MW</strong></li>
+          <li><span>Eficiencia (ida y vuelta)</span><strong id="eficiencia">-- %</strong></li>
+          <li><span>Temperatura</span><strong id="temperatura">-- °C</strong></li>
           <li><span>SOH</span><strong id="soh">-- %</strong></li>
           <li><span>EFC acumulados</span><strong id="efc">--</strong></li>
         </ul>
-      </div>
+      </article>
 
-      <div class="panel">
-        <h3>RESUMEN ECONÓMICO</h3>
-        <ul class="data-list">
+      <article class="card daily-summary">
+        <h3>RESUMEN DEL DÍA <small>(ACUMULADO HASTA HORA ACTUAL)</small></h3>
+        <ul class="kv-list large-kv">
+          <li><span>Energía FV generada</span><strong id="energiaFvDia">-- MWh</strong></li>
+          <li><span>Energía inyectada a red</span><strong id="energiaInyDia">-- MWh</strong></li>
+          <li><span>Curtailment total</span><strong id="curtailmentDia">-- MWh</strong></li>
+          <li><span>Energía cargada BESS</span><strong id="cargaDia">-- MWh</strong></li>
+          <li><span>Energía descargada BESS</span><strong id="descargaDia">-- MWh</strong></li>
+          <li><span>Curtailment recuperado</span><strong id="curtRecDia">-- MWh</strong></li>
           <li><span>Ingreso acumulado</span><strong id="ingreso">-- USD</strong></li>
           <li><span>Costo degradación</span><strong id="costoDeg">-- USD</strong></li>
-          <li><span>Beneficio neto</span><strong id="beneficio">-- USD</strong></li>
         </ul>
-      </div>
+        <div class="benefit-line"><span>Beneficio neto acumulado</span><strong id="beneficio">-- USD</strong></div>
+      </article>
     </section>
 
-    <section class="bottom-grid">
-      <div class="panel">
-        <h3>RADIACIÓN SOLAR</h3>
-        <canvas id="radiationChart"></canvas>
-      </div>
-
-      <div class="panel">
-        <h3>SOC BESS</h3>
-        <canvas id="socChart"></canvas>
-      </div>
-
-      <div class="panel">
-        <h3>PMg MIRAGE 220</h3>
-        <canvas id="pmgChart"></canvas>
-      </div>
-
-      <div class="panel">
-        <h3>DEGRADACIÓN</h3>
-        <ul class="data-list">
-          <li><span>Pérdida capacidad</span><strong id="perdidaCapacidad">-- %</strong></li>
+    <section class="grid-secondary">
+      <article class="card"><h3>RADIACIÓN SOLAR</h3><div class="chart-box small"><canvas id="radiationChart"></canvas></div></article>
+      <article class="card"><h3>SOC BESS (%)</h3><div class="chart-box small"><canvas id="socChart"></canvas></div></article>
+      <article class="card"><h3>PMg MIRAGE 220</h3><div class="chart-box small"><canvas id="pmgChart"></canvas></div></article>
+      <article class="card degradation">
+        <h3>DEGRADACIÓN <small>(ACUMULADA)</small></h3>
+        <ul class="kv-list compact">
+          <li><span>Pérdida de capacidad</span><strong id="perdidaCapacidad">-- %</strong></li>
           <li><span>SOH actual</span><strong id="sohActual">-- %</strong></li>
           <li><span>Costo degradación</span><strong id="costoDeg2">-- USD</strong></li>
         </ul>
-      </div>
+      </article>
     </section>
 
-    <section class="panel table-panel">
-      <h3>COMPARATIVA DE ESTRATEGIAS</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Estrategia</th>
-            <th>Ingreso</th>
-            <th>Costo degradación</th>
-            <th>Beneficio neto</th>
-            <th>SOH final</th>
-            <th>EFC</th>
-          </tr>
-        </thead>
-        <tbody id="strategyTable">
-          <tr>
-            <td colspan="6">Sin datos cargados</td>
-          </tr>
-        </tbody>
-      </table>
+    <section class="grid-bottom">
+      <article class="card strategy-table-card">
+        <h3>COMPARATIVA DE ESTRATEGIAS <small>(RESULTADOS ANUALES)</small></h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Estrategia</th><th>Ingreso anual (USD)</th><th>Costo degradación (USD)</th><th>Beneficio neto (USD)</th><th>SOH final (%)</th><th>EFC/año</th><th>Curtailment recuperado (MWh)</th><th>USD / MWh descargado</th><th>USD / %SOH perdido</th>
+              </tr>
+            </thead>
+            <tbody id="strategyTable"><tr><td colspan="9">Sin datos cargados</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+      <article class="card recommendation">
+        <h3>RECOMENDACIÓN</h3>
+        <p id="recommendationText">La recomendación aparecerá cuando se carguen los resultados de estrategias.</p>
+        <small>Estrategia recomendada:</small>
+        <strong id="recommendedStrategy">Sin datos</strong>
+        <button type="button">Ver análisis detallado →</button>
+      </article>
     </section>
   </main>
 </body>
