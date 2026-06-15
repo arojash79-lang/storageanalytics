@@ -1534,3 +1534,30 @@ a {
 .bitacora-link a:hover {
   background: rgba(20, 155, 255, 0.12);
 }
+@media (max-width: 768px) {
+  .ultimos-avances {
+    margin: 24px 16px 0;
+    padding: 20px 16px 24px;
+  }
+
+  .avances-carousel {
+    gap: 12px;
+  }
+
+  .avance-card {
+    width: 100%;
+    max-width: 310px;
+    padding: 18px;
+  }
+
+  .carousel-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+  }
+
+  .bitacora-link {
+    justify-content: center;
+    margin-top: 18px;
+  }
+}
