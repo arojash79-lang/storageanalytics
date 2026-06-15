@@ -1218,3 +1218,108 @@ a {
     line-height: 1.8;
   }
 }
+/* =========================================================
+   EFECTO HOVER PARA TARJETAS INTERNAS
+   Objetivos / Resumen / Bibliografía / Uso de IA / Metodología
+   ========================================================= */
+
+.block-card,
+.ri-extra-card,
+.support-card,
+.method-card {
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.block-card:hover,
+.ri-extra-card:hover,
+.support-card:hover,
+.method-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 28px rgba(22, 139, 255, 0.16),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+/* Brillo interno suave */
+.block-card::before,
+.support-card::before,
+.method-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 15% 10%,
+    rgba(255, 255, 255, 0.08),
+    transparent 32%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.block-card:hover::before,
+.support-card:hover::before,
+.method-card:hover::before {
+  opacity: 1;
+}
+
+/* Necesario para que el brillo no se salga del borde */
+.block-card,
+.support-card,
+.method-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mantiene el contenido sobre el brillo */
+.block-card > *,
+.support-card > *,
+.method-card > * {
+  position: relative;
+  z-index: 2;
+}
+/* Hover por color de tarjeta */
+
+.bibliography-card:hover {
+  border-color: rgba(245, 158, 11, 0.85);
+  box-shadow:
+    0 0 28px rgba(245, 158, 11, 0.18),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+.ai-card:hover {
+  border-color: rgba(155, 92, 255, 0.85);
+  box-shadow:
+    0 0 28px rgba(155, 92, 255, 0.18),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+.method-card-blue:hover {
+  border-color: rgba(22, 139, 255, 0.9);
+}
+
+.method-card-green:hover {
+  border-color: rgba(57, 212, 111, 0.85);
+  box-shadow:
+    0 0 28px rgba(57, 212, 111, 0.16),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+.method-card-purple:hover {
+  border-color: rgba(155, 92, 255, 0.85);
+  box-shadow:
+    0 0 28px rgba(155, 92, 255, 0.16),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+.method-card-orange:hover {
+  border-color: rgba(245, 158, 11, 0.85);
+  box-shadow:
+    0 0 28px rgba(245, 158, 11, 0.16),
+    0 24px 60px rgba(0, 0, 0, 0.32);
+}
