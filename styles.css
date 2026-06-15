@@ -645,6 +645,379 @@ a {
   color: #a970ff;
 }
 
+
+/* =========================================================
+   PÁGINAS RESUMEN/INTRODUCCIÓN Y OBJETIVOS
+   Restauración de diseño interno
+   ========================================================= */
+
+.ri-page {
+  width: 100%;
+  margin: 0;
+  padding: 26px 0 34px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(22, 139, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 82% 28%, rgba(0, 210, 255, 0.08), transparent 36%),
+    linear-gradient(135deg, #020815 0%, #061323 45%, #020814 100%);
+}
+
+.ri-panel {
+  position: relative;
+  width: min(100% - 190px, 1620px);
+  margin: 0 auto 22px;
+  overflow: hidden;
+  border: 1px solid rgba(70, 151, 255, 0.52);
+  outline: 1px solid rgba(70, 151, 255, 0.26);
+  outline-offset: -1px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(180, 220, 255, 0.22),
+    inset 0 -1px 0 rgba(180, 220, 255, 0.20),
+    0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.ri-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 11, 22, 0.84) 0%,
+      rgba(3, 11, 22, 0.66) 46%,
+      rgba(3, 11, 22, 0.80) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(3, 11, 22, 0.78),
+      rgba(3, 11, 22, 0.24) 48%,
+      rgba(3, 11, 22, 0.68)
+    );
+}
+
+.ri-center,
+.ri-two-columns {
+  position: relative;
+  z-index: 2;
+}
+
+.ri-panel-main {
+  min-height: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: url("assets/solar-bess-hero.jpg");
+}
+
+.ri-center {
+  width: min(100%, 1050px);
+  margin: 0 auto;
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.ri-center h1 {
+  max-width: 980px;
+  margin: 0 auto;
+  color: #ffffff;
+  font-size: clamp(2.55rem, 3.5vw, 4.25rem);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+}
+
+.ri-center p {
+  max-width: 880px;
+  margin: 0 auto;
+  color: #d7e2ee;
+  font-size: 0.98rem;
+  line-height: 1.58;
+  text-align: center;
+}
+
+.ri-line {
+  width: 105px;
+  height: 6px;
+  margin: 20px auto 24px;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.ri-line.small {
+  width: 82px;
+  height: 5px;
+  margin: 8px 0 28px;
+}
+
+.ri-panel-intro,
+.ri-panel-summary {
+  display: flex;
+  align-items: flex-start;
+  min-height: 340px;
+}
+
+.ri-panel-intro {
+  background-image: url("assets/intro-bess.jpg");
+}
+
+.ri-panel-summary {
+  background-image: url("assets/resumen-bess.jpg");
+}
+
+.ri-two-columns {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px 30px 38px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 68px;
+  align-items: start;
+}
+
+.ri-text {
+  align-self: start;
+  color: #ffffff;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ri-text h2 {
+  display: inline-block;
+  margin: 0;
+  padding: 0 10px 0 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 2.45vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  background: rgba(3, 11, 22, 0.38);
+}
+
+.ri-text p {
+  margin: 0 0 18px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.ri-text p:last-child {
+  margin-bottom: 0;
+}
+
+.ri-panel-intro .ri-text-right-column,
+.ri-panel-summary .ri-text-right-column {
+  padding-top: 88px;
+}
+
+.ri-plus {
+  width: min(100% - 190px, 1620px);
+  height: 22px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--blue);
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+  border: none;
+  box-shadow: none;
+  position: relative;
+  z-index: 5;
+}
+
+.ri-panel-extra {
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 42px 0 48px;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.ri-panel-extra::before {
+  display: none;
+}
+
+.ri-extra-grid {
+  width: min(100% - 190px, 1620px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.ri-extra-card {
+  position: relative;
+  min-height: 170px;
+  padding: 24px 24px 22px;
+  border-radius: 12px;
+  color: #ffffff;
+  text-decoration: none;
+  overflow: hidden;
+  background: rgba(8, 30, 56, 0.74);
+  border: 1px solid rgba(70, 151, 255, 0.35);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ri-extra-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.08), transparent 30%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.ri-extra-icon,
+.ri-extra-card h3,
+.ri-extra-card p,
+.ri-extra-arrow {
+  position: relative;
+  z-index: 2;
+}
+
+.ri-extra-icon {
+  font-size: 2.1rem;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.ri-extra-card h3 {
+  margin: 0 0 12px;
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.ri-extra-card p {
+  max-width: 720px;
+  margin: 0 0 10px;
+  color: #d1ddeb;
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
+.ri-extra-arrow {
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+  font-size: 1.75rem;
+  font-weight: 900;
+}
+
+.ri-extra-card.bibliography-card {
+  border-color: rgba(245, 158, 11, 0.58);
+  background: linear-gradient(145deg, rgba(57, 37, 6, 0.58), rgba(8, 30, 56, 0.72));
+}
+
+.ri-extra-card.bibliography-card .ri-extra-icon,
+.ri-extra-card.bibliography-card h3,
+.ri-extra-card.bibliography-card .ri-extra-arrow {
+  color: var(--orange);
+}
+
+.ri-extra-card.ai-card {
+  border-color: rgba(155, 92, 255, 0.58);
+  background: linear-gradient(145deg, rgba(35, 18, 59, 0.64), rgba(8, 30, 56, 0.72));
+}
+
+.ri-extra-card.ai-card .ri-extra-icon,
+.ri-extra-card.ai-card h3,
+.ri-extra-card.ai-card .ri-extra-arrow {
+  color: var(--purple);
+}
+
+@media (max-width: 1180px) {
+  .ri-panel,
+  .ri-plus {
+    width: min(100% - 48px, 1000px);
+  }
+
+  .ri-two-columns {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 34px 28px;
+  }
+
+  .ri-panel-intro .ri-text-right-column,
+  .ri-panel-summary .ri-text-right-column {
+    padding-top: 0;
+  }
+
+  .ri-panel-intro,
+  .ri-panel-summary {
+    min-height: auto;
+  }
+
+  .ri-extra-grid {
+    width: min(100% - 48px, 1000px);
+  }
+}
+
+@media (max-width: 720px) {
+  .ri-page {
+    padding: 18px 0 26px;
+  }
+
+  .ri-panel,
+  .ri-plus,
+  .ri-extra-grid {
+    width: calc(100% - 28px);
+  }
+
+  .ri-panel-main {
+    min-height: 360px;
+  }
+
+  .ri-center {
+    padding: 42px 18px;
+  }
+
+  .ri-center h1 {
+    font-size: 2.25rem;
+  }
+
+  .ri-center p {
+    font-size: 0.93rem;
+  }
+
+  .ri-two-columns {
+    padding: 30px 18px;
+  }
+
+  .ri-text h2 {
+    font-size: 2rem;
+  }
+
+  .ri-text p {
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .ri-panel-extra {
+    padding: 30px 0 36px;
+  }
+
+  .ri-extra-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ri-extra-card {
+    min-height: 150px;
+  }
+}
+
 /* =========================================================
    FOOTER
    ========================================================= */
