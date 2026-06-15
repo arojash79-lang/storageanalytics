@@ -9,8 +9,8 @@ Determinar el costo técnico y económico asociado a la degradación de sistemas
 
 ### Metodología
 
-- Modelación fotovoltaica mediante SAM y PySAM.
-- Datos meteorológicos NREL/NSRDB.
+- Modelación fotovoltaica mediante SAM.
+- Datos meteorológicos Explorador Solar de Chile (TMY).
 - Datos históricos del Coordinador Eléctrico Nacional.
 - Enfoque de operación Price-Taker.
 - Evaluación de estrategias de recuperación de curtailment y arbitraje energético.
@@ -19,7 +19,7 @@ Determinar el costo técnico y económico asociado a la degradación de sistemas
 ### Caso de estudio
 
 - Planta FV representativa de María Elena.
-- Barra de precios Mirage 220.
+- Barra de precios Miraje 220.
 - Horizonte histórico de 3 a 5 años.
 
 ### Plataforma web
@@ -28,7 +28,7 @@ https://storageanalytics.cl
 
 ### Autor
 
-Arturo Ignacio Rojas Hermosilla
+Arturo Rojas
 
 ### Programa
 
