@@ -849,17 +849,17 @@ a {
 }
 
 .brand {
-  width: 520px !important;
+  width: 480px !important;
   height: 82px !important;
-  max-width: 520px !important;
+  max-width: 480px !important;
   max-height: 82px !important;
-  flex: 0 0 520px !important;
+  flex: 0 0 480px !important;
   display: block !important;
   overflow: hidden !important;
   background-image: url("/assets/logo-storage-analytics.png") !important;
   background-repeat: no-repeat !important;
   background-position: left center !important;
-  background-size: 520px auto !important;
+  background-size: 480px auto !important;
 }
 
 .brand-icon,
