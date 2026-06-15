@@ -1556,3 +1556,150 @@ a {
     font-size: 1.7rem;
   }
 }
+
+/* =========================================================
+   FIX FINAL IMÁGENES HERO + RESUMEN INTRODUCCIÓN
+   Mantiene tu CSS y solo fuerza rutas/fondos correctos
+   ========================================================= */
+
+/* Portada: corrige ruta absoluta de la imagen */
+.hero-section {
+  isolation: isolate !important;
+}
+
+.hero-section::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(90deg, rgba(3, 11, 22, 0.98) 0%, rgba(3, 11, 22, 0.84) 34%, rgba(3, 11, 22, 0.34) 63%, rgba(3, 11, 22, 0.82) 100%),
+    linear-gradient(0deg, rgba(3, 11, 22, 0.92), rgba(3, 11, 22, 0.10) 44%, rgba(3, 11, 22, 0.68)),
+    url("/assets/solar-bess-hero.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  opacity: 0.98 !important;
+  z-index: -2 !important;
+}
+
+/* Página resumen_introduccion: estructura visual final */
+.ri-panel {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 430px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.ri-panel::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(90deg, rgba(3, 11, 22, 0.96) 0%, rgba(3, 11, 22, 0.76) 42%, rgba(3, 11, 22, 0.62) 100%),
+    linear-gradient(0deg, rgba(3, 11, 22, 0.88), rgba(3, 11, 22, 0.08) 48%, rgba(3, 11, 22, 0.76)) !important;
+  z-index: 1 !important;
+}
+
+.ri-panel-main {
+  min-height: 420px !important;
+  justify-content: center !important;
+  text-align: center !important;
+  background-image: url("/assets/solar-bess-hero.jpg") !important;
+}
+
+.ri-panel-intro {
+  min-height: 720px !important;
+  background-image: url("/assets/intro-bess.jpg") !important;
+}
+
+.ri-panel-summary {
+  min-height: 520px !important;
+  background-image: url("/assets/resumen-bess.jpg") !important;
+}
+
+.ri-center,
+.ri-two-columns,
+.ri-text {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.ri-two-columns {
+  width: min(100%, 1560px) !important;
+  margin: 0 auto !important;
+  padding: 70px 70px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 80px !important;
+  align-items: start !important;
+}
+
+.ri-panel-intro .ri-text,
+.ri-panel-summary .ri-text {
+  align-self: start !important;
+}
+
+.ri-panel-intro .ri-text p,
+.ri-panel-summary .ri-text p {
+  margin: 0 0 24px !important;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  line-height: 1.62 !important;
+  text-align: justify !important;
+  text-justify: inter-word !important;
+  letter-spacing: 0 !important;
+  word-spacing: normal !important;
+}
+
+.ri-panel-intro .ri-text p:last-child,
+.ri-panel-summary .ri-text p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.ri-plus {
+  height: 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #ffffff !important;
+  color: var(--blue) !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Responsive resumen_introduccion */
+@media (max-width: 1100px) {
+  .ri-two-columns {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 56px 30px !important;
+  }
+
+  .ri-panel-intro {
+    min-height: auto !important;
+  }
+
+  .ri-panel-summary {
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .ri-two-columns {
+    padding: 48px 24px !important;
+  }
+
+  .ri-panel-main {
+    min-height: 420px !important;
+  }
+
+  .ri-panel-intro,
+  .ri-panel-summary {
+    min-height: auto !important;
+  }
+}
