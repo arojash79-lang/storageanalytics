@@ -42,11 +42,10 @@
 
         <p>
           En esta sección se busca plasmar una representación general del estudio abordado. Además, se busca incluir antecedentes previos de investigaciones
-          relacionadas  con el tema abordado, considerando el por qué de la relevancia de la problemática identificada dentro del contexto actual del estado del arte
-          y como las soluciones buscadas para abordar esta problemática ayudan al conocimiento científico y/o tecnológico de la industria. Finalmente, se busca 
-          establecer un contexto informativo del problema identificado con el objeto de orientar al lector en la forma en que se ha organizado el texto para asi ayudar 
+          relacionadas con el tema abordado, considerando el por qué de la relevancia de la problemática identificada dentro del contexto actual del estado del arte
+          y como las soluciones buscadas para abordar esta problemática ayudan al conocimiento científico y/o tecnológico de la industria. Finalmente, se busca
+          establecer un contexto informativo del problema identificado con el objeto de orientar al lector en la forma en que se ha organizado el texto para asi ayudar
           a facilitar su comprensión.
-
         </p>
       </div>
     </section>
@@ -60,43 +59,48 @@
           <h2>Introducción y Motivación</h2>
           <div class="ri-line small"></div>
 
-          La creciente penetración de generación fotovoltaica en el Sistema Eléctrico Nacional (SEN) chileno ha transformado 
-          significativamente la operación eléctrica durante la última década. Particularmente en el norte de Chile, las elevadas 
-          condiciones de irradiancia han impulsado un importante desarrollo de centrales fotovoltaicas utility-scale. 
-          Sin embargo, este crecimiento ha estado acompañado por un aumento progresivo de episodios de curtailment y vertimiento de energía 
-          fotovoltaica, originados principalmente por restricciones de transmisión y desacoples entre generación y demanda. 
-          Como consecuencia, parte importante de la energía renovable potencialmente generable no puede ser inyectada al sistema.
-          </p>
           <p>
-          En este contexto, los sistemas de almacenamiento mediante baterías (Battery Energy Storage Systems, BESS) han surgido como una alternativa para 
-          mitigar el curtailment, desplazar energía hacia períodos de mayor valor económico y aumentar la flexibilidad operativa del SEN. 
-          No obstante, la operación intensiva de estos sistemas implica ciclos continuos de carga y descarga que aceleran fenómenos de degradación, reduciendo 
-          progresivamente la capacidad útil, el estado de salud (State of Health, SOH) y la vida económica del activo. Por ello, las estrategias de operación no 
-          deben evaluarse únicamente desde un punto de vista económico, sino también considerando sus efectos sobre el desgaste físico de las baterías.
+            La creciente penetración de generación fotovoltaica en el Sistema Eléctrico Nacional (SEN) chileno ha transformado
+            significativamente la operación eléctrica durante la última década. Particularmente en el norte de Chile, las elevadas
+            condiciones de irradiancia han impulsado un importante desarrollo de centrales fotovoltaicas utility-scale.
+            Sin embargo, este crecimiento ha estado acompañado por un aumento progresivo de episodios de curtailment y vertimiento de energía
+            fotovoltaica, originados principalmente por restricciones de transmisión y desacoples entre generación y demanda.
+            Como consecuencia, parte importante de la energía renovable potencialmente generable no puede ser inyectada al sistema.
           </p>
-          </div>
-         <div class="ri-text">       
-          Diversas investigaciones recientes han abordado la relación entre operación, degradación y valorización económica de sistemas BESS. García-Miguel et al. (2022) 
-          destacan la necesidad de incorporar la degradación dentro de la evaluación energética y económica de baterías, mientras que O’Kane et al. (2021) muestran 
-          que variables operacionales como estado de carga, throughput, profundidad de descarga y tasas de carga y descarga influyen directamente sobre los mecanismos 
-          de envejecimiento de baterías de ion-litio.
-          </p>
-        <p>         
-          La presente investigación propone una metodología aplicada para evaluar el costo técnico y económico asociado a la degradación de un sistema BESS utility-scale bajo 
-          condiciones reales de operación del SEN. Para ello, se considera como caso de estudio la planta fotovoltaica CEME1, ubicada en el 
-          norte de Chile, utilizando datos meteorológicos representativos, simulación de generación fotovoltaica en SAM (System Advisor Model) y registros históricos 
-          del Coordinador Eléctrico Nacional (CEN), incluyendo energía inyectada, curtailment y precios marginales de la barra Mirage 220 kV. 
-          Bajo un enfoque ex-post y price-taker, se evalúan distintas estrategias operacionales predefinidas para estimar energía cargada y descargada, throughput, ciclos 
-          equivalentes, SOH, ingresos potenciales, costo de degradación y beneficio neto.
-           </p>
-        <p>          
-          La motivación principal de este trabajo surge de la necesidad de comprender de forma integrada la interacción entre recuperación de energía vertida, rentabilidad 
-          operacional y degradación del sistema BESS en el contexto chileno. En particular, se busca aportar una metodología replicable que permita evaluar no solo los 
-          beneficios económicos asociados al almacenamiento energético, sino también las consecuencias físicas y económicas derivadas de su utilización. De esta forma, el 
-          estudio busca cuantificar el costo real de operar un BESS frente al curtailment fotovoltaico y entregar una base técnica para comparar estrategias de operación 
-          en proyectos FV+BESS.
-           </p>
 
+          <p>
+            En este contexto, los sistemas de almacenamiento mediante baterías (Battery Energy Storage Systems, BESS) han surgido como una alternativa para
+            mitigar el curtailment, desplazar energía hacia períodos de mayor valor económico y aumentar la flexibilidad operativa del SEN.
+            No obstante, la operación intensiva de estos sistemas implica ciclos continuos de carga y descarga que aceleran fenómenos de degradación, reduciendo
+            progresivamente la capacidad útil, el estado de salud (State of Health, SOH) y la vida económica del activo. Por ello, las estrategias de operación no
+            deben evaluarse únicamente desde un punto de vista económico, sino también considerando sus efectos sobre el desgaste físico de las baterías.
+          </p>
+        </div>
+
+        <div class="ri-text ri-text-right-column">
+          <p>
+            Diversas investigaciones recientes han abordado la relación entre operación, degradación y valorización económica de sistemas BESS. García-Miguel et al. (2022)
+            destacan la necesidad de incorporar la degradación dentro de la evaluación energética y económica de baterías, mientras que O’Kane et al. (2021) muestran
+            que variables operacionales como estado de carga, throughput, profundidad de descarga y tasas de carga y descarga influyen directamente sobre los mecanismos
+            de envejecimiento de baterías de ion-litio.
+          </p>
+
+          <p>
+            La presente investigación propone una metodología aplicada para evaluar el costo técnico y económico asociado a la degradación de un sistema BESS utility-scale bajo
+            condiciones reales de operación del SEN. Para ello, se considera como caso de estudio la planta fotovoltaica CEME1, ubicada en el
+            norte de Chile, utilizando datos meteorológicos representativos, simulación de generación fotovoltaica en SAM (System Advisor Model) y registros históricos
+            del Coordinador Eléctrico Nacional (CEN), incluyendo energía inyectada, curtailment y precios marginales de la barra Mirage 220 kV.
+            Bajo un enfoque ex-post y price-taker, se evalúan distintas estrategias operacionales predefinidas para estimar energía cargada y descargada, throughput, ciclos
+            equivalentes, SOH, ingresos potenciales, costo de degradación y beneficio neto.
+          </p>
+
+          <p>
+            La motivación principal de este trabajo surge de la necesidad de comprender de forma integrada la interacción entre recuperación de energía vertida, rentabilidad
+            operacional y degradación del sistema BESS en el contexto chileno. En particular, se busca aportar una metodología replicable que permita evaluar no solo los
+            beneficios económicos asociados al almacenamiento energético, sino también las consecuencias físicas y económicas derivadas de su utilización. De esta forma, el
+            estudio busca cuantificar el costo real de operar un BESS frente al curtailment fotovoltaico y entregar una base técnica para comparar estrategias de operación
+            en proyectos FV+BESS.
+          </p>
         </div>
 
       </div>
@@ -106,11 +110,12 @@
 
     <section class="ri-panel ri-panel-summary">
       <div class="ri-two-columns">
-        
+
         <div class="ri-text ri-text-left">
           <h2>Resumen</h2>
           <div class="ri-line small"></div>
-        
+
+          <p>
             Diversas investigaciones recientes han abordado la relación entre operación,
             degradación y valorización económica de sistemas BESS. García-Miguel et al. (2022)
             destacan la necesidad de incorporar la degradación dentro de la evaluación energética
@@ -125,8 +130,10 @@
             técnico y económico asociado a la degradación de un sistema BESS utility-scale bajo
             condiciones reales de operación del SEN.
           </p>
-          </div>
-         <div class="ri-text">
+        </div>
+
+        <div class="ri-text ri-text-right-column">
+          <p>
             Para ello, se considera como caso de estudio la planta fotovoltaica CEME1, ubicada
             en el norte de Chile, utilizando datos meteorológicos representativos, simulación
             de generación fotovoltaica en SAM y registros históricos del Coordinador Eléctrico
