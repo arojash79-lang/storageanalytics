@@ -3428,3 +3428,29 @@ a {
     grid-template-columns: 1fr !important;
   }
 }
+/* Ajuste texto hero tipo PowerUp */
+
+.hero-content {
+  max-width: 720px !important;
+  padding-left: 18% !important;
+  padding-top: 70px !important;
+}
+
+.hero-text h2 {
+  max-width: 700px !important;
+  font-size: clamp(2.6rem, 3.8vw, 4.6rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.hero-text p {
+  max-width: 680px !important;
+  font-size: 1.05rem !important;
+  line-height: 1.45 !important;
+}
+
+.title-line {
+  width: 120px !important;
+  height: 7px !important;
+  margin: 22px 0 24px !important;
+}
