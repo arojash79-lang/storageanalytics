@@ -97,42 +97,6 @@
         </div>
       </section>
     </section>
-    <section class="ultimos-avances">
-  <div class="section-title">
-    <span>▣</span>
-    <h2>ÚLTIMOS AVANCES</h2>
-  </div>
-
-  <div class="avances-carousel">
-    <button class="carousel-btn left" onclick="cambiarAvance(-1)">←</button>
-
-    <div class="avance-card" id="avanceCard">
-      <div class="avance-fecha">▣ 15-06-2026</div>
-      <h3>Ajuste de introducción y resumen</h3>
-      <p>
-        Se incorporaron mejoras en el contexto y alcance de la investigación,
-        alineando el enfoque con los objetivos del proyecto.
-      </p>
-     <span class="avance-estado en-desarrollo">En desarrollo</span>
-     <span class="avance-estado en-revision">En revisión</span>
-     <span class="avance-estado completado">✓ Completado</span>
-    </div>
-
-    <button class="carousel-btn right" onclick="cambiarAvance(1)">→</button>
-  </div>
-
-  <div class="carousel-dots" id="carouselDots">
-    <span class="dot active"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
-
-  <div class="bitacora-link">
-    <a href="avances.html">Ver bitácora completa →</a>
-  </div>
-</section>
   </main>
 
   <footer class="site-footer">
@@ -144,70 +108,5 @@
       Magíster en Ingeniería de la Energía
     </p>
   </footer>
-  <script>
-  const avances = [
-    {
-      fecha: "15-06-2026",
-      titulo: "Sección de introducción y resumen",
-      descripcion: "+ Info en bitácora.",
-      estado: "En desarrollo",
-      claseEstado: "en-desarrollo"
-    },
-    {
-      fecha: "15-06-2026",
-      titulo: "Sección de Objetivos",
-      descripcion: "+ Info en bitácora.",
-      estado: "En desarrollo",
-      claseEstado: "en-desarrollo"
-    },
-    {
-      fecha: "15-06-2026",
-      titulo: "Sección de metodología",
-      descripcion: "+ Info en bitácora.",
-      estado: "En desarrollo",
-      claseEstado: "en-desarrollo"
-    },
-    {
-      fecha: "15-06-2026",
-      titulo: "Procesamiento de datos meteorológicos",
-      descripcion: "+ Info en bitácora.",
-      estado: "En desarrollo",
-      claseEstado: "en-desarrollo"
-    }
-  ];
-
-  let avanceActual = 0;
-
-  function cambiarAvance(direccion) {
-    avanceActual += direccion;
-
-    if (avanceActual < 0) {
-      avanceActual = avances.length - 1;
-    }
-
-    if (avanceActual >= avances.length) {
-      avanceActual = 0;
-    }
-
-    actualizarAvance();
-  }
-
-  function actualizarAvance() {
-    const avance = avances[avanceActual];
-    const card = document.getElementById("avanceCard");
-
-    card.innerHTML = `
-      <div class="avance-fecha">▣ ${avance.fecha}</div>
-      <h3>${avance.titulo}</h3>
-      <p>${avance.descripcion}</p>
-      <span class="avance-estado completado">${avance.estado}</span>
-    `;
-
-    const dots = document.querySelectorAll(".dot");
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === avanceActual);
-    });
-  }
-</script>
 </body>
 </html>
