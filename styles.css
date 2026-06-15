@@ -972,3 +972,204 @@ a {
     padding-top: 44px !important;
   }
 }
+/* =========================================================
+   RESUMEN E INTRODUCCIÓN
+   Página /resumen_introduccion/
+   ========================================================= */
+
+.ri-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #030b16;
+}
+
+.ri-hero {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(70, 151, 255, 0.22);
+}
+
+.ri-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 11, 22, 0.96) 0%, rgba(3, 11, 22, 0.72) 42%, rgba(3, 11, 22, 0.58) 100%),
+    linear-gradient(0deg, rgba(3, 11, 22, 0.82), rgba(3, 11, 22, 0.08) 50%, rgba(3, 11, 22, 0.75));
+  z-index: 1;
+}
+
+.ri-hero-main {
+  min-height: 390px;
+  justify-content: center;
+  text-align: center;
+  background-image: url("/assets/solar-bess-hero.jpg");
+}
+
+.ri-hero-intro {
+  min-height: 330px;
+  background-image: url("/assets/intro-bess.jpg");
+}
+
+.ri-hero-summary {
+  min-height: 330px;
+  background-image: url("/assets/resumen-bess.jpg");
+}
+
+.ri-hero-center,
+.ri-content {
+  position: relative;
+  z-index: 2;
+}
+
+.ri-hero-center {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 70px 28px;
+}
+
+.ri-hero-center h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 4.2vw, 5rem);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  color: #ffffff;
+}
+
+.ri-hero-center p {
+  max-width: 760px;
+  margin: 0 auto;
+  color: #d0dbe8;
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.ri-content {
+  width: min(100%, 620px);
+  padding: 58px 70px;
+}
+
+.ri-content-left {
+  margin-left: 6%;
+  margin-right: auto;
+  text-align: left;
+}
+
+.ri-content-right {
+  margin-left: auto;
+  margin-right: 6%;
+  text-align: left;
+}
+
+.ri-content h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2.2rem, 3vw, 3.3rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.ri-content p {
+  margin: 0 0 14px;
+  color: #d0dbe8;
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.ri-content p:last-child {
+  margin-bottom: 0;
+}
+
+.ri-title-line {
+  width: 120px;
+  height: 7px;
+  margin: 22px auto 26px;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.ri-title-line.small {
+  width: 78px;
+  height: 5px;
+  margin: 18px 0 24px;
+}
+
+.ri-separator {
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  color: var(--blue);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Fondos temporales si aún no subes las imágenes */
+.ri-hero-intro,
+.ri-hero-summary {
+  background-color: #061426;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ri-hero {
+    min-height: auto;
+  }
+
+  .ri-hero-main {
+    min-height: 420px;
+  }
+
+  .ri-content,
+  .ri-content-left,
+  .ri-content-right {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 52px 28px;
+  }
+
+  .ri-content h2,
+  .ri-content p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  .ri-hero-center {
+    padding: 60px 24px;
+  }
+
+  .ri-hero-center h1 {
+    font-size: 2.55rem;
+  }
+
+  .ri-hero-center p {
+    font-size: 1rem;
+  }
+
+  .ri-content {
+    padding: 46px 24px;
+  }
+
+  .ri-content h2 {
+    font-size: 2.25rem;
+  }
+
+  .ri-content p {
+    font-size: 0.97rem;
+  }
+
+  .ri-separator {
+    height: 30px;
+    font-size: 1.7rem;
+  }
+}
