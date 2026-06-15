@@ -142,5 +142,72 @@
       Magíster en Ingeniería de la Energía
     </p>
   </footer>
+  <script>
+  const avances = [
+    {
+      fecha: "15-06-2026",
+      titulo: "Ajuste de introducción y resumen",
+      descripcion: "Se incorporaron mejoras en el contexto y alcance de la investigación, alineando el enfoque con los objetivos del proyecto.",
+      estado: "✓ Completado"
+    },
+    {
+      fecha: "13-06-2026",
+      titulo: "Metodología actualizada",
+      descripcion: "Se actualizaron etapas, flujo de trabajo y enfoque metodológico según los nuevos requerimientos del proyecto.",
+      estado: "✓ Completado"
+    },
+    {
+      fecha: "10-06-2026",
+      titulo: "Modelación preliminar CEME1 en SAM",
+      descripcion: "Se avanzó en la representación técnica de la planta fotovoltaica CEME1 dentro del entorno SAM.",
+      estado: "En revisión"
+    },
+    {
+      fecha: "08-06-2026",
+      titulo: "Comparación de datos meteorológicos",
+      descripcion: "Se compararon fuentes meteorológicas para caracterizar el recurso solar del sitio de estudio.",
+      estado: "✓ Completado"
+    },
+    {
+      fecha: "06-06-2026",
+      titulo: "Definición de estructura web",
+      descripcion: "Se organizaron las secciones principales del sitio para documentar el avance de la actividad de graduación.",
+      estado: "✓ Completado"
+    }
+  ];
+
+  let avanceActual = 0;
+
+  function cambiarAvance(direccion) {
+    avanceActual += direccion;
+
+    if (avanceActual < 0) {
+      avanceActual = avances.length - 1;
+    }
+
+    if (avanceActual >= avances.length) {
+      avanceActual = 0;
+    }
+
+    actualizarAvance();
+  }
+
+  function actualizarAvance() {
+    const avance = avances[avanceActual];
+    const card = document.getElementById("avanceCard");
+
+    card.innerHTML = `
+      <div class="avance-fecha">▣ ${avance.fecha}</div>
+      <h3>${avance.titulo}</h3>
+      <p>${avance.descripcion}</p>
+      <span class="avance-estado completado">${avance.estado}</span>
+    `;
+
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === avanceActual);
+    });
+  }
+</script>
 </body>
 </html>
