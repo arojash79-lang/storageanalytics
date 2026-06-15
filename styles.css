@@ -3367,3 +3367,21 @@ a {
   text-justify: inter-word !important;
   line-height: 1.75;
 }
+.indicators-panel {
+  display: none !important;
+}
+
+.hero-content {
+  display: block !important;
+  max-width: 780px !important;
+}
+
+.hero-text h2 {
+  max-width: 760px !important;
+  font-size: clamp(2.6rem, 3.6vw, 4.6rem) !important;
+  line-height: 1.08 !important;
+}
+
+.hero-section {
+  min-height: 650px !important;
+}
