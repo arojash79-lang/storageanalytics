@@ -156,7 +156,7 @@ a {
   background:
     linear-gradient(90deg, rgba(3, 11, 22, 0.98) 0%, rgba(3, 11, 22, 0.84) 34%, rgba(3, 11, 22, 0.34) 63%, rgba(3, 11, 22, 0.82) 100%),
     linear-gradient(0deg, rgba(3, 11, 22, 0.92), rgba(3, 11, 22, 0.10) 44%, rgba(3, 11, 22, 0.68)),
-    url("assets/solar-bess-hero.jpg");
+    url("/assets/solar-bess-hero.jpg");
   background-size: cover;
   background-position: center;
   opacity: 0.98;
@@ -972,370 +972,9 @@ a {
     padding-top: 44px !important;
   }
 }
+
 /* =========================================================
-   RESUMEN E INTRODUCCIÓN
-   Página /resumen_introduccion/
-   ========================================================= */
-
-.ri-page {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background: #030b16;
-}
-
-.ri-hero {
-  position: relative;
-  width: 100%;
-  min-height: 360px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  border-bottom: 1px solid rgba(70, 151, 255, 0.22);
-}
-
-.ri-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.96) 0%, rgba(3, 11, 22, 0.72) 42%, rgba(3, 11, 22, 0.58) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.82), rgba(3, 11, 22, 0.08) 50%, rgba(3, 11, 22, 0.75));
-  z-index: 1;
-}
-
-.ri-hero-main {
-  min-height: 390px;
-  justify-content: center;
-  text-align: center;
-  background-image: url("/assets/solar-bess-hero.jpg");
-}
-
-.ri-hero-intro {
-  min-height: 330px;
-  background-image: url("/assets/intro-bess.jpg");
-}
-
-.ri-hero-summary {
-  min-height: 330px;
-  background-image: url("/assets/resumen-bess.jpg");
-}
-
-.ri-hero-center,
-.ri-content {
-  position: relative;
-  z-index: 2;
-}
-
-.ri-hero-center {
-  width: min(100%, 980px);
-  margin: 0 auto;
-  padding: 70px 28px;
-}
-
-.ri-hero-center h1 {
-  margin: 0;
-  font-size: clamp(2.6rem, 4.2vw, 5rem);
-  line-height: 1.06;
-  letter-spacing: -0.045em;
-  color: #ffffff;
-}
-
-.ri-hero-center p {
-  max-width: 760px;
-  margin: 0 auto;
-  color: #d0dbe8;
-  font-size: 1.08rem;
-  line-height: 1.55;
-}
-
-.ri-content {
-  width: min(100%, 620px);
-  padding: 58px 70px;
-}
-
-.ri-content-left {
-  margin-left: 6%;
-  margin-right: auto;
-  text-align: left;
-}
-
-.ri-content-right {
-  margin-left: auto;
-  margin-right: 6%;
-  text-align: left;
-}
-
-.ri-content h2 {
-  margin: 0;
-  color: #ffffff;
-  font-size: clamp(2.2rem, 3vw, 3.3rem);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
-}
-
-.ri-content p {
-  margin: 0 0 14px;
-  color: #d0dbe8;
-  font-size: 1.02rem;
-  line-height: 1.55;
-}
-
-.ri-content p:last-child {
-  margin-bottom: 0;
-}
-
-.ri-title-line {
-  width: 120px;
-  height: 7px;
-  margin: 22px auto 26px;
-  border-radius: 999px;
-  background: var(--blue);
-}
-
-.ri-title-line.small {
-  width: 78px;
-  height: 5px;
-  margin: 18px 0 24px;
-}
-
-.ri-separator {
-  height: 34px;
-  display: grid;
-  place-items: center;
-  background: #ffffff;
-  color: var(--blue);
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-/* Fondos temporales si aún no subes las imágenes */
-.ri-hero-intro,
-.ri-hero-summary {
-  background-color: #061426;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .ri-hero {
-    min-height: auto;
-  }
-
-  .ri-hero-main {
-    min-height: 420px;
-  }
-
-  .ri-content,
-  .ri-content-left,
-  .ri-content-right {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 52px 28px;
-  }
-
-  .ri-content h2,
-  .ri-content p {
-    text-align: left;
-  }
-}
-
-@media (max-width: 720px) {
-  .ri-hero-center {
-    padding: 60px 24px;
-  }
-
-  .ri-hero-center h1 {
-    font-size: 2.55rem;
-  }
-
-  .ri-hero-center p {
-    font-size: 1rem;
-  }
-
-  .ri-content {
-    padding: 46px 24px;
-  }
-
-  .ri-content h2 {
-    font-size: 2.25rem;
-  }
-
-  .ri-content p {
-    font-size: 0.97rem;
-  }
-
-  .ri-separator {
-    height: 30px;
-    font-size: 1.7rem;
-  }
-}
-/* =========================================================
-   RESUMEN / INTRODUCCIÓN - CUERPOS 2 Y 3 EN DOS COLUMNAS
-   ========================================================= */
-
-.ri-hero-intro,
-.ri-hero-summary {
-  position: relative;
-  width: 100%;
-  min-height: 520px;
-  display: flex;
-  align-items: center;
-  padding: 48px 56px;
-  overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(2, 9, 19, 0.96) 0%, rgba(3, 11, 22, 0.88) 50%, rgba(2, 9, 19, 0.96) 100%);
-}
-
-.ri-split {
-  width: 100%;
-  max-width: 1560px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 44px;
-  align-items: center;
-}
-
-.ri-split-reverse {
-  grid-template-columns: 1fr 1fr;
-}
-
-.ri-copy {
-  color: #ffffff;
-}
-
-.ri-copy-left {
-  text-align: left;
-}
-
-.ri-copy-right {
-  text-align: right;
-}
-
-.ri-copy h2 {
-  margin: 0;
-  font-size: clamp(2rem, 2.8vw, 3.3rem);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-  color: #ffffff;
-}
-
-.ri-copy p {
-  margin: 0 0 16px;
-  color: #d7e2ee;
-  font-size: 1rem;
-  line-height: 1.65;
-  text-align: justify;
-}
-
-.ri-copy-right p {
-  text-align: justify;
-}
-
-.ri-title-line.small {
-  width: 82px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--blue);
-  margin: 18px 0 24px;
-}
-
-.ri-copy-right .ri-title-line.small {
-  margin-left: auto;
-}
-
-.ri-visual {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.ri-visual-media {
-  width: 100%;
-  min-height: 280px;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(70, 151, 255, 0.28);
-  background: rgba(8, 30, 56, 0.55);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
-}
-
-.ri-visual-media img {
-  width: 100%;
-  height: 100%;
-  min-height: 280px;
-  object-fit: cover;
-  display: block;
-}
-
-.ri-visual-text {
-  background: rgba(7, 24, 44, 0.72);
-  border: 1px solid rgba(70, 151, 255, 0.22);
-  border-radius: 18px;
-  padding: 22px 24px;
-  backdrop-filter: blur(8px);
-}
-
-.ri-visual-text p {
-  margin: 0 0 14px;
-  color: #d7e2ee;
-  font-size: 0.98rem;
-  line-height: 1.62;
-  text-align: justify;
-}
-
-.ri-visual-text p:last-child {
-  margin-bottom: 0;
-}
-
-/* separador blanco con + */
-.ri-separator {
-  height: 34px;
-  display: grid;
-  place-items: center;
-  background: #ffffff;
-  color: var(--blue);
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-/* responsive */
-@media (max-width: 1100px) {
-  .ri-hero-intro,
-  .ri-hero-summary {
-    padding: 40px 24px;
-    min-height: auto;
-  }
-
-  .ri-split,
-  .ri-split-reverse {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .ri-copy-right {
-    text-align: left;
-  }
-
-  .ri-copy-right .ri-title-line.small {
-    margin-left: 0;
-  }
-
-  .ri-visual-media {
-    min-height: 220px;
-  }
-
-  .ri-visual-media img {
-    min-height: 220px;
-  }
-}
-/* =========================================================
-   PÁGINA RESUMEN E INTRODUCCIÓN
+   RESUMEN E INTRODUCCIÓN - VERSIÓN FINAL LIMPIA
    /resumen_introduccion/
    ========================================================= */
 
@@ -1349,122 +988,69 @@ a {
 .ri-panel {
   position: relative;
   width: 100%;
-  min-height: 430px;
   display: flex;
   align-items: center;
   overflow: hidden;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .ri-panel::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.96) 0%, rgba(3, 11, 22, 0.76) 42%, rgba(3, 11, 22, 0.62) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.88), rgba(3, 11, 22, 0.08) 48%, rgba(3, 11, 22, 0.76));
   z-index: 1;
-}
-
-.ri-panel-main {
-  min-height: 420px;
-  justify-content: center;
-  text-align: center;
-  background-image: url("/assets/solar-bess-hero.jpg");
-}
-
-.ri-panel-intro {
-  background-image: url("/assets/intro-bess.jpg");
-}
-
-.ri-panel-summary {
-  background-image: url("/assets/resumen-bess.jpg");
+  background:
+    linear-gradient(90deg, rgba(3, 11, 22, 0.76) 0%, rgba(3, 11, 22, 0.48) 46%, rgba(3, 11, 22, 0.34) 100%),
+    linear-gradient(0deg, rgba(3, 11, 22, 0.56), rgba(3, 11, 22, 0.02) 48%, rgba(3, 11, 22, 0.42));
 }
 
 .ri-center,
-.ri-two-columns {
+.ri-two-columns,
+.ri-text {
   position: relative;
   z-index: 2;
 }
 
+/* Primer cuerpo: similar al hero de la página inicial */
+.ri-panel-main {
+  min-height: 470px;
+  justify-content: center;
+  text-align: center;
+  background-image: url("/assets/solar-bess-hero.jpg");
+  background-position: center;
+}
+
 .ri-center {
-  width: min(100%, 980px);
+  width: min(100%, 1040px);
   margin: 0 auto;
-  padding: 72px 28px;
+  padding: 0 24px;
   text-align: center;
 }
 
 .ri-center h1 {
+  max-width: 980px;
   margin: 0 auto;
-  max-width: 900px;
   color: #ffffff;
-  font-size: clamp(2.4rem, 3.8vw, 4.8rem);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
+  font-size: clamp(3rem, 4vw, 4.85rem);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.42);
 }
 
 .ri-center p {
-  max-width: 780px;
+  max-width: 790px;
   margin: 0 auto;
-  color: #d7e2ee;
-  font-size: 1.04rem;
+  color: #edf6ff;
+  font-size: 1.03rem;
   line-height: 1.62;
-}
-
-.ri-two-columns {
-  width: min(100%, 1560px);
-  margin: 0 auto;
-  padding: 70px 70px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.ri-text {
-  color: #ffffff;
-}
-
-.ri-text h2 {
-  margin: 0;
-  color: #ffffff;
-  font-size: clamp(2.2rem, 3vw, 3.5rem);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
-}
-
-.ri-text p {
-  margin: 0 0 16px;
-  color: #d7e2ee;
-  font-size: 1.02rem;
-  line-height: 1.65;
-  text-align: justify;
-}
-
-.ri-text p:last-child {
-  margin-bottom: 0;
-}
-
-.ri-text-left {
-  text-align: left;
-}
-
-.ri-text-right {
-  text-align: right;
-}
-
-.ri-text-box {
-  padding: 28px 32px;
-  border-radius: 18px;
-  background: rgba(3, 11, 22, 0.68);
-  border: 1px solid rgba(70, 151, 255, 0.18);
-  backdrop-filter: blur(8px);
+  text-align: center;
 }
 
 .ri-line {
-  width: 120px;
-  height: 7px;
+  width: 110px;
+  height: 6px;
   margin: 22px auto 26px;
   border-radius: 999px;
   background: var(--blue);
@@ -1473,12 +1059,110 @@ a {
 .ri-line.small {
   width: 82px;
   height: 5px;
-  margin: 18px 0 24px;
+  margin: 0 0 28px 0;
 }
 
-.ri-line.right {
-  margin-left: auto;
-  margin-right: 0;
+/* Segundo cuerpo: texto izquierdo + caja derecha */
+.ri-panel-intro {
+  min-height: 820px;
+  background-image: url("/assets/intro-bess.jpg");
+  background-position: center;
+}
+
+.ri-panel-intro .ri-two-columns {
+  width: min(100%, 1500px);
+  margin: 0 auto;
+  padding: 70px 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 76px;
+  align-items: start;
+}
+
+.ri-panel-intro .ri-text-left {
+  align-self: start;
+  margin: 0;
+  padding: 0;
+}
+
+.ri-panel-intro .ri-text-left h2 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: clamp(2.4rem, 3vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.42);
+}
+
+.ri-panel-intro .ri-text-left p,
+.ri-panel-intro .ri-text-right-column p,
+.ri-panel-summary .ri-text-left p,
+.ri-panel-summary .ri-text-right-column p {
+  margin: 0 0 28px;
+  color: #ffffff;
+  font-size: 1.03rem;
+  line-height: 1.72;
+  text-align: justify;
+  text-justify: inter-word;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.36);
+}
+
+.ri-panel-intro .ri-text-left p:last-child,
+.ri-panel-intro .ri-text-right-column p:last-child,
+.ri-panel-summary .ri-text-left p:last-child,
+.ri-panel-summary .ri-text-right-column p:last-child {
+  margin-bottom: 0;
+}
+
+.ri-panel-intro .ri-text-right-column {
+  align-self: start;
+  margin-top: 88px;
+  padding: 20px 24px;
+  background: rgba(3, 11, 22, 0.56);
+  border: 4px solid #39d46f;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(3px);
+}
+
+/* Tercer cuerpo: caja izquierda + resumen derecha */
+.ri-panel-summary {
+  min-height: 620px;
+  background-image: url("/assets/resumen-bess.jpg");
+  background-position: center;
+}
+
+.ri-panel-summary .ri-two-columns {
+  width: min(100%, 1500px);
+  margin: 0 auto;
+  padding: 70px 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 76px;
+  align-items: start;
+}
+
+.ri-panel-summary .ri-text-left {
+  align-self: start;
+  padding: 20px 24px;
+  background: rgba(3, 11, 22, 0.56);
+  border: 4px solid #39d46f;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(3px);
+}
+
+.ri-panel-summary .ri-text-left h2,
+.ri-panel-summary .ri-text-right-column h2 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: clamp(2.3rem, 3vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.ri-panel-summary .ri-text-right-column {
+  align-self: start;
+  margin: 0;
+  padding: 0;
 }
 
 .ri-plus {
@@ -1492,483 +1176,68 @@ a {
   line-height: 1;
 }
 
-/* Si aún no tienes imágenes, evita que quede negro plano */
-.ri-panel-intro {
-  background-color: #061426;
-}
-
-.ri-panel-summary {
-  background-color: #061426;
-}
-
-/* Responsive */
-@media (max-width: 1100px) {
-  .ri-two-columns {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 56px 30px;
-  }
-
-  .ri-text-right {
-    text-align: left;
-  }
-
-  .ri-line.right {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 720px) {
+@media (max-width: 1180px) {
   .ri-panel-main {
-    min-height: 420px;
-  }
-
-  .ri-center {
-    padding: 58px 24px;
+    min-height: 430px;
   }
 
   .ri-center h1 {
-    font-size: 2.35rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .ri-panel-intro .ri-two-columns,
+  .ri-panel-summary .ri-two-columns {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 56px 30px;
+  }
+
+  .ri-panel-intro,
+  .ri-panel-summary {
+    min-height: auto;
+  }
+
+  .ri-panel-intro .ri-text-right-column {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .ri-center {
+    padding: 0 18px;
+  }
+
+  .ri-center h1 {
+    font-size: 2.3rem;
+    line-height: 1.1;
   }
 
   .ri-center p {
-    font-size: 0.97rem;
+    font-size: 0.98rem;
   }
 
-  .ri-two-columns {
-    padding: 48px 24px;
+  .ri-panel-intro .ri-two-columns,
+  .ri-panel-summary .ri-two-columns {
+    padding: 46px 22px;
   }
 
-  .ri-text h2 {
-    font-size: 2.2rem;
+  .ri-panel-intro .ri-text-left h2,
+  .ri-panel-summary .ri-text-left h2,
+  .ri-panel-summary .ri-text-right-column h2 {
+    font-size: 2rem;
   }
 
-  .ri-text p {
+  .ri-panel-intro .ri-text-left p,
+  .ri-panel-intro .ri-text-right-column p,
+  .ri-panel-summary .ri-text-left p,
+  .ri-panel-summary .ri-text-right-column p {
     font-size: 0.96rem;
+    line-height: 1.62;
   }
 
-  .ri-text-box {
-    padding: 22px 20px;
-  }
-
-  .ri-plus {
-    height: 30px;
-    font-size: 1.7rem;
-  }
-}
-
-/* =========================================================
-   FIX FINAL IMÁGENES HERO + RESUMEN INTRODUCCIÓN
-   Mantiene tu CSS y solo fuerza rutas/fondos correctos
-   ========================================================= */
-
-/* Portada: corrige ruta absoluta de la imagen */
-.hero-section {
-  isolation: isolate !important;
-}
-
-.hero-section::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.98) 0%, rgba(3, 11, 22, 0.84) 34%, rgba(3, 11, 22, 0.34) 63%, rgba(3, 11, 22, 0.82) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.92), rgba(3, 11, 22, 0.10) 44%, rgba(3, 11, 22, 0.68)),
-    url("/assets/solar-bess-hero.jpg") !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  opacity: 0.98 !important;
-  z-index: -2 !important;
-}
-
-/* Página resumen_introduccion: estructura visual final */
-.ri-panel {
-  position: relative !important;
-  width: 100% !important;
-  min-height: 430px !important;
-  display: flex !important;
-  align-items: center !important;
-  overflow: hidden !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-.ri-panel::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.96) 0%, rgba(3, 11, 22, 0.76) 42%, rgba(3, 11, 22, 0.62) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.88), rgba(3, 11, 22, 0.08) 48%, rgba(3, 11, 22, 0.76)) !important;
-  z-index: 1 !important;
-}
-
-.ri-panel-main {
-  min-height: 420px !important;
-  justify-content: center !important;
-  text-align: center !important;
-  background-image: url("/assets/solar-bess-hero.jpg") !important;
-}
-
-.ri-panel-intro {
-  min-height: 720px !important;
-  background-image: url("/assets/intro-bess.jpg") !important;
-}
-
-.ri-panel-summary {
-  min-height: 520px !important;
-  background-image: url("/assets/resumen-bess.jpg") !important;
-}
-
-.ri-center,
-.ri-two-columns,
-.ri-text {
-  position: relative !important;
-  z-index: 2 !important;
-}
-
-.ri-two-columns {
-  width: min(100%, 1560px) !important;
-  margin: 0 auto !important;
-  padding: 70px 70px !important;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 80px !important;
-  align-items: start !important;
-}
-
-.ri-panel-intro .ri-text,
-.ri-panel-summary .ri-text {
-  align-self: start !important;
-}
-
-.ri-panel-intro .ri-text p,
-.ri-panel-summary .ri-text p {
-  margin: 0 0 24px !important;
-  color: #ffffff !important;
-  font-size: 1rem !important;
-  line-height: 1.62 !important;
-  text-align: justify !important;
-  text-justify: inter-word !important;
-  letter-spacing: 0 !important;
-  word-spacing: normal !important;
-}
-
-.ri-panel-intro .ri-text p:last-child,
-.ri-panel-summary .ri-text p:last-child {
-  margin-bottom: 0 !important;
-}
-
-.ri-plus {
-  height: 34px !important;
-  display: grid !important;
-  place-items: center !important;
-  background: #ffffff !important;
-  color: var(--blue) !important;
-  font-size: 2rem !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-}
-
-/* Responsive resumen_introduccion */
-@media (max-width: 1100px) {
-  .ri-two-columns {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-    padding: 56px 30px !important;
-  }
-
-  .ri-panel-intro {
-    min-height: auto !important;
-  }
-
-  .ri-panel-summary {
-    min-height: auto !important;
-  }
-}
-
-@media (max-width: 720px) {
-  .ri-two-columns {
-    padding: 48px 24px !important;
-  }
-
-  .ri-panel-main {
-    min-height: 420px !important;
-  }
-
-  .ri-panel-intro,
-  .ri-panel-summary {
-    min-height: auto !important;
-  }
-}
-/* =========================================================
-   AJUSTE FINAL RESUMEN / INTRODUCCIÓN
-   - Hero principal del mismo tamaño visual que inicio
-   - Cuerpos 2 y 3 alineados arriba
-   - Línea verde alineada con la columna derecha
-   - Más brillo/contraste en imágenes
-   ========================================================= */
-
-/* -------------------------
-   MÁS BRILLO EN IMÁGENES
-   ------------------------- */
-
-.hero-section::before {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(3, 11, 22, 0.86) 0%,
-      rgba(3, 11, 22, 0.62) 34%,
-      rgba(3, 11, 22, 0.18) 63%,
-      rgba(3, 11, 22, 0.58) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(3, 11, 22, 0.58),
-      rgba(3, 11, 22, 0.03) 44%,
-      rgba(3, 11, 22, 0.42)
-    ),
-    url("/assets/solar-bess-hero.jpg") !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  opacity: 1 !important;
-}
-
-.ri-panel::before {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(3, 11, 22, 0.82) 0%,
-      rgba(3, 11, 22, 0.56) 42%,
-      rgba(3, 11, 22, 0.34) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(3, 11, 22, 0.52),
-      rgba(3, 11, 22, 0.03) 48%,
-      rgba(3, 11, 22, 0.40)
-    ) !important;
-}
-
-/* -------------------------
-   HERO 1 (rectángulo rojo)
-   MISMO PESO VISUAL QUE HOME
-   ------------------------- */
-
-.ri-panel-main {
-  min-height: 470px !important;
-  background-image: url("/assets/solar-bess-hero.jpg") !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  justify-content: center !important;
-  text-align: center !important;
-}
-
-.ri-panel-main .ri-center {
-  width: min(100%, 980px) !important;
-  margin: 0 auto !important;
-  padding: 0 24px !important;
-  text-align: center !important;
-}
-
-.ri-panel-main .ri-center h1 {
-  margin: 0 auto !important;
-  max-width: 920px !important;
-  font-size: clamp(3rem, 4.1vw, 4.95rem) !important;
-  line-height: 1.06 !important;
-  letter-spacing: -0.04em !important;
-  color: #ffffff !important;
-}
-
-.ri-panel-main .ri-center p {
-  max-width: 760px !important;
-  margin: 0 auto !important;
-  font-size: 1.03rem !important;
-  line-height: 1.62 !important;
-  color: #e1ebf5 !important;
-  text-align: center !important;
-}
-
-.ri-panel-main .ri-line {
-  width: 110px !important;
-  height: 6px !important;
-  margin: 22px auto 26px !important;
-  border-radius: 999px !important;
-  background: var(--blue) !important;
-}
-
-/* -------------------------
-   CUERPOS 2 Y 3
-   ALINEADOS ARRIBA
-   ------------------------- */
-
-.ri-panel-intro,
-.ri-panel-summary {
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-.ri-panel-intro {
-  min-height: 760px !important;
-  background-image: url("/assets/intro-bess.jpg") !important;
-}
-
-.ri-panel-summary {
-  min-height: 560px !important;
-  background-image: url("/assets/resumen-bess.jpg") !important;
-}
-
-.ri-panel-intro .ri-two-columns,
-.ri-panel-summary .ri-two-columns {
-  width: min(100%, 1560px) !important;
-  margin: 0 auto !important;
-  padding: 78px 72px !important;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 84px !important;
-  align-items: start !important;
-}
-
-.ri-panel-intro .ri-text,
-.ri-panel-summary .ri-text {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  align-self: start !important;
-  margin: 0 !important;
-  padding-top: 0 !important;
-}
-
-.ri-panel-intro .ri-text h2,
-.ri-panel-summary .ri-text h2 {
-  margin-top: 0 !important;
-  margin-bottom: 10px !important;
-  font-size: clamp(2rem, 2.5vw, 3rem) !important;
-  line-height: 1.08 !important;
-  color: #ffffff !important;
-}
-
-.ri-panel-intro .ri-line.small,
-.ri-panel-summary .ri-line.small {
-  width: 82px !important;
-  height: 5px !important;
-  margin: 0 0 28px 0 !important;
-  border-radius: 999px !important;
-  background: var(--blue) !important;
-}
-
-/* párrafos iguales en formato */
-.ri-panel-intro .ri-text p,
-.ri-panel-summary .ri-text p {
-  margin: 0 0 22px !important;
-  color: #ffffff !important;
-  font-size: 1rem !important;
-  line-height: 1.68 !important;
-  text-align: justify !important;
-  text-justify: inter-word !important;
-}
-
-.ri-panel-intro .ri-text p:last-child,
-.ri-panel-summary .ri-text p:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* -------------------------
-   LÍNEA VERDE ALINEADA
-   CON LA COLUMNA DERECHA
-   ------------------------- */
-
-/* Cuerpo 2: línea verde arriba de la columna derecha */
-.ri-panel-intro .ri-text:last-child {
-  border-top: 4px solid #39d46f !important;
-  padding-top: 16px !important;
-}
-
-/* Cuerpo 3: si quieres la línea en la columna izquierda, queda así */
-.ri-panel-summary .ri-text:first-child {
-  border-top: 4px solid #39d46f !important;
-  padding-top: 16px !important;
-}
-
-/* -------------------------
-   SIGNO +
-   ------------------------- */
-
-.ri-plus {
-  height: 34px !important;
-  display: grid !important;
-  place-items: center !important;
-  background: #ffffff !important;
-  color: var(--blue) !important;
-  font-size: 2rem !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-}
-
-/* -------------------------
-   RESPONSIVE
-   ------------------------- */
-
-@media (max-width: 1180px) {
-  .ri-panel-main {
-    min-height: 430px !important;
-  }
-
-  .ri-panel-main .ri-center h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem) !important;
-  }
-
-  .ri-panel-intro .ri-two-columns,
-  .ri-panel-summary .ri-two-columns {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-    padding: 56px 30px !important;
-  }
-
-  .ri-panel-intro,
-  .ri-panel-summary {
-    min-height: auto !important;
-  }
-
-  .ri-panel-intro .ri-text:last-child,
-  .ri-panel-summary .ri-text:first-child {
-    border-top: 4px solid #39d46f !important;
-    padding-top: 16px !important;
-  }
-}
-
-@media (max-width: 720px) {
-  .ri-panel-main .ri-center {
-    padding: 0 18px !important;
-  }
-
-  .ri-panel-main .ri-center h1 {
-    font-size: 2.3rem !important;
-    line-height: 1.1 !important;
-  }
-
-  .ri-panel-main .ri-center p {
-    font-size: 0.98rem !important;
-  }
-
-  .ri-panel-intro .ri-two-columns,
-  .ri-panel-summary .ri-two-columns {
-    padding: 46px 22px !important;
-  }
-
-  .ri-panel-intro .ri-text h2,
-  .ri-panel-summary .ri-text h2 {
-    font-size: 1.9rem !important;
-  }
-
-  .ri-panel-intro .ri-text p,
-  .ri-panel-summary .ri-text p {
-    font-size: 0.96rem !important;
-    line-height: 1.62 !important;
+  .ri-panel-intro .ri-text-right-column,
+  .ri-panel-summary .ri-text-left {
+    padding: 18px;
+    border-width: 3px;
   }
 }
