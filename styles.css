@@ -849,17 +849,17 @@ a {
 }
 
 .brand {
-  width: 480px !important;
+  width: 450px !important;
   height: 82px !important;
-  max-width: 480px !important;
+  max-width: 450px !important;
   max-height: 82px !important;
-  flex: 0 0 480px !important;
+  flex: 0 0 450px !important;
   display: block !important;
   overflow: hidden !important;
   background-image: url("/assets/logo-storage-analytics.png") !important;
   background-repeat: no-repeat !important;
   background-position: left center !important;
-  background-size: 480px auto !important;
+  background-size: 450px auto !important;
 }
 
 .brand-icon,
@@ -871,4 +871,104 @@ a {
 
 .nav {
   margin-left: auto !important;
+}
+/* =========================================================
+   FIX MOBILE HEADER + LOGO + NAV
+   Solo afecta smartphone
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 112px !important;
+
+    padding: 12px 16px 14px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 10px !important;
+
+    background: rgba(2, 9, 19, 0.98) !important;
+    border-bottom: 1px solid rgba(70, 151, 255, 0.22) !important;
+    backdrop-filter: blur(18px) !important;
+  }
+
+  .brand {
+    width: 300px !important;
+    max-width: calc(100vw - 32px) !important;
+    height: 58px !important;
+    max-height: 58px !important;
+
+    display: block !important;
+    flex: 0 0 auto !important;
+    overflow: hidden !important;
+
+    background-image: url("/assets/logo-storage-analytics.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: left center !important;
+    background-size: contain !important;
+  }
+
+  .brand-icon,
+  .brand-text,
+  .brand img,
+  .brand-logo {
+    display: none !important;
+  }
+
+  .nav {
+    width: 100% !important;
+    margin-left: 0 !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .nav > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    padding: 8px 12px !important;
+
+    color: #ffffff !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+
+    background: rgba(8, 30, 56, 0.92) !important;
+    border: 1px solid rgba(70, 151, 255, 0.36) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22) !important;
+  }
+
+  .nav > a:hover {
+    color: #48aaff !important;
+    background: rgba(10, 39, 72, 0.98) !important;
+  }
+
+  .home {
+    padding-top: 20px !important;
+  }
+
+  .hero-section {
+    padding-top: 44px !important;
+  }
 }
