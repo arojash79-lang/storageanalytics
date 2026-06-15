@@ -4,288 +4,165 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Bloque 1 | Data meteorológica y Simulación en SAM</title>
+  <title>Storage Analytics | Metodología</title>
 
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <header class="site-header">
     <a href="/" class="brand" aria-label="Storage Analytics">
-      <div class="brand-icon">
-        <span>ϟ</span>
-      </div>
-
-      <div class="brand-text">
-        <h1>Storage Analytics</h1>
-        <p>Plataforma de análisis en costos por degradación en sistemas BESS</p>
-      </div>
+      <img src="/assets/logo-storage-analytics.png" alt="Storage Analytics" class="brand-logo">
     </a>
 
     <nav class="nav" aria-label="Navegación principal">
-      <a href="/">Inicio</a>
+      <a href="index.html">◈ Inicio</a>
+      <a href="index.html">✉︎ Acceso E-mail</a>
     </nav>
   </header>
 
-  <main class="block-page">
+  <main class="home">
+    <section class="hero-section metodologia-page" id="metodologia">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2>
+            Metodología de evaluación de costos por degradación en sistemas
+            <span>BESS</span>
+          </h2>
 
-    <section class="block-hero">
-      <span class="block-kicker">Bloque 1</span>
+          <div class="title-line"></div>
 
-      <h2>Data meteorológica y Simulación en SAM</h2>
-
-      <p>
-        Este bloque desarrolla la base energética inicial del estudio. Su propósito
-        es recopilar, procesar y validar datos meteorológicos y operacionales para
-        estimar la generación fotovoltaica potencial de CEME1 en SAM, compararla
-        con registros reales del Coordinador Eléctrico Nacional (CEN) y generar los
-        inputs o parámetros que posteriormente permitirán definir escenarios de operación del BESS.
-      </p>
-    </section>
-
-    <section class="block-intro-grid">
-      <article class="block-card block-card-large">
-        <div class="block-card-header">
-          <span>☀</span>
-          <h3>Objetivo del Bloque 1</h3>
+          <p>
+            Enfoque académico para estimar el costo real de degradación considerando
+            condiciones reales de operación en sistemas de almacenamiento de energía.
+          </p>
         </div>
-
-        <p>
-          El Bloque 1 busca construir una representación energética de la planta
-          fotovoltaica CEME1 a partir de fuentes meteorológicas públicas y datos
-          operacionales reales. Para ello, se utilizarán datos del Explorador Solar
-          de Chile para una serie horaria de un año meteorológico típico (TMY) y
-          NASA POWER serie horaria 2025, los cuales serán procesados en Python para
-          generar archivos meteorológicos horarios compatibles con SAM.
-        </p>
-
-        <p>
-          Posteriormente, estos archivos serán utilizados en SAM junto con la
-          arquitectura técnica de CEME1, considerando módulos, strings, inversores,
-          orientación y subcampos, para obtener estimaciones de energía esperada.
-          Dichas simulaciones serán contrastadas con la energía real inyectada a la red
-          y con los registros de curtailment publicados por el Coordinador Eléctrico Nacional.
-        </p>
-      </article>
-
-      <article class="block-card">
-        <div class="block-card-header">
-          <span>▤</span>
-          <h3>Fuentes meteorológicas</h3>
-        </div>
-
-        <ul class="block-list">
-          <li>
-            <strong>Explorador Solar de Chile</strong>
-            <span>Archivo TMY representativo para la zona de María Elena.</span>
-          </li>
-
-          <li>
-            <strong>NASA POWER 2025</strong>
-            <span>Serie meteorológica histórica horaria para reconstruir el año 2025.</span>
-          </li>
-        </ul>
-      </article>
-
-      <article class="block-card">
-        <div class="block-card-header">
-          <span>◎</span>
-          <h3>Datos CEN</h3>
-        </div>
-
-        <ul class="block-list">
-          <li>
-            <strong>Precios marginales</strong>
-            <span>Barra Mirage 220, período 2020–2025.</span>
-          </li>
-
-          <li>
-            <strong>Operación real CEME1</strong>
-            <span>Energía inyectada a la red y curtailment horario para el año 2025.</span>
-          </li>
-        </ul>
-      </article>
-    </section>
-
-    <section class="block-workflow">
-      <div class="section-heading">
-        <span>⛓</span>
-        <h3>Flujo metodológico del Bloque 1</h3>
       </div>
 
-      <div class="block-flow-grid">
-        <article class="block-step">
-          <span>01</span>
-          <h4>Descarga meteorológica</h4>
-          <p>
-            Se recopilan datos del Explorador Solar de Chile y de NASA POWER para
-            representar las condiciones solares y climáticas de María Elena.
-          </p>
-        </article>
+      <section class="methodology-section">
+        <div class="section-heading">
+          <span>▦</span>
+          <h3>Metodología</h3>
+        </div>
 
-        <article class="block-step">
-          <span>02</span>
-          <h4>Procesamiento en Python</h4>
-          <p>
-            Las series se limpian, ordenan y validan mediante Python y Pandas,
-            revisando formato horario, unidades y consistencia.
-          </p>
-        </article>
+        <div class="methodology-grid">
 
-        <article class="block-step">
-          <span>03</span>
-          <h4>CSV compatible con SAM</h4>
-          <p>
-            Se generan archivos meteorológicos horarios listos para ser importados
-            en SAM, incluyendo GHI, DNI, DHI, temperatura ambiente y viento.
-          </p>
-        </article>
+          <article class="method-card method-card-blue">
+            <div class="method-number">01</div>
+            <div class="method-icon">☁</div>
 
-        <article class="block-step">
-          <span>04</span>
-          <h4>Configuración CEME1 en SAM</h4>
-          <p>
-            Se incorpora la arquitectura técnica de la planta: módulos, strings,
-            inversores, orientación Este/Oeste y subcampos equivalentes.
-          </p>
-        </article>
+            <h4>Datos y simulación en SAM</h4>
 
-        <article class="block-step">
-          <span>05</span>
-          <h4>Generación potencial</h4>
-          <p>
-            Se simulan casos basados en Explorador Solar y NASA POWER, obteniendo
-            estimaciones de generación fotovoltaica potencial.
-          </p>
-        </article>
+            <ul>
+              <li>Obtención y análisis de datos meteorológicos representativos.</li>
+              <li>Uso de TMY del Explorador Solar de Chile para caracterización del recurso.</li>
+              <li>Modelación de la planta FV CEME1 en SAM según su arquitectura real.</li>
+              <li>Configuración de módulos, inversores y subcampos.</li>
+              <li>Estimación de energía horaria a red mediante Egrid.</li>
+              <li>Comparación con datos históricos del CEN: inyección y curtailment.</li>
+            </ul>
+          </article>
 
-        <article class="block-step">
-          <span>06</span>
-          <h4>Contraste con datos CEN</h4>
-          <p>
-            La generación simulada se compara con la energía efectivamente inyectada
-            por CEME1 y con el curtailment horario registrado durante 2025.
-          </p>
-        </article>
-      </div>
-    </section>
+          <div class="method-arrow">→</div>
 
-    <section class="block-comparison">
-      <article class="comparison-card">
-        <span class="block-kicker">Simulaciones SAM</span>
-        <h3>Estimación de energía potencial</h3>
+          <article class="method-card method-card-green">
+            <div class="method-number">02</div>
+            <div class="method-icon">▯</div>
 
-        <p>
-          El modelo SAM permitirá obtener dos estimaciones principales de energía
-          potencial esperada: una basada en el archivo TMY del Explorador Solar y
-          otra basada en la reconstrucción meteorológica horaria 2025 de NASA POWER.
-          Ambas simulaciones utilizarán la misma configuración técnica de CEME1, de
-          manera que la comparación se centre en el efecto de la fuente meteorológica.
-        </p>
-      </article>
+            <h4>Operación del sistema BESS</h4>
 
-      <article class="comparison-card">
-        <span class="block-kicker">Datos reales CEN</span>
-        <h3>Validación operacional</h3>
+            <ul>
+              <li>Enfoque ex-post y price-taker bajo condiciones reales del SEN.</li>
+              <li>Uso de datos históricos de inyección, curtailment y precios marginales Mirage 220 kV.</li>
+              <li>Definición de estrategias operacionales predefinidas.</li>
+              <li>Evaluación de recuperación de energía vertida, arbitraje energético y operación mixta.</li>
+              <li>Obtención de perfiles de carga, descarga y estado de carga.</li>
+            </ul>
+          </article>
 
-        <p>
-          Los resultados simulados serán contrastados con la energía real inyectada
-          a la red y con los registros de curtailment de CEME1. Este contraste permitirá
-          evaluar la representatividad de las fuentes meteorológicas y construir una
-          base energética coherente para el análisis FV+BESS.
-        </p>
-      </article>
-    </section>
+          <div class="method-arrow">→</div>
 
-    <section class="block-output">
-      <div>
-        <span class="block-kicker">Resultado esperado</span>
-        <h3>Inputs para el modelo FV+BESS</h3>
+          <article class="method-card method-card-purple">
+            <div class="method-number">03</div>
+            <div class="method-icon">⌁</div>
 
-        <p>
-          El resultado de este bloque será un conjunto de series horarias procesadas
-          y validadas: generación fotovoltaica potencial, energía real inyectada,
-          curtailment horario y precios marginales de la barra Mirage 220. Estas
-          variables permitirán construir métricas operacionales y definir escenarios
-          de operación del BESS bajo un enfoque price-taker, dando paso al Bloque 2.
-        </p>
-      </div>
+            <h4>Degradación del BESS</h4>
 
-      <a href="/metodologia/bloque-2/" class="btn btn-primary">
-        Continuar a Bloque 2
-      </a>
+            <ul>
+              <li>Estimación del uso operacional del sistema BESS.</li>
+              <li>Cálculo de throughput energético y ciclos equivalentes.</li>
+              <li>Evaluación de profundidad de descarga, estado de carga y estado de salud.</li>
+              <li>Estimación de degradación acumulada a lo largo del período analizado.</li>
+              <li>Comparación del desgaste asociado a cada estrategia operacional.</li>
+            </ul>
+          </article>
+
+          <div class="method-arrow">→</div>
+
+          <article class="method-card method-card-orange">
+            <div class="method-number">04</div>
+            <div class="method-icon">$</div>
+
+            <h4>Evaluación económica</h4>
+
+            <ul>
+              <li>Estimación de ingresos potenciales por operación del BESS.</li>
+              <li>Cálculo del costo técnico-económico de degradación asociado al uso del sistema.</li>
+              <li>Indicadores: USD/ciclo, USD/MWh descargado y costo anual de degradación.</li>
+              <li>Comparación del beneficio neto entre estrategias operacionales.</li>
+              <li>Determinación del valor de compensación necesario para justificar inversión y operación.</li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="support-section">
+        <div class="support-grid">
+
+          <article class="support-card bibliography-card">
+            <div class="support-icon">☷</div>
+            <h4>Bibliografía</h4>
+
+            <ul>
+              <li>
+                García-Miguel et al. (2022). Revisión sobre implementación de degradación
+                en la operación de sistemas BESS.
+              </li>
+              <li>
+                O’Kane et al. (2022). Modelación de degradación en baterías de ion-litio.
+              </li>
+              <li>
+                Edge et al. (2021). Mecanismos de degradación y envejecimiento en baterías
+                de ion-litio.
+              </li>
+            </ul>
+          </article>
+
+          <article class="support-card ai-card">
+            <div class="support-icon">◩</div>
+            <h4>Uso de herramientas de IA</h4>
+
+            <p>
+              Se declara el uso de herramientas de inteligencia artificial como apoyo en la
+              búsqueda y selección de referencias bibliográficas relacionadas con la degradación
+              de sistemas BESS, además de apoyo en la revisión ortográfica del texto.
+            </p>
+          </article>
+
+        </div>
+      </section>
     </section>
   </main>
 
   <footer class="site-footer">
     <p>
-      Storage Analytics © 2025
+      Storage Analytics © 2026
       <span>•</span>
       Actividad de Graduación
       <span>•</span>
       Magíster en Ingeniería de la Energía
     </p>
   </footer>
-
-  <script>
-    const dropdowns = document.querySelectorAll(".nav-dropdown");
-
-    dropdowns.forEach(function (dropdown) {
-      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-      if (!trigger) return;
-
-      trigger.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        dropdowns.forEach(function (otherDropdown) {
-          if (otherDropdown !== dropdown) {
-            otherDropdown.classList.remove("open");
-
-            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
-
-            if (otherTrigger) {
-              otherTrigger.setAttribute("aria-expanded", "false");
-            }
-          }
-        });
-
-        dropdown.classList.toggle("open");
-
-        const isOpen = dropdown.classList.contains("open");
-        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      });
-
-      dropdown.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-    });
-
-    document.addEventListener("click", function () {
-      dropdowns.forEach(function (dropdown) {
-        dropdown.classList.remove("open");
-
-        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-        if (trigger) {
-          trigger.setAttribute("aria-expanded", "false");
-        }
-      });
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        dropdowns.forEach(function (dropdown) {
-          dropdown.classList.remove("open");
-
-          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-          if (trigger) {
-            trigger.setAttribute("aria-expanded", "false");
-          }
-        });
-      }
-    });
-  </script>
 </body>
 </html>
