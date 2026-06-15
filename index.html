@@ -29,7 +29,6 @@
   </header>
 
   <main class="home">
-
     <section class="hero-section" id="inicio">
       <div class="hero-content">
         <div class="hero-text">
@@ -54,64 +53,64 @@
           </p>
         </div>
       </div>
-    </section>
 
-    <section class="quick-section">
-      <div class="section-heading">
-        <span>▦</span>
-        <h3>Accesos rápidos</h3>
-      </div>
+      <section class="quick-section">
+        <div class="section-heading">
+          <span>▦</span>
+          <h3>Accesos rápidos</h3>
+        </div>
 
-      <div class="quick-grid">
-        <a href="resumen_introduccion" class="quick-card project-card">
-          <div class="quick-icon">▣</div>
-          <h4>Introducción y Resumen</h4>
-          <p>Mirada General y contexto de la AG.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+        <div class="quick-grid">
+          <a href="resumen_introduccion" class="quick-card project-card">
+            <div class="quick-icon">▣</div>
+            <h4>Introducción y Resumen</h4>
+            <p>Mirada General y contexto de la AG.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="objetivos" class="quick-card objectives-card">
-          <div class="quick-icon">◎</div>
-          <h4>Objetivos</h4>
-          <p>Objetivo general y objetivos específicos.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+          <a href="objetivos" class="quick-card objectives-card">
+            <div class="quick-icon">◎</div>
+            <h4>Objetivos</h4>
+            <p>Objetivo general y objetivos específicos.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="/metodologia/bloque-1/" class="quick-card methodology-card">
-          <div class="quick-icon">▦</div>
-          <h4>Metodología</h4>
-          <p>Enfoque, etapas y flujo de trabajo.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+          <a href="/metodologia/bloque-1/" class="quick-card methodology-card">
+            <div class="quick-icon">▦</div>
+            <h4>Metodología</h4>
+            <p>Enfoque, etapas y flujo de trabajo.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="/gantt/" class="quick-card gantt-card">
-          <div class="quick-icon">▤</div>
-          <h4>Carta Gantt</h4>
-          <p>Planificación temporal del proyecto, hitos principales y etapas.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+          <a href="/gantt/" class="quick-card gantt-card">
+            <div class="quick-icon">▤</div>
+            <h4>Carta Gantt</h4>
+            <p>Planificación temporal del proyecto, hitos principales y etapas.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="/avances/" class="quick-card progress-card">
-          <div class="quick-icon">▰</div>
-          <h4>Avances</h4>
-          <p>Bitácora del proyecto, resultados completados y próximos pasos.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+          <a href="/avances/" class="quick-card progress-card">
+            <div class="quick-icon">▰</div>
+            <h4>Avances</h4>
+            <p>Bitácora del proyecto, resultados completados y próximos pasos.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="/links/" class="quick-card links-card">
-          <div class="quick-icon">↗</div>
-          <h4>Links de interés</h4>
-          <p>Recursos clave: Python, SAM, CEN, Explorador Solar de Chile y más.</p>
-          <span class="quick-arrow">→</span>
-        </a>
+          <a href="/links/" class="quick-card links-card">
+            <div class="quick-icon">↗</div>
+            <h4>Links de interés</h4>
+            <p>Recursos clave: Python, SAM, CEN, Explorador Solar de Chile y más.</p>
+            <span class="quick-arrow">→</span>
+          </a>
 
-        <a href="/dashboard/" class="quick-card dashboard-card">
-          <div class="quick-icon">▥</div>
-          <h4>Dashboard</h4>
-          <p>Indicadores, generación, operación BESS y métricas económicas.</p>
-          <span class="quick-arrow">→</span>
-        </a>
-      </div>
+          <a href="/dashboard/" class="quick-card dashboard-card">
+            <div class="quick-icon">▥</div>
+            <h4>Dashboard</h4>
+            <p>Indicadores, generación, operación BESS y métricas económicas.</p>
+            <span class="quick-arrow">→</span>
+          </a>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -124,66 +123,5 @@
       Magíster en Ingeniería de la Energía
     </p>
   </footer>
-
-  <script>
-    const dropdowns = document.querySelectorAll(".nav-dropdown");
-
-    dropdowns.forEach(function (dropdown) {
-      const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-      if (!trigger) return;
-
-      trigger.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        dropdowns.forEach(function (otherDropdown) {
-          if (otherDropdown !== dropdown) {
-            otherDropdown.classList.remove("open");
-
-            const otherTrigger = otherDropdown.querySelector(".nav-dropdown-trigger");
-
-            if (otherTrigger) {
-              otherTrigger.setAttribute("aria-expanded", "false");
-            }
-          }
-        });
-
-        dropdown.classList.toggle("open");
-
-        const isOpen = dropdown.classList.contains("open");
-        trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      });
-
-      dropdown.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-    });
-
-    document.addEventListener("click", function () {
-      dropdowns.forEach(function (dropdown) {
-        dropdown.classList.remove("open");
-
-        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-        if (trigger) {
-          trigger.setAttribute("aria-expanded", "false");
-        }
-      });
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        dropdowns.forEach(function (dropdown) {
-          dropdown.classList.remove("open");
-
-          const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-
-          if (trigger) {
-            trigger.setAttribute("aria-expanded", "false");
-          }
-        });
-      }
-    });
-  </script>
 </body>
 </html>
