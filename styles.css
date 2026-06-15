@@ -3367,8 +3367,3 @@ a {
   text-justify: inter-word !important;
   line-height: 1.75;
 }
-.block-list span,
-.block-step p {
-  text-align: justify !important;
-  text-justify: inter-word !important;
-}
