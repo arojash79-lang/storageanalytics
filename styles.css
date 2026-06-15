@@ -1561,3 +1561,20 @@ a {
     margin-top: 18px;
   }
 }
+.avance-estado.completado {
+  color: #20e17a;
+  background: rgba(32, 225, 122, 0.12);
+  border: 1px solid rgba(32, 225, 122, 0.35);
+}
+
+.avance-estado.en-desarrollo {
+  color: #14b8ff;
+  background: rgba(20, 184, 255, 0.12);
+  border: 1px solid rgba(20, 184, 255, 0.35);
+}
+
+.avance-estado.en-revision {
+  color: #a970ff;
+  background: rgba(169, 112, 255, 0.12);
+  border: 1px solid rgba(169, 112, 255, 0.35);
+}
