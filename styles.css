@@ -3454,3 +3454,36 @@ a {
   height: 7px !important;
   margin: 22px 0 24px !important;
 }
+
+
+/* AJUSTE HERO PRINCIPAL */
+
+.hero-section{
+min-height:700px !important;
+}
+
+.hero-content{
+display:block !important;
+max-width:950px !important;
+padding:70px 0 0 90px !important;
+}
+
+.hero-text{
+max-width:900px !important;
+padding:0 !important;
+}
+
+.hero-text h2{
+max-width:900px !important;
+font-size:clamp(2.8rem,4.4vw,5rem) !important;
+line-height:1.05 !important;
+letter-spacing:-0.05em !important;
+}
+
+.hero-text p{
+max-width:760px !important;
+}
+
+.quick-grid{
+grid-template-columns:repeat(7,1fr) !important;
+}
