@@ -3385,3 +3385,46 @@ a {
 .hero-section {
   min-height: 650px !important;
 }
+/* Accesos rápidos dentro del hero y a todo el ancho */
+
+.hero-section {
+  min-height: 860px !important;
+  padding-bottom: 42px !important;
+}
+
+.quick-section {
+  width: calc(100% - 64px) !important;
+  margin: 34px 32px 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.quick-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.quick-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 180px !important;
+}
+
+@media (max-width: 1300px) {
+  .quick-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .quick-section {
+    width: 100% !important;
+    margin: 28px 0 0 !important;
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
