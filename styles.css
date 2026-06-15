@@ -1703,3 +1703,272 @@ a {
     min-height: auto !important;
   }
 }
+/* =========================================================
+   AJUSTE FINAL RESUMEN / INTRODUCCIÓN
+   - Hero principal del mismo tamaño visual que inicio
+   - Cuerpos 2 y 3 alineados arriba
+   - Línea verde alineada con la columna derecha
+   - Más brillo/contraste en imágenes
+   ========================================================= */
+
+/* -------------------------
+   MÁS BRILLO EN IMÁGENES
+   ------------------------- */
+
+.hero-section::before {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 11, 22, 0.86) 0%,
+      rgba(3, 11, 22, 0.62) 34%,
+      rgba(3, 11, 22, 0.18) 63%,
+      rgba(3, 11, 22, 0.58) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(3, 11, 22, 0.58),
+      rgba(3, 11, 22, 0.03) 44%,
+      rgba(3, 11, 22, 0.42)
+    ),
+    url("/assets/solar-bess-hero.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  opacity: 1 !important;
+}
+
+.ri-panel::before {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 11, 22, 0.82) 0%,
+      rgba(3, 11, 22, 0.56) 42%,
+      rgba(3, 11, 22, 0.34) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(3, 11, 22, 0.52),
+      rgba(3, 11, 22, 0.03) 48%,
+      rgba(3, 11, 22, 0.40)
+    ) !important;
+}
+
+/* -------------------------
+   HERO 1 (rectángulo rojo)
+   MISMO PESO VISUAL QUE HOME
+   ------------------------- */
+
+.ri-panel-main {
+  min-height: 470px !important;
+  background-image: url("/assets/solar-bess-hero.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.ri-panel-main .ri-center {
+  width: min(100%, 980px) !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  text-align: center !important;
+}
+
+.ri-panel-main .ri-center h1 {
+  margin: 0 auto !important;
+  max-width: 920px !important;
+  font-size: clamp(3rem, 4.1vw, 4.95rem) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.04em !important;
+  color: #ffffff !important;
+}
+
+.ri-panel-main .ri-center p {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  font-size: 1.03rem !important;
+  line-height: 1.62 !important;
+  color: #e1ebf5 !important;
+  text-align: center !important;
+}
+
+.ri-panel-main .ri-line {
+  width: 110px !important;
+  height: 6px !important;
+  margin: 22px auto 26px !important;
+  border-radius: 999px !important;
+  background: var(--blue) !important;
+}
+
+/* -------------------------
+   CUERPOS 2 Y 3
+   ALINEADOS ARRIBA
+   ------------------------- */
+
+.ri-panel-intro,
+.ri-panel-summary {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.ri-panel-intro {
+  min-height: 760px !important;
+  background-image: url("/assets/intro-bess.jpg") !important;
+}
+
+.ri-panel-summary {
+  min-height: 560px !important;
+  background-image: url("/assets/resumen-bess.jpg") !important;
+}
+
+.ri-panel-intro .ri-two-columns,
+.ri-panel-summary .ri-two-columns {
+  width: min(100%, 1560px) !important;
+  margin: 0 auto !important;
+  padding: 78px 72px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 84px !important;
+  align-items: start !important;
+}
+
+.ri-panel-intro .ri-text,
+.ri-panel-summary .ri-text {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-self: start !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+}
+
+.ri-panel-intro .ri-text h2,
+.ri-panel-summary .ri-text h2 {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+  font-size: clamp(2rem, 2.5vw, 3rem) !important;
+  line-height: 1.08 !important;
+  color: #ffffff !important;
+}
+
+.ri-panel-intro .ri-line.small,
+.ri-panel-summary .ri-line.small {
+  width: 82px !important;
+  height: 5px !important;
+  margin: 0 0 28px 0 !important;
+  border-radius: 999px !important;
+  background: var(--blue) !important;
+}
+
+/* párrafos iguales en formato */
+.ri-panel-intro .ri-text p,
+.ri-panel-summary .ri-text p {
+  margin: 0 0 22px !important;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  line-height: 1.68 !important;
+  text-align: justify !important;
+  text-justify: inter-word !important;
+}
+
+.ri-panel-intro .ri-text p:last-child,
+.ri-panel-summary .ri-text p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* -------------------------
+   LÍNEA VERDE ALINEADA
+   CON LA COLUMNA DERECHA
+   ------------------------- */
+
+/* Cuerpo 2: línea verde arriba de la columna derecha */
+.ri-panel-intro .ri-text:last-child {
+  border-top: 4px solid #39d46f !important;
+  padding-top: 16px !important;
+}
+
+/* Cuerpo 3: si quieres la línea en la columna izquierda, queda así */
+.ri-panel-summary .ri-text:first-child {
+  border-top: 4px solid #39d46f !important;
+  padding-top: 16px !important;
+}
+
+/* -------------------------
+   SIGNO +
+   ------------------------- */
+
+.ri-plus {
+  height: 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #ffffff !important;
+  color: var(--blue) !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* -------------------------
+   RESPONSIVE
+   ------------------------- */
+
+@media (max-width: 1180px) {
+  .ri-panel-main {
+    min-height: 430px !important;
+  }
+
+  .ri-panel-main .ri-center h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem) !important;
+  }
+
+  .ri-panel-intro .ri-two-columns,
+  .ri-panel-summary .ri-two-columns {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 56px 30px !important;
+  }
+
+  .ri-panel-intro,
+  .ri-panel-summary {
+    min-height: auto !important;
+  }
+
+  .ri-panel-intro .ri-text:last-child,
+  .ri-panel-summary .ri-text:first-child {
+    border-top: 4px solid #39d46f !important;
+    padding-top: 16px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .ri-panel-main .ri-center {
+    padding: 0 18px !important;
+  }
+
+  .ri-panel-main .ri-center h1 {
+    font-size: 2.3rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .ri-panel-main .ri-center p {
+    font-size: 0.98rem !important;
+  }
+
+  .ri-panel-intro .ri-two-columns,
+  .ri-panel-summary .ri-two-columns {
+    padding: 46px 22px !important;
+  }
+
+  .ri-panel-intro .ri-text h2,
+  .ri-panel-summary .ri-text h2 {
+    font-size: 1.9rem !important;
+  }
+
+  .ri-panel-intro .ri-text p,
+  .ri-panel-summary .ri-text p {
+    font-size: 0.96rem !important;
+    line-height: 1.62 !important;
+  }
+}
