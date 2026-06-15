@@ -6,12 +6,7 @@
 :root {
   --bg: #030b16;
   --bg-2: #061426;
-  --bg-3: #081d35;
-  --panel: rgba(6, 21, 40, 0.84);
-  --panel-strong: rgba(8, 30, 56, 0.92);
-  --border: rgba(70, 151, 255, 0.27);
-  --border-strong: rgba(70, 151, 255, 0.48);
-
+  --bg-3: #081
   --text: #ffffff;
   --muted: #b9c8d8;
   --muted-2: #8193a8;
