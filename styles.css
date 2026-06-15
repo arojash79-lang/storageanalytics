@@ -974,7 +974,10 @@ a {
 }
 
 /* =========================================================
-   RESUMEN E INTRODUCCIÓN - LAYOUT COMO CAPTURA
+   RESUMEN E INTRODUCCIÓN - FINAL CORREGIDO
+   - Brillo controlado
+   - Sin franja blanca
+   - Párrafos nivelados
    /resumen_introduccion/
    ========================================================= */
 
@@ -985,6 +988,7 @@ a {
   background: #061426;
 }
 
+/* CONTENEDORES GENERALES */
 .ri-panel {
   position: relative;
   width: min(100% - 190px, 1620px);
@@ -997,14 +1001,25 @@ a {
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
 }
 
+/* BRILLO CONTROLADO: imagen visible, pero oscura */
 .ri-panel::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.70) 0%, rgba(3, 11, 22, 0.46) 48%, rgba(3, 11, 22, 0.62) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.50), rgba(3, 11, 22, 0.08) 48%, rgba(3, 11, 22, 0.38));
+    linear-gradient(
+      90deg,
+      rgba(3, 11, 22, 0.82) 0%,
+      rgba(3, 11, 22, 0.66) 46%,
+      rgba(3, 11, 22, 0.78) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(3, 11, 22, 0.74),
+      rgba(3, 11, 22, 0.24) 48%,
+      rgba(3, 11, 22, 0.66)
+    );
 }
 
 .ri-center,
@@ -1048,6 +1063,7 @@ a {
   text-align: center;
 }
 
+/* LÍNEAS AZULES */
 .ri-line {
   width: 105px;
   height: 6px;
@@ -1062,16 +1078,16 @@ a {
   margin: 8px 0 28px;
 }
 
-/* BLOQUE 2 Y 3 */
+/* BLOQUES 2 Y 3 */
 .ri-panel-intro,
 .ri-panel-summary {
   display: flex;
   align-items: flex-start;
-  background-image: url("/assets/intro-bess.jpg");
 }
 
 .ri-panel-intro {
   min-height: 340px;
+  background-image: url("/assets/intro-bess.jpg");
 }
 
 .ri-panel-summary {
@@ -1083,7 +1099,7 @@ a {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 24px 30px 32px;
+  padding: 28px 30px 36px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 68px;
@@ -1100,7 +1116,7 @@ a {
 
 .ri-text h2 {
   display: inline-block;
-  margin: 0 0 0;
+  margin: 0;
   padding: 0 10px 0 0;
   color: #ffffff;
   font-size: clamp(2rem, 2.45vw, 3rem);
@@ -1122,34 +1138,36 @@ a {
   margin-bottom: 0;
 }
 
-/* La columna derecha parte alineada con el texto, no con el título */
+/* NIVELACIÓN EXACTA:
+   La columna derecha parte al nivel del primer párrafo de la izquierda,
+   dejando arriba solo el espacio equivalente al título + línea azul. */
 .ri-panel-intro .ri-text-right-column,
 .ri-panel-summary .ri-text-right-column {
-  padding-top: 62px;
+  padding-top: 88px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-/* En resumen, el título va arriba a la izquierda y las columnas quedan bajo él */
-.ri-panel-summary .ri-text-left h2 {
-  margin-bottom: 0;
-}
-
-/* SEPARADOR */
+/* SIN FRANJA BLANCA */
 .ri-plus {
   width: min(100% - 190px, 1620px);
-  height: 28px;
+  height: 22px;
   margin: -22px auto 22px;
   display: grid;
   place-items: center;
-  background: #ffffff;
+  background: #061426 !important;
   color: var(--blue);
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 900;
   line-height: 1;
+  border: none !important;
+  box-shadow: none !important;
   position: relative;
   z-index: 5;
 }
 
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 1180px) {
   .ri-panel,
   .ri-plus {
@@ -1164,7 +1182,7 @@ a {
 
   .ri-panel-intro .ri-text-right-column,
   .ri-panel-summary .ri-text-right-column {
-    padding-top: 0;
+    padding-top: 0 !important;
   }
 
   .ri-panel-intro,
@@ -1211,42 +1229,4 @@ a {
     font-size: 0.92rem;
     line-height: 1.58;
   }
-}
-
-
-/* =========================================================
-   FIX FINAL: MENOS BRILLO EN IMÁGENES
-   Solo oscurece fondos, no cambia layout
-   ========================================================= */
-
-.ri-panel::before {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(3, 11, 22, 0.88) 0%,
-      rgba(3, 11, 22, 0.74) 48%,
-      rgba(3, 11, 22, 0.84) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(3, 11, 22, 0.78),
-      rgba(3, 11, 22, 0.34) 48%,
-      rgba(3, 11, 22, 0.72)
-    ) !important;
-}
-
-.ri-panel-main::before {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(3, 11, 22, 0.90) 0%,
-      rgba(3, 11, 22, 0.76) 45%,
-      rgba(3, 11, 22, 0.86) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(3, 11, 22, 0.80),
-      rgba(3, 11, 22, 0.38) 48%,
-      rgba(3, 11, 22, 0.72)
-    ) !important;
 }
