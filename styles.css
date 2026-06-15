@@ -1230,3 +1230,32 @@ a {
     line-height: 1.58;
   }
 }
+
+
+/* =========================================================
+   FIX FINAL: BORDES VISIBLES EN LOS 4 LADOS
+   El borde real queda reforzado con outline interno para que
+   arriba y abajo se vean igual que los laterales.
+   ========================================================= */
+
+.ri-panel {
+  border: 1px solid rgba(70, 151, 255, 0.52) !important;
+  outline: 1px solid rgba(70, 151, 255, 0.36) !important;
+  outline-offset: -1px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(180, 220, 255, 0.32),
+    inset 0 -1px 0 rgba(180, 220, 255, 0.32),
+    inset 1px 0 0 rgba(180, 220, 255, 0.22),
+    inset -1px 0 0 rgba(180, 220, 255, 0.22),
+    0 24px 70px rgba(0, 0, 0, 0.26) !important;
+}
+
+/* Evita que el separador o el margen tape el borde inferior */
+.ri-plus {
+  margin: 0 auto 22px !important;
+}
+
+/* Da aire entre bloques para que se vea el borde superior/inferior completo */
+.ri-panel {
+  margin-bottom: 22px !important;
+}
