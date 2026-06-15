@@ -148,7 +148,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 70px 58px 42px;
+  padding: 52px 58px 42px;
 }
 
 .hero-section::before {
@@ -156,8 +156,8 @@ a {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(3, 11, 22, 0.98) 0%, rgba(3, 11, 22, 0.83) 33%, rgba(3, 11, 22, 0.36) 62%, rgba(3, 11, 22, 0.82) 100%),
-    linear-gradient(0deg, rgba(3, 11, 22, 0.92), rgba(3, 11, 22, 0.12) 44%, rgba(3, 11, 22, 0.72)),
+    linear-gradient(90deg, rgba(3, 11, 22, 0.98) 0%, rgba(3, 11, 22, 0.84) 34%, rgba(3, 11, 22, 0.34) 63%, rgba(3, 11, 22, 0.82) 100%),
+    linear-gradient(0deg, rgba(3, 11, 22, 0.92), rgba(3, 11, 22, 0.10) 44%, rgba(3, 11, 22, 0.68)),
     url("assets/solar-bess-hero.jpg");
   background-size: cover;
   background-position: center;
@@ -177,19 +177,21 @@ a {
 
 .hero-content {
   width: 100%;
-  max-width: 850px;
+  max-width: 690px;
+  margin-left: clamp(80px, 12vw, 220px);
+  transform: translateY(-12px);
 }
 
 .hero-text {
-  max-width: 850px;
+  max-width: 690px;
 }
 
 .hero-text h2 {
-  max-width: 820px;
+  max-width: 690px;
   margin: 0;
-  font-size: clamp(2.7rem, 4.05vw, 4.95rem);
-  line-height: 1.05;
-  letter-spacing: -0.048em;
+  font-size: clamp(2.35rem, 3.05vw, 3.95rem);
+  line-height: 1.08;
+  letter-spacing: -0.038em;
 }
 
 .hero-text h2 span {
@@ -197,19 +199,19 @@ a {
 }
 
 .title-line {
-  width: 110px;
+  width: 120px;
   height: 7px;
   background: var(--blue);
   border-radius: 999px;
-  margin: 24px 0 26px;
+  margin: 24px 0 24px;
 }
 
 .hero-text p {
-  max-width: 740px;
+  max-width: 660px;
   margin: 0 0 16px;
   color: #d0dbe8;
-  line-height: 1.55;
-  font-size: 1.05rem;
+  line-height: 1.5;
+  font-size: 1rem;
 }
 
 /* =========================================================
@@ -218,7 +220,7 @@ a {
 
 .quick-section {
   width: 100%;
-  margin-top: 48px;
+  margin-top: 54px;
   position: relative;
   z-index: 2;
 }
@@ -406,6 +408,10 @@ a {
    ========================================================= */
 
 @media (max-width: 1450px) {
+  .hero-content {
+    margin-left: clamp(40px, 7vw, 120px);
+  }
+
   .quick-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -442,9 +448,14 @@ a {
     padding: 58px 36px 38px;
   }
 
-  .hero-content,
-  .hero-text {
+  .hero-content {
     max-width: 100%;
+    margin-left: 0;
+    transform: none;
+  }
+
+  .hero-text {
+    max-width: 760px;
   }
 
   .quick-grid {
