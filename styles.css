@@ -840,3 +840,35 @@ a {
     min-height: auto;
   }
 }
+/* FIX FINAL LOGO LEGIBLE */
+
+.site-header {
+  min-height: 96px !important;
+  height: 96px !important;
+  padding: 0 48px !important;
+}
+
+.brand {
+  width: 520px !important;
+  height: 82px !important;
+  max-width: 520px !important;
+  max-height: 82px !important;
+  flex: 0 0 520px !important;
+  display: block !important;
+  overflow: hidden !important;
+  background-image: url("/assets/logo-storage-analytics.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: 520px auto !important;
+}
+
+.brand-icon,
+.brand-text,
+.brand img,
+.brand-logo {
+  display: none !important;
+}
+
+.nav {
+  margin-left: auto !important;
+}
