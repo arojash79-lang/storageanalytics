@@ -805,3 +805,77 @@ a {
     min-height: auto;
   }
 }
+/* =========================================================
+   FIX LOGO HEADER - TAMAÑO CONTROLADO
+   ========================================================= */
+
+.site-header {
+  min-height: 86px !important;
+  height: 86px !important;
+  padding: 0 48px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.brand {
+  width: 360px !important;
+  height: 64px !important;
+  max-width: 360px !important;
+  max-height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+
+  background-image: url("/assets/logo-storage-analytics.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+}
+
+.brand img,
+.brand-logo {
+  width: auto !important;
+  height: 64px !important;
+  max-width: 360px !important;
+  max-height: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Oculta el logo viejo si todavía está en el HTML */
+.brand-icon,
+.brand-text {
+  display: none !important;
+}
+
+/* Mantiene el menú a la derecha */
+.nav {
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .site-header {
+    height: auto !important;
+    min-height: 76px !important;
+    padding: 14px 16px !important;
+  }
+
+  .brand {
+    width: 260px !important;
+    height: 52px !important;
+    max-width: 260px !important;
+    max-height: 52px !important;
+  }
+
+  .brand img,
+  .brand-logo {
+    height: 52px !important;
+    max-width: 260px !important;
+    max-height: 52px !important;
+  }
+}
