@@ -3355,3 +3355,7 @@ a {
     grid-template-columns: 1fr !important;
   }
 }
+.block-card p {
+  text-align: justify;
+  text-justify: inter-word;
+}
