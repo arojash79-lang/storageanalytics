@@ -769,3 +769,239 @@ tbody tr.highlight {
     height: 260px;
   }
 }
+/* ============================================================
+   VISTAS DEL DASHBOARD
+   ============================================================ */
+
+.dashboard-view {
+  display: none;
+}
+
+.dashboard-view.active {
+  display: block;
+}
+
+
+/* ============================================================
+   VISTA RECURSO SOLAR (TMY)
+   ============================================================ */
+
+.solar-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+
+.solar-header h2 {
+  margin: 4px 0 8px;
+  font-size: 1.35rem;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.solar-header p {
+  margin: 0;
+  color: #c7d7ea;
+  line-height: 1.45;
+  font-size: 0.92rem;
+}
+
+.section-eyebrow {
+  margin: 0 0 4px;
+  color: #ffd84a !important;
+  font-size: 0.76rem !important;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.method-note {
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(16, 57, 105, 0.42);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.method-note strong {
+  color: #ffffff;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.method-note span {
+  color: #c7d7ea;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+
+/* ============================================================
+   KPI RECURSO SOLAR
+   ============================================================ */
+
+.solar-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.solar-kpi-row .kpi-card {
+  min-height: 94px;
+}
+
+.solar-kpi-row .kpi-content h2 {
+  font-size: 1.45rem;
+}
+
+.solar-kpi-row .kpi-content h2 small {
+  font-size: 0.68rem;
+}
+
+
+/* ============================================================
+   GRILLAS RECURSO SOLAR
+   ============================================================ */
+
+.solar-grid-main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.solar-grid-secondary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(260px, 0.75fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.solar-chart-card {
+  min-width: 0;
+}
+
+.solar-chart-card .panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.solar-chart-card .panel-head h3 {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.solar-chart-card .panel-head small {
+  color: #8fb4d8;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.chart-box.chart-medium {
+  position: relative;
+  height: 280px;
+}
+
+.heatmap-box {
+  position: relative;
+  height: 280px;
+  width: 100%;
+}
+
+.heatmap-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* ============================================================
+   TARJETA FUENTE Y ALCANCE
+   ============================================================ */
+
+.solar-source-card h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.solar-source-card .kv-list li {
+  gap: 10px;
+}
+
+.solar-source-card .kv-list li span {
+  color: #9ab7d5;
+}
+
+.solar-source-card .kv-list li strong {
+  color: #ffffff;
+  text-align: right;
+}
+
+
+/* ============================================================
+   RESPONSIVE RECURSO SOLAR
+   ============================================================ */
+
+@media (max-width: 1400px) {
+  .solar-kpi-row {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+  }
+
+  .solar-grid-secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .solar-source-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 980px) {
+  .solar-header {
+    grid-template-columns: 1fr;
+  }
+
+  .solar-kpi-row {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+
+  .solar-grid-main,
+  .solar-grid-secondary {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-box.chart-medium,
+  .heatmap-box {
+    height: 250px;
+  }
+}
+
+@media (max-width: 620px) {
+  .solar-kpi-row {
+    grid-template-columns: 1fr;
+  }
+
+  .solar-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .method-note {
+    padding: 12px;
+  }
+
+  .chart-box.chart-medium,
+  .heatmap-box {
+    height: 230px;
+  }
+}
