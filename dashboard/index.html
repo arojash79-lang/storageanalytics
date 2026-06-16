@@ -21,17 +21,17 @@
     <div class="side-subtitle">SCADA SIMULADOR<br>FV + BESS</div>
 
     <nav class="side-nav">
-      <a class="active" href="#"><span>⌂</span> Vista General</a>
-      <a href="#"><span>☼</span> Recurso Solar</a>
-      <a href="#"><span>♜</span> Planta FV</a>
-      <a href="#"><span>▣</span> Operación BESS</a>
-      <a href="#"><span>$</span> Economía</a>
-      <a href="#"><span>▦</span> Estrategias</a>
-      <a href="#"><span>⌁</span> Comparador</a>
-      <a href="#"><span>▤</span> Reportes</a>
-      <a href="#"><span>⚙</span> Configuración</a>
-      <a href="#"><span>?</span> Ayuda</a>
-    </nav>
+  <a class="active" href="#" data-view="general"><span>⌂</span> Vista General</a>
+  <a href="#" data-view="solar"><span>☼</span> Recurso Solar (TMY)</a>
+  <a href="#" data-view="planta"><span>♜</span> Planta FV (SAM)</a>
+  <a href="#" data-view="bess"><span>▣</span> Operación BESS</a>
+  <a href="#" data-view="economia"><span>$</span> Economía</a>
+  <a href="#" data-view="estrategias"><span>▦</span> Estrategias</a>
+  <a href="#" data-view="comparador"><span>⌁</span> Comparador</a>
+  <a href="#" data-view="reportes"><span>▤</span> Reportes</a>
+  <a href="#" data-view="configuracion"><span>⚙</span> Configuración</a>
+  <a href="#" data-view="ayuda"><span>?</span> Ayuda</a>
+</nav>
 
     <section class="active-strategy">
       <p>ESTRATEGIA ACTIVA</p>
@@ -65,7 +65,7 @@
         </select>
       </div>
     </header>
-
+<section id="view-general" class="dashboard-view active">
     <section class="sim-strip card">
       <div class="sim-state">
         <span class="live-dot"></span>
@@ -210,6 +210,168 @@
         <button type="button">Ver análisis detallado →</button>
       </article>
     </section>
+    <!-- FIN VISTA GENERAL -->
+  </section>
+
+    <!-- =======================================================
+         VISTA RECURSO SOLAR (TMY)
+         ======================================================= -->
+    <section id="view-solar" class="dashboard-view">
+      <section class="solar-header card">
+        <div>
+          <p class="section-eyebrow">RECURSO SOLAR — AÑO METEOROLÓGICO TÍPICO</p>
+          <h2>Caracterización meteorológica TMY — María Elena</h2>
+          <p>
+            Visualización de GHI, DNI, DHI, temperatura ambiente y velocidad del viento
+            a partir del archivo TMY del Explorador Solar.
+          </p>
+        </div>
+
+        <div class="method-note">
+          <strong>Nota metodológica</strong>
+          <span>
+            Las irradiancias corresponden al Año Meteorológico Típico (TMY) del Explorador Solar.
+            Representan condiciones típicas de largo plazo y no mediciones reales de un año calendario específico.
+          </span>
+        </div>
+      </section>
+
+      <section class="solar-kpi-row" id="solarKpiCards">
+        <article class="kpi-card yellow">
+          <div class="kpi-icon">☀</div>
+          <div class="kpi-content">
+            <p>GHI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiGhiDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Global horizontal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card orange">
+          <div class="kpi-icon">◉</div>
+          <div class="kpi-content">
+            <p>DNI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiDniDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Directa normal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card blue">
+          <div class="kpi-icon">☁</div>
+          <div class="kpi-content">
+            <p>DHI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiDhiDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Difusa horizontal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card green">
+          <div class="kpi-icon">▦</div>
+          <div class="kpi-content">
+            <p>GHI ANUAL</p>
+            <h2><span id="solarKpiGhiAnnual">--</span> <small>kWh/m²/año</small></h2>
+            <small>Recurso global anual</small>
+          </div>
+        </article>
+
+        <article class="kpi-card violet">
+          <div class="kpi-icon">°C</div>
+          <div class="kpi-content">
+            <p>TEMPERATURA MEDIA</p>
+            <h2><span id="solarKpiTemp">--</span> <small>°C</small></h2>
+            <small>Promedio anual TMY</small>
+          </div>
+        </article>
+
+        <article class="kpi-card green">
+          <div class="kpi-icon">≋</div>
+          <div class="kpi-content">
+            <p>VIENTO MEDIO</p>
+            <h2><span id="solarKpiWind">--</span> <small>m/s</small></h2>
+            <small>Promedio anual TMY</small>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-main">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>PERFIL HORARIO PROMEDIO ANUAL</h3>
+            <small>GHI, DNI y DHI en W/m²</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarPerfilHorarioChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>IRRADIACIÓN DIARIA PROMEDIO MENSUAL</h3>
+            <small>kWh/m²/día</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarMensualPromedioChart"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-main">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>IRRADIACIÓN MENSUAL ACUMULADA</h3>
+            <small>kWh/m²/mes</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarMensualAcumuladaChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>MAPA DE CALOR GHI</h3>
+            <small>Hora del día vs día del año típico</small>
+          </div>
+          <div class="heatmap-box">
+            <canvas id="solarHeatmapGhi"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-secondary">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>TEMPERATURA AMBIENTE MENSUAL</h3>
+            <small>Promedio mensual y rango térmico</small>
+          </div>
+          <div class="chart-box small">
+            <canvas id="solarTemperaturaChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>VELOCIDAD DEL VIENTO MENSUAL</h3>
+            <small>Promedio mensual y máxima mensual</small>
+          </div>
+          <div class="chart-box small">
+            <canvas id="solarVientoChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-source-card">
+          <h3>FUENTE Y ALCANCE</h3>
+          <ul class="kv-list compact">
+            <li><span>Fuente</span><strong id="solarMetaFuente">Explorador Solar</strong></li>
+            <li><span>Tipo de dato</span><strong id="solarMetaTipo">TMY</strong></li>
+            <li><span>Ubicación</span><strong id="solarMetaUbicacion">María Elena / CEME1</strong></li>
+            <li><span>Latitud</span><strong id="solarMetaLat">--</strong></li>
+            <li><span>Longitud</span><strong id="solarMetaLon">--</strong></li>
+            <li><span>Elevación</span><strong id="solarMetaElev">--</strong></li>
+          </ul>
+        </article>
+      </section>
+    </section>
+    <!-- FIN VISTA RECURSO SOLAR -->
+
   </main>
 </body>
 </html>
