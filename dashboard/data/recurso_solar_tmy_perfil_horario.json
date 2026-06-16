@@ -1,0 +1,218 @@
+[
+  {
+    "hora": 0,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 13.771,
+    "viento_promedio_m_s": 1.725,
+    "hora_label": "00:00"
+  },
+  {
+    "hora": 1,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 12.799,
+    "viento_promedio_m_s": 1.787,
+    "hora_label": "01:00"
+  },
+  {
+    "hora": 2,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 12.012,
+    "viento_promedio_m_s": 2.021,
+    "hora_label": "02:00"
+  },
+  {
+    "hora": 3,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 11.38,
+    "viento_promedio_m_s": 2.308,
+    "hora_label": "03:00"
+  },
+  {
+    "hora": 4,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 10.724,
+    "viento_promedio_m_s": 2.56,
+    "hora_label": "04:00"
+  },
+  {
+    "hora": 5,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 10.139,
+    "viento_promedio_m_s": 2.667,
+    "hora_label": "05:00"
+  },
+  {
+    "hora": 6,
+    "ghi_promedio_w_m2": 2.321,
+    "dni_promedio_w_m2": 35.247,
+    "dhi_promedio_w_m2": 1.149,
+    "temperatura_promedio_c": 10.942,
+    "viento_promedio_m_s": 2.816,
+    "hora_label": "06:00"
+  },
+  {
+    "hora": 7,
+    "ghi_promedio_w_m2": 81.498,
+    "dni_promedio_w_m2": 349.805,
+    "dhi_promedio_w_m2": 17.456,
+    "temperatura_promedio_c": 13.746,
+    "viento_promedio_m_s": 2.835,
+    "hora_label": "07:00"
+  },
+  {
+    "hora": 8,
+    "ghi_promedio_w_m2": 294.384,
+    "dni_promedio_w_m2": 788.611,
+    "dhi_promedio_w_m2": 41.001,
+    "temperatura_promedio_c": 17.367,
+    "viento_promedio_m_s": 2.26,
+    "hora_label": "08:00"
+  },
+  {
+    "hora": 9,
+    "ghi_promedio_w_m2": 529.24,
+    "dni_promedio_w_m2": 907.228,
+    "dhi_promedio_w_m2": 58.738,
+    "temperatura_promedio_c": 21.142,
+    "viento_promedio_m_s": 1.699,
+    "hora_label": "09:00"
+  },
+  {
+    "hora": 10,
+    "ghi_promedio_w_m2": 735.096,
+    "dni_promedio_w_m2": 977.535,
+    "dhi_promedio_w_m2": 66.105,
+    "temperatura_promedio_c": 24.219,
+    "viento_promedio_m_s": 1.742,
+    "hora_label": "10:00"
+  },
+  {
+    "hora": 11,
+    "ghi_promedio_w_m2": 884.299,
+    "dni_promedio_w_m2": 1001.672,
+    "dhi_promedio_w_m2": 77.771,
+    "temperatura_promedio_c": 26.574,
+    "viento_promedio_m_s": 2.231,
+    "hora_label": "11:00"
+  },
+  {
+    "hora": 12,
+    "ghi_promedio_w_m2": 964.346,
+    "dni_promedio_w_m2": 999.81,
+    "dhi_promedio_w_m2": 91.114,
+    "temperatura_promedio_c": 28.333,
+    "viento_promedio_m_s": 2.717,
+    "hora_label": "12:00"
+  },
+  {
+    "hora": 13,
+    "ghi_promedio_w_m2": 968.46,
+    "dni_promedio_w_m2": 986.461,
+    "dhi_promedio_w_m2": 98.024,
+    "temperatura_promedio_c": 29.396,
+    "viento_promedio_m_s": 3.284,
+    "hora_label": "13:00"
+  },
+  {
+    "hora": 14,
+    "ghi_promedio_w_m2": 904.807,
+    "dni_promedio_w_m2": 982.077,
+    "dhi_promedio_w_m2": 88.996,
+    "temperatura_promedio_c": 29.731,
+    "viento_promedio_m_s": 4.533,
+    "hora_label": "14:00"
+  },
+  {
+    "hora": 15,
+    "ghi_promedio_w_m2": 771.697,
+    "dni_promedio_w_m2": 957.113,
+    "dhi_promedio_w_m2": 79.454,
+    "temperatura_promedio_c": 29.54,
+    "viento_promedio_m_s": 6.079,
+    "hora_label": "15:00"
+  },
+  {
+    "hora": 16,
+    "ghi_promedio_w_m2": 582.441,
+    "dni_promedio_w_m2": 912.36,
+    "dhi_promedio_w_m2": 64.914,
+    "temperatura_promedio_c": 28.509,
+    "viento_promedio_m_s": 7.276,
+    "hora_label": "16:00"
+  },
+  {
+    "hora": 17,
+    "ghi_promedio_w_m2": 358.83,
+    "dni_promedio_w_m2": 831.213,
+    "dhi_promedio_w_m2": 48.232,
+    "temperatura_promedio_c": 26.313,
+    "viento_promedio_m_s": 7.056,
+    "hora_label": "17:00"
+  },
+  {
+    "hora": 18,
+    "ghi_promedio_w_m2": 127.793,
+    "dni_promedio_w_m2": 532.728,
+    "dhi_promedio_w_m2": 23.938,
+    "temperatura_promedio_c": 23.45,
+    "viento_promedio_m_s": 4.821,
+    "hora_label": "18:00"
+  },
+  {
+    "hora": 19,
+    "ghi_promedio_w_m2": 11.229,
+    "dni_promedio_w_m2": 105.188,
+    "dhi_promedio_w_m2": 3.822,
+    "temperatura_promedio_c": 20.915,
+    "viento_promedio_m_s": 3.129,
+    "hora_label": "19:00"
+  },
+  {
+    "hora": 20,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 19.047,
+    "viento_promedio_m_s": 2.595,
+    "hora_label": "20:00"
+  },
+  {
+    "hora": 21,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 17.531,
+    "viento_promedio_m_s": 2.245,
+    "hora_label": "21:00"
+  },
+  {
+    "hora": 22,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 16.122,
+    "viento_promedio_m_s": 2.025,
+    "hora_label": "22:00"
+  },
+  {
+    "hora": 23,
+    "ghi_promedio_w_m2": 0.0,
+    "dni_promedio_w_m2": 0.0,
+    "dhi_promedio_w_m2": 0.0,
+    "temperatura_promedio_c": 14.908,
+    "viento_promedio_m_s": 1.798,
+    "hora_label": "23:00"
+  }
+]
