@@ -178,3 +178,603 @@ function money(v){ if(v===undefined||v===null||Number.isNaN(Number(v))) return "
 function sum(rows,k){ return rows.reduce((a,b)=>a+(Number(b[k])||0),0); }
 function max(rows,k){ return rows.reduce((m,b)=>Math.max(m,Number(b[k])||0),0); }
 function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
+/* ============================================================
+   MÓDULO RECURSO SOLAR (TMY)
+   ------------------------------------------------------------
+   Este bloque carga los datos JSON del TMY del Explorador Solar
+   y alimenta la vista "Recurso Solar (TMY)" del dashboard.
+   ============================================================ */
+
+(() => {
+  const SOLAR_DATA_URL = "data/recurso_solar_tmy_dashboard_bundle.json";
+
+  const solarState = {
+    loaded: false,
+    bundle: null,
+    charts: {},
+  };
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function formatNumber(value, decimals = 2) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    return Number(value).toLocaleString("es-CL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function formatInteger(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    return Number(value).toLocaleString("es-CL", {
+      maximumFractionDigits: 0,
+    });
+  }
+
+  function setText(id, value) {
+    const el = byId(id);
+    if (el) el.textContent = value;
+  }
+
+  function destroySolarCharts() {
+    Object.values(solarState.charts).forEach((chart) => {
+      if (chart && typeof chart.destroy === "function") {
+        chart.destroy();
+      }
+    });
+
+    solarState.charts = {};
+  }
+
+  function getCssColor(variableName, fallback) {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+
+    return value || fallback;
+  }
+
+  function chartBaseOptions(extra = {}) {
+    const gridColor = "rgba(140, 170, 210, 0.16)";
+    const tickColor = "#b8cbe3";
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: tickColor,
+            boxWidth: 14,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: "rgba(3, 18, 34, 0.95)",
+          titleColor: "#ffffff",
+          bodyColor: "#d7e8ff",
+          borderColor: "rgba(91, 141, 196, 0.45)",
+          borderWidth: 1,
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: tickColor,
+          },
+          grid: {
+            color: gridColor,
+          },
+        },
+        y: {
+          ticks: {
+            color: tickColor,
+          },
+          grid: {
+            color: gridColor,
+          },
+        },
+      },
+      ...extra,
+    };
+  }
+
+  function lineDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      borderColor: color,
+      backgroundColor: color,
+      borderWidth: 2,
+      pointRadius: 2,
+      pointHoverRadius: 4,
+      tension: 0.28,
+      fill: false,
+      yAxisID,
+    };
+  }
+
+  function barDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      backgroundColor: color,
+      borderColor: color,
+      borderWidth: 1,
+      yAxisID,
+    };
+  }
+
+  async function loadSolarBundle() {
+    if (solarState.loaded && solarState.bundle) {
+      return solarState.bundle;
+    }
+
+    try {
+      const response = await fetch(SOLAR_DATA_URL, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const bundle = await response.json();
+      solarState.bundle = bundle;
+      solarState.loaded = true;
+
+      return bundle;
+    } catch (error) {
+      console.error("No se pudo cargar el JSON del recurso solar TMY:", error);
+      return null;
+    }
+  }
+
+  function renderSolarKpis(kpis) {
+    if (!kpis) return;
+
+    setText("solarKpiGhiDaily", formatNumber(kpis.ghi_promedio_diario_kwh_m2_dia, 3));
+    setText("solarKpiDniDaily", formatNumber(kpis.dni_promedio_diario_kwh_m2_dia, 3));
+    setText("solarKpiDhiDaily", formatNumber(kpis.dhi_promedio_diario_kwh_m2_dia, 3));
+    setText("solarKpiGhiAnnual", formatNumber(kpis.ghi_anual_kwh_m2_anio, 0));
+    setText("solarKpiTemp", formatNumber(kpis.temperatura_media_anual_c, 1));
+    setText("solarKpiWind", formatNumber(kpis.viento_media_anual_m_s, 1));
+  }
+
+  function renderSolarMetadata(metadata) {
+    if (!metadata) return;
+
+    setText("solarMetaFuente", metadata.fuente || "Explorador Solar");
+    setText("solarMetaTipo", metadata.tipo_dato || "TMY");
+    setText("solarMetaUbicacion", metadata.ubicacion || "María Elena / CEME1");
+
+    const lat = metadata.latitude !== null && metadata.latitude !== undefined
+      ? `${formatNumber(metadata.latitude, 4)}°`
+      : "--";
+
+    const lon = metadata.longitude !== null && metadata.longitude !== undefined
+      ? `${formatNumber(metadata.longitude, 4)}°`
+      : "--";
+
+    const elev = metadata.elevation_m !== null && metadata.elevation_m !== undefined
+      ? `${formatNumber(metadata.elevation_m, 0)} m`
+      : "--";
+
+    setText("solarMetaLat", lat);
+    setText("solarMetaLon", lon);
+    setText("solarMetaElev", elev);
+  }
+
+  function renderSolarPerfilHorario(perfil) {
+    const canvas = byId("solarPerfilHorarioChart");
+    if (!canvas || !Array.isArray(perfil)) return;
+
+    const labels = perfil.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`);
+
+    solarState.charts.perfilHorario = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("GHI", perfil.map((row) => row.ghi_promedio_w_m2), "#f2c94c"),
+          lineDataset("DNI", perfil.map((row) => row.dni_promedio_w_m2), "#f2994a"),
+          lineDataset("DHI", perfil.map((row) => row.dhi_promedio_w_m2), "#2d9cdb"),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: {
+              color: "#b8cbe3",
+              maxRotation: 0,
+              autoSkip: true,
+              maxTicksLimit: 12,
+            },
+            grid: {
+              color: "rgba(140, 170, 210, 0.16)",
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "W/m²",
+              color: "#b8cbe3",
+            },
+            ticks: {
+              color: "#b8cbe3",
+            },
+            grid: {
+              color: "rgba(140, 170, 210, 0.16)",
+            },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSolarMensualPromedio(mensual) {
+    const canvas = byId("solarMensualPromedioChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const labels = mensual.map((row) => row.mes_corto);
+
+    solarState.charts.mensualPromedio = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("GHI", mensual.map((row) => row.ghi_kwh_m2_dia_promedio), "#f2c94c"),
+          lineDataset("DNI", mensual.map((row) => row.dni_kwh_m2_dia_promedio), "#f2994a"),
+          lineDataset("DHI", mensual.map((row) => row.dhi_kwh_m2_dia_promedio), "#2d9cdb"),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "kWh/m²/día",
+              color: "#b8cbe3",
+            },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSolarMensualAcumulada(mensual) {
+    const canvas = byId("solarMensualAcumuladaChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const labels = mensual.map((row) => row.mes_corto);
+
+    solarState.charts.mensualAcumulada = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("GHI", mensual.map((row) => row.ghi_kwh_m2_mes), "#f2c94c"),
+          barDataset("DNI", mensual.map((row) => row.dni_kwh_m2_mes), "#f2994a"),
+          barDataset("DHI", mensual.map((row) => row.dhi_kwh_m2_mes), "#2d9cdb"),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.12)" },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "kWh/m²/mes",
+              color: "#b8cbe3",
+            },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSolarTemperatura(mensual) {
+    const canvas = byId("solarTemperaturaChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const labels = mensual.map((row) => row.mes_corto);
+
+    solarState.charts.temperatura = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("Temperatura media", mensual.map((row) => row.temperatura_media_c), "#ff6b6b"),
+          lineDataset("Temperatura máxima", mensual.map((row) => row.temperatura_max_c), "#ffb3b3"),
+          lineDataset("Temperatura mínima", mensual.map((row) => row.temperatura_min_c), "#9ec5ff"),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "°C",
+              color: "#b8cbe3",
+            },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSolarViento(mensual) {
+    const canvas = byId("solarVientoChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const labels = mensual.map((row) => row.mes_corto);
+
+    solarState.charts.viento = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("Velocidad media", mensual.map((row) => row.viento_media_m_s), "#4ade80"),
+          lineDataset("Velocidad máxima", mensual.map((row) => row.viento_max_m_s), "#e5e7eb"),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.12)" },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "m/s",
+              color: "#b8cbe3",
+            },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.16)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function colorForGhi(value, maxValue) {
+    if (!value || value <= 0) return "rgba(4, 13, 27, 0.95)";
+
+    const ratio = Math.max(0, Math.min(1, value / maxValue));
+
+    const r = Math.round(25 + ratio * 230);
+    const g = Math.round(70 + ratio * 170);
+    const b = Math.round(120 - ratio * 80);
+
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function renderSolarHeatmap(horario) {
+    const canvas = byId("solarHeatmapGhi");
+    if (!canvas || !Array.isArray(horario)) return;
+
+    const ctx = canvas.getContext("2d");
+    const parent = canvas.parentElement;
+
+    const cssWidth = parent.clientWidth || 600;
+    const cssHeight = parent.clientHeight || 280;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = cssWidth * dpr;
+    canvas.height = cssHeight * dpr;
+    canvas.style.width = `${cssWidth}px`;
+    canvas.style.height = `${cssHeight}px`;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+    const margin = {
+      left: 44,
+      right: 18,
+      top: 18,
+      bottom: 30,
+    };
+
+    const plotW = cssWidth - margin.left - margin.right;
+    const plotH = cssHeight - margin.top - margin.bottom;
+
+    const maxGhi = Math.max(...horario.map((row) => Number(row.ghi) || 0), 1);
+
+    const cellW = plotW / 365;
+    const cellH = plotH / 24;
+
+    horario.forEach((row) => {
+      const day = Number(row.dia_tmy);
+      const hour = Number(row.hora);
+      const ghi = Number(row.ghi) || 0;
+
+      if (!day || hour < 0 || hour > 23) return;
+
+      const x = margin.left + (day - 1) * cellW;
+      const y = margin.top + (23 - hour) * cellH;
+
+      ctx.fillStyle = colorForGhi(ghi, maxGhi);
+      ctx.fillRect(x, y, Math.max(cellW + 0.5, 1), Math.max(cellH + 0.5, 1));
+    });
+
+    ctx.strokeStyle = "rgba(184, 203, 227, 0.45)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(margin.left, margin.top, plotW, plotH);
+
+    ctx.fillStyle = "#b8cbe3";
+    ctx.font = "11px Arial";
+    ctx.textAlign = "center";
+
+    const monthTicks = [
+      { d: 15, label: "Ene" },
+      { d: 46, label: "Feb" },
+      { d: 74, label: "Mar" },
+      { d: 105, label: "Abr" },
+      { d: 135, label: "May" },
+      { d: 166, label: "Jun" },
+      { d: 196, label: "Jul" },
+      { d: 227, label: "Ago" },
+      { d: 258, label: "Sep" },
+      { d: 288, label: "Oct" },
+      { d: 319, label: "Nov" },
+      { d: 349, label: "Dic" },
+    ];
+
+    monthTicks.forEach((tick) => {
+      const x = margin.left + (tick.d - 1) * cellW;
+      ctx.fillText(tick.label, x, cssHeight - 10);
+    });
+
+    ctx.textAlign = "right";
+
+    [0, 6, 12, 18, 23].forEach((hour) => {
+      const y = margin.top + (23 - hour) * cellH + 4;
+      ctx.fillText(String(hour).padStart(2, "0"), margin.left - 8, y);
+    });
+
+    ctx.save();
+    ctx.translate(13, margin.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = "center";
+    ctx.fillText("Hora del día", 0, 0);
+    ctx.restore();
+
+    ctx.textAlign = "left";
+    ctx.fillText(`GHI máx.: ${formatNumber(maxGhi, 0)} W/m²`, margin.left, 12);
+  }
+
+  async function renderSolarView() {
+    const bundle = await loadSolarBundle();
+
+    if (!bundle) {
+      console.warn("No hay datos solares disponibles para renderizar.");
+      return;
+    }
+
+    renderSolarKpis(bundle.kpis);
+    renderSolarMetadata(bundle.metadata);
+
+    destroySolarCharts();
+
+    renderSolarPerfilHorario(bundle.perfil_horario);
+    renderSolarMensualPromedio(bundle.mensual);
+    renderSolarMensualAcumulada(bundle.mensual);
+    renderSolarTemperatura(bundle.mensual);
+    renderSolarViento(bundle.mensual);
+
+    setTimeout(() => {
+      renderSolarHeatmap(bundle.horario);
+    }, 50);
+  }
+
+  function showDashboardView(viewName) {
+    const target = byId(`view-${viewName}`);
+
+    if (!target) {
+      console.warn(`La vista '${viewName}' aún no está implementada.`);
+      return;
+    }
+
+    document.querySelectorAll(".dashboard-view").forEach((view) => {
+      view.classList.remove("active");
+    });
+
+    target.classList.add("active");
+
+    document.querySelectorAll(".side-nav a[data-view]").forEach((link) => {
+      link.classList.toggle("active", link.dataset.view === viewName);
+    });
+
+    if (viewName === "solar") {
+      renderSolarView();
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setupDashboardNavigation() {
+    document.querySelectorAll(".side-nav a[data-view]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        const viewName = link.dataset.view;
+
+        if (!byId(`view-${viewName}`)) {
+          console.warn(`Vista no disponible todavía: ${viewName}`);
+          return;
+        }
+
+        showDashboardView(viewName);
+      });
+    });
+  }
+
+  function setupSolarResizeHandler() {
+    let resizeTimer = null;
+
+    window.addEventListener("resize", () => {
+      const solarView = byId("view-solar");
+
+      if (!solarView || !solarView.classList.contains("active")) {
+        return;
+      }
+
+      clearTimeout(resizeTimer);
+
+      resizeTimer = setTimeout(() => {
+        if (solarState.bundle && Array.isArray(solarState.bundle.horario)) {
+          renderSolarHeatmap(solarState.bundle.horario);
+        }
+      }, 200);
+    });
+  }
+
+  function initSolarModule() {
+    setupDashboardNavigation();
+    setupSolarResizeHandler();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSolarModule);
+  } else {
+    initSolarModule();
+  }
+})();
+
+
+
+
+
+
+
+
+
+
