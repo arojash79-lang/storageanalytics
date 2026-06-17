@@ -1,1 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">ϟ</div>
+      <div class="brand-text">
+        <strong>STORAGE</strong>
+        <strong>ANALYTICS</strong>
+      </div>
+    </div>
 
+    <div class="side-subtitle">SCADA SIMULADOR<br>FV + BESS</div>
+
+    <nav class="side-nav">
+  <a class="active" href="#" data-view="general"><span>⌂</span> Vista General</a>
+  <a href="#" data-view="solar"><span>☼</span> Recurso Solar (TMY)</a>
+  <a href="#" data-view="planta"><span>♜</span> Planta FV (SAM)</a>
+  <a href="#" data-view="bess"><span>▣</span> Operación BESS</a>
+  <a href="#" data-view="economia"><span>$</span> Economía</a>
+  <a href="#" data-view="estrategias"><span>▦</span> Estrategias</a>
+  <a href="#" data-view="comparador"><span>⌁</span> Comparador</a>
+  <a href="#" data-view="reportes"><span>▤</span> Reportes</a>
+  <a href="#" data-view="configuracion"><span>⚙</span> Configuración</a>
+  <a href="#" data-view="ayuda"><span>?</span> Ayuda</a>
+</nav>
+
+    <section class="active-strategy">
+      <p>ESTRATEGIA ACTIVA</p>
+      <h3 id="strategyName"><span class="badge-dot"></span> Sin datos</h3>
+      <small id="strategyDescription">Seleccione una estrategia o cargue archivos JSON.</small>
+      <button id="changeStrategyBtn" type="button">Cambiar estrategia</button>
+    </section>
+  </aside>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>CEME1 FV + DUNE BESS</h1>
+        <p>SCADA - OPERACIÓN HORARIA SIMULADA</p>
+      </div>
+
+      <div class="top-controls">
+        <label class="date-pill">
+          <input id="dateInput" type="date" value="2025-05-15" />
+        </label>
+        <span class="muted-label">Día seleccionado</span>
+        <button id="playBtn" class="control primary" type="button">▷ Play</button>
+        <button id="pauseBtn" class="control" type="button">Ⅱ Pausa</button>
+        <button id="resetBtn" class="control" type="button">↻ Reiniciar</button>
+        <span class="muted-label">Velocidad</span>
+        <select id="speedSelect" class="control select">
+          <option value="1600">1x</option>
+          <option value="700" selected>10x</option>
+          <option value="300">50x</option>
+          <option value="120">100x</option>
+        </select>
+      </div>
+    </header>
+<section id="view-general" class="dashboard-view active">
+    <section class="sim-strip card">
+      <div class="sim-state">
+        <span class="live-dot"></span>
+        <span>EN SIMULACIÓN</span>
+        <small>Hora simulada:</small>
+        <strong id="simHour">--:--</strong>
+        <em id="simDate">Sin datos</em>
+      </div>
+      <div class="time-runner">
+        <div class="bubble" id="sliderBubble">--:--</div>
+        <input id="timeSlider" type="range" min="0" max="0" value="0" />
+        <div class="time-scale">
+          <span>00:00</span><span>03:00</span><span>06:00</span><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span><span>21:00</span><span>24:00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi-row">
+      <article class="kpi-card yellow">
+        <div class="kpi-icon">☀</div>
+        <div class="kpi-content"><p>RADIACIÓN GHI</p><h2><span id="ghi">--</span> <small>W/m²</small></h2><small id="ghiSub">Máx. día: -- W/m²</small></div>
+        <canvas id="sparkGhi"></canvas>
+      </article>
+      <article class="kpi-card green">
+        <div class="kpi-icon">▦</div>
+        <div class="kpi-content"><p>PRODUCCIÓN FV (AC)</p><h2><span id="fv">--</span> <small>MW</small></h2><small id="fvSub">Máx. día: -- MW</small></div>
+        <canvas id="sparkFv"></canvas>
+      </article>
+      <article class="kpi-card orange">
+        <div class="kpi-icon">☁</div>
+        <div class="kpi-content"><p>CURTAILMENT</p><h2><span id="curtailment">--</span> <small>MW</small></h2><small id="curtSub">-- % de la producción</small></div>
+        <canvas id="sparkCurt"></canvas>
+      </article>
+      <article class="kpi-card green">
+        <div class="kpi-icon">♜</div>
+        <div class="kpi-content"><p>INYECCIÓN A RED</p><h2><span id="inyeccion">--</span> <small>MW</small></h2><small id="injSub">-- % de la producción</small></div>
+        <canvas id="sparkInj"></canvas>
+      </article>
+      <article class="kpi-card blue">
+        <div class="kpi-icon">▣</div>
+        <div class="kpi-content"><p>CARGA BESS</p><h2><span id="carga">--</span> <small>MW</small></h2><small>Potencia de carga</small></div>
+        <canvas id="sparkCarga"></canvas>
+      </article>
+      <article class="kpi-card purple">
+        <div class="kpi-icon">▣</div>
+        <div class="kpi-content"><p>DESCARGA BESS</p><h2><span id="descarga">--</span> <small>MW</small></h2><small>Potencia de descarga</small></div>
+        <canvas id="sparkDescarga"></canvas>
+      </article>
+      <article class="kpi-card soc-card">
+        <p>SOC BESS</p>
+        <div class="soc-ring"><span id="soc">--</span><small>%</small></div>
+      </article>
+      <article class="kpi-card violet">
+        <div class="kpi-icon">$</div>
+        <div class="kpi-content"><p>PMg MIRAGE 220</p><h2><span id="pmg">--</span> <small>USD/MWh</small></h2><small id="pmgSub">Promedio día: --</small></div>
+        <canvas id="sparkPmg"></canvas>
+      </article>
+    </section>
+
+    <section class="grid-main">
+      <article class="card operation-panel">
+        <div class="panel-head"><h3>OPERACIÓN HORARIA DEL SISTEMA</h3></div>
+        <div class="legend-line">
+          <span class="lg green"></span>Producción FV (AC)
+          <span class="lg cyan"></span>Inyección a Red
+          <span class="lg orange"></span>Curtailment
+          <span class="lg blue"></span>Carga BESS
+          <span class="lg purple"></span>Descarga BESS
+          <span class="lg yellow"></span>PMg Mirage 220
+        </div>
+        <div class="chart-box chart-large"><canvas id="operationChart"></canvas></div>
+      </article>
+
+      <article class="card bess-state">
+        <h3>ESTADO BESS</h3>
+        <div class="battery-wrap">
+          <div class="battery-head"></div>
+          <div class="battery"><div id="batteryFill"></div></div>
+          <strong>SOC<br><span id="socLarge">--%</span></strong>
+        </div>
+        <ul class="kv-list">
+          <li><span>Energía almacenada</span><strong id="energiaAlmacenada">-- MWh</strong></li>
+          <li><span>Energía nominal</span><strong id="energiaNominal">-- MWh</strong></li>
+          <li><span>Potencia máx. carga</span><strong id="pMaxCarga">-- MW</strong></li>
+          <li><span>Potencia máx. descarga</span><strong id="pMaxDescarga">-- MW</strong></li>
+          <li><span>Eficiencia (ida y vuelta)</span><strong id="eficiencia">-- %</strong></li>
+          <li><span>Temperatura</span><strong id="temperatura">-- °C</strong></li>
+          <li><span>SOH</span><strong id="soh">-- %</strong></li>
+          <li><span>EFC acumulados</span><strong id="efc">--</strong></li>
+        </ul>
+      </article>
+
+      <article class="card daily-summary">
+        <h3>RESUMEN DEL DÍA <small>(ACUMULADO HASTA HORA ACTUAL)</small></h3>
+        <ul class="kv-list large-kv">
+          <li><span>Energía FV generada</span><strong id="energiaFvDia">-- MWh</strong></li>
+          <li><span>Energía inyectada a red</span><strong id="energiaInyDia">-- MWh</strong></li>
+          <li><span>Curtailment total</span><strong id="curtailmentDia">-- MWh</strong></li>
+          <li><span>Energía cargada BESS</span><strong id="cargaDia">-- MWh</strong></li>
+          <li><span>Energía descargada BESS</span><strong id="descargaDia">-- MWh</strong></li>
+          <li><span>Curtailment recuperado</span><strong id="curtRecDia">-- MWh</strong></li>
+          <li><span>Ingreso acumulado</span><strong id="ingreso">-- USD</strong></li>
+          <li><span>Costo degradación</span><strong id="costoDeg">-- USD</strong></li>
+        </ul>
+        <div class="benefit-line"><span>Beneficio neto acumulado</span><strong id="beneficio">-- USD</strong></div>
+      </article>
+    </section>
+
+    <section class="grid-secondary">
+      <article class="card"><h3>RADIACIÓN SOLAR</h3><div class="chart-box small"><canvas id="radiationChart"></canvas></div></article>
+      <article class="card"><h3>SOC BESS (%)</h3><div class="chart-box small"><canvas id="socChart"></canvas></div></article>
+      <article class="card"><h3>PMg MIRAGE 220</h3><div class="chart-box small"><canvas id="pmgChart"></canvas></div></article>
+      <article class="card degradation">
+        <h3>DEGRADACIÓN <small>(ACUMULADA)</small></h3>
+        <ul class="kv-list compact">
+          <li><span>Pérdida de capacidad</span><strong id="perdidaCapacidad">-- %</strong></li>
+          <li><span>SOH actual</span><strong id="sohActual">-- %</strong></li>
+          <li><span>Costo degradación</span><strong id="costoDeg2">-- USD</strong></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid-bottom">
+      <article class="card strategy-table-card">
+        <h3>COMPARATIVA DE ESTRATEGIAS <small>(RESULTADOS ANUALES)</small></h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Estrategia</th><th>Ingreso anual (USD)</th><th>Costo degradación (USD)</th><th>Beneficio neto (USD)</th><th>SOH final (%)</th><th>EFC/año</th><th>Curtailment recuperado (MWh)</th><th>USD / MWh descargado</th><th>USD / %SOH perdido</th>
+              </tr>
+            </thead>
+            <tbody id="strategyTable"><tr><td colspan="9">Sin datos cargados</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+      <article class="card recommendation">
+        <h3>RECOMENDACIÓN</h3>
+        <p id="recommendationText">La recomendación aparecerá cuando se carguen los resultados de estrategias.</p>
+        <small>Estrategia recomendada:</small>
+        <strong id="recommendedStrategy">Sin datos</strong>
+        <button type="button">Ver análisis detallado →</button>
+      </article>
+    </section>
+    <!-- FIN VISTA GENERAL -->
+  </section>
+
+    <!-- =======================================================
+         VISTA RECURSO SOLAR (TMY)
+         ======================================================= -->
+    <section id="view-solar" class="dashboard-view">
+      <section class="solar-header card">
+        <div>
+          <p class="section-eyebrow">RECURSO SOLAR — AÑO METEOROLÓGICO TÍPICO</p>
+          <h2>Caracterización meteorológica TMY — María Elena</h2>
+          <p>
+            Visualización de GHI, DNI, DHI, temperatura ambiente y velocidad del viento
+            a partir del archivo TMY del Explorador Solar.
+          </p>
+        </div>
+
+        <div class="method-note">
+          <strong>Nota metodológica</strong>
+          <span>
+            Las irradiancias corresponden al Año Meteorológico Típico (TMY) del Explorador Solar.
+            Representan condiciones típicas de largo plazo y no mediciones reales de un año calendario específico.
+          </span>
+        </div>
+      </section>
+
+      <section class="solar-kpi-row" id="solarKpiCards">
+        <article class="kpi-card yellow">
+          <div class="kpi-icon">☀</div>
+          <div class="kpi-content">
+            <p>GHI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiGhiDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Global horizontal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card orange">
+          <div class="kpi-icon">◉</div>
+          <div class="kpi-content">
+            <p>DNI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiDniDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Directa normal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card blue">
+          <div class="kpi-icon">☁</div>
+          <div class="kpi-content">
+            <p>DHI PROMEDIO DIARIA</p>
+            <h2><span id="solarKpiDhiDaily">--</span> <small>kWh/m²/día</small></h2>
+            <small>Difusa horizontal</small>
+          </div>
+        </article>
+
+        <article class="kpi-card green">
+          <div class="kpi-icon">▦</div>
+          <div class="kpi-content">
+            <p>GHI ANUAL</p>
+            <h2><span id="solarKpiGhiAnnual">--</span> <small>kWh/m²/año</small></h2>
+            <small>Recurso global anual</small>
+          </div>
+        </article>
+
+        <article class="kpi-card violet">
+          <div class="kpi-icon">°C</div>
+          <div class="kpi-content">
+            <p>TEMPERATURA MEDIA</p>
+            <h2><span id="solarKpiTemp">--</span> <small>°C</small></h2>
+            <small>Promedio anual TMY</small>
+          </div>
+        </article>
+
+        <article class="kpi-card green">
+          <div class="kpi-icon">≋</div>
+          <div class="kpi-content">
+            <p>VIENTO MEDIO</p>
+            <h2><span id="solarKpiWind">--</span> <small>m/s</small></h2>
+            <small>Promedio anual TMY</small>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-main">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>PERFIL HORARIO PROMEDIO ANUAL</h3>
+            <small>GHI, DNI y DHI en W/m²</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarPerfilHorarioChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>IRRADIACIÓN DIARIA PROMEDIO MENSUAL</h3>
+            <small>kWh/m²/día</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarMensualPromedioChart"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-main">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>IRRADIACIÓN MENSUAL ACUMULADA</h3>
+            <small>kWh/m²/mes</small>
+          </div>
+          <div class="chart-box chart-medium">
+            <canvas id="solarMensualAcumuladaChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>MAPA DE CALOR GHI</h3>
+            <small>Hora del día vs día del año típico</small>
+          </div>
+          <div class="heatmap-box">
+            <canvas id="solarHeatmapGhi"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="solar-grid-secondary">
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>TEMPERATURA AMBIENTE MENSUAL</h3>
+            <small>Promedio mensual y rango térmico</small>
+          </div>
+          <div class="chart-box small">
+            <canvas id="solarTemperaturaChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-chart-card">
+          <div class="panel-head">
+            <h3>VELOCIDAD DEL VIENTO MENSUAL</h3>
+            <small>Promedio mensual y máxima mensual</small>
+          </div>
+          <div class="chart-box small">
+            <canvas id="solarVientoChart"></canvas>
+          </div>
+        </article>
+
+        <article class="card solar-source-card">
+          <h3>FUENTE Y ALCANCE</h3>
+          <ul class="kv-list compact">
+            <li><span>Fuente</span><strong id="solarMetaFuente">Explorador Solar</strong></li>
+            <li><span>Tipo de dato</span><strong id="solarMetaTipo">TMY</strong></li>
+            <li><span>Ubicación</span><strong id="solarMetaUbicacion">María Elena / CEME1</strong></li>
+            <li><span>Latitud</span><strong id="solarMetaLat">--</strong></li>
+            <li><span>Longitud</span><strong id="solarMetaLon">--</strong></li>
+            <li><span>Elevación</span><strong id="solarMetaElev">--</strong></li>
+          </ul>
+        </article>
+      </section>
+    </section>
+    <!-- FIN VISTA RECURSO SOLAR -->
+
+    <!-- =======================================================
+         VISTA PLANTA FV (SAM)
+         ======================================================= -->
+    <section id="view-planta" class="dashboard-view">
+      <section class="plant-header card">
+        <div>
+          <p class="section-eyebrow">PLANTA FV — MODELACIÓN SAM</p>
+          <h2>Planta FV CEME1 — arquitectura modelada en SAM</h2>
+          <p>
+            Arquitectura equivalente de la planta FV CEME1 modelada a partir de 6 submodelos representativos,
+            configuración estructural en V invertida Este/Oeste, módulos JAM72-S30-540/545-MR e inversores
+            Sungrow SG3125-HV-30.
+          </p>
+        </div>
+
+        <div class="method-note plant-note">
+          <strong>Nota metodológica</strong>
+          <span>
+            Esta vista describe la arquitectura técnica usada para representar CEME1 en SAM. Los resultados
+            energéticos de Egrid se incorporarán en la pestaña Desempeño Energético una vez ejecutada la simulación.
+          </span>
+        </div>
+      </section>
+
+      <section class="plant-tabs card">
+        <button class="plant-tab active" type="button" data-plant-tab="arquitectura">Arquitectura</button>
+        <button class="plant-tab" type="button" data-plant-tab="energia">Desempeño Energético</button>
+      </section>
+
+      <section id="plant-tab-arquitectura" class="plant-tab-panel active">
+        <section class="plant-kpi-row">
+          <article class="kpi-card green">
+            <div class="kpi-icon">▧</div>
+            <div class="kpi-content">
+              <p>SUBMODELOS EQUIVALENTES</p>
+              <h2>6</h2>
+              <small>SC01 a SC06</small>
+            </div>
+          </article>
+
+          <article class="kpi-card blue">
+            <div class="kpi-icon">⌁</div>
+            <div class="kpi-content">
+              <p>STRINGS TOTALES</p>
+              <h2>29.424 <small>strings</small></h2>
+              <small>cadenas FV modeladas</small>
+            </div>
+          </article>
+
+          <article class="kpi-card purple">
+            <div class="kpi-icon">▣</div>
+            <div class="kpi-content">
+              <p>INVERSORES TOTALES</p>
+              <h2>120</h2>
+              <small>SG3125-HV-30</small>
+            </div>
+          </article>
+
+          <article class="kpi-card orange">
+            <div class="kpi-icon">◈</div>
+            <div class="kpi-content">
+              <p>ORIENTACIÓN</p>
+              <h2>Este / Oeste</h2>
+              <small>distribución simétrica</small>
+            </div>
+          </article>
+
+          <article class="kpi-card green">
+            <div class="kpi-icon">V</div>
+            <div class="kpi-content">
+              <p>CONFIGURACIÓN</p>
+              <h2>V invertida</h2>
+              <small>estructura fija, 5°</small>
+            </div>
+          </article>
+
+          <article class="kpi-card yellow">
+            <div class="kpi-icon">▦</div>
+            <div class="kpi-content">
+              <p>MÓDULOS FV</p>
+              <h2>540 / 545 <small>Wp</small></h2>
+              <small>JAM72-S30-MR</small>
+            </div>
+          </article>
+        </section>
+
+        <section class="plant-layout-main">
+          <article class="card plant-singleline-card">
+            <div class="panel-head">
+              <h3>DIAGRAMA UNIFILAR EQUIVALENTE</h3>
+              <small>6 submodelos FV → inversores → punto de inyección</small>
+            </div>
+
+            <div class="singleline-legend">
+              <span><i class="dc-line"></i> DC / strings FV</span>
+              <span><i class="ac-line"></i> AC / salida inversores</span>
+            </div>
+
+            <div class="ceme1-svg-wrap ceme1-svg-wrap-v5" aria-label="Diagrama unifilar equivalente CEME1">
+              <svg class="ceme1-singleline-svg ceme1-singleline-svg-v5" viewBox="0 0 1180 520" preserveAspectRatio="xMidYMin meet" role="img" aria-labelledby="ceme1UnifilarTitle ceme1UnifilarDesc">
+                <title id="ceme1UnifilarTitle">Diagrama unifilar equivalente CEME1</title>
+                <desc id="ceme1UnifilarDesc">Seis submodelos fotovoltaicos SC01 a SC06 conectados a inversores SG3125-HV-30, barra AC equivalente y punto de inyección.</desc>
+
+                <defs>
+                  <filter id="softGlowV5" x="-45%" y="-45%" width="190%" height="190%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+
+                  <linearGradient id="panelGradientV5" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#0b2c51" />
+                    <stop offset="55%" stop-color="#04162a" />
+                    <stop offset="100%" stop-color="#020b17" />
+                  </linearGradient>
+
+                  <linearGradient id="moduleGradientV5" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#45b7ff" />
+                    <stop offset="48%" stop-color="#176bd6" />
+                    <stop offset="100%" stop-color="#062763" />
+                  </linearGradient>
+
+                  <linearGradient id="inverterGradientV5" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#0e5e81" />
+                    <stop offset="100%" stop-color="#031320" />
+                  </linearGradient>
+
+                  <linearGradient id="busGradientV5" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#6ec2ff" />
+                    <stop offset="50%" stop-color="#2f90ff" />
+                    <stop offset="100%" stop-color="#6ec2ff" />
+                  </linearGradient>
+
+                  <marker id="arrowDcV5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd847" />
+                  </marker>
+
+                  <marker id="arrowAcV5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#4aa8ff" />
+                  </marker>
+
+                  <symbol id="pvModuleV5" viewBox="0 0 80 52">
+                    <polygon points="10,3 77,3 69,49 2,49" fill="url(#moduleGradientV5)" stroke="#8dd5ff" stroke-width="1.5" filter="url(#softGlowV5)" />
+                    <line x1="24" y1="4" x2="16" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
+                    <line x1="42" y1="4" x2="34" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
+                    <line x1="60" y1="4" x2="52" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
+                    <line x1="7" y1="18" x2="74" y2="18" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
+                    <line x1="5" y1="33" x2="72" y2="33" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
+                  </symbol>
+
+                  <symbol id="inverterIconV5" viewBox="0 0 64 64">
+                    <rect x="4" y="4" width="56" height="56" rx="9" fill="url(#inverterGradientV5)" stroke="#69e3ff" stroke-width="2.5" filter="url(#softGlowV5)" />
+                    <text x="32" y="27" text-anchor="middle" class="svg-inv-v5">DC</text>
+                    <line x1="17" y1="33" x2="47" y2="33" stroke="#69e3ff" stroke-width="1.6" />
+                    <text x="32" y="49" text-anchor="middle" class="svg-inv-v5">AC</text>
+                  </symbol>
+                </defs>
+
+                <style>
+                  .svg-title-v5 { fill: #ffffff; font: 900 17px Arial, sans-serif; letter-spacing: .2px; }
+                  .svg-subtitle-v5 { fill: #9ec3e8; font: 500 12px Arial, sans-serif; }
+                  .svg-label-v5 { fill: #ffffff; font: 900 13px Arial, sans-serif; }
+                  .svg-small-v5 { fill: #c9d9ea; font: 600 11px Arial, sans-serif; }
+                  .svg-muted-v5 { fill: #93b5d2; font: 500 10px Arial, sans-serif; }
+                  .svg-yellow-v5 { fill: #ffd847; font: 900 12.5px Arial, sans-serif; }
+                  .svg-blue-v5 { fill: #8fd0ff; font: 900 12px Arial, sans-serif; }
+                  .svg-green-v5 { fill: #65ff57; font: 900 12px Arial, sans-serif; }
+                  .svg-inv-v5 { fill: #eaffff; font: 900 16px Arial, sans-serif; }
+                  .svg-row-bg-v5 { fill: rgba(7, 30, 55, 0.56); stroke: rgba(98, 165, 232, 0.20); stroke-width: 1; }
+                  .svg-sc-card-v5 { fill: rgba(2, 14, 28, 0.98); stroke: rgba(104, 180, 255, 0.70); stroke-width: 1.2; }
+                  .svg-dark-chip-v5 { fill: rgba(2, 12, 24, 0.80); stroke: rgba(255, 255, 255, 0.05); }
+                  .svg-dc-line-v5 { stroke: #ffd847; stroke-width: 2.2; stroke-dasharray: 8 8; marker-end: url(#arrowDcV5); }
+                  .svg-ac-line-v5 { stroke: #4aa8ff; stroke-width: 2.7; }
+                  .svg-ac-arrow-v5 { stroke: #4aa8ff; stroke-width: 2.8; marker-end: url(#arrowAcV5); }
+                  .svg-bus-v5 { stroke: url(#busGradientV5); stroke-width: 5; filter: url(#softGlowV5); }
+                  .svg-node-v5 { fill: #031225; stroke: #79caff; stroke-width: 2.4; filter: url(#softGlowV5); }
+                  .svg-injection-box-v5 { fill: rgba(7, 27, 48, 0.98); stroke: rgba(108, 190, 255, 0.85); stroke-width: 2; filter: url(#softGlowV5); }
+                  .svg-note-v5 { fill: rgba(3, 18, 34, 0.76); stroke: rgba(86, 151, 220, 0.22); }
+                </style>
+
+                <rect x="0" y="0" width="1180" height="520" rx="18" fill="url(#panelGradientV5)" opacity="0.72" />
+
+                <text x="18" y="27" class="svg-title-v5">Arquitectura FV equivalente por submodelos</text>
+                <text x="18" y="48" class="svg-subtitle-v5">6 submodelos FV → strings DC → inversores DC/AC → barra colectora AC → punto de inyección</text>
+
+                <line x1="810" y1="30" x2="848" y2="30" class="svg-dc-line-v5" />
+                <text x="860" y="34" class="svg-small-v5">DC / strings FV</text>
+                <line x1="990" y1="30" x2="1028" y2="30" class="svg-ac-line-v5" />
+                <text x="1040" y="34" class="svg-small-v5">AC / salida inversores</text>
+
+                <text x="903" y="62" class="svg-blue-v5">Barra AC equivalente</text>
+                <line x1="892" y1="78" x2="892" y2="388" class="svg-bus-v5" />
+
+                
+                <!-- SC01 -->
+                <g class="svg-row-v5" transform="translate(0,78)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC01</text>
+                  <text x="47" y="10" class="svg-small-v5">540 Wp · Este</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">2.976 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">12 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">37,5 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+                <!-- SC02 -->
+                <g class="svg-row-v5" transform="translate(0,140)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC02</text>
+                  <text x="47" y="10" class="svg-small-v5">540 Wp · Oeste</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">2.976 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">12 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">37,5 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+                <!-- SC03 -->
+                <g class="svg-row-v5" transform="translate(0,202)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC03</text>
+                  <text x="47" y="10" class="svg-small-v5">545 Wp · Este</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">5.040 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(240 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">21 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">65,6 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+                <!-- SC04 -->
+                <g class="svg-row-v5" transform="translate(0,264)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC04</text>
+                  <text x="47" y="10" class="svg-small-v5">545 Wp · Oeste</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">5.040 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(240 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">21 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">65,6 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+                <!-- SC05 -->
+                <g class="svg-row-v5" transform="translate(0,326)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC05</text>
+                  <text x="47" y="10" class="svg-small-v5">545 Wp · Este</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">6.696 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">27 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">84,4 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+                <!-- SC06 -->
+                <g class="svg-row-v5" transform="translate(0,388)">
+                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
+                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
+                  <text x="47" y="-5" class="svg-label-v5">SC06</text>
+                  <text x="47" y="10" class="svg-small-v5">545 Wp · Oeste</text>
+
+                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
+                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
+
+                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
+                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="263" y="-2" class="svg-yellow-v5">6.696 strings</text>
+                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
+
+                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
+
+                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
+                  <text x="603" y="-2" class="svg-label-v5">27 inversores</text>
+                  <text x="603" y="14" class="svg-muted-v5">84,4 MVA</text>
+
+                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
+                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
+                </g>
+
+                <circle cx="892" cy="233" r="6.5" class="svg-node-v5" />
+                <line x1="898" y1="233" x2="972" y2="233" class="svg-ac-arrow-v5" />
+
+                <rect x="972" y="178" width="145" height="110" rx="17" class="svg-injection-box-v5" />
+                <rect x="1018" y="199" width="55" height="55" rx="9" fill="rgba(8,34,59,0.98)" stroke="rgba(118,200,255,0.90)" stroke-width="1.8" />
+                <text x="1045.5" y="231" text-anchor="middle" class="svg-label-v5">kWh</text>
+                <text x="1045" y="274" text-anchor="middle" class="svg-label-v5">PUNTO DE</text>
+                <text x="1045" y="291" text-anchor="middle" class="svg-label-v5">INYECCIÓN</text>
+                <text x="1045" y="314" text-anchor="middle" class="svg-muted-v5">salida AC equivalente</text>
+
+                <rect x="18" y="458" width="1099" height="42" rx="12" class="svg-note-v5" />
+                <circle cx="38" cy="479" r="9" fill="rgba(0, 139, 255, 0.18)" stroke="#58b9ff" />
+                <text x="35" y="483" class="svg-blue-v5">i</text>
+                <text x="58" y="483" class="svg-small-v5">Representación equivalente:</text>
+                <text x="204" y="483" class="svg-blue-v5">SC01–SC06</text>
+                <text x="292" y="483" class="svg-small-v5">agrupan orientación Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</text>
+              </svg>
+            </div>
+          </article>
+
+          <article class="card plant-tech-card">
+            <h3>FICHA TÉCNICA DE MODELACIÓN</h3>
+            <ul class="kv-list compact">
+              <li><span>Planta</span><strong>CEME1</strong></li>
+              <li><span>Ubicación</span><strong>María Elena</strong></li>
