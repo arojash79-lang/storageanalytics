@@ -371,9 +371,238 @@
       </section>
     </section>
     <!-- FIN VISTA RECURSO SOLAR -->
-<section id="view-planta" class="dashboard-view">
-  ...
-</section>
+
+    <!-- =======================================================
+         VISTA PLANTA FV (SAM)
+         ======================================================= -->
+    <section id="view-planta" class="dashboard-view">
+      <section class="plant-header card">
+        <div>
+          <p class="section-eyebrow">PLANTA FV — MODELACIÓN SAM</p>
+          <h2>Planta FV CEME1 — arquitectura modelada en SAM</h2>
+          <p>
+            Arquitectura equivalente de la planta FV CEME1 modelada a partir de 6 submodelos representativos,
+            configuración estructural en V invertida Este/Oeste, módulos JAM72-S30-540/545-MR e inversores
+            Sungrow SG3125-HV-30.
+          </p>
+        </div>
+
+        <div class="method-note plant-note">
+          <strong>Nota metodológica</strong>
+          <span>
+            Esta vista describe la arquitectura técnica usada para representar CEME1 en SAM. Los resultados
+            energéticos de Egrid se incorporarán en la pestaña Desempeño Energético una vez ejecutada la simulación.
+          </span>
+        </div>
+      </section>
+
+      <section class="plant-tabs card">
+        <button class="plant-tab active" type="button" data-plant-tab="arquitectura">Arquitectura</button>
+        <button class="plant-tab" type="button" data-plant-tab="energia">Desempeño Energético</button>
+      </section>
+
+      <section id="plant-tab-arquitectura" class="plant-tab-panel active">
+        <section class="plant-kpi-row">
+          <article class="kpi-card green">
+            <div class="kpi-icon">▧</div>
+            <div class="kpi-content">
+              <p>SUBMODELOS EQUIVALENTES</p>
+              <h2>6</h2>
+              <small>SC01 a SC06</small>
+            </div>
+          </article>
+
+          <article class="kpi-card blue">
+            <div class="kpi-icon">⌁</div>
+            <div class="kpi-content">
+              <p>STRINGS TOTALES</p>
+              <h2>29.424 <small>strings</small></h2>
+              <small>cadenas FV modeladas</small>
+            </div>
+          </article>
+
+          <article class="kpi-card purple">
+            <div class="kpi-icon">▣</div>
+            <div class="kpi-content">
+              <p>INVERSORES TOTALES</p>
+              <h2>120</h2>
+              <small>SG3125-HV-30</small>
+            </div>
+          </article>
+
+          <article class="kpi-card orange">
+            <div class="kpi-icon">◈</div>
+            <div class="kpi-content">
+              <p>ORIENTACIÓN</p>
+              <h2>Este / Oeste</h2>
+              <small>distribución simétrica</small>
+            </div>
+          </article>
+
+          <article class="kpi-card green">
+            <div class="kpi-icon">V</div>
+            <div class="kpi-content">
+              <p>CONFIGURACIÓN</p>
+              <h2>V invertida</h2>
+              <small>estructura fija, 5°</small>
+            </div>
+          </article>
+
+          <article class="kpi-card yellow">
+            <div class="kpi-icon">▦</div>
+            <div class="kpi-content">
+              <p>MÓDULOS FV</p>
+              <h2>540 / 545 <small>Wp</small></h2>
+              <small>JAM72-S30-MR</small>
+            </div>
+          </article>
+        </section>
+
+        <section class="plant-layout-main">
+          <article class="card plant-singleline-card">
+            <div class="panel-head">
+              <h3>DIAGRAMA UNIFILAR EQUIVALENTE</h3>
+              <small>6 submodelos FV → inversores → punto de inyección</small>
+            </div>
+
+            <div class="singleline-legend">
+              <span><i class="dc-line"></i> DC / strings FV</span>
+              <span><i class="ac-line"></i> AC / salida inversores</span>
+            </div>
+
+            <div class="singleline-diagram">
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC01</strong><span>540 Wp</span><em>Este</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>12 inversores</strong><span>37.500 kVA</span></div>
+              </div>
+
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC02</strong><span>540 Wp</span><em>Oeste</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>12 inversores</strong><span>37.500 kVA</span></div>
+              </div>
+
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC03</strong><span>545 Wp</span><em>Este</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>21 inversores</strong><span>65.625 kVA</span></div>
+              </div>
+
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC04</strong><span>545 Wp</span><em>Oeste</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>21 inversores</strong><span>65.625 kVA</span></div>
+              </div>
+
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC05</strong><span>545 Wp</span><em>Este</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>27 inversores</strong><span>84.375 kVA</span></div>
+              </div>
+
+              <div class="singleline-row">
+                <div class="sc-box"><strong>SC06</strong><span>545 Wp</span><em>Oeste</em></div>
+                <div class="module-icon" aria-label="módulos FV"></div>
+                <div class="string-info"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
+                <div class="inv-box">DC<br>AC</div>
+                <div class="inv-info"><strong>27 inversores</strong><span>84.375 kVA</span></div>
+              </div>
+
+              <div class="injection-node">
+                <div class="meter-icon">kWh</div>
+                <strong>PUNTO DE INYECCIÓN</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="card plant-tech-card">
+            <h3>FICHA TÉCNICA DE MODELACIÓN</h3>
+            <ul class="kv-list compact">
+              <li><span>Planta</span><strong>CEME1</strong></li>
+              <li><span>Ubicación</span><strong>María Elena</strong></li>
+              <li><span>Herramienta</span><strong>SAM</strong></li>
+              <li><span>Configuración estructural</span><strong>V invertida</strong></li>
+              <li><span>Orientación</span><strong>Este / Oeste</strong></li>
+              <li><span>Inclinación</span><strong>5°</strong></li>
+              <li><span>Submodelos</span><strong>6</strong></li>
+              <li><span>Modelo inversor</span><strong>SG3125-HV-30</strong></li>
+              <li><span>Módulo PV 1</span><strong>JAM72-S30-540-MR</strong></li>
+              <li><span>Módulo PV 2</span><strong>JAM72-S30-545-MR</strong></li>
+              <li><span>Resolución temporal</span><strong>Horaria</strong></li>
+              <li><span>Salida energética principal</span><strong>Egrid</strong></li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="plant-bottom-grid">
+          <article class="card plant-table-card">
+            <h3>DETALLE DE SUBMODELOS</h3>
+            <div class="table-scroll">
+              <table class="plant-submodel-table">
+                <thead>
+                  <tr>
+                    <th>Submodelo</th>
+                    <th>Módulo</th>
+                    <th>Orientación</th>
+                    <th>Strings</th>
+                    <th>Inversores</th>
+                    <th>Cadenas / inversor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td><td>248</td></tr>
+                  <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td><td>248</td></tr>
+                  <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td><td>240</td></tr>
+                  <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td><td>240</td></tr>
+                  <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td><td>248</td></tr>
+                  <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td><td>248</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card plant-balance-card">
+            <h3>BALANCE ESTE / OESTE</h3>
+            <div class="balance-symbol">⚖</div>
+            <p><strong>14.712</strong> strings</p>
+            <p><strong>60</strong> inversores</p>
+            <small>por orientación</small>
+          </article>
+        </section>
+      </section>
+
+      <section id="plant-tab-energia" class="plant-tab-panel">
+        <article class="card plant-placeholder-card">
+          <h3>DESEMPEÑO ENERGÉTICO — PENDIENTE DE SIMULACIÓN SAM</h3>
+          <p>
+            Esta subpestaña recibirá los resultados horarios de SAM una vez exportado Egrid. Luego se cargarán
+            KPIs, generación mensual, perfil horario promedio, mapa de calor Egrid y distribución diaria.
+          </p>
+          <div class="pending-flow">
+            <span>TMY Explorador Solar</span>
+            <strong>→</strong>
+            <span>SAM CEME1</span>
+            <strong>→</strong>
+            <span>Egrid horario</span>
+            <strong>→</strong>
+            <span>JSON Dashboard</span>
+          </div>
+        </article>
+      </section>
+    </section>
+    <!-- FIN VISTA PLANTA FV (SAM) -->
+
   </main>
 </body>
 </html>
