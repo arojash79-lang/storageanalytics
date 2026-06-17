@@ -778,3 +778,43 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
 
 
+
+
+/* ============================================================
+   MÓDULO PLANTA FV (SAM) - SUBPESTAÑAS INTERNAS
+   ============================================================ */
+(function () {
+  function setupPlantTabs() {
+    const tabButtons = document.querySelectorAll(".plant-tab[data-plant-tab]");
+
+    if (!tabButtons.length) {
+      return;
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tabName = button.dataset.plantTab;
+        const targetPanel = document.getElementById(`plant-tab-${tabName}`);
+
+        if (!targetPanel) {
+          console.warn(`Subpestaña Planta FV no encontrada: ${tabName}`);
+          return;
+        }
+
+        tabButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn === button);
+        });
+
+        document.querySelectorAll(".plant-tab-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel === targetPanel);
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupPlantTabs);
+  } else {
+    setupPlantTabs();
+  }
+})();
