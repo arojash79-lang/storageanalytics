@@ -1795,3 +1795,26 @@ tbody tr.highlight {
     min-width: 840px;
   }
 }
+
+/* ============================================================
+   V4 — Ajuste fino del SVG unifilar CEME1
+   Fuerza escalamiento limpio y evita descalces visuales.
+   ============================================================ */
+.ceme1-svg-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.ceme1-singleline-svg-v4 {
+  display: block;
+  width: 100%;
+  min-width: 980px;
+  max-width: none;
+  height: auto;
+}
+
+@media (min-width: 1500px) {
+  .ceme1-singleline-svg-v4 {
+    min-width: 0;
+  }
+}
