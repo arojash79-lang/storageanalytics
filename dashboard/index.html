@@ -471,12 +471,12 @@
             </div>
 
             <div class="ceme1-svg-wrap" aria-label="Diagrama unifilar equivalente CEME1">
-              <svg class="ceme1-singleline-svg" viewBox="0 0 1100 520" role="img" aria-labelledby="ceme1UnifilarTitle ceme1UnifilarDesc">
+              <svg class="ceme1-singleline-svg ceme1-singleline-svg-v4" viewBox="0 0 1180 520" preserveAspectRatio="xMidYMin meet" role="img" aria-labelledby="ceme1UnifilarTitle ceme1UnifilarDesc">
                 <title id="ceme1UnifilarTitle">Diagrama unifilar equivalente CEME1</title>
-                <desc id="ceme1UnifilarDesc">Seis submodelos fotovoltaicos SC01 a SC06 conectados a inversores SG3125-HV-30 y a un punto de inyección AC equivalente.</desc>
+                <desc id="ceme1UnifilarDesc">Seis submodelos fotovoltaicos SC01 a SC06 conectados a inversores SG3125-HV-30, barra AC equivalente y punto de inyección.</desc>
 
                 <defs>
-                  <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+                  <filter id="softGlowV4" x="-40%" y="-40%" width="180%" height="180%">
                     <feGaussianBlur stdDeviation="3" result="blur" />
                     <feMerge>
                       <feMergeNode in="blur" />
@@ -484,138 +484,182 @@
                     </feMerge>
                   </filter>
 
-                  <linearGradient id="moduleGradient" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#2d93ff" />
-                    <stop offset="55%" stop-color="#1557b7" />
-                    <stop offset="100%" stop-color="#0b2f73" />
+                  <linearGradient id="moduleGradientV4" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#39a7ff" />
+                    <stop offset="52%" stop-color="#1762c7" />
+                    <stop offset="100%" stop-color="#082e72" />
                   </linearGradient>
 
-                  <linearGradient id="invGradient" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#0b3854" />
+                  <linearGradient id="invGradientV4" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#0d496a" />
                     <stop offset="100%" stop-color="#031728" />
                   </linearGradient>
 
-                  <symbol id="pvModule" viewBox="0 0 66 42">
-                    <polygon points="8,2 64,2 58,40 2,40" fill="url(#moduleGradient)" stroke="#8ad1ff" stroke-width="1.4" />
-                    <line x1="20" y1="3" x2="14" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
-                    <line x1="34" y1="3" x2="28" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
-                    <line x1="48" y1="3" x2="42" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
-                    <line x1="5" y1="14" x2="62" y2="14" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
-                    <line x1="3" y1="27" x2="60" y2="27" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                  <linearGradient id="busGradientV4" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#6bb8ff" />
+                    <stop offset="50%" stop-color="#2d8cff" />
+                    <stop offset="100%" stop-color="#6bb8ff" />
+                  </linearGradient>
+
+                  <marker id="arrowDcV4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd84c" />
+                  </marker>
+
+                  <marker id="arrowAcV4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#4da3ff" />
+                  </marker>
+
+                  <symbol id="pvModuleV4" viewBox="0 0 76 48">
+                    <polygon points="9,3 73,3 66,45 2,45" fill="url(#moduleGradientV4)" stroke="#8ad1ff" stroke-width="1.5" />
+                    <line x1="22" y1="4" x2="15" y2="44" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="38" y1="4" x2="31" y2="44" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="54" y1="4" x2="47" y2="44" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="6" y1="17" x2="70" y2="17" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="4" y1="31" x2="68" y2="31" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
                   </symbol>
 
-                  <symbol id="inverterIcon" viewBox="0 0 58 58">
-                    <rect x="3" y="3" width="52" height="52" rx="8" fill="url(#invGradient)" stroke="#65dfff" stroke-width="2.2" filter="url(#softGlow)" />
-                    <text x="29" y="25" text-anchor="middle" class="svg-inv-main">DC</text>
-                    <line x1="14" y1="31" x2="44" y2="31" stroke="#65dfff" stroke-width="1.4" />
-                    <text x="29" y="45" text-anchor="middle" class="svg-inv-main">AC</text>
+                  <symbol id="inverterIconV4" viewBox="0 0 60 60">
+                    <rect x="3" y="3" width="54" height="54" rx="9" fill="url(#invGradientV4)" stroke="#65dfff" stroke-width="2.4" filter="url(#softGlowV4)" />
+                    <text x="30" y="25" text-anchor="middle" class="svg-inv-main-v4">DC</text>
+                    <line x1="15" y1="31" x2="45" y2="31" stroke="#65dfff" stroke-width="1.5" />
+                    <text x="30" y="46" text-anchor="middle" class="svg-inv-main-v4">AC</text>
                   </symbol>
                 </defs>
 
                 <style>
-                  .svg-title { fill: #ffffff; font: 800 16px Arial, sans-serif; letter-spacing: .2px; }
-                  .svg-subtitle { fill: #9ec3e8; font: 500 12px Arial, sans-serif; }
-                  .svg-label { fill: #ffffff; font: 800 13px Arial, sans-serif; }
-                  .svg-small { fill: #c8d9ea; font: 500 11px Arial, sans-serif; }
-                  .svg-muted { fill: #93b0cc; font: 500 10px Arial, sans-serif; }
-                  .svg-yellow { fill: #ffd84c; font: 800 12px Arial, sans-serif; }
-                  .svg-blue { fill: #8dcaff; font: 800 12px Arial, sans-serif; }
-                  .svg-inv-main { fill: #e7fbff; font: 900 15px Arial, sans-serif; }
-                  .sc-card { fill: rgba(3, 18, 34, 0.96); stroke: rgba(104, 174, 255, 0.62); stroke-width: 1.2; }
-                  .row-bg { fill: rgba(7, 30, 55, 0.42); stroke: rgba(86, 151, 220, 0.18); stroke-width: 1; }
-                  .dc { stroke: #ffd84c; stroke-width: 2.2; stroke-dasharray: 8 8; }
-                  .ac { stroke: #4da3ff; stroke-width: 2.6; }
-                  .bus { stroke: #4da3ff; stroke-width: 4; filter: url(#softGlow); }
+                  .svg-title-v4 { fill: #ffffff; font: 800 16px Arial, sans-serif; letter-spacing: .2px; }
+                  .svg-subtitle-v4 { fill: #9ec3e8; font: 500 12px Arial, sans-serif; }
+                  .svg-label-v4 { fill: #ffffff; font: 800 13px Arial, sans-serif; }
+                  .svg-small-v4 { fill: #c8d9ea; font: 500 11px Arial, sans-serif; }
+                  .svg-muted-v4 { fill: #93b0cc; font: 500 10px Arial, sans-serif; }
+                  .svg-yellow-v4 { fill: #ffd84c; font: 800 12px Arial, sans-serif; }
+                  .svg-blue-v4 { fill: #8dcaff; font: 800 12px Arial, sans-serif; }
+                  .svg-inv-main-v4 { fill: #e7fbff; font: 900 15px Arial, sans-serif; }
+                  .sc-card-v4 { fill: rgba(3, 18, 34, 0.96); stroke: rgba(104, 174, 255, 0.62); stroke-width: 1.2; }
+                  .row-bg-v4 { fill: rgba(7, 30, 55, 0.40); stroke: rgba(86, 151, 220, 0.18); stroke-width: 1; }
+                  .dc-v4 { stroke: #ffd84c; stroke-width: 2.2; stroke-dasharray: 8 8; marker-end: url(#arrowDcV4); }
+                  .ac-v4 { stroke: #4da3ff; stroke-width: 2.6; marker-end: url(#arrowAcV4); }
+                  .ac-plain-v4 { stroke: #4da3ff; stroke-width: 2.6; }
+                  .bus-v4 { stroke: url(#busGradientV4); stroke-width: 5; filter: url(#softGlowV4); }
+                  .node-v4 { fill: #06182d; stroke: #72c2ff; stroke-width: 2.2; filter: url(#softGlowV4); }
                 </style>
 
-                <text x="18" y="25" class="svg-title">Arquitectura FV equivalente por submodelos</text>
-                <text x="18" y="45" class="svg-subtitle">Strings DC → inversores DC/AC → barra colectora AC → punto de inyección</text>
+                <text x="18" y="25" class="svg-title-v4">Arquitectura FV equivalente por submodelos</text>
+                <text x="18" y="45" class="svg-subtitle-v4">Strings DC → inversores DC/AC → barra colectora AC → punto de inyección</text>
 
-                <line x1="742" y1="28" x2="772" y2="28" class="dc" />
-                <text x="780" y="32" class="svg-small">DC / strings FV</text>
-                <line x1="890" y1="28" x2="920" y2="28" class="ac" />
-                <text x="928" y="32" class="svg-small">AC / salida inversores</text>
+                <line x1="790" y1="28" x2="820" y2="28" class="dc-v4" />
+                <text x="830" y="32" class="svg-small-v4">DC / strings FV</text>
+                <line x1="955" y1="28" x2="985" y2="28" class="ac-v4" />
+                <text x="995" y="32" class="svg-small-v4">AC / salida inversores</text>
 
-                <line x1="875" y1="78" x2="875" y2="438" class="bus" />
-                <text x="890" y="72" class="svg-blue">Barra AC equivalente</text>
+                <!-- Barra AC exactamente alineada con las seis salidas -->
+                <line x1="940" y1="91" x2="940" y2="407" class="bus-v4" />
+                <text x="955" y="78" class="svg-blue-v4">Barra AC equivalente</text>
 
                 <!-- SC01 -->
-                <rect x="18" y="67" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="76" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="93" class="svg-label">SC01</text><text x="48" y="107" class="svg-small">540 Wp · Este</text>
-                <use href="#pvModule" x="138" y="74" width="66" height="42" />
-                <line x1="204" y1="96" x2="420" y2="96" class="dc" />
-                <text x="244" y="90" class="svg-yellow">2.976 strings</text><text x="244" y="108" class="svg-small">(248 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="67" width="58" height="58" />
-                <text x="548" y="89" class="svg-label">12 inversores</text><text x="548" y="107" class="svg-muted">37.500 kVA</text>
-                <line x1="518" y1="96" x2="875" y2="96" class="ac" />
+                <rect x="18" y="66" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="73" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="90" class="svg-label-v4">SC01</text><text x="48" y="104" class="svg-small-v4">540 Wp · Este</text>
+                <use href="#pvModuleV4" x="138" y="70" width="76" height="48" />
+                <text x="140" y="126" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="93" x2="430" y2="93" class="dc-v4" />
+                <rect x="245" y="76" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="90" class="svg-yellow-v4">2.976 strings</text><text x="255" y="106" class="svg-small-v4">(248 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="63" width="60" height="60" />
+                <rect x="555" y="75" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="91" class="svg-label-v4">12 inversores</text><text x="568" y="107" class="svg-muted-v4">37.500 kVA</text>
+                <line x1="526" y1="93" x2="940" y2="93" class="ac-plain-v4" />
+                <circle cx="940" cy="93" r="5" class="node-v4" />
 
                 <!-- SC02 -->
-                <rect x="18" y="129" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="138" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="155" class="svg-label">SC02</text><text x="48" y="169" class="svg-small">540 Wp · Oeste</text>
-                <use href="#pvModule" x="138" y="136" width="66" height="42" />
-                <line x1="204" y1="158" x2="420" y2="158" class="dc" />
-                <text x="244" y="152" class="svg-yellow">2.976 strings</text><text x="244" y="170" class="svg-small">(248 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="129" width="58" height="58" />
-                <text x="548" y="151" class="svg-label">12 inversores</text><text x="548" y="169" class="svg-muted">37.500 kVA</text>
-                <line x1="518" y1="158" x2="875" y2="158" class="ac" />
+                <rect x="18" y="128" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="135" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="152" class="svg-label-v4">SC02</text><text x="48" y="166" class="svg-small-v4">540 Wp · Oeste</text>
+                <use href="#pvModuleV4" x="138" y="132" width="76" height="48" />
+                <text x="140" y="188" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="155" x2="430" y2="155" class="dc-v4" />
+                <rect x="245" y="138" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="152" class="svg-yellow-v4">2.976 strings</text><text x="255" y="168" class="svg-small-v4">(248 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="125" width="60" height="60" />
+                <rect x="555" y="137" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="153" class="svg-label-v4">12 inversores</text><text x="568" y="169" class="svg-muted-v4">37.500 kVA</text>
+                <line x1="526" y1="155" x2="940" y2="155" class="ac-plain-v4" />
+                <circle cx="940" cy="155" r="5" class="node-v4" />
 
                 <!-- SC03 -->
-                <rect x="18" y="191" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="200" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="217" class="svg-label">SC03</text><text x="48" y="231" class="svg-small">545 Wp · Este</text>
-                <use href="#pvModule" x="138" y="198" width="66" height="42" />
-                <line x1="204" y1="220" x2="420" y2="220" class="dc" />
-                <text x="244" y="214" class="svg-yellow">5.040 strings</text><text x="244" y="232" class="svg-small">(240 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="191" width="58" height="58" />
-                <text x="548" y="213" class="svg-label">21 inversores</text><text x="548" y="231" class="svg-muted">65.625 kVA</text>
-                <line x1="518" y1="220" x2="875" y2="220" class="ac" />
+                <rect x="18" y="190" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="197" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="214" class="svg-label-v4">SC03</text><text x="48" y="228" class="svg-small-v4">545 Wp · Este</text>
+                <use href="#pvModuleV4" x="138" y="194" width="76" height="48" />
+                <text x="140" y="250" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="217" x2="430" y2="217" class="dc-v4" />
+                <rect x="245" y="200" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="214" class="svg-yellow-v4">5.040 strings</text><text x="255" y="230" class="svg-small-v4">(240 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="187" width="60" height="60" />
+                <rect x="555" y="199" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="215" class="svg-label-v4">21 inversores</text><text x="568" y="231" class="svg-muted-v4">65.625 kVA</text>
+                <line x1="526" y1="217" x2="940" y2="217" class="ac-plain-v4" />
+                <circle cx="940" cy="217" r="5" class="node-v4" />
 
                 <!-- SC04 -->
-                <rect x="18" y="253" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="262" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="279" class="svg-label">SC04</text><text x="48" y="293" class="svg-small">545 Wp · Oeste</text>
-                <use href="#pvModule" x="138" y="260" width="66" height="42" />
-                <line x1="204" y1="282" x2="420" y2="282" class="dc" />
-                <text x="244" y="276" class="svg-yellow">5.040 strings</text><text x="244" y="294" class="svg-small">(240 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="253" width="58" height="58" />
-                <text x="548" y="275" class="svg-label">21 inversores</text><text x="548" y="293" class="svg-muted">65.625 kVA</text>
-                <line x1="518" y1="282" x2="875" y2="282" class="ac" />
+                <rect x="18" y="252" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="259" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="276" class="svg-label-v4">SC04</text><text x="48" y="290" class="svg-small-v4">545 Wp · Oeste</text>
+                <use href="#pvModuleV4" x="138" y="256" width="76" height="48" />
+                <text x="140" y="312" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="279" x2="430" y2="279" class="dc-v4" />
+                <rect x="245" y="262" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="276" class="svg-yellow-v4">5.040 strings</text><text x="255" y="292" class="svg-small-v4">(240 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="249" width="60" height="60" />
+                <rect x="555" y="261" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="277" class="svg-label-v4">21 inversores</text><text x="568" y="293" class="svg-muted-v4">65.625 kVA</text>
+                <line x1="526" y1="279" x2="940" y2="279" class="ac-plain-v4" />
+                <circle cx="940" cy="279" r="5" class="node-v4" />
 
                 <!-- SC05 -->
-                <rect x="18" y="315" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="324" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="341" class="svg-label">SC05</text><text x="48" y="355" class="svg-small">545 Wp · Este</text>
-                <use href="#pvModule" x="138" y="322" width="66" height="42" />
-                <line x1="204" y1="344" x2="420" y2="344" class="dc" />
-                <text x="244" y="338" class="svg-yellow">6.696 strings</text><text x="244" y="356" class="svg-small">(248 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="315" width="58" height="58" />
-                <text x="548" y="337" class="svg-label">27 inversores</text><text x="548" y="355" class="svg-muted">84.375 kVA</text>
-                <line x1="518" y1="344" x2="875" y2="344" class="ac" />
+                <rect x="18" y="314" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="321" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="338" class="svg-label-v4">SC05</text><text x="48" y="352" class="svg-small-v4">545 Wp · Este</text>
+                <use href="#pvModuleV4" x="138" y="318" width="76" height="48" />
+                <text x="140" y="374" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="341" x2="430" y2="341" class="dc-v4" />
+                <rect x="245" y="324" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="338" class="svg-yellow-v4">6.696 strings</text><text x="255" y="354" class="svg-small-v4">(248 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="311" width="60" height="60" />
+                <rect x="555" y="323" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="339" class="svg-label-v4">27 inversores</text><text x="568" y="355" class="svg-muted-v4">84.375 kVA</text>
+                <line x1="526" y1="341" x2="940" y2="341" class="ac-plain-v4" />
+                <circle cx="940" cy="341" r="5" class="node-v4" />
 
                 <!-- SC06 -->
-                <rect x="18" y="377" width="1060" height="58" rx="12" class="row-bg" />
-                <rect x="32" y="386" width="78" height="40" rx="8" class="sc-card" />
-                <text x="48" y="403" class="svg-label">SC06</text><text x="48" y="417" class="svg-small">545 Wp · Oeste</text>
-                <use href="#pvModule" x="138" y="384" width="66" height="42" />
-                <line x1="204" y1="406" x2="420" y2="406" class="dc" />
-                <text x="244" y="400" class="svg-yellow">6.696 strings</text><text x="244" y="418" class="svg-small">(248 cadenas/inversor)</text>
-                <use href="#inverterIcon" x="460" y="377" width="58" height="58" />
-                <text x="548" y="399" class="svg-label">27 inversores</text><text x="548" y="417" class="svg-muted">84.375 kVA</text>
-                <line x1="518" y1="406" x2="875" y2="406" class="ac" />
+                <rect x="18" y="376" width="1042" height="54" rx="12" class="row-bg-v4" />
+                <rect x="32" y="383" width="78" height="40" rx="8" class="sc-card-v4" />
+                <text x="48" y="400" class="svg-label-v4">SC06</text><text x="48" y="414" class="svg-small-v4">545 Wp · Oeste</text>
+                <use href="#pvModuleV4" x="138" y="380" width="76" height="48" />
+                <text x="140" y="436" class="svg-muted-v4">30 módulos/string</text>
+                <line x1="214" y1="403" x2="430" y2="403" class="dc-v4" />
+                <rect x="245" y="386" width="168" height="34" rx="8" fill="rgba(2,12,24,.72)" stroke="rgba(255,216,76,.10)" />
+                <text x="255" y="400" class="svg-yellow-v4">6.696 strings</text><text x="255" y="416" class="svg-small-v4">(248 cadenas/inversor)</text>
+                <use href="#inverterIconV4" x="466" y="373" width="60" height="60" />
+                <rect x="555" y="385" width="130" height="36" rx="8" fill="rgba(2,12,24,.72)" />
+                <text x="568" y="401" class="svg-label-v4">27 inversores</text><text x="568" y="417" class="svg-muted-v4">84.375 kVA</text>
+                <line x1="526" y1="403" x2="940" y2="403" class="ac-plain-v4" />
+                <circle cx="940" cy="403" r="5" class="node-v4" />
 
-                <line x1="875" y1="258" x2="938" y2="258" class="ac" />
-                <rect x="938" y="203" width="130" height="110" rx="15" fill="rgba(7,27,48,0.96)" stroke="rgba(95,173,255,0.65)" stroke-width="1.6" filter="url(#softGlow)" />
-                <rect x="976" y="220" width="55" height="55" rx="8" fill="rgba(8,34,59,0.98)" stroke="rgba(95,173,255,0.82)" stroke-width="1.5" />
-                <text x="1004" y="252" text-anchor="middle" class="svg-label">kWh</text>
-                <text x="1004" y="292" text-anchor="middle" class="svg-label">PUNTO DE</text>
-                <text x="1004" y="309" text-anchor="middle" class="svg-label">INYECCIÓN</text>
+                <!-- Conexión principal a punto de inyección: coincide exactamente con el centro de la barra -->
+                <circle cx="940" cy="248" r="6" class="node-v4" />
+                <line x1="946" y1="248" x2="998" y2="248" class="ac-v4" />
 
-                <rect x="18" y="456" width="1060" height="46" rx="12" fill="rgba(3,18,34,0.70)" stroke="rgba(86,151,220,0.18)" />
-                <text x="36" y="482" class="svg-small">Representación equivalente:</text>
-                <text x="190" y="482" class="svg-blue">SC01–SC06</text>
-                <text x="278" y="482" class="svg-small">agrupan familias Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</text>
+                <rect x="998" y="196" width="150" height="104" rx="16" fill="rgba(7,27,48,0.96)" stroke="rgba(95,173,255,0.70)" stroke-width="1.8" filter="url(#softGlowV4)" />
+                <rect x="1046" y="214" width="55" height="55" rx="8" fill="rgba(8,34,59,0.98)" stroke="rgba(95,173,255,0.82)" stroke-width="1.5" />
+                <text x="1074" y="246" text-anchor="middle" class="svg-label-v4">kWh</text>
+                <text x="1074" y="287" text-anchor="middle" class="svg-label-v4">PUNTO DE</text>
+                <text x="1074" y="304" text-anchor="middle" class="svg-label-v4">INYECCIÓN</text>
+
+                <rect x="18" y="456" width="1130" height="46" rx="12" fill="rgba(3,18,34,0.70)" stroke="rgba(86,151,220,0.18)" />
+                <text x="36" y="482" class="svg-small-v4">Representación equivalente:</text>
+                <text x="190" y="482" class="svg-blue-v4">SC01–SC06</text>
+                <text x="278" y="482" class="svg-small-v4">agrupan familias Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</text>
               </svg>
             </div>
           </article>
