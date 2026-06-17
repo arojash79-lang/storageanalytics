@@ -470,71 +470,154 @@
               <span><i class="ac-line"></i> AC / salida inversores</span>
             </div>
 
-            <div class="singleline-diagram pro-unifilar">
-              <div class="unifilar-bus" aria-hidden="true"></div>
+            <div class="ceme1-svg-wrap" aria-label="Diagrama unifilar equivalente CEME1">
+              <svg class="ceme1-singleline-svg" viewBox="0 0 1100 520" role="img" aria-labelledby="ceme1UnifilarTitle ceme1UnifilarDesc">
+                <title id="ceme1UnifilarTitle">Diagrama unifilar equivalente CEME1</title>
+                <desc id="ceme1UnifilarDesc">Seis submodelos fotovoltaicos SC01 a SC06 conectados a inversores SG3125-HV-30 y a un punto de inyección AC equivalente.</desc>
 
-              <div class="singleline-flow">
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC01</strong><span>540 Wp</span><em>Este</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>12 inversores</strong><span>37.500 kVA</span></div>
-                </div>
+                <defs>
+                  <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
 
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC02</strong><span>540 Wp</span><em>Oeste</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>12 inversores</strong><span>37.500 kVA</span></div>
-                </div>
+                  <linearGradient id="moduleGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#2d93ff" />
+                    <stop offset="55%" stop-color="#1557b7" />
+                    <stop offset="100%" stop-color="#0b2f73" />
+                  </linearGradient>
 
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC03</strong><span>545 Wp</span><em>Este</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>21 inversores</strong><span>65.625 kVA</span></div>
-                </div>
+                  <linearGradient id="invGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#0b3854" />
+                    <stop offset="100%" stop-color="#031728" />
+                  </linearGradient>
 
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC04</strong><span>545 Wp</span><em>Oeste</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>21 inversores</strong><span>65.625 kVA</span></div>
-                </div>
+                  <symbol id="pvModule" viewBox="0 0 66 42">
+                    <polygon points="8,2 64,2 58,40 2,40" fill="url(#moduleGradient)" stroke="#8ad1ff" stroke-width="1.4" />
+                    <line x1="20" y1="3" x2="14" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="34" y1="3" x2="28" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="48" y1="3" x2="42" y2="39" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="5" y1="14" x2="62" y2="14" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                    <line x1="3" y1="27" x2="60" y2="27" stroke="rgba(255,255,255,0.35)" stroke-width="1" />
+                  </symbol>
 
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC05</strong><span>545 Wp</span><em>Este</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>27 inversores</strong><span>84.375 kVA</span></div>
-                </div>
+                  <symbol id="inverterIcon" viewBox="0 0 58 58">
+                    <rect x="3" y="3" width="52" height="52" rx="8" fill="url(#invGradient)" stroke="#65dfff" stroke-width="2.2" filter="url(#softGlow)" />
+                    <text x="29" y="25" text-anchor="middle" class="svg-inv-main">DC</text>
+                    <line x1="14" y1="31" x2="44" y2="31" stroke="#65dfff" stroke-width="1.4" />
+                    <text x="29" y="45" text-anchor="middle" class="svg-inv-main">AC</text>
+                  </symbol>
+                </defs>
 
-                <div class="singleline-row">
-                  <div class="sc-box"><strong>SC06</strong><span>545 Wp</span><em>Oeste</em></div>
-                  <div class="pv-stack"><div class="module-icon" aria-label="módulos FV"></div><span>30 módulos/string</span></div>
-                  <div class="string-info"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
-                  <div class="flow-arrow">→</div>
-                  <div class="inv-box">DC<br>AC</div>
-                  <div class="inv-info"><strong>27 inversores</strong><span>84.375 kVA</span></div>
-                </div>
-              </div>
+                <style>
+                  .svg-title { fill: #ffffff; font: 800 16px Arial, sans-serif; letter-spacing: .2px; }
+                  .svg-subtitle { fill: #9ec3e8; font: 500 12px Arial, sans-serif; }
+                  .svg-label { fill: #ffffff; font: 800 13px Arial, sans-serif; }
+                  .svg-small { fill: #c8d9ea; font: 500 11px Arial, sans-serif; }
+                  .svg-muted { fill: #93b0cc; font: 500 10px Arial, sans-serif; }
+                  .svg-yellow { fill: #ffd84c; font: 800 12px Arial, sans-serif; }
+                  .svg-blue { fill: #8dcaff; font: 800 12px Arial, sans-serif; }
+                  .svg-inv-main { fill: #e7fbff; font: 900 15px Arial, sans-serif; }
+                  .sc-card { fill: rgba(3, 18, 34, 0.96); stroke: rgba(104, 174, 255, 0.62); stroke-width: 1.2; }
+                  .row-bg { fill: rgba(7, 30, 55, 0.42); stroke: rgba(86, 151, 220, 0.18); stroke-width: 1; }
+                  .dc { stroke: #ffd84c; stroke-width: 2.2; stroke-dasharray: 8 8; }
+                  .ac { stroke: #4da3ff; stroke-width: 2.6; }
+                  .bus { stroke: #4da3ff; stroke-width: 4; filter: url(#softGlow); }
+                </style>
 
-              <div class="injection-node">
-                <div class="meter-icon">kWh</div>
-                <strong>PUNTO DE INYECCIÓN</strong>
-                <span>Salida AC equivalente</span>
-              </div>
-            </div>            </div>
+                <text x="18" y="25" class="svg-title">Arquitectura FV equivalente por submodelos</text>
+                <text x="18" y="45" class="svg-subtitle">Strings DC → inversores DC/AC → barra colectora AC → punto de inyección</text>
+
+                <line x1="742" y1="28" x2="772" y2="28" class="dc" />
+                <text x="780" y="32" class="svg-small">DC / strings FV</text>
+                <line x1="890" y1="28" x2="920" y2="28" class="ac" />
+                <text x="928" y="32" class="svg-small">AC / salida inversores</text>
+
+                <line x1="875" y1="78" x2="875" y2="438" class="bus" />
+                <text x="890" y="72" class="svg-blue">Barra AC equivalente</text>
+
+                <!-- SC01 -->
+                <rect x="18" y="67" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="76" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="93" class="svg-label">SC01</text><text x="48" y="107" class="svg-small">540 Wp · Este</text>
+                <use href="#pvModule" x="138" y="74" width="66" height="42" />
+                <line x1="204" y1="96" x2="420" y2="96" class="dc" />
+                <text x="244" y="90" class="svg-yellow">2.976 strings</text><text x="244" y="108" class="svg-small">(248 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="67" width="58" height="58" />
+                <text x="548" y="89" class="svg-label">12 inversores</text><text x="548" y="107" class="svg-muted">37.500 kVA</text>
+                <line x1="518" y1="96" x2="875" y2="96" class="ac" />
+
+                <!-- SC02 -->
+                <rect x="18" y="129" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="138" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="155" class="svg-label">SC02</text><text x="48" y="169" class="svg-small">540 Wp · Oeste</text>
+                <use href="#pvModule" x="138" y="136" width="66" height="42" />
+                <line x1="204" y1="158" x2="420" y2="158" class="dc" />
+                <text x="244" y="152" class="svg-yellow">2.976 strings</text><text x="244" y="170" class="svg-small">(248 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="129" width="58" height="58" />
+                <text x="548" y="151" class="svg-label">12 inversores</text><text x="548" y="169" class="svg-muted">37.500 kVA</text>
+                <line x1="518" y1="158" x2="875" y2="158" class="ac" />
+
+                <!-- SC03 -->
+                <rect x="18" y="191" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="200" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="217" class="svg-label">SC03</text><text x="48" y="231" class="svg-small">545 Wp · Este</text>
+                <use href="#pvModule" x="138" y="198" width="66" height="42" />
+                <line x1="204" y1="220" x2="420" y2="220" class="dc" />
+                <text x="244" y="214" class="svg-yellow">5.040 strings</text><text x="244" y="232" class="svg-small">(240 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="191" width="58" height="58" />
+                <text x="548" y="213" class="svg-label">21 inversores</text><text x="548" y="231" class="svg-muted">65.625 kVA</text>
+                <line x1="518" y1="220" x2="875" y2="220" class="ac" />
+
+                <!-- SC04 -->
+                <rect x="18" y="253" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="262" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="279" class="svg-label">SC04</text><text x="48" y="293" class="svg-small">545 Wp · Oeste</text>
+                <use href="#pvModule" x="138" y="260" width="66" height="42" />
+                <line x1="204" y1="282" x2="420" y2="282" class="dc" />
+                <text x="244" y="276" class="svg-yellow">5.040 strings</text><text x="244" y="294" class="svg-small">(240 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="253" width="58" height="58" />
+                <text x="548" y="275" class="svg-label">21 inversores</text><text x="548" y="293" class="svg-muted">65.625 kVA</text>
+                <line x1="518" y1="282" x2="875" y2="282" class="ac" />
+
+                <!-- SC05 -->
+                <rect x="18" y="315" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="324" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="341" class="svg-label">SC05</text><text x="48" y="355" class="svg-small">545 Wp · Este</text>
+                <use href="#pvModule" x="138" y="322" width="66" height="42" />
+                <line x1="204" y1="344" x2="420" y2="344" class="dc" />
+                <text x="244" y="338" class="svg-yellow">6.696 strings</text><text x="244" y="356" class="svg-small">(248 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="315" width="58" height="58" />
+                <text x="548" y="337" class="svg-label">27 inversores</text><text x="548" y="355" class="svg-muted">84.375 kVA</text>
+                <line x1="518" y1="344" x2="875" y2="344" class="ac" />
+
+                <!-- SC06 -->
+                <rect x="18" y="377" width="1060" height="58" rx="12" class="row-bg" />
+                <rect x="32" y="386" width="78" height="40" rx="8" class="sc-card" />
+                <text x="48" y="403" class="svg-label">SC06</text><text x="48" y="417" class="svg-small">545 Wp · Oeste</text>
+                <use href="#pvModule" x="138" y="384" width="66" height="42" />
+                <line x1="204" y1="406" x2="420" y2="406" class="dc" />
+                <text x="244" y="400" class="svg-yellow">6.696 strings</text><text x="244" y="418" class="svg-small">(248 cadenas/inversor)</text>
+                <use href="#inverterIcon" x="460" y="377" width="58" height="58" />
+                <text x="548" y="399" class="svg-label">27 inversores</text><text x="548" y="417" class="svg-muted">84.375 kVA</text>
+                <line x1="518" y1="406" x2="875" y2="406" class="ac" />
+
+                <line x1="875" y1="258" x2="938" y2="258" class="ac" />
+                <rect x="938" y="203" width="130" height="110" rx="15" fill="rgba(7,27,48,0.96)" stroke="rgba(95,173,255,0.65)" stroke-width="1.6" filter="url(#softGlow)" />
+                <rect x="976" y="220" width="55" height="55" rx="8" fill="rgba(8,34,59,0.98)" stroke="rgba(95,173,255,0.82)" stroke-width="1.5" />
+                <text x="1004" y="252" text-anchor="middle" class="svg-label">kWh</text>
+                <text x="1004" y="292" text-anchor="middle" class="svg-label">PUNTO DE</text>
+                <text x="1004" y="309" text-anchor="middle" class="svg-label">INYECCIÓN</text>
+
+                <rect x="18" y="456" width="1060" height="46" rx="12" fill="rgba(3,18,34,0.70)" stroke="rgba(86,151,220,0.18)" />
+                <text x="36" y="482" class="svg-small">Representación equivalente:</text>
+                <text x="190" y="482" class="svg-blue">SC01–SC06</text>
+                <text x="278" y="482" class="svg-small">agrupan familias Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</text>
+              </svg>
+            </div>
           </article>
 
           <article class="card plant-tech-card">
