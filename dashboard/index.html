@@ -372,375 +372,266 @@
     </section>
     <!-- FIN VISTA RECURSO SOLAR -->
 
-    <!-- =======================================================
-         VISTA PLANTA FV (SAM)
-         ======================================================= -->
+
+    <!-- INICIO VISTA PLANTA FV SAM -->
     <section id="view-planta" class="dashboard-view">
-      <section class="plant-header card">
-        <div>
-          <p class="section-eyebrow">PLANTA FV — MODELACIÓN SAM</p>
-          <h2>Planta FV CEME1 — arquitectura modelada en SAM</h2>
-          <p>
-            Arquitectura equivalente de la planta FV CEME1 modelada a partir de 6 submodelos representativos,
-            configuración estructural en V invertida Este/Oeste, módulos JAM72-S30-540/545-MR e inversores
-            Sungrow SG3125-HV-30.
-          </p>
+      <section class="plant-sam-shell">
+        <div class="plant-head-grid">
+          <article class="plant-title-card card">
+            <p class="section-kicker">PLANTA FV — MODELACIÓN SAM</p>
+            <h2>Planta FV CEME1 — arquitectura modelada en SAM</h2>
+            <p>
+              Arquitectura equivalente de la planta FV CEME1 modelada a partir de 6 submodelos representativos,
+              configuración estructural en V invertida Este/Oeste, módulos JAM72-S30-540/545-MR e inversores
+              Sungrow SG3125-HV-30.
+            </p>
+          </article>
+
+          <article class="plant-note-card card">
+            <h3>NOTA METODOLÓGICA</h3>
+            <p>
+              Esta vista describe la arquitectura técnica usada para representar CEME1 en SAM. Los resultados
+              energéticos de Egrid se incorporarán en la pestaña Desempeño Energético una vez ejecutada la simulación.
+            </p>
+          </article>
         </div>
 
-        <div class="method-note plant-note">
-          <strong>Nota metodológica</strong>
-          <span>
-            Esta vista describe la arquitectura técnica usada para representar CEME1 en SAM. Los resultados
-            energéticos de Egrid se incorporarán en la pestaña Desempeño Energético una vez ejecutada la simulación.
-          </span>
+        <div class="plant-tabs card">
+          <button class="plant-tab-btn active" type="button" data-plant-panel="arquitectura">Arquitectura</button>
+          <button class="plant-tab-btn" type="button" data-plant-panel="energia">Desempeño Energético</button>
+        </div>
+
+        <div id="plant-panel-arquitectura" class="plant-panel active">
+          <section class="plant-kpi-grid">
+            <article class="plant-kpi card green">
+              <span class="plant-kpi-icon">▧</span>
+              <div>
+                <p>SUBMODELOS EQUIVALENTES</p>
+                <h3>6</h3>
+                <small>SC01 a SC06</small>
+              </div>
+            </article>
+
+            <article class="plant-kpi card blue">
+              <span class="plant-kpi-icon">⇢</span>
+              <div>
+                <p>STRINGS TOTALES</p>
+                <h3>29.424 <small>strings</small></h3>
+                <small>Cadenas FV modeladas</small>
+              </div>
+            </article>
+
+            <article class="plant-kpi card purple">
+              <span class="plant-kpi-icon">▣</span>
+              <div>
+                <p>INVERSORES TOTALES</p>
+                <h3>120</h3>
+                <small>SG3125-HV-30</small>
+              </div>
+            </article>
+
+            <article class="plant-kpi card orange">
+              <span class="plant-kpi-icon">◇</span>
+              <div>
+                <p>ORIENTACIÓN</p>
+                <h3>Este / Oeste</h3>
+                <small>Distribución simétrica</small>
+              </div>
+            </article>
+
+            <article class="plant-kpi card green">
+              <span class="plant-kpi-icon">V</span>
+              <div>
+                <p>CONFIGURACIÓN</p>
+                <h3>V invertida</h3>
+                <small>Estructura fija, 5°</small>
+              </div>
+            </article>
+
+            <article class="plant-kpi card yellow">
+              <span class="plant-kpi-icon">▦</span>
+              <div>
+                <p>MÓDULOS FV</p>
+                <h3>540 / 545 <small>Wp</small></h3>
+                <small>JAM72-S30-MR</small>
+              </div>
+            </article>
+          </section>
+
+          <section class="plant-layout-grid">
+            <article class="card plant-diagram-card">
+              <div class="panel-head plant-panel-head">
+                <div>
+                  <h3>DIAGRAMA UNIFILAR EQUIVALENTE</h3>
+                  <small>6 submodelos FV → strings DC → inversores DC/AC → barra colectora AC → punto de inyección</small>
+                </div>
+                <div class="plant-legend">
+                  <span><i class="dc"></i> DC / strings FV</span>
+                  <span><i class="ac"></i> AC / salida inversores</span>
+                </div>
+              </div>
+
+              <div class="pv-unifilar-scroll">
+                <div class="pv-unifilar-pro" aria-label="Diagrama unifilar equivalente CEME1">
+                  <div class="pv-bus-label">Barra AC equivalente</div>
+                  <div class="pv-bus-pro"></div>
+                  <div class="pv-bus-link"></div>
+                  <div class="pv-injection-pro">
+                    <div class="meter-icon">kWh</div>
+                    <strong>PUNTO DE<br>INYECCIÓN</strong>
+                    <small>Salida AC equivalente</small>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC01</strong><span>540 Wp · Este</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>12 inversores</strong><span>37,5 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC02</strong><span>540 Wp · Oeste</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>2.976 strings</strong><span>(248 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>12 inversores</strong><span>37,5 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC03</strong><span>545 Wp · Este</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>21 inversores</strong><span>65,6 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC04</strong><span>545 Wp · Oeste</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>5.040 strings</strong><span>(240 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>21 inversores</strong><span>65,6 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC05</strong><span>545 Wp · Este</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>27 inversores</strong><span>84,4 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+
+                  <div class="pv-row-pro">
+                    <div class="sc-chip"><strong>SC06</strong><span>545 Wp · Oeste</span></div>
+                    <div class="module-icon" title="30 módulos/string"><span></span></div>
+                    <div class="strings-box"><strong>6.696 strings</strong><span>(248 cadenas/inversor)</span></div>
+                    <div class="inverter-box">DC<br>AC</div>
+                    <div class="inverter-count"><strong>27 inversores</strong><span>84,4 MVA</span></div>
+                    <div class="ac-run"><span class="node"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="plant-footnote">
+                <span>i</span>
+                <p><strong>Representación equivalente:</strong> SC01–SC06 agrupan orientación Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</p>
+              </div>
+            </article>
+
+            <article class="card plant-tech-card">
+              <h3>FICHA TÉCNICA DE MODELACIÓN</h3>
+              <ul class="plant-tech-list">
+                <li><span>Planta</span><strong>CEME1</strong></li>
+                <li><span>Ubicación</span><strong>María Elena</strong></li>
+                <li><span>Herramienta</span><strong>SAM</strong></li>
+                <li><span>Configuración estructural</span><strong>V invertida</strong></li>
+                <li><span>Orientación</span><strong>Este / Oeste</strong></li>
+                <li><span>Inclinación</span><strong>5°</strong></li>
+                <li><span>Submodelos</span><strong>6</strong></li>
+                <li><span>Modelo inversor</span><strong>SG3125-HV-30</strong></li>
+                <li><span>Módulo PV 1</span><strong>JAM72-S30-540-MR</strong></li>
+                <li><span>Módulo PV 2</span><strong>JAM72-S30-545-MR</strong></li>
+                <li><span>Resolución temporal</span><strong>Horaria</strong></li>
+                <li><span>Salida energética principal</span><strong>Egrid</strong></li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="plant-bottom-grid">
+            <article class="card plant-table-card">
+              <h3>DETALLE DE SUBMODELOS</h3>
+              <div class="plant-table-wrap">
+                <table class="plant-submodel-table">
+                  <thead>
+                    <tr>
+                      <th>Submodelo</th>
+                      <th>Módulo</th>
+                      <th>Orientación</th>
+                      <th>Strings</th>
+                      <th>Inversores</th>
+                      <th>Cadenas / inversor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td><td>248</td></tr>
+                    <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td><td>248</td></tr>
+                    <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td><td>240</td></tr>
+                    <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td><td>240</td></tr>
+                    <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td><td>248</td></tr>
+                    <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td><td>248</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="card plant-balance-card">
+              <h3>BALANCE ESTE / OESTE</h3>
+              <div class="balance-panels">
+                <div class="balance-box east">
+                  <span>ESTE</span>
+                  <strong>14.712</strong>
+                  <small>strings</small>
+                  <em>60 inversores</em>
+                </div>
+                <div class="balance-scale">⚖</div>
+                <div class="balance-box west">
+                  <span>OESTE</span>
+                  <strong>14.712</strong>
+                  <small>strings</small>
+                  <em>60 inversores</em>
+                </div>
+              </div>
+              <div class="balance-total">
+                <span>TOTAL</span>
+                <strong>29.424</strong><small>strings</small>
+                <i></i>
+                <strong>120</strong><small>inversores</small>
+              </div>
+              <p>Distribución simétrica de la arquitectura equivalente Este/Oeste.</p>
+            </article>
+          </section>
+        </div>
+
+        <div id="plant-panel-energia" class="plant-panel">
+          <article class="card plant-energy-placeholder">
+            <h3>DESEMPEÑO ENERGÉTICO — PENDIENTE DE SIMULACIÓN SAM</h3>
+            <p>
+              Esta pestaña recibirá los resultados horarios de Egrid una vez ejecutada la simulación en SAM.
+              Aquí se incorporarán Egrid anual, generación mensual, perfil horario promedio, mapa de calor y
+              comparación posterior con datos CEN.
+            </p>
+          </article>
         </div>
       </section>
+    </section>
+    <!-- FIN VISTA PLANTA FV SAM -->
 
-      <section class="plant-tabs card">
-        <button class="plant-tab active" type="button" data-plant-tab="arquitectura">Arquitectura</button>
-        <button class="plant-tab" type="button" data-plant-tab="energia">Desempeño Energético</button>
-      </section>
-
-      <section id="plant-tab-arquitectura" class="plant-tab-panel active">
-        <section class="plant-kpi-row">
-          <article class="kpi-card green">
-            <div class="kpi-icon">▧</div>
-            <div class="kpi-content">
-              <p>SUBMODELOS EQUIVALENTES</p>
-              <h2>6</h2>
-              <small>SC01 a SC06</small>
-            </div>
-          </article>
-
-          <article class="kpi-card blue">
-            <div class="kpi-icon">⌁</div>
-            <div class="kpi-content">
-              <p>STRINGS TOTALES</p>
-              <h2>29.424 <small>strings</small></h2>
-              <small>cadenas FV modeladas</small>
-            </div>
-          </article>
-
-          <article class="kpi-card purple">
-            <div class="kpi-icon">▣</div>
-            <div class="kpi-content">
-              <p>INVERSORES TOTALES</p>
-              <h2>120</h2>
-              <small>SG3125-HV-30</small>
-            </div>
-          </article>
-
-          <article class="kpi-card orange">
-            <div class="kpi-icon">◈</div>
-            <div class="kpi-content">
-              <p>ORIENTACIÓN</p>
-              <h2>Este / Oeste</h2>
-              <small>distribución simétrica</small>
-            </div>
-          </article>
-
-          <article class="kpi-card green">
-            <div class="kpi-icon">V</div>
-            <div class="kpi-content">
-              <p>CONFIGURACIÓN</p>
-              <h2>V invertida</h2>
-              <small>estructura fija, 5°</small>
-            </div>
-          </article>
-
-          <article class="kpi-card yellow">
-            <div class="kpi-icon">▦</div>
-            <div class="kpi-content">
-              <p>MÓDULOS FV</p>
-              <h2>540 / 545 <small>Wp</small></h2>
-              <small>JAM72-S30-MR</small>
-            </div>
-          </article>
-        </section>
-
-        <section class="plant-layout-main">
-          <article class="card plant-singleline-card">
-            <div class="panel-head">
-              <h3>DIAGRAMA UNIFILAR EQUIVALENTE</h3>
-              <small>6 submodelos FV → inversores → punto de inyección</small>
-            </div>
-
-            <div class="singleline-legend">
-              <span><i class="dc-line"></i> DC / strings FV</span>
-              <span><i class="ac-line"></i> AC / salida inversores</span>
-            </div>
-
-            <div class="ceme1-svg-wrap ceme1-svg-wrap-v5" aria-label="Diagrama unifilar equivalente CEME1">
-              <svg class="ceme1-singleline-svg ceme1-singleline-svg-v5" viewBox="0 0 1180 520" preserveAspectRatio="xMidYMin meet" role="img" aria-labelledby="ceme1UnifilarTitle ceme1UnifilarDesc">
-                <title id="ceme1UnifilarTitle">Diagrama unifilar equivalente CEME1</title>
-                <desc id="ceme1UnifilarDesc">Seis submodelos fotovoltaicos SC01 a SC06 conectados a inversores SG3125-HV-30, barra AC equivalente y punto de inyección.</desc>
-
-                <defs>
-                  <filter id="softGlowV5" x="-45%" y="-45%" width="190%" height="190%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-
-                  <linearGradient id="panelGradientV5" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#0b2c51" />
-                    <stop offset="55%" stop-color="#04162a" />
-                    <stop offset="100%" stop-color="#020b17" />
-                  </linearGradient>
-
-                  <linearGradient id="moduleGradientV5" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#45b7ff" />
-                    <stop offset="48%" stop-color="#176bd6" />
-                    <stop offset="100%" stop-color="#062763" />
-                  </linearGradient>
-
-                  <linearGradient id="inverterGradientV5" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#0e5e81" />
-                    <stop offset="100%" stop-color="#031320" />
-                  </linearGradient>
-
-                  <linearGradient id="busGradientV5" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#6ec2ff" />
-                    <stop offset="50%" stop-color="#2f90ff" />
-                    <stop offset="100%" stop-color="#6ec2ff" />
-                  </linearGradient>
-
-                  <marker id="arrowDcV5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd847" />
-                  </marker>
-
-                  <marker id="arrowAcV5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#4aa8ff" />
-                  </marker>
-
-                  <symbol id="pvModuleV5" viewBox="0 0 80 52">
-                    <polygon points="10,3 77,3 69,49 2,49" fill="url(#moduleGradientV5)" stroke="#8dd5ff" stroke-width="1.5" filter="url(#softGlowV5)" />
-                    <line x1="24" y1="4" x2="16" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
-                    <line x1="42" y1="4" x2="34" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
-                    <line x1="60" y1="4" x2="52" y2="48" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
-                    <line x1="7" y1="18" x2="74" y2="18" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
-                    <line x1="5" y1="33" x2="72" y2="33" stroke="rgba(255,255,255,0.36)" stroke-width="1" />
-                  </symbol>
-
-                  <symbol id="inverterIconV5" viewBox="0 0 64 64">
-                    <rect x="4" y="4" width="56" height="56" rx="9" fill="url(#inverterGradientV5)" stroke="#69e3ff" stroke-width="2.5" filter="url(#softGlowV5)" />
-                    <text x="32" y="27" text-anchor="middle" class="svg-inv-v5">DC</text>
-                    <line x1="17" y1="33" x2="47" y2="33" stroke="#69e3ff" stroke-width="1.6" />
-                    <text x="32" y="49" text-anchor="middle" class="svg-inv-v5">AC</text>
-                  </symbol>
-                </defs>
-
-                <style>
-                  .svg-title-v5 { fill: #ffffff; font: 900 17px Arial, sans-serif; letter-spacing: .2px; }
-                  .svg-subtitle-v5 { fill: #9ec3e8; font: 500 12px Arial, sans-serif; }
-                  .svg-label-v5 { fill: #ffffff; font: 900 13px Arial, sans-serif; }
-                  .svg-small-v5 { fill: #c9d9ea; font: 600 11px Arial, sans-serif; }
-                  .svg-muted-v5 { fill: #93b5d2; font: 500 10px Arial, sans-serif; }
-                  .svg-yellow-v5 { fill: #ffd847; font: 900 12.5px Arial, sans-serif; }
-                  .svg-blue-v5 { fill: #8fd0ff; font: 900 12px Arial, sans-serif; }
-                  .svg-green-v5 { fill: #65ff57; font: 900 12px Arial, sans-serif; }
-                  .svg-inv-v5 { fill: #eaffff; font: 900 16px Arial, sans-serif; }
-                  .svg-row-bg-v5 { fill: rgba(7, 30, 55, 0.56); stroke: rgba(98, 165, 232, 0.20); stroke-width: 1; }
-                  .svg-sc-card-v5 { fill: rgba(2, 14, 28, 0.98); stroke: rgba(104, 180, 255, 0.70); stroke-width: 1.2; }
-                  .svg-dark-chip-v5 { fill: rgba(2, 12, 24, 0.80); stroke: rgba(255, 255, 255, 0.05); }
-                  .svg-dc-line-v5 { stroke: #ffd847; stroke-width: 2.2; stroke-dasharray: 8 8; marker-end: url(#arrowDcV5); }
-                  .svg-ac-line-v5 { stroke: #4aa8ff; stroke-width: 2.7; }
-                  .svg-ac-arrow-v5 { stroke: #4aa8ff; stroke-width: 2.8; marker-end: url(#arrowAcV5); }
-                  .svg-bus-v5 { stroke: url(#busGradientV5); stroke-width: 5; filter: url(#softGlowV5); }
-                  .svg-node-v5 { fill: #031225; stroke: #79caff; stroke-width: 2.4; filter: url(#softGlowV5); }
-                  .svg-injection-box-v5 { fill: rgba(7, 27, 48, 0.98); stroke: rgba(108, 190, 255, 0.85); stroke-width: 2; filter: url(#softGlowV5); }
-                  .svg-note-v5 { fill: rgba(3, 18, 34, 0.76); stroke: rgba(86, 151, 220, 0.22); }
-                </style>
-
-                <rect x="0" y="0" width="1180" height="520" rx="18" fill="url(#panelGradientV5)" opacity="0.72" />
-
-                <text x="18" y="27" class="svg-title-v5">Arquitectura FV equivalente por submodelos</text>
-                <text x="18" y="48" class="svg-subtitle-v5">6 submodelos FV → strings DC → inversores DC/AC → barra colectora AC → punto de inyección</text>
-
-                <line x1="810" y1="30" x2="848" y2="30" class="svg-dc-line-v5" />
-                <text x="860" y="34" class="svg-small-v5">DC / strings FV</text>
-                <line x1="990" y1="30" x2="1028" y2="30" class="svg-ac-line-v5" />
-                <text x="1040" y="34" class="svg-small-v5">AC / salida inversores</text>
-
-                <text x="903" y="62" class="svg-blue-v5">Barra AC equivalente</text>
-                <line x1="892" y1="78" x2="892" y2="388" class="svg-bus-v5" />
-
-                
-                <!-- SC01 -->
-                <g class="svg-row-v5" transform="translate(0,78)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC01</text>
-                  <text x="47" y="10" class="svg-small-v5">540 Wp · Este</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">2.976 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">12 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">37,5 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-                <!-- SC02 -->
-                <g class="svg-row-v5" transform="translate(0,140)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC02</text>
-                  <text x="47" y="10" class="svg-small-v5">540 Wp · Oeste</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">2.976 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">12 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">37,5 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-                <!-- SC03 -->
-                <g class="svg-row-v5" transform="translate(0,202)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC03</text>
-                  <text x="47" y="10" class="svg-small-v5">545 Wp · Este</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">5.040 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(240 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">21 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">65,6 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-                <!-- SC04 -->
-                <g class="svg-row-v5" transform="translate(0,264)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC04</text>
-                  <text x="47" y="10" class="svg-small-v5">545 Wp · Oeste</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">5.040 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(240 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">21 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">65,6 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-                <!-- SC05 -->
-                <g class="svg-row-v5" transform="translate(0,326)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC05</text>
-                  <text x="47" y="10" class="svg-small-v5">545 Wp · Este</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">6.696 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">27 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">84,4 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-                <!-- SC06 -->
-                <g class="svg-row-v5" transform="translate(0,388)">
-                  <rect x="18" y="-28" width="1015" height="54" rx="13" class="svg-row-bg-v5" />
-                  <rect x="31" y="-22" width="82" height="42" rx="8" class="svg-sc-card-v5" />
-                  <text x="47" y="-5" class="svg-label-v5">SC06</text>
-                  <text x="47" y="10" class="svg-small-v5">545 Wp · Oeste</text>
-
-                  <use href="#pvModuleV5" x="140" y="-25" width="78" height="50" />
-                  <text x="146" y="35" class="svg-muted-v5">30 módulos/string</text>
-
-                  <line x1="222" y1="0" x2="472" y2="0" class="svg-dc-line-v5" />
-                  <rect x="250" y="-18" width="188" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="263" y="-2" class="svg-yellow-v5">6.696 strings</text>
-                  <text x="263" y="14" class="svg-small-v5">(248 cadenas/inversor)</text>
-
-                  <use href="#inverterIconV5" x="496" y="-31" width="62" height="62" />
-
-                  <rect x="590" y="-18" width="122" height="36" rx="8" class="svg-dark-chip-v5" />
-                  <text x="603" y="-2" class="svg-label-v5">27 inversores</text>
-                  <text x="603" y="14" class="svg-muted-v5">84,4 MVA</text>
-
-                  <line x1="558" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <line x1="892" y1="0" x2="892" y2="0" class="svg-ac-line-v5" />
-                  <circle cx="892" cy="0" r="5.5" class="svg-node-v5" />
-                </g>
-
-                <circle cx="892" cy="233" r="6.5" class="svg-node-v5" />
-                <line x1="898" y1="233" x2="972" y2="233" class="svg-ac-arrow-v5" />
-
-                <rect x="972" y="178" width="145" height="110" rx="17" class="svg-injection-box-v5" />
-                <rect x="1018" y="199" width="55" height="55" rx="9" fill="rgba(8,34,59,0.98)" stroke="rgba(118,200,255,0.90)" stroke-width="1.8" />
-                <text x="1045.5" y="231" text-anchor="middle" class="svg-label-v5">kWh</text>
-                <text x="1045" y="274" text-anchor="middle" class="svg-label-v5">PUNTO DE</text>
-                <text x="1045" y="291" text-anchor="middle" class="svg-label-v5">INYECCIÓN</text>
-                <text x="1045" y="314" text-anchor="middle" class="svg-muted-v5">salida AC equivalente</text>
-
-                <rect x="18" y="458" width="1099" height="42" rx="12" class="svg-note-v5" />
-                <circle cx="38" cy="479" r="9" fill="rgba(0, 139, 255, 0.18)" stroke="#58b9ff" />
-                <text x="35" y="483" class="svg-blue-v5">i</text>
-                <text x="58" y="483" class="svg-small-v5">Representación equivalente:</text>
-                <text x="204" y="483" class="svg-blue-v5">SC01–SC06</text>
-                <text x="292" y="483" class="svg-small-v5">agrupan orientación Este/Oeste, strings, inversores y salida AC para la simulación horaria en SAM.</text>
-              </svg>
-            </div>
-          </article>
-
-          <article class="card plant-tech-card">
-            <h3>FICHA TÉCNICA DE MODELACIÓN</h3>
-            <ul class="kv-list compact">
-              <li><span>Planta</span><strong>CEME1</strong></li>
-              <li><span>Ubicación</span><strong>María Elena</strong></li>
+  </main>
+</body>
+</html>
