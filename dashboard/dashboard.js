@@ -781,40 +781,31 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
 
 /* ============================================================
-   MÓDULO PLANTA FV (SAM) - SUBPESTAÑAS INTERNAS
+   SUBPESTAÑAS INTERNAS PLANTA FV (SAM)
    ============================================================ */
 (function () {
-  function setupPlantTabs() {
-    const tabButtons = document.querySelectorAll(".plant-tab[data-plant-tab]");
+  function initPlantTabs() {
+    const buttons = document.querySelectorAll(".plant-tab-btn[data-plant-panel]");
+    if (!buttons.length) return;
 
-    if (!tabButtons.length) {
-      return;
-    }
-
-    tabButtons.forEach((button) => {
+    buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        const tabName = button.dataset.plantTab;
-        const targetPanel = document.getElementById(`plant-tab-${tabName}`);
+        const panelName = button.dataset.plantPanel;
 
-        if (!targetPanel) {
-          console.warn(`Subpestaña Planta FV no encontrada: ${tabName}`);
-          return;
-        }
-
-        tabButtons.forEach((btn) => {
-          btn.classList.toggle("active", btn === button);
+        buttons.forEach((item) => {
+          item.classList.toggle("active", item === button);
         });
 
-        document.querySelectorAll(".plant-tab-panel").forEach((panel) => {
-          panel.classList.toggle("active", panel === targetPanel);
+        document.querySelectorAll(".plant-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.id === `plant-panel-${panelName}`);
         });
       });
     });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupPlantTabs);
+    document.addEventListener("DOMContentLoaded", initPlantTabs);
   } else {
-    setupPlantTabs();
+    initPlantTabs();
   }
 })();
