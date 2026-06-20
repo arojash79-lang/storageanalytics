@@ -717,6 +717,13 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       renderSolarView();
     }
 
+    if (viewName === "planta") {
+      const energyPanel = byId("plant-panel-energia");
+      if (energyPanel && energyPanel.classList.contains("active")) {
+        window.renderPlantEnergyView?.();
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -781,6 +788,403 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
 
 /* ============================================================
+   DESEMPEÑO ENERGÉTICO PLANTA FV (SAM)
+   ============================================================ */
+(function () {
+  const PLANT_SAM_BUNDLE_URL = "data/planta_fv_sam_dashboard_bundle.json";
+
+  const plantEnergyState = {
+    loaded: false,
+    rendered: false,
+    bundle: null,
+    charts: {},
+  };
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function setText(id, value) {
+    const el = byId(id);
+    if (el) el.textContent = value;
+  }
+
+  function formatNumber(value, decimals = 1) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    return Number(value).toLocaleString("es-CL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function formatInteger(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    return Number(value).toLocaleString("es-CL", {
+      maximumFractionDigits: 0,
+    });
+  }
+
+  function asPercent(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    const number = Number(value);
+    return formatNumber(number <= 1.5 ? number * 100 : number, 1);
+  }
+
+  function getCssColor(variableName, fallback) {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+
+    return value || fallback;
+  }
+
+  function destroyPlantCharts() {
+    Object.values(plantEnergyState.charts).forEach((chart) => {
+      if (chart && typeof chart.destroy === "function") {
+        chart.destroy();
+      }
+    });
+
+    plantEnergyState.charts = {};
+  }
+
+  function chartBaseOptions(extra = {}) {
+    const tickColor = "#b8cbe3";
+    const gridColor = "rgba(140, 170, 210, 0.14)";
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: tickColor,
+            boxWidth: 14,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: "rgba(3, 18, 34, 0.96)",
+          titleColor: "#ffffff",
+          bodyColor: "#d7e8ff",
+          borderColor: "rgba(91, 141, 196, 0.45)",
+          borderWidth: 1,
+        },
+      },
+      scales: {
+        x: {
+          ticks: { color: tickColor },
+          grid: { color: gridColor },
+        },
+        y: {
+          ticks: { color: tickColor },
+          grid: { color: gridColor },
+        },
+      },
+      ...extra,
+    };
+  }
+
+  function lineDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      borderColor: color,
+      backgroundColor: color,
+      borderWidth: 2,
+      pointRadius: 2,
+      pointHoverRadius: 4,
+      tension: 0.28,
+      fill: false,
+      yAxisID,
+    };
+  }
+
+  function barDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      backgroundColor: `${color}cc`,
+      borderColor: color,
+      borderWidth: 1,
+      borderRadius: 4,
+      yAxisID,
+    };
+  }
+
+  async function loadPlantBundle() {
+    if (plantEnergyState.loaded && plantEnergyState.bundle) {
+      return plantEnergyState.bundle;
+    }
+
+    try {
+      const response = await fetch(PLANT_SAM_BUNDLE_URL, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const bundle = await response.json();
+      plantEnergyState.bundle = bundle;
+      plantEnergyState.loaded = true;
+
+      return bundle;
+    } catch (error) {
+      console.error("No se pudo cargar el bundle Planta FV SAM:", error);
+      return null;
+    }
+  }
+
+  function renderPlantEnergyKpis(kpis) {
+    if (!kpis) return;
+
+    setText("plantKpiAcNetAnnual", formatNumber(kpis.energia_ac_neta_gwh_anio, 1));
+    setText("plantKpiDcAnnual", formatNumber(kpis.energia_dc_gwh_anio, 1));
+    setText("plantKpiAcNominal", formatNumber(kpis.potencia_ac_nominal_mwac, 1));
+    setText("plantKpiDcNominal", formatNumber(kpis.potencia_dc_nominal_mwp, 1));
+    setText("plantKpiAcMax", formatNumber(kpis.potencia_ac_maxima_mw, 1));
+    setText("plantKpiCapacityFactor", formatNumber(kpis.factor_planta_ac_pct, 1));
+    setText("plantKpiPerformanceRatio", asPercent(kpis.performance_ratio_ponderado));
+    setText("plantKpiPoaEast", formatInteger(kpis.poa_este_anual_kwh_m2));
+    setText("plantKpiPoaWest", formatInteger(kpis.poa_oeste_anual_kwh_m2));
+  }
+
+  function renderPlantMonthlyEnergy(mensual) {
+    const canvas = byId("plantMonthlyEnergyChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const blue = getCssColor("--blue", "#2689ff");
+    const green = getCssColor("--green", "#76ff45");
+    const labels = mensual.map((row) => row.mes_nombre || row.mes_corto || row.mes);
+
+    plantEnergyState.charts.monthlyEnergy = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("AC neta", mensual.map((row) => row.energia_ac_neta_gwh), green),
+          barDataset("DC", mensual.map((row) => row.energia_dc_gwh), blue),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantHourlyProfile(perfil) {
+    const canvas = byId("plantHourlyProfileChart");
+    if (!canvas || !Array.isArray(perfil)) return;
+
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+    const labels = perfil.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`);
+
+    plantEnergyState.charts.hourlyProfile = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("AC promedio", perfil.map((row) => row.potencia_ac_prom_mw), cyan),
+          lineDataset("DC promedio", perfil.map((row) => row.potencia_dc_prom_mw), yellow),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3", maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "MW", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantPoaOrientation(mensual) {
+    const canvas = byId("plantPoaOrientationChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const orange = getCssColor("--orange", "#ff8a00");
+    const labels = mensual.map((row) => row.mes_nombre || row.mes_corto || row.mes);
+
+    plantEnergyState.charts.poaOrientation = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("POA Este", mensual.map((row) => row.poa_este_kwh_m2), green),
+          lineDataset("POA Oeste", mensual.map((row) => row.poa_oeste_kwh_m2), orange),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "kWh/m²", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantSubmodelEnergy(submodelos) {
+    const canvas = byId("plantSubmodelEnergyChart");
+    if (!canvas || !Array.isArray(submodelos)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const orange = getCssColor("--orange", "#ff8a00");
+    const labels = submodelos.map((row) => row.submodelo);
+    const colors = submodelos.map((row) => row.orientacion === "Oeste" ? `${orange}cc` : `${green}cc`);
+
+    plantEnergyState.charts.submodelEnergy = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            ...barDataset("AC neta", submodelos.map((row) => row.energia_ac_neta_gwh), green),
+            backgroundColor: colors,
+            borderColor: colors,
+          },
+        ],
+      },
+      options: chartBaseOptions({
+        plugins: {
+          ...chartBaseOptions().plugins,
+          legend: { display: false },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantOrientationBalance(balance) {
+    const canvas = byId("plantOrientationBalanceChart");
+    if (!canvas || !Array.isArray(balance)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const orange = getCssColor("--orange", "#ff8a00");
+
+    plantEnergyState.charts.orientationBalance = new Chart(canvas, {
+      type: "doughnut",
+      data: {
+        labels: balance.map((row) => row.orientacion),
+        datasets: [
+          {
+            label: "Energía AC neta",
+            data: balance.map((row) => row.energia_ac_neta_gwh),
+            backgroundColor: [`${green}cc`, `${orange}cc`],
+            borderColor: [green, orange],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "62%",
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              color: "#b8cbe3",
+              usePointStyle: true,
+            },
+          },
+          tooltip: {
+            backgroundColor: "rgba(3, 18, 34, 0.96)",
+            titleColor: "#ffffff",
+            bodyColor: "#d7e8ff",
+            callbacks: {
+              label: (context) => `${context.label}: ${formatNumber(context.raw, 1)} GWh`,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async function renderPlantEnergyView() {
+    if (plantEnergyState.rendered) return;
+
+    setText("plantEnergyStatus", "CARGANDO");
+    const bundle = await loadPlantBundle();
+
+    if (!bundle) {
+      setText("plantEnergyStatus", "ERROR DATOS");
+      byId("plantEnergyStatus")?.classList.add("error");
+      setText("plantEnergyMeta", "No se pudo cargar data/planta_fv_sam_dashboard_bundle.json");
+      return;
+    }
+
+    const statusEl = byId("plantEnergyStatus");
+    if (statusEl) statusEl.classList.remove("error");
+    setText("plantEnergyStatus", "DATOS OK");
+    setText(
+      "plantEnergyMeta",
+      `${bundle.metadata?.herramienta || "SAM"} · ${bundle.metadata?.fuente_meteorologica || "TMY Explorador Solar"} · ${bundle.metadata?.resolucion || "horaria"}`
+    );
+
+    renderPlantEnergyKpis(bundle.kpis);
+    destroyPlantCharts();
+    renderPlantMonthlyEnergy(bundle.mensual);
+    renderPlantHourlyProfile(bundle.perfil_horario);
+    renderPlantPoaOrientation(bundle.mensual);
+    renderPlantSubmodelEnergy(bundle.submodelos);
+    renderPlantOrientationBalance(bundle.balance_orientacion);
+
+    plantEnergyState.rendered = true;
+  }
+
+  window.renderPlantEnergyView = renderPlantEnergyView;
+})();
+
+
+/* ============================================================
    SUBPESTAÑAS INTERNAS PLANTA FV (SAM)
    ============================================================ */
 (function () {
@@ -799,6 +1203,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         document.querySelectorAll(".plant-panel").forEach((panel) => {
           panel.classList.toggle("active", panel.id === `plant-panel-${panelName}`);
         });
+
+        if (panelName === "energia") {
+          window.renderPlantEnergyView?.();
+        }
       });
     });
   }

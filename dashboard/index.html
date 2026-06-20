@@ -962,14 +962,99 @@
         </div>
 
         <div id="plant-panel-energia" class="plant-panel">
-          <article class="card plant-energy-placeholder">
-            <h3>DESEMPEÑO ENERGÉTICO — PENDIENTE DE SIMULACIÓN SAM</h3>
-            <p>
-              Esta pestaña recibirá los resultados horarios de Egrid una vez ejecutada la simulación en SAM.
-              Aquí se incorporarán Egrid anual, generación mensual, perfil horario promedio, mapa de calor y
-              comparación posterior con datos CEN.
-            </p>
-          </article>
+          <section class="plant-energy-status card">
+            <div>
+              <p class="section-kicker">RESULTADOS SAM — TMY</p>
+              <h3>Desempeño energético anual equivalente</h3>
+              <small id="plantEnergyMeta">Cargando resultados desde dashboard/data...</small>
+            </div>
+            <span id="plantEnergyStatus" class="plant-status-pill">SIN DATOS</span>
+          </section>
+
+          <section class="plant-energy-kpi-grid">
+            <article class="plant-energy-kpi card">
+              <p>ENERGÍA AC NETA ANUAL</p>
+              <h3><span id="plantKpiAcNetAnnual">--</span><small> GWh/año</small></h3>
+              <small>Egrid neta SAM</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>ENERGÍA DC ANUAL</p>
+              <h3><span id="plantKpiDcAnnual">--</span><small> GWh/año</small></h3>
+              <small>Entrada DC equivalente</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>POTENCIA AC NOMINAL</p>
+              <h3><span id="plantKpiAcNominal">--</span><small> MWac</small></h3>
+              <small>Inversores modelados</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>POTENCIA DC NOMINAL</p>
+              <h3><span id="plantKpiDcNominal">--</span><small> MWp</small></h3>
+              <small>Campo FV equivalente</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>POTENCIA AC MÁXIMA</p>
+              <h3><span id="plantKpiAcMax">--</span><small> MW</small></h3>
+              <small>Máximo horario TMY</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>FACTOR DE PLANTA AC</p>
+              <h3><span id="plantKpiCapacityFactor">--</span><small> %</small></h3>
+              <small>Sobre potencia AC</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>PERFORMANCE RATIO</p>
+              <h3><span id="plantKpiPerformanceRatio">--</span><small> %</small></h3>
+              <small>PR ponderado</small>
+            </article>
+            <article class="plant-energy-kpi card poa">
+              <p>POA ESTE / OESTE ANUAL</p>
+              <h3><span id="plantKpiPoaEast">--</span><small> / </small><span id="plantKpiPoaWest">--</span></h3>
+              <small>kWh/m²/año</small>
+            </article>
+          </section>
+
+          <section class="plant-energy-chart-grid">
+            <article class="card plant-energy-chart wide">
+              <div class="panel-head">
+                <h3>GENERACIÓN MENSUAL AC / DC</h3>
+                <small>GWh por mes</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="plantMonthlyEnergyChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>PERFIL HORARIO AC / DC</h3>
+                <small>MW promedio por hora</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="plantHourlyProfileChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>POA ESTE / OESTE</h3>
+                <small>kWh/m² mensual</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="plantPoaOrientationChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>ENERGÍA ANUAL POR SUBMODELO</h3>
+                <small>GWh netos AC</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="plantSubmodelEnergyChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>BALANCE ESTE / OESTE</h3>
+                <small>Participación energética</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="plantOrientationBalanceChart"></canvas></div>
+            </article>
+          </section>
         </div>
       </section>
     </section>
