@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260620-1615" />
+  <link rel="stylesheet" href="dashboard.css?v=20260620-1905" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="dashboard.js?v=20260620-1615" defer></script>
+  <script src="dashboard.js?v=20260620-1905" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -689,7 +689,18 @@
 
         <div class="plant-tabs card">
           <button class="plant-tab-btn active" type="button" data-plant-panel="arquitectura">Arquitectura</button>
-          <button class="plant-tab-btn" type="button" data-plant-panel="energia">Desempeño Energético</button>
+          <button class="plant-tab-btn plant-energy-mode-btn tmy" type="button" data-plant-panel="energia" data-plant-energy-mode="tmy">
+            Desempeño Energético
+            <span>TMY Explorador Solar de Chile</span>
+          </button>
+          <button class="plant-tab-btn plant-energy-mode-btn nasa" type="button" data-plant-panel="energia" data-plant-energy-mode="nasa">
+            NASA POWER
+            <span>Serie 2025</span>
+          </button>
+          <button class="plant-tab-btn plant-energy-mode-btn compare" type="button" data-plant-panel="energia" data-plant-energy-mode="compare">
+            Comparativa
+            <span>TMY vs NASA 2025</span>
+          </button>
         </div>
 
         <div id="plant-panel-arquitectura" class="plant-panel active">
@@ -964,8 +975,8 @@
         <div id="plant-panel-energia" class="plant-panel">
           <section class="plant-energy-status card">
             <div>
-              <p class="section-kicker">RESULTADOS SAM — TMY</p>
-              <h3>Desempeño energético anual equivalente</h3>
+              <p id="plantEnergyKicker" class="section-kicker">RESULTADOS SAM — TMY</p>
+              <h3 id="plantEnergyTitle">Desempeño energético anual equivalente</h3>
               <small id="plantEnergyMeta">Cargando resultados desde dashboard/data...</small>
             </div>
             <span id="plantEnergyStatus" class="plant-status-pill">SIN DATOS</span>

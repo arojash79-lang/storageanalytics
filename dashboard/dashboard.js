@@ -791,12 +791,37 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
    DESEMPEÑO ENERGÉTICO PLANTA FV (SAM)
    ============================================================ */
 (function () {
-  const PLANT_SAM_BUNDLE_URL = "data/planta_fv_sam_dashboard_bundle.json";
+  const PLANT_ENERGY_SOURCES = {
+    tmy: {
+      url: "data/planta_fv_sam_dashboard_bundle.json",
+      type: "single",
+      kicker: "RESULTADOS SAM — TMY",
+      title: "Desempeño energético anual equivalente",
+      status: "TMY DATOS OK",
+      metaLabel: "TMY Explorador Solar de Chile",
+    },
+    nasa: {
+      url: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
+      type: "single",
+      kicker: "RESULTADOS SAM — NASA POWER 2025",
+      title: "Desempeño energético anual equivalente · serie 2025",
+      status: "NASA DATOS OK",
+      metaLabel: "NASA POWER serie 2025",
+    },
+    compare: {
+      url: "data/comparativa_tmy_vs_nasa_2025_dashboard_bundle.json",
+      type: "compare",
+      kicker: "COMPARATIVA SAM — TMY VS NASA 2025",
+      title: "Comparativa energética anual y horaria",
+      status: "COMPARATIVA OK",
+      metaLabel: "TMY Explorador Solar de Chile vs NASA POWER serie 2025",
+    },
+  };
 
   const plantEnergyState = {
-    loaded: false,
-    rendered: false,
-    bundle: null,
+    bundles: {},
+    currentMode: "tmy",
+    renderedMode: null,
     charts: {},
   };
 
@@ -925,25 +950,55 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     };
   }
 
-  async function loadPlantBundle() {
-    if (plantEnergyState.loaded && plantEnergyState.bundle) {
-      return plantEnergyState.bundle;
+  function normalizePlantEnergyMode(mode) {
+    return PLANT_ENERGY_SOURCES[mode] ? mode : plantEnergyState.currentMode || "tmy";
+  }
+
+  function setPlantEnergyStatus(text, isError = false) {
+    const statusEl = byId("plantEnergyStatus");
+    if (statusEl) statusEl.classList.toggle("error", isError);
+    setText("plantEnergyStatus", text);
+  }
+
+  function setPlantEnergyHeader(source, bundle = null) {
+    setText("plantEnergyKicker", source.kicker);
+    setText("plantEnergyTitle", source.title);
+
+    const metadata = bundle?.metadata || bundle?.kpis || {};
+    const tool = metadata.herramienta || "SAM";
+    const resolution = metadata.resolucion || metadata.resolucion_temporal || "horaria";
+    setText("plantEnergyMeta", `${tool} · ${source.metaLabel} · ${resolution}`);
+  }
+
+  function setActiveEnergyModeButton(mode) {
+    document.querySelectorAll(".plant-energy-mode-btn[data-plant-energy-mode]").forEach((button) => {
+      const isActive = button.dataset.plantEnergyMode === mode;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+  }
+
+  async function loadPlantBundle(mode) {
+    const source = PLANT_ENERGY_SOURCES[mode];
+    if (!source) return null;
+
+    if (plantEnergyState.bundles[mode]) {
+      return plantEnergyState.bundles[mode];
     }
 
     try {
-      const response = await fetch(PLANT_SAM_BUNDLE_URL, { cache: "no-store" });
+      const response = await fetch(source.url, { cache: "no-store" });
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
 
       const bundle = await response.json();
-      plantEnergyState.bundle = bundle;
-      plantEnergyState.loaded = true;
+      plantEnergyState.bundles[mode] = bundle;
 
       return bundle;
     } catch (error) {
-      console.error("No se pudo cargar el bundle Planta FV SAM:", error);
+      console.error(`No se pudo cargar el bundle Planta FV SAM (${source.url}):`, error);
       return null;
     }
   }
@@ -960,6 +1015,41 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     setText("plantKpiPerformanceRatio", asPercent(kpis.performance_ratio_ponderado));
     setText("plantKpiPoaEast", formatInteger(kpis.poa_este_anual_kwh_m2));
     setText("plantKpiPoaWest", formatInteger(kpis.poa_oeste_anual_kwh_m2));
+  }
+
+  function findCompareCase(kpis, pattern, fallbackIndex) {
+    if (!Array.isArray(kpis)) return {};
+
+    return kpis.find((row) => pattern.test(`${row.caso || ""} ${row.fuente_meteorologica || ""}`))
+      || kpis[fallbackIndex]
+      || {};
+  }
+
+  function formatPair(left, right, decimals = 1) {
+    return `${formatNumber(left, decimals)} / ${formatNumber(right, decimals)}`;
+  }
+
+  function formatIntegerPair(left, right) {
+    return `${formatInteger(left)} / ${formatInteger(right)}`;
+  }
+
+  function formatPercentPair(left, right) {
+    return `${asPercent(left)} / ${asPercent(right)}`;
+  }
+
+  function renderPlantCompareKpis(kpis) {
+    const tmy = findCompareCase(kpis, /tmy/i, 0);
+    const nasa = findCompareCase(kpis, /nasa/i, 1);
+
+    setText("plantKpiAcNetAnnual", formatPair(tmy.energia_ac_neta_gwh_anio, nasa.energia_ac_neta_gwh_anio, 1));
+    setText("plantKpiDcAnnual", formatPair(tmy.energia_dc_gwh_anio, nasa.energia_dc_gwh_anio, 1));
+    setText("plantKpiAcNominal", formatPair(tmy.potencia_ac_nominal_mwac, nasa.potencia_ac_nominal_mwac, 1));
+    setText("plantKpiDcNominal", formatPair(tmy.potencia_dc_nominal_mwp, nasa.potencia_dc_nominal_mwp, 1));
+    setText("plantKpiAcMax", formatPair(tmy.potencia_ac_maxima_mw, nasa.potencia_ac_maxima_mw, 1));
+    setText("plantKpiCapacityFactor", formatPair(tmy.factor_planta_ac_pct, nasa.factor_planta_ac_pct, 1));
+    setText("plantKpiPerformanceRatio", formatPercentPair(tmy.performance_ratio_ponderado, nasa.performance_ratio_ponderado));
+    setText("plantKpiPoaEast", formatIntegerPair(tmy.poa_este_anual_kwh_m2, nasa.poa_este_anual_kwh_m2));
+    setText("plantKpiPoaWest", formatIntegerPair(tmy.poa_oeste_anual_kwh_m2, nasa.poa_oeste_anual_kwh_m2));
   }
 
   function renderPlantMonthlyEnergy(mensual) {
@@ -1148,39 +1238,253 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     });
   }
 
-  async function renderPlantEnergyView() {
-    if (plantEnergyState.rendered) return;
+  function renderPlantCompareMonthly(mensual) {
+    const canvas = byId("plantMonthlyEnergyChart");
+    if (!canvas || !Array.isArray(mensual)) return;
 
-    setText("plantEnergyStatus", "CARGANDO");
-    const bundle = await loadPlantBundle();
+    const blue = getCssColor("--blue", "#2689ff");
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const green = getCssColor("--green", "#76ff45");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+    const labels = mensual.map((row) => row.mes_nombre || row.mes_corto || row.mes);
 
-    if (!bundle) {
-      setText("plantEnergyStatus", "ERROR DATOS");
-      byId("plantEnergyStatus")?.classList.add("error");
-      setText("plantEnergyMeta", "No se pudo cargar data/planta_fv_sam_dashboard_bundle.json");
-      return;
-    }
+    plantEnergyState.charts.monthlyEnergy = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("AC TMY", mensual.map((row) => row.energia_ac_neta_gwh_tmy), green),
+          barDataset("AC NASA 2025", mensual.map((row) => row.energia_ac_neta_gwh_nasa_2025), cyan),
+          barDataset("DC TMY", mensual.map((row) => row.energia_dc_gwh_tmy), yellow),
+          barDataset("DC NASA 2025", mensual.map((row) => row.energia_dc_gwh_nasa_2025), blue),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
 
-    const statusEl = byId("plantEnergyStatus");
-    if (statusEl) statusEl.classList.remove("error");
-    setText("plantEnergyStatus", "DATOS OK");
-    setText(
-      "plantEnergyMeta",
-      `${bundle.metadata?.herramienta || "SAM"} · ${bundle.metadata?.fuente_meteorologica || "TMY Explorador Solar"} · ${bundle.metadata?.resolucion || "horaria"}`
-    );
+  function renderPlantCompareHourly(perfil) {
+    const canvas = byId("plantHourlyProfileChart");
+    if (!canvas || !Array.isArray(perfil)) return;
 
+    const blue = getCssColor("--blue", "#2689ff");
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const green = getCssColor("--green", "#76ff45");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+    const labels = perfil.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`);
+
+    plantEnergyState.charts.hourlyProfile = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("AC TMY", perfil.map((row) => row.potencia_ac_prom_mw_tmy), cyan),
+          { ...lineDataset("AC NASA 2025", perfil.map((row) => row.potencia_ac_prom_mw_nasa_2025), green), borderDash: [6, 4] },
+          lineDataset("DC TMY", perfil.map((row) => row.potencia_dc_prom_mw_tmy), yellow),
+          { ...lineDataset("DC NASA 2025", perfil.map((row) => row.potencia_dc_prom_mw_nasa_2025), blue), borderDash: [6, 4] },
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3", maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "MW", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantComparePoa(mensual) {
+    const canvas = byId("plantPoaOrientationChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const orange = getCssColor("--orange", "#ff8a00");
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const purple = getCssColor("--purple", "#b46cff");
+    const labels = mensual.map((row) => row.mes_nombre || row.mes_corto || row.mes);
+
+    plantEnergyState.charts.poaOrientation = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("Este TMY", mensual.map((row) => row.poa_este_kwh_m2_tmy), green),
+          { ...lineDataset("Este NASA 2025", mensual.map((row) => row.poa_este_kwh_m2_nasa_2025), cyan), borderDash: [6, 4] },
+          lineDataset("Oeste TMY", mensual.map((row) => row.poa_oeste_kwh_m2_tmy), orange),
+          { ...lineDataset("Oeste NASA 2025", mensual.map((row) => row.poa_oeste_kwh_m2_nasa_2025), purple), borderDash: [6, 4] },
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "kWh/m²", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderPlantCompareSubmodel(submodelos) {
+    const canvas = byId("plantSubmodelEnergyChart");
+    if (!canvas || !Array.isArray(submodelos)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+    const labels = submodelos.map((row) => row.submodelo);
+
+    plantEnergyState.charts.submodelEnergy = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("AC TMY", submodelos.map((row) => row.energia_ac_neta_gwh_tmy), green),
+          barDataset("AC NASA 2025", submodelos.map((row) => row.energia_ac_neta_gwh_nasa_2025), blue),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function findBalanceValue(balance, casePattern, orientationPattern) {
+    const row = Array.isArray(balance)
+      ? balance.find((item) => casePattern.test(`${item.caso || ""}`) && orientationPattern.test(`${item.orientacion || ""}`))
+      : null;
+
+    return row?.energia_ac_neta_gwh ?? null;
+  }
+
+  function renderPlantCompareBalance(balance) {
+    const canvas = byId("plantOrientationBalanceChart");
+    if (!canvas || !Array.isArray(balance)) return;
+
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+
+    plantEnergyState.charts.orientationBalance = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: ["Este", "Oeste"],
+        datasets: [
+          barDataset("TMY", [
+            findBalanceValue(balance, /tmy/i, /este/i),
+            findBalanceValue(balance, /tmy/i, /oeste/i),
+          ], green),
+          barDataset("NASA 2025", [
+            findBalanceValue(balance, /nasa/i, /este/i),
+            findBalanceValue(balance, /nasa/i, /oeste/i),
+          ], blue),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSinglePlantEnergyBundle(bundle) {
     renderPlantEnergyKpis(bundle.kpis);
-    destroyPlantCharts();
     renderPlantMonthlyEnergy(bundle.mensual);
     renderPlantHourlyProfile(bundle.perfil_horario);
     renderPlantPoaOrientation(bundle.mensual);
     renderPlantSubmodelEnergy(bundle.submodelos);
     renderPlantOrientationBalance(bundle.balance_orientacion);
+  }
 
-    plantEnergyState.rendered = true;
+  function renderComparePlantEnergyBundle(bundle) {
+    renderPlantCompareKpis(bundle.kpis);
+    renderPlantCompareMonthly(bundle.mensual);
+    renderPlantCompareHourly(bundle.perfil_horario);
+    renderPlantComparePoa(bundle.mensual);
+    renderPlantCompareSubmodel(bundle.submodelos);
+    renderPlantCompareBalance(bundle.balance_orientacion);
+  }
+
+  async function renderPlantEnergyView(mode) {
+    const nextMode = normalizePlantEnergyMode(mode);
+    const source = PLANT_ENERGY_SOURCES[nextMode];
+    plantEnergyState.currentMode = nextMode;
+    setActiveEnergyModeButton(nextMode);
+
+    if (plantEnergyState.renderedMode === nextMode && Object.keys(plantEnergyState.charts).length) {
+      return;
+    }
+
+    setPlantEnergyHeader(source);
+    setPlantEnergyStatus("CARGANDO");
+    const bundle = await loadPlantBundle(nextMode);
+
+    if (plantEnergyState.currentMode !== nextMode) return;
+
+    if (!bundle) {
+      destroyPlantCharts();
+      plantEnergyState.renderedMode = null;
+      setPlantEnergyStatus("ERROR DATOS", true);
+      setText("plantEnergyMeta", `No se pudo cargar ${source.url}`);
+      return;
+    }
+
+    setPlantEnergyHeader(source, bundle);
+    setPlantEnergyStatus(source.status);
+    destroyPlantCharts();
+
+    if (source.type === "compare") {
+      renderComparePlantEnergyBundle(bundle);
+    } else {
+      renderSinglePlantEnergyBundle(bundle);
+    }
+
+    plantEnergyState.renderedMode = nextMode;
   }
 
   window.renderPlantEnergyView = renderPlantEnergyView;
+  window.getActivePlantEnergyMode = () => plantEnergyState.currentMode;
 })();
 
 
@@ -1205,7 +1509,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         });
 
         if (panelName === "energia") {
-          window.renderPlantEnergyView?.();
+          window.renderPlantEnergyView?.(button.dataset.plantEnergyMode);
         }
       });
     });

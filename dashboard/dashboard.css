@@ -1064,8 +1064,10 @@ tbody tr.highlight {
 .plant-tabs {
   display: inline-flex;
   align-self: flex-start;
+  flex-wrap: wrap;
   gap: 6px;
   padding: 8px;
+  max-width: 100%;
 }
 
 .plant-tab-btn {
@@ -1079,11 +1081,73 @@ tbody tr.highlight {
   cursor: pointer;
 }
 
+.plant-energy-mode-btn {
+  min-height: 52px;
+  min-width: 176px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.plant-energy-mode-btn span {
+  display: block;
+  max-width: 100%;
+  color: #9fc8f5;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plant-energy-mode-btn.tmy {
+  border-color: rgba(69, 165, 255, 0.34);
+}
+
+.plant-energy-mode-btn.nasa {
+  border-color: rgba(118, 255, 69, 0.42);
+  color: #dfffd5;
+}
+
+.plant-energy-mode-btn.nasa span {
+  color: #a8f98b;
+}
+
+.plant-energy-mode-btn.compare {
+  border-color: rgba(255, 77, 77, 0.48);
+  color: #ffe5e5;
+}
+
+.plant-energy-mode-btn.compare span {
+  color: #ffb6b6;
+}
+
 .plant-tab-btn.active {
   background: linear-gradient(180deg, #216fd9, #1055ba);
   border-color: #45a5ff;
   color: #fff;
   box-shadow: 0 0 18px rgba(38, 137, 255, 0.18);
+}
+
+.plant-energy-mode-btn.active span {
+  color: #ffffff;
+}
+
+.plant-energy-mode-btn.nasa.active {
+  background: linear-gradient(180deg, rgba(42, 153, 49, 0.95), rgba(14, 92, 34, 0.98));
+  border-color: rgba(118, 255, 69, 0.82);
+  box-shadow: 0 0 18px rgba(118, 255, 69, 0.16);
+}
+
+.plant-energy-mode-btn.compare.active {
+  background: linear-gradient(180deg, rgba(160, 49, 49, 0.96), rgba(91, 22, 30, 0.98));
+  border-color: rgba(255, 77, 77, 0.86);
+  box-shadow: 0 0 18px rgba(255, 77, 77, 0.15);
 }
 
 .plant-panel {
@@ -2003,7 +2067,8 @@ tbody tr.highlight {
   .plant-energy-chart-grid { grid-template-columns: 1fr; }
   .plant-kpi-grid { grid-template-columns: 1fr; }
   .plant-tabs { width: 100%; }
-  .plant-tab-btn { flex: 1; min-width: 0; }
+  .plant-tab-btn { flex: 1 1 144px; min-width: 144px; }
+  .plant-energy-mode-btn { min-width: 144px; }
 }
 
 @media (max-width: 760px) {
