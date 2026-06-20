@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260620-1535" />
+  <link rel="stylesheet" href="dashboard.css?v=20260620-1615" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="dashboard.js?v=20260620-1535" defer></script>
+  <script src="dashboard.js?v=20260620-1615" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -693,96 +693,102 @@
         </div>
 
         <div id="plant-panel-arquitectura" class="plant-panel active">
-          <section class="plant-kpi-grid">
-            <article class="plant-kpi card green">
-              <span class="plant-kpi-icon" aria-hidden="true">
+          <section class="plant-scada-strip" aria-label="Flujo SCADA de arquitectura FV">
+            <article class="scada-step field">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-                  <path d="M8 4v16M16 4v16M4 8h16M4 16h16"></path>
-                  <path d="M7 7l10 10M12 7l5 5"></path>
+                  <rect x="4" y="5" width="16" height="12" rx="2"></rect>
+                  <path d="M8 5v12M12 5v12M16 5v12M4 9h16M4 13h16"></path>
                 </svg>
               </span>
               <div>
-                <p>SUBMODELOS EQUIVALENTES</p>
-                <h3>6</h3>
-                <small>SC01 a SC06</small>
+                <p>CAMPO FV</p>
+                <strong>SC01–SC06</strong>
+                <small>bloques equivalentes</small>
               </div>
             </article>
 
-            <article class="plant-kpi card blue">
-              <span class="plant-kpi-icon" aria-hidden="true">
+            <article class="scada-step dc">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
                   <path d="M4 12h14"></path>
                   <path d="M14 8l4 4-4 4"></path>
                   <circle cx="5" cy="12" r="1.6"></circle>
-                  <circle cx="11" cy="12" r="1.6"></circle>
+                  <circle cx="10" cy="12" r="1.6"></circle>
                 </svg>
               </span>
               <div>
-                <p>STRINGS TOTALES</p>
-                <h3>29.424 <small>strings</small></h3>
-                <small>Cadenas FV modeladas</small>
+                <p>DC STRINGS</p>
+                <strong>29.424</strong>
+                <small>Este/Oeste balanceado</small>
               </div>
             </article>
 
-            <article class="plant-kpi card purple">
-              <span class="plant-kpi-icon" aria-hidden="true">
+            <article class="scada-step inv">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
                   <rect x="5" y="5" width="14" height="14" rx="2"></rect>
-                  <path d="M9 15h6M9 9h6M12 9v6"></path>
+                  <path d="M9 9h6M9 15h6M12 9v6"></path>
                   <path d="M7 3v3M17 3v3M7 18v3M17 18v3"></path>
                 </svg>
               </span>
               <div>
-                <p>INVERSORES TOTALES</p>
-                <h3>120</h3>
-                <small>SG3125-HV-30</small>
+                <p>INVERSORES</p>
+                <strong>120</strong>
+                <small>conversión DC/AC</small>
               </div>
             </article>
 
-            <article class="plant-kpi card orange">
-              <span class="plant-kpi-icon" aria-hidden="true">
+            <article class="scada-step ac">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <path d="M12 3l7 9-7 9-7-9 7-9z"></path>
-                  <path d="M8 12h8"></path>
-                  <path d="M9 9l-3 3 3 3M15 9l3 3-3 3"></path>
+                  <path d="M6 5v14"></path>
+                  <path d="M10 8h8M10 12h8M10 16h8"></path>
+                  <circle cx="6" cy="8" r="1.5"></circle>
+                  <circle cx="6" cy="12" r="1.5"></circle>
+                  <circle cx="6" cy="16" r="1.5"></circle>
                 </svg>
               </span>
               <div>
-                <p>ORIENTACIÓN</p>
-                <h3>Este / Oeste</h3>
-                <small>Distribución simétrica</small>
+                <p>BARRA AC</p>
+                <strong>colector</strong>
+                <small>barra equivalente</small>
               </div>
             </article>
 
-            <article class="plant-kpi card green">
-              <span class="plant-kpi-icon" aria-hidden="true">
+            <article class="scada-step poi">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <path d="M4 7l8 10 8-10"></path>
-                  <path d="M7 7h10"></path>
-                  <path d="M12 17v4"></path>
-                  <path d="M6 21h12"></path>
+                  <rect x="6" y="5" width="12" height="14" rx="2"></rect>
+                  <path d="M9 10h6M9 14h6"></path>
+                  <path d="M18 12h3"></path>
+                  <path d="M3 12h3"></path>
                 </svg>
               </span>
               <div>
-                <p>CONFIGURACIÓN</p>
-                <h3>V invertida</h3>
-                <small>Estructura fija, 5°</small>
+                <p>POI</p>
+                <strong>inyección</strong>
+                <small>salida AC modelada</small>
               </div>
             </article>
 
-            <article class="plant-kpi card yellow">
-              <span class="plant-kpi-icon" aria-hidden="true">
+            <article class="scada-step status">
+              <span class="scada-led"></span>
+              <span class="scada-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <rect x="4" y="5" width="16" height="12" rx="2"></rect>
-                  <path d="M8 5v12M12 5v12M16 5v12M4 9h16M4 13h16"></path>
-                  <path d="M10 20h4M12 17v3"></path>
+                  <path d="M4 12l5 5L20 6"></path>
+                  <path d="M4 20h16"></path>
                 </svg>
               </span>
               <div>
-                <p>MÓDULOS FV</p>
-                <h3>540 / 545 <small>Wp</small></h3>
-                <small>JAM72-S30-MR</small>
+                <p>ESTADO</p>
+                <strong>modelo OK</strong>
+                <small>topología validada</small>
               </div>
             </article>
           </section>
@@ -808,7 +814,7 @@
                     <span>Strings DC</span>
                     <span>Inversor</span>
                     <span>Bloque AC</span>
-                    <span>Colector AC</span>
+                    <span class="pv-stage-spacer"></span>
                   </div>
                   <div class="pv-bus-label">Barra AC equivalente</div>
                   <div class="pv-bus-pro"></div>

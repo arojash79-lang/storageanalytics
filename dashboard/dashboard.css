@@ -1094,6 +1094,125 @@ tbody tr.highlight {
   display: block;
 }
 
+.plant-scada-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(160px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scada-step {
+  position: relative;
+  min-height: 70px;
+  display: grid;
+  grid-template-columns: 10px 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  overflow: hidden;
+  border: 1px solid rgba(86, 157, 235, 0.2);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(8, 31, 56, 0.95), rgba(4, 17, 31, 0.98)),
+    radial-gradient(circle at 8% 50%, rgba(118, 255, 69, 0.08), transparent 35%);
+}
+
+.scada-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid currentColor;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.scada-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  width: 10px;
+  border-top: 2px solid rgba(82, 181, 255, 0.65);
+  transform: translateY(-50%);
+}
+
+.scada-step.field,
+.scada-step.poi,
+.scada-step.status {
+  color: var(--green);
+}
+
+.scada-step.dc {
+  color: var(--yellow);
+}
+
+.scada-step.inv {
+  color: var(--purple);
+}
+
+.scada-step.ac {
+  color: var(--cyan);
+}
+
+.scada-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.scada-step-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.scada-step-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.scada-step-icon svg circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.scada-step p {
+  margin-bottom: 3px;
+  color: currentColor;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+}
+
+.scada-step strong {
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.scada-step small {
+  display: block;
+  margin-top: 4px;
+  color: #bcd0e6;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .plant-kpi-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(150px, 1fr));
@@ -1754,6 +1873,7 @@ tbody tr.highlight {
 }
 
 @media (max-width: 1450px) {
+  .plant-scada-strip { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
   .plant-kpi-grid { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
   .plant-layout-grid,
   .plant-bottom-grid { grid-template-columns: 1fr; }
@@ -1761,6 +1881,7 @@ tbody tr.highlight {
 
 @media (max-width: 900px) {
   .plant-head-grid { grid-template-columns: 1fr; }
+  .plant-scada-strip { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
   .plant-kpi-grid { grid-template-columns: 1fr; }
   .plant-tabs { width: 100%; }
   .plant-tab-btn { flex: 1; min-width: 0; }
@@ -1777,6 +1898,14 @@ tbody tr.highlight {
     gap: 12px;
     flex-wrap: wrap;
     white-space: normal;
+  }
+
+  .plant-scada-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .scada-step:not(:last-child)::after {
+    display: none;
   }
 
   .pv-unifilar-scroll {
