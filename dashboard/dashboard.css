@@ -222,9 +222,9 @@ body {
   grid-template-columns: 190px 1fr;
   gap: 18px;
   align-items: center;
-  padding: 9px 16px;
+  padding: 11px 16px;
   margin-bottom: 9px;
-  height: 78px;
+  min-height: 92px;
 }
 
 .sim-state span:not(.live-dot) {
@@ -249,11 +249,13 @@ body {
 .sim-state small {
   display: block;
   color: #aebed0;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .sim-state strong {
+  display: block;
   font-size: 26px;
+  line-height: 1.05;
   margin-right: 8px;
 }
 
@@ -262,6 +264,7 @@ body {
   font-style: normal;
   color: #c6d4e5;
   font-size: 12px;
+  margin-top: 2px;
 }
 
 .time-runner {
@@ -1175,6 +1178,9 @@ tbody tr.highlight {
 }
 
 .plant-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
   align-items: flex-start;
   margin-bottom: 10px;
 }
@@ -1221,40 +1227,70 @@ tbody tr.highlight {
 
 .pv-unifilar-scroll {
   overflow-x: auto;
-  padding-bottom: 3px;
+  padding: 2px 0 4px;
+  scrollbar-color: rgba(88, 176, 255, 0.55) rgba(4, 18, 33, 0.75);
 }
 
 .pv-unifilar-pro {
   position: relative;
-  min-width: 930px;
-  min-height: 468px;
-  padding: 8px 168px 12px 8px;
-  border-radius: 12px;
-  background: radial-gradient(circle at 70% 50%, rgba(24, 103, 170, 0.14), transparent 42%), rgba(2, 12, 24, 0.26);
+  min-width: 1040px;
+  min-height: 520px;
+  padding: 44px 194px 16px 14px;
+  border: 1px solid rgba(97, 174, 255, 0.18);
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0/90px 100%,
+    radial-gradient(circle at 82% 48%, rgba(24, 103, 170, 0.18), transparent 36%),
+    rgba(2, 12, 24, 0.34);
+}
+
+.pv-stage-labels {
+  display: grid;
+  grid-template-columns: 108px 82px 210px 68px 150px minmax(144px, 1fr);
+  gap: 14px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+  color: #86c7ff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
 }
 
 .pv-row-pro {
   height: 68px;
   display: grid;
-  grid-template-columns: 92px 86px 190px 64px 128px minmax(145px, 1fr);
+  grid-template-columns: 108px 82px 210px 68px 150px minmax(144px, 1fr);
   gap: 14px;
   align-items: center;
   position: relative;
-  margin-bottom: 7px;
+  margin-bottom: 9px;
   padding: 7px 0;
 }
 
 .pv-row-pro::before {
   content: "";
   position: absolute;
-  left: 0;
-  right: -2px;
+  left: -2px;
+  right: -1px;
   top: 0;
   bottom: 0;
   border: 1px solid rgba(78, 153, 230, 0.14);
-  background: linear-gradient(90deg, rgba(7, 28, 52, 0.55), rgba(6, 20, 37, 0.18));
+  background: linear-gradient(90deg, rgba(7, 28, 52, 0.72), rgba(6, 20, 37, 0.24));
   border-radius: 10px;
   pointer-events: none;
+}
+
+.pv-row-pro:last-child {
+  margin-bottom: 0;
+}
+
+.pv-row-pro.orientation-east::before {
+  border-left: 3px solid rgba(118, 255, 69, 0.72);
+}
+
+.pv-row-pro.orientation-west::before {
+  border-left: 3px solid rgba(255, 138, 0, 0.72);
 }
 
 .sc-chip,
@@ -1268,7 +1304,7 @@ tbody tr.highlight {
 }
 
 .sc-chip {
-  width: 82px;
+  width: 96px;
   min-height: 48px;
   border: 1px solid rgba(90, 177, 255, 0.46);
   background: rgba(4, 17, 32, 0.9);
@@ -1277,6 +1313,16 @@ tbody tr.highlight {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.orientation-east .sc-chip {
+  border-color: rgba(118, 255, 69, 0.45);
+  box-shadow: inset 3px 0 0 rgba(118, 255, 69, 0.55);
+}
+
+.orientation-west .sc-chip {
+  border-color: rgba(255, 138, 0, 0.45);
+  box-shadow: inset 3px 0 0 rgba(255, 138, 0, 0.55);
 }
 
 .sc-chip strong {
@@ -1293,6 +1339,7 @@ tbody tr.highlight {
 .module-icon {
   width: 62px;
   height: 38px;
+  justify-self: center;
   transform: skewX(-7deg);
   border-radius: 4px;
   border: 1px solid rgba(113, 196, 255, 0.76);
@@ -1318,6 +1365,7 @@ tbody tr.highlight {
 
 .strings-box {
   min-height: 44px;
+  width: 100%;
   padding: 8px 14px;
   border: 1px solid rgba(255, 210, 31, 0.42);
   border-radius: 7px;
@@ -1366,6 +1414,7 @@ tbody tr.highlight {
 
 .inverter-count {
   min-height: 44px;
+  width: 100%;
   padding: 8px 12px;
   border-radius: 7px;
   background: rgba(0, 8, 17, 0.72);
@@ -1386,6 +1435,7 @@ tbody tr.highlight {
 
 .ac-run {
   height: 2px;
+  min-width: 130px;
   background: linear-gradient(90deg, #48a9ff, #62bdff);
   box-shadow: 0 0 10px rgba(72, 169, 255, 0.38);
 }
@@ -1405,9 +1455,9 @@ tbody tr.highlight {
 
 .pv-bus-pro {
   position: absolute;
-  right: 166px;
-  top: 49px;
-  height: 380px;
+  right: 194px;
+  top: 102px;
+  height: 386px;
   width: 3px;
   background: #55b6ff;
   box-shadow: 0 0 14px rgba(85, 182, 255, 0.65);
@@ -1416,18 +1466,24 @@ tbody tr.highlight {
 
 .pv-bus-label {
   position: absolute;
-  right: 116px;
-  top: 17px;
+  right: 130px;
+  top: 52px;
+  padding: 7px 10px;
+  border: 1px solid rgba(85, 182, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(4, 20, 38, 0.92);
   color: #8ccaff;
   font-weight: 800;
   font-size: 12px;
+  white-space: nowrap;
+  z-index: 6;
 }
 
 .pv-bus-link {
   position: absolute;
-  right: 103px;
-  top: 238px;
-  width: 64px;
+  right: 134px;
+  top: 295px;
+  width: 60px;
   height: 2px;
   background: #55b6ff;
   box-shadow: 0 0 12px rgba(85, 182, 255, 0.7);
@@ -1446,11 +1502,11 @@ tbody tr.highlight {
 
 .pv-injection-pro {
   position: absolute;
-  right: 8px;
-  top: 200px;
-  width: 100px;
-  min-height: 112px;
-  border-radius: 13px;
+  right: 18px;
+  top: 236px;
+  width: 116px;
+  min-height: 122px;
+  border-radius: 10px;
   border: 2px solid #62bdff;
   background: radial-gradient(circle at top, rgba(61, 158, 255, 0.22), rgba(6, 21, 39, 0.96));
   box-shadow: 0 0 20px rgba(98, 189, 255, 0.26);
@@ -1466,7 +1522,7 @@ tbody tr.highlight {
   width: 50px;
   height: 45px;
   border: 2px solid #7fc8ff;
-  border-radius: 7px;
+  border-radius: 6px;
   display: grid;
   place-items: center;
   font-weight: 900;
@@ -1691,4 +1747,130 @@ tbody tr.highlight {
   .plant-kpi-grid { grid-template-columns: 1fr; }
   .plant-tabs { width: 100%; }
   .plant-tab-btn { flex: 1; min-width: 0; }
+}
+
+@media (max-width: 760px) {
+  .plant-panel-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .plant-legend {
+    gap: 12px;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .pv-unifilar-scroll {
+    overflow-x: visible;
+  }
+
+  .pv-unifilar-pro {
+    min-width: 0;
+    min-height: 0;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pv-stage-labels,
+  .strings-box::before,
+  .strings-box::after,
+  .pv-bus-pro,
+  .pv-bus-link,
+  .ac-run .node {
+    display: none;
+  }
+
+  .pv-row-pro {
+    height: auto;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 10px 12px;
+    margin-bottom: 0;
+    padding: 12px;
+  }
+
+  .pv-row-pro::before {
+    right: 0;
+    border-radius: 8px;
+  }
+
+  .sc-chip {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .module-icon {
+    align-self: center;
+  }
+
+  .module-icon::after {
+    display: none;
+  }
+
+  .strings-box {
+    grid-column: 2;
+  }
+
+  .inverter-box {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .inverter-count {
+    grid-column: 2;
+  }
+
+  .ac-run {
+    grid-column: 1 / -1;
+    min-width: 0;
+    width: 100%;
+    margin-top: 2px;
+  }
+
+  .pv-bus-label {
+    position: relative;
+    top: auto;
+    right: auto;
+    order: 2;
+    align-self: stretch;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+  .pv-injection-pro {
+    position: relative;
+    top: auto;
+    right: auto;
+    order: 3;
+    width: 100%;
+    min-height: 0;
+    padding: 12px;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .meter-icon {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  .balance-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .balance-scale {
+    font-size: 26px;
+  }
+
+  .balance-total {
+    flex-wrap: wrap;
+  }
 }
