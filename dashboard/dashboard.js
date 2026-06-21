@@ -39,6 +39,7 @@ async function cargarDatosScadaHorario(){
     const json = await res.json();
     scadaHourlyRows = Array.isArray(json) ? json : [];
     if(!scadaHourlyRows.length) throw new Error("JSON horario vacío");
+    logScadaLoadDiagnostics(scadaHourlyRows);
     setScadaDataNote("Los valores FV provienen de SAM y los valores de inyección, curtailment y precio provienen de CEN/SEN 2025. CEN disponible se define como inyección + curtailment.");
     updateScadaDay(true);
   }catch(e){
@@ -55,11 +56,11 @@ async function cargarDatosScadaHorario(){
 
 function updateScadaDay(resetIndex = false){
   pause();
-  const selectedDate = $("dateInput").value || "2025-05-15";
+  const selectedDate = normalizeDate($("dateInput").value || "2025-05-15");
   const selectedCase = $("samCaseSelect").value || "SAM_NASA_2025";
   const rows = scadaHourlyRows
-    .filter((row) => row.caso_sam === selectedCase && String(row.timestamp || "").slice(0,10) === selectedDate)
-    .sort((a,b) => Number(a.hora) - Number(b.hora))
+    .filter((row) => normalizeDate(row.timestamp) === selectedDate && String(row.caso_sam || "").trim() === selectedCase)
+    .sort((a,b) => getTimestampTime(a.timestamp) - getTimestampTime(b.timestamp))
     .map(normalizeScadaRow);
 
   datos = rows;
@@ -68,7 +69,8 @@ function updateScadaDay(resetIndex = false){
   $("timeSlider").value = indiceActual;
 
   if(!datos.length && scadaHourlyRows.length){
-    setScadaDataNote(`Sin datos horarios para ${selectedDate} / ${selectedCase}.`);
+    setScadaDataNote("Sin datos para la fecha seleccionada y caso SAM seleccionado");
+    logScadaNoMatches(selectedDate, selectedCase);
   } else if(scadaHourlyRows.length) {
     setScadaDataNote("Los valores FV provienen de SAM y los valores de inyección, curtailment y precio provienen de CEN/SEN 2025. CEN disponible se define como inyección + curtailment.");
   }
@@ -77,29 +79,102 @@ function updateScadaDay(resetIndex = false){
 }
 
 function normalizeScadaRow(row){
-  const timestamp = String(row.timestamp || "").replace(" ", "T");
-  const fv = Math.max(0, Number(row.sam_e_ac_pos_mwh ?? row.sam_e_ac_mwh ?? row.sam_p_ac_mw) || 0);
-  const inyeccion = Number(row.cen_inyeccion_mwh) || 0;
-  const curtailment = Number(row.cen_curtailment_mwh) || 0;
-  const disponible = Number(row.cen_disponible_mwh) || (inyeccion + curtailment);
-  const precio = Number(row.precio_spot_usd_mwh) || 0;
+  const timestamp = normalizeTimestamp(row.timestamp);
+  const fvPower = toNumber(row.sam_p_ac_mw);
+  const fvEnergy = toNumber(row.sam_e_ac_mwh);
+  const inyeccion = toNumber(row.cen_inyeccion_mwh);
+  const curtailment = toNumber(row.cen_curtailment_mwh);
+  const disponible = toNumber(row.cen_disponible_mwh, inyeccion + curtailment);
+  const precio = toNumber(row.precio_spot_usd_mwh);
 
   return {
     datetime: timestamp,
     caso_sam: row.caso_sam,
     fuente_meteorologica: row.fuente_meteorologica,
-    ghi: Number(row.meteo_ghi_wm2) || 0,
-    dni: Number(row.meteo_dni_wm2) || 0,
-    dhi: Number(row.meteo_dhi_wm2) || 0,
-    fv,
+    rawTimestamp: row.timestamp,
+    ghi: toNumber(row.meteo_ghi_wm2),
+    dni: toNumber(row.meteo_dni_wm2),
+    dhi: toNumber(row.meteo_dhi_wm2),
+    fv: fvPower,
+    fvPower,
+    fvEnergy,
     inyeccion,
     curtailment,
     disponible,
-    residuo: Number(row.residuo_sam_menos_cen_disp_mwh) || (fv - disponible),
+    residuo: toNumber(row.residuo_sam_menos_cen_disp_mwh, fvEnergy - disponible),
     pmg: precio,
-    ingreso_inyeccion_usd: Number(row.cen_ingreso_inyeccion_usd) || (inyeccion * precio),
-    valor_curtailment_usd: Number(row.cen_valor_curtailment_usd) || (curtailment * precio),
+    ingreso_inyeccion_usd: toNumber(row.cen_ingreso_inyeccion_usd, inyeccion * precio),
+    valor_curtailment_usd: toNumber(row.cen_valor_curtailment_usd, curtailment * precio),
   };
+}
+
+function normalizeDate(value){
+  if(!value) return "";
+  if(value instanceof Date && validDate(value)) return formatDateParts(value.getFullYear(), value.getMonth() + 1, value.getDate());
+
+  const raw = String(value).trim();
+  const ymd = raw.match(/(\d{4})\s*[-/.]\s*(\d{1,2})\s*[-/.]\s*(\d{1,2})/);
+  if(ymd) return formatDateParts(ymd[1], ymd[2], ymd[3]);
+
+  const dmy = raw.match(/(\d{1,2})\s*[-/.]\s*(\d{1,2})\s*[-/.]\s*(\d{4})/);
+  if(dmy) return formatDateParts(dmy[3], dmy[2], dmy[1]);
+
+  const parsed = new Date(raw.replace(" ", "T"));
+  return validDate(parsed) ? formatDateParts(parsed.getFullYear(), parsed.getMonth() + 1, parsed.getDate()) : "";
+}
+
+function normalizeTimestamp(value){
+  const date = normalizeDate(value);
+  const timeMatch = String(value || "").match(/(?:T|\s)(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  const time = timeMatch ? `${pad2(timeMatch[1])}:${timeMatch[2]}:${timeMatch[3] || "00"}` : "00:00:00";
+  return date ? `${date}T${time}` : "";
+}
+
+function formatDateParts(year, month, day){
+  return `${String(year).padStart(4,"0")}-${pad2(month)}-${pad2(day)}`;
+}
+
+function pad2(value){
+  return String(value).padStart(2,"0");
+}
+
+function toNumber(value, fallback = 0){
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+function getTimestampTime(value){
+  const normalized = normalizeTimestamp(value);
+  const time = new Date(normalized).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+function getAvailableScadaDates(){
+  return [...new Set(scadaHourlyRows.map((row) => normalizeDate(row.timestamp)).filter(Boolean))].sort();
+}
+
+function getAvailableScadaCases(){
+  return [...new Set(scadaHourlyRows.map((row) => String(row.caso_sam || "").trim()).filter(Boolean))].sort();
+}
+
+function logScadaLoadDiagnostics(rows){
+  const first = rows[0] || {};
+  const sampleDates = [...new Set(rows.slice(0, 72).map((row) => normalizeDate(row.timestamp)).filter(Boolean))];
+  console.log("[SCADA SAM/CEN] registros cargados:", rows.length);
+  console.log("[SCADA SAM/CEN] primer registro:", first);
+  console.log("[SCADA SAM/CEN] campos disponibles:", Object.keys(first));
+  console.log("[SCADA SAM/CEN] fechas únicas detectadas en primeros registros:", sampleDates);
+}
+
+function logScadaNoMatches(selectedDate, selectedCase){
+  const dates = getAvailableScadaDates();
+  console.warn("[SCADA SAM/CEN] Sin datos para filtro horario", {
+    selectedDate,
+    selectedCase,
+    fechaMinimaDisponible: dates[0] || null,
+    fechaMaximaDisponible: dates[dates.length - 1] || null,
+    casosDisponibles: getAvailableScadaCases(),
+  });
 }
 
 function setScadaDataNote(message, isError = false){
@@ -148,14 +223,14 @@ function update(){
   set("perdidaCapacidad", "No validada"); set("costoDeg2", "No calculado"); set("beneficio", "Módulo en desarrollo");
 
   set("ghiSub", `Máx. día: ${n(max(dayRows,"ghi"))} W/m²`);
-  set("fvSub", `Máx. día: ${n(max(dayRows,"fv"),1)} MWh/h`);
+  set("fvSub", `Máx. día: ${n(max(dayRows,"fvPower"),1)} MW`);
   const pctCurt = d.disponible ? (d.curtailment/d.disponible)*100 : 0;
   const pctInj = d.disponible ? (d.inyeccion/d.disponible)*100 : 0;
   set("curtSub", `${n(pctCurt,1)}% de CEN disponible`);
   set("injSub", `${n(pctInj,1)}% de CEN disponible`);
   set("pmgSub", `Promedio día: ${n(avg(dayRows,"pmg"),1)}`);
 
-  set("energiaFvDia", `${n(sum(dayRows,"fv"),1)} MWh`);
+  set("energiaFvDia", `${n(sum(dayRows,"fvEnergy"),1)} MWh`);
   set("energiaDispDia", `${n(sum(dayRows,"disponible"),1)} MWh`);
   set("energiaInyDia", `${n(sum(dayRows,"inyeccion"),1)} MWh`);
   set("curtailmentDia", `${n(sum(dayRows,"curtailment"),1)} MWh`);
@@ -170,12 +245,12 @@ function update(){
 function updateCharts(dayRows, rowsUntil){
   const labels = dayRows.map(x => hourLabel(x.datetime));
   const labelsUntil = rowsUntil.map(x => hourLabel(x.datetime));
-  setChart(charts.operation, labels, ["fv","disponible","inyeccion","curtailment","pmg"].map(k => dayRows.map(x => x[k] || 0)));
+  setChart(charts.operation, labels, ["fvEnergy","disponible","inyeccion","curtailment","pmg"].map(k => dayRows.map(x => x[k] || 0)));
   setChart(charts.radiation, labels, ["ghi","dni","dhi"].map(k => dayRows.map(x => x[k] || 0)));
   setChart(charts.soc, labels, [dayRows.map(x => x.residuo || 0)]);
   setChart(charts.pmg, labels, [dayRows.map(x => x.pmg || 0)]);
   setChart(charts.sparkGhi, labelsUntil, [rowsUntil.map(x=>x.ghi||0)]);
-  setChart(charts.sparkFv, labelsUntil, [rowsUntil.map(x=>x.fv||0)]);
+  setChart(charts.sparkFv, labelsUntil, [rowsUntil.map(x=>x.fvPower||0)]);
   setChart(charts.sparkCurt, labelsUntil, [rowsUntil.map(x=>x.curtailment||0)]);
   setChart(charts.sparkInj, labelsUntil, [rowsUntil.map(x=>x.inyeccion||0)]);
   setChart(charts.sparkCarga, labelsUntil, [rowsUntil.map(x=>x.disponible||0)]);
