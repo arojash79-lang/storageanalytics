@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260620-1905" />
+  <link rel="stylesheet" href="dashboard.css?v=20260620-2235" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="dashboard.js?v=20260620-1905" defer></script>
+  <script src="dashboard.js?v=20260620-2235" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -344,6 +344,10 @@
           <input id="dateInput" type="date" value="2025-05-15" />
         </label>
         <span class="muted-label">Día seleccionado</span>
+        <select id="samCaseSelect" class="control select">
+          <option value="SAM_TMY">SAM TMY</option>
+          <option value="SAM_NASA_2025" selected>SAM NASA POWER 2025</option>
+        </select>
         <button id="playBtn" class="control primary" type="button">▷ Play</button>
         <button id="pauseBtn" class="control" type="button">Ⅱ Pausa</button>
         <button id="resetBtn" class="control" type="button">↻ Reiniciar</button>
@@ -374,6 +378,10 @@
       </div>
     </section>
 
+    <section id="scadaDataNote" class="scada-data-note card">
+      Los valores FV provienen de SAM y los valores de inyección, curtailment y precio provienen de CEN/SEN 2025. CEN disponible se define como inyección + curtailment.
+    </section>
+
     <section class="kpi-row">
       <article class="kpi-card yellow">
         <div class="kpi-icon">☀</div>
@@ -382,31 +390,31 @@
       </article>
       <article class="kpi-card green">
         <div class="kpi-icon">▦</div>
-        <div class="kpi-content"><p>PRODUCCIÓN FV (AC)</p><h2><span id="fv">--</span> <small>MW</small></h2><small id="fvSub">Máx. día: -- MW</small></div>
+        <div class="kpi-content"><p>PRODUCCIÓN FV SAM (AC)</p><h2><span id="fv">--</span> <small>MW</small></h2><small id="fvSub">Máx. día: -- MW</small></div>
         <canvas id="sparkFv"></canvas>
       </article>
       <article class="kpi-card orange">
         <div class="kpi-icon">☁</div>
-        <div class="kpi-content"><p>CURTAILMENT</p><h2><span id="curtailment">--</span> <small>MW</small></h2><small id="curtSub">-- % de la producción</small></div>
+        <div class="kpi-content"><p>CURTAILMENT CEN</p><h2><span id="curtailment">--</span> <small>MWh</small></h2><small id="curtSub">-- % de CEN disponible</small></div>
         <canvas id="sparkCurt"></canvas>
       </article>
-      <article class="kpi-card green">
+      <article class="kpi-card blue">
         <div class="kpi-icon">♜</div>
-        <div class="kpi-content"><p>INYECCIÓN A RED</p><h2><span id="inyeccion">--</span> <small>MW</small></h2><small id="injSub">-- % de la producción</small></div>
+        <div class="kpi-content"><p>INYECCIÓN REAL CEN</p><h2><span id="inyeccion">--</span> <small>MWh</small></h2><small id="injSub">-- % de CEN disponible</small></div>
         <canvas id="sparkInj"></canvas>
       </article>
-      <article class="kpi-card blue">
+      <article class="kpi-card cyan">
         <div class="kpi-icon">▣</div>
-        <div class="kpi-content"><p>CARGA BESS</p><h2><span id="carga">--</span> <small>MW</small></h2><small>Potencia de carga</small></div>
+        <div class="kpi-content"><p>CEN DISPONIBLE</p><h2><span id="carga">--</span> <small>MWh</small></h2><small>Inyección + curtailment</small></div>
         <canvas id="sparkCarga"></canvas>
       </article>
-      <article class="kpi-card purple">
+      <article class="kpi-card orange">
         <div class="kpi-icon">▣</div>
-        <div class="kpi-content"><p>DESCARGA BESS</p><h2><span id="descarga">--</span> <small>MW</small></h2><small>Potencia de descarga</small></div>
+        <div class="kpi-content"><p>RESIDUO SAM-CEN DISP.</p><h2><span id="descarga">--</span> <small>MWh</small></h2><small>SAM - CEN disponible</small></div>
         <canvas id="sparkDescarga"></canvas>
       </article>
       <article class="kpi-card soc-card">
-        <p>SOC BESS</p>
+        <p>BESS</p>
         <div class="soc-ring"><span id="soc">--</span><small>%</small></div>
       </article>
       <article class="kpi-card violet">
@@ -421,60 +429,58 @@
         <div class="panel-head"><h3>OPERACIÓN HORARIA DEL SISTEMA</h3></div>
         <div class="legend-line">
           <span class="lg green"></span>Producción FV (AC)
-          <span class="lg cyan"></span>Inyección a Red
+          <span class="lg yellow"></span>CEN disponible
+          <span class="lg cyan"></span>Inyección CEN
           <span class="lg orange"></span>Curtailment
-          <span class="lg blue"></span>Carga BESS
-          <span class="lg purple"></span>Descarga BESS
-          <span class="lg yellow"></span>PMg Mirage 220
+          <span class="lg purple"></span>PMg Mirage 220
         </div>
         <div class="chart-box chart-large"><canvas id="operationChart"></canvas></div>
       </article>
 
       <article class="card bess-state">
-        <h3>ESTADO BESS</h3>
+        <h3>ESTADO BESS <small>MÓDULO EN DESARROLLO</small></h3>
         <div class="battery-wrap">
           <div class="battery-head"></div>
           <div class="battery"><div id="batteryFill"></div></div>
-          <strong>SOC<br><span id="socLarge">--%</span></strong>
+          <strong>BESS<br><span id="socLarge">--</span></strong>
         </div>
         <ul class="kv-list">
-          <li><span>Energía almacenada</span><strong id="energiaAlmacenada">-- MWh</strong></li>
-          <li><span>Energía nominal</span><strong id="energiaNominal">-- MWh</strong></li>
-          <li><span>Potencia máx. carga</span><strong id="pMaxCarga">-- MW</strong></li>
-          <li><span>Potencia máx. descarga</span><strong id="pMaxDescarga">-- MW</strong></li>
-          <li><span>Eficiencia (ida y vuelta)</span><strong id="eficiencia">-- %</strong></li>
-          <li><span>Temperatura</span><strong id="temperatura">-- °C</strong></li>
-          <li><span>SOH</span><strong id="soh">-- %</strong></li>
+          <li><span>Estado módulo</span><strong id="energiaAlmacenada">En desarrollo</strong></li>
+          <li><span>Datos operación BESS</span><strong id="energiaNominal">No disponibles</strong></li>
+          <li><span>Carga validada</span><strong id="pMaxCarga">--</strong></li>
+          <li><span>Descarga validada</span><strong id="pMaxDescarga">--</strong></li>
+          <li><span>Eficiencia validada</span><strong id="eficiencia">--</strong></li>
+          <li><span>Temperatura BESS</span><strong id="temperatura">--</strong></li>
+          <li><span>SOH</span><strong id="soh">--</strong></li>
           <li><span>EFC acumulados</span><strong id="efc">--</strong></li>
         </ul>
       </article>
 
       <article class="card daily-summary">
-        <h3>RESUMEN DEL DÍA <small>(ACUMULADO HASTA HORA ACTUAL)</small></h3>
+        <h3>RESUMEN DEL DÍA <small>(ACUMULADO DÍA SELECCIONADO)</small></h3>
         <ul class="kv-list large-kv">
-          <li><span>Energía FV generada</span><strong id="energiaFvDia">-- MWh</strong></li>
-          <li><span>Energía inyectada a red</span><strong id="energiaInyDia">-- MWh</strong></li>
+          <li><span>Energía FV SAM del día</span><strong id="energiaFvDia">-- MWh</strong></li>
+          <li><span>Energía CEN disponible</span><strong id="energiaDispDia">-- MWh</strong></li>
+          <li><span>Energía inyectada CEN</span><strong id="energiaInyDia">-- MWh</strong></li>
           <li><span>Curtailment total</span><strong id="curtailmentDia">-- MWh</strong></li>
-          <li><span>Energía cargada BESS</span><strong id="cargaDia">-- MWh</strong></li>
-          <li><span>Energía descargada BESS</span><strong id="descargaDia">-- MWh</strong></li>
-          <li><span>Curtailment recuperado</span><strong id="curtRecDia">-- MWh</strong></li>
-          <li><span>Ingreso acumulado</span><strong id="ingreso">-- USD</strong></li>
-          <li><span>Costo degradación</span><strong id="costoDeg">-- USD</strong></li>
+          <li><span>Ingreso por inyección</span><strong id="ingreso">-- USD</strong></li>
+          <li><span>Valor económico curtailment</span><strong id="valorCurtDia">-- USD</strong></li>
+          <li><span>Residuo SAM-CEN disponible</span><strong id="curtRecDia">-- MWh</strong></li>
         </ul>
-        <div class="benefit-line"><span>Beneficio neto acumulado</span><strong id="beneficio">-- USD</strong></div>
+        <div class="benefit-line"><span>BESS</span><strong id="beneficio">Módulo en desarrollo</strong></div>
       </article>
     </section>
 
     <section class="grid-secondary">
       <article class="card"><h3>RADIACIÓN SOLAR</h3><div class="chart-box small"><canvas id="radiationChart"></canvas></div></article>
-      <article class="card"><h3>SOC BESS (%)</h3><div class="chart-box small"><canvas id="socChart"></canvas></div></article>
+      <article class="card"><h3>RESIDUO SAM - CEN DISP.</h3><div class="chart-box small"><canvas id="socChart"></canvas></div></article>
       <article class="card"><h3>PMg MIRAGE 220</h3><div class="chart-box small"><canvas id="pmgChart"></canvas></div></article>
       <article class="card degradation">
-        <h3>DEGRADACIÓN <small>(ACUMULADA)</small></h3>
+        <h3>BESS / DEGRADACIÓN <small>MÓDULO EN DESARROLLO</small></h3>
         <ul class="kv-list compact">
-          <li><span>Pérdida de capacidad</span><strong id="perdidaCapacidad">-- %</strong></li>
-          <li><span>SOH actual</span><strong id="sohActual">-- %</strong></li>
-          <li><span>Costo degradación</span><strong id="costoDeg2">-- USD</strong></li>
+          <li><span>Pérdida de capacidad</span><strong id="perdidaCapacidad">No validada</strong></li>
+          <li><span>SOH actual</span><strong id="sohActual">No disponible</strong></li>
+          <li><span>Costo degradación</span><strong id="costoDeg2">No calculado</strong></li>
         </ul>
       </article>
     </section>
@@ -681,25 +687,25 @@
           <article class="plant-note-card card">
             <h3>NOTA METODOLÓGICA</h3>
             <p>
-              Esta vista describe la arquitectura técnica usada para representar CEME1 en SAM. Los resultados
-              energéticos de Egrid se incorporarán en la pestaña Desempeño Energético una vez ejecutada la simulación.
+              La planta CEME1 se representa en SAM mediante seis submodelos equivalentes para capturar la configuración
+              Este/Oeste, las familias de módulos y la distribución de inversores de la planta.
             </p>
           </article>
         </div>
 
         <div class="plant-tabs card">
-          <button class="plant-tab-btn active" type="button" data-plant-panel="arquitectura">Arquitectura</button>
+          <button class="plant-tab-btn active" type="button" data-plant-panel="arquitectura">Arquitectura CEME1</button>
           <button class="plant-tab-btn plant-energy-mode-btn tmy" type="button" data-plant-panel="energia" data-plant-energy-mode="tmy">
-            Desempeño Energético
-            <span>TMY Explorador Solar de Chile</span>
-          </button>
-          <button class="plant-tab-btn plant-energy-mode-btn nasa" type="button" data-plant-panel="energia" data-plant-energy-mode="nasa">
-            NASA POWER
-            <span>Serie 2025</span>
+            Simulación energética SAM
+            <span>Caso base TMY</span>
           </button>
           <button class="plant-tab-btn plant-energy-mode-btn compare" type="button" data-plant-panel="energia" data-plant-energy-mode="compare">
-            Comparativa
-            <span>TMY vs NASA 2025</span>
+            Comparativa TMY vs NASA 2025
+            <span>Meteorología SAM</span>
+          </button>
+          <button class="plant-tab-btn plant-energy-mode-btn cen" type="button" data-plant-panel="sam-cen">
+            SAM vs CEN 2025
+            <span>Validación CEN</span>
           </button>
         </div>
 
@@ -911,6 +917,8 @@
                 <li><span>Modelo inversor</span><strong>SG3125-HV-30</strong></li>
                 <li><span>Módulo PV 1</span><strong>JAM72-S30-540-MR</strong></li>
                 <li><span>Módulo PV 2</span><strong>JAM72-S30-545-MR</strong></li>
+                <li><span>Potencia DC instalada</span><strong>480,2 MWp</strong></li>
+                <li><span>Potencia AC instalada</span><strong>412,4 MWac</strong></li>
                 <li><span>Resolución temporal</span><strong>Horaria</strong></li>
                 <li><span>Salida energética principal</span><strong>Egrid</strong></li>
               </ul>
@@ -1023,6 +1031,20 @@
               <h3><span id="plantKpiPoaEast">--</span><small> / </small><span id="plantKpiPoaWest">--</span></h3>
               <small>kWh/m²/año</small>
             </article>
+            <article class="plant-energy-kpi card">
+              <p>GHI ANUAL</p>
+              <h3><span id="plantKpiGhiAnnual">--</span><small> kWh/m²/año</small></h3>
+              <small id="plantKpiGhiSub">Global horizontal</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>DNI ANUAL</p>
+              <h3><span id="plantKpiDniAnnual">--</span><small> kWh/m²/año</small></h3>
+              <small id="plantKpiDniSub">Directa normal</small>
+            </article>
+          </section>
+
+          <section id="plantSamMethodNote" class="plant-method-note card">
+            Energía AC positiva para visualización. La métrica energética principal es Energía AC neta anual.
           </section>
 
           <section class="plant-energy-chart-grid">
@@ -1065,6 +1087,330 @@
               </div>
               <div class="plant-chart-box"><canvas id="plantOrientationBalanceChart"></canvas></div>
             </article>
+          </section>
+
+          <section id="plantCompareDetails" class="plant-compare-details" hidden>
+            <article class="card plant-method-note">
+              <h3>Perfil horario AC/DC</h3>
+              <p>
+                El perfil horario total anual puede suavizar la configuración Este/Oeste, especialmente por la baja
+                inclinación de 5°. La validación de la arquitectura debe realizarse separando los submodelos Este y Oeste.
+              </p>
+              <div class="plant-profile-tabs" aria-label="Selector metodológico de perfil">
+                <button type="button" class="active">Perfil promedio anual</button>
+                <button type="button" disabled>Perfil mensual</button>
+                <button type="button" disabled>Día representativo de verano</button>
+              </div>
+              <small>El JSON comparativo disponible contiene perfil horario promedio anual total, no detalle diario por submodelo.</small>
+            </article>
+
+            <article class="card plant-method-note">
+              <h3>Verificación Este/Oeste</h3>
+              <p>
+                Este = SC01 + SC03 + SC05. Oeste = SC02 + SC04 + SC06. Se requiere generar un JSON horario por
+                submodelo para validar Este/Oeste. El perfil total anual no basta para confirmar visualmente la
+                arquitectura V invertida.
+              </p>
+              <small>El total puede verse como campana o plateau por la baja inclinación de 5°.</small>
+            </article>
+
+            <article class="card plant-method-note">
+              <h3>POA Este/Oeste mensual</h3>
+              <p>
+                El TMY representa un año meteorológico típico y tiende a mostrar mayor simetría Este/Oeste. NASA POWER
+                2025 representa un año histórico, por lo que puede mostrar asimetrías horarias y estacionales.
+              </p>
+              <small>Eje Y no truncado: parte desde cero para evitar sobreinterpretación visual.</small>
+            </article>
+
+            <article class="card plant-method-note">
+              <h3>Balance Este/Oeste</h3>
+              <p>Las barras TMY y NASA representan escenarios meteorológicos alternativos; no son valores acumulables.</p>
+            </article>
+
+            <article class="card plant-compare-table-card">
+              <h3>Tabla resumen de diferencias porcentuales</h3>
+              <div class="plant-table-wrap">
+                <table class="plant-submodel-table">
+                  <thead>
+                    <tr><th>Métrica</th><th>TMY</th><th>NASA 2025</th><th>Δ [%] / Δ [pp]</th></tr>
+                  </thead>
+                  <tbody id="plantCompareDiffBody"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="card plant-compare-table-card">
+              <h3>Energía anual por submodelo</h3>
+              <p class="plant-table-note">Las diferencias de energía entre submodelos se deben principalmente a distinta capacidad instalada, no necesariamente a diferencias de recurso o rendimiento.</p>
+              <div class="plant-table-wrap">
+                <table class="plant-submodel-table">
+                  <thead>
+                    <tr>
+                      <th>Submodelo</th><th>Orientación</th><th>Módulo</th><th>Strings</th><th>Inversores</th>
+                      <th>Potencia DC estimada</th><th>AC TMY</th><th>AC NASA 2025</th>
+                    </tr>
+                  </thead>
+                  <tbody id="plantCompareSubmodelBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+        </div>
+
+        <div id="plant-panel-sam-cen" class="plant-panel">
+          <section class="sam-cen-scada-header card">
+            <div class="sam-cen-title">
+              <p class="section-kicker">SAM VS CEN 2025</p>
+              <h3>Validación energética FV contra operación CEN</h3>
+              <small id="samCenMeta">Cargando data/sam_tmy_nasa_vs_cen_dashboard_bundle.json...</small>
+            </div>
+            <div class="sam-cen-header-grid" aria-label="Cabecera SCADA SAM vs CEN">
+              <div><span>PLANTA</span><strong id="samCenHeaderPlant">CEME1</strong></div>
+              <div><span>BARRA</span><strong id="samCenHeaderBus">MIRAJE_220</strong></div>
+              <div><span>AÑO</span><strong id="samCenHeaderYear">2025</strong></div>
+              <div><span>MODO</span><strong>Validación SAM vs CEN</strong></div>
+              <div class="sam-cen-state-cell"><span>ESTADO</span><strong id="samCenStatus" class="sam-cen-state-pill">SIN DATOS</strong></div>
+              <div><span>FUENTE</span><strong>CEN/SEN + SAM</strong></div>
+            </div>
+          </section>
+
+          <section class="sam-cen-method card">
+            <h3>NOTA METODOLÓGICA</h3>
+            <p>
+              CEN disponible se define como inyección + curtailment. El residuo SAM-CEN no representa error puro del modelo,
+              ya que puede incluir meteorología, disponibilidad real, pérdidas no modeladas, restricciones operacionales y
+              diferencias de medición.
+            </p>
+          </section>
+
+          <section class="sam-cen-flow card" aria-label="Flujo energético SAM CEN">
+            <div class="sam-cen-flow-head">
+              <div>
+                <p class="section-kicker">FLUJO ENERGÉTICO EMS</p>
+                <h3>Recurso solar / SAM → CEN disponible → CEN inyección → Curtailment → BESS futuro</h3>
+              </div>
+              <span>GWh/año</span>
+            </div>
+            <div class="sam-cen-flow-grid">
+              <article class="sam-cen-flow-node source">
+                <span>RECURSO SOLAR / SAM</span>
+                <strong><b id="samCenFlowTmy">--</b><small> TMY</small></strong>
+                <strong><b id="samCenFlowNasa">--</b><small> NASA 2025</small></strong>
+              </article>
+              <article class="sam-cen-flow-node available">
+                <span>CEN DISPONIBLE</span>
+                <strong><b id="samCenFlowAvailable">--</b><small> GWh</small></strong>
+                <em>inyección + curtailment</em>
+              </article>
+              <article class="sam-cen-flow-node injection">
+                <span>CEN INYECCIÓN</span>
+                <strong><b id="samCenFlowInjection">--</b><small> GWh</small></strong>
+                <em>energía efectivamente inyectada</em>
+              </article>
+              <article class="sam-cen-flow-node curtailment">
+                <span>CURTAILMENT</span>
+                <strong><b id="samCenFlowCurtailment">--</b><small> GWh</small></strong>
+                <em>restricción operacional</em>
+              </article>
+              <article class="sam-cen-flow-node future">
+                <span>BESS FUTURO</span>
+                <strong><b>--</b><small> MWh</small></strong>
+                <em>recuperación potencial</em>
+              </article>
+            </div>
+          </section>
+
+          <section class="sam-cen-instruments">
+            <article id="samCenTmyInstrument" class="sam-cen-instrument card">
+              <div class="sam-cen-instrument-head">
+                <div>
+                  <p>SAM TMY vs CEN disponible</p>
+                  <strong id="samCenTmyBadge">CASO BASE TÍPICO</strong>
+                </div>
+                <span id="samCenTmySemaphore" class="sam-cen-semaphore">--</span>
+              </div>
+              <div class="sam-cen-gauge">
+                <b id="samCenTmyNrmse">--</b><small>nRMSE %</small>
+              </div>
+              <div class="sam-cen-instrument-metrics">
+                <span>RMSE <strong id="samCenTmyRmse">--</strong></span>
+                <span>MBE <strong id="samCenTmyMbe">--</strong></span>
+                <span>MAE <strong id="samCenTmyMae">--</strong></span>
+                <span>r <strong id="samCenTmyCorr">--</strong></span>
+                <span>Δ anual <strong id="samCenTmyDelta">--</strong></span>
+              </div>
+            </article>
+
+            <article id="samCenNasaInstrument" class="sam-cen-instrument card">
+              <div class="sam-cen-instrument-head">
+                <div>
+                  <p>SAM NASA 2025 vs CEN disponible</p>
+                  <strong id="samCenNasaBadge">SERIE METEOROLÓGICA 2025</strong>
+                </div>
+                <span id="samCenNasaSemaphore" class="sam-cen-semaphore">--</span>
+              </div>
+              <div class="sam-cen-gauge">
+                <b id="samCenNasaNrmse">--</b><small>nRMSE %</small>
+              </div>
+              <div class="sam-cen-instrument-metrics">
+                <span>RMSE <strong id="samCenNasaRmse">--</strong></span>
+                <span>MBE <strong id="samCenNasaMbe">--</strong></span>
+                <span>MAE <strong id="samCenNasaMae">--</strong></span>
+                <span>r <strong id="samCenNasaCorr">--</strong></span>
+                <span>Δ anual <strong id="samCenNasaDelta">--</strong></span>
+              </div>
+            </article>
+
+            <article class="sam-cen-operational-card card">
+              <p>BRECHA OPERACIONAL</p>
+              <h3>SAM vs CEN inyección real</h3>
+              <span>Esta comparación incluye el efecto del curtailment y restricciones de operación. No se interpreta como validación técnica pura del modelo FV.</span>
+            </article>
+          </section>
+
+          <section class="plant-energy-kpi-grid sam-cen-kpis">
+            <article class="plant-energy-kpi card">
+              <p>CEN INYECCIÓN ANUAL</p>
+              <h3><span id="samCenKpiInjection">--</span><small> GWh</small></h3>
+              <small>Inyección real 2025</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>CEN CURTAILMENT ANUAL</p>
+              <h3><span id="samCenKpiCurtailment">--</span><small> GWh</small></h3>
+              <small>Recorte registrado</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>CEN DISPONIBLE ANUAL</p>
+              <h3><span id="samCenKpiAvailable">--</span><small> GWh</small></h3>
+              <small>Inyección + curtailment</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>FACTOR CURTAILMENT</p>
+              <h3><span id="samCenKpiCurtailmentFactor">--</span><small> %</small></h3>
+              <small>Curtailment / disponible</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>SAM TMY ANUAL</p>
+              <h3><span id="samCenKpiTmyAnnual">--</span><small> GWh</small></h3>
+              <small>Explorador Solar</small>
+            </article>
+            <article class="plant-energy-kpi card">
+              <p>SAM NASA 2025 ANUAL</p>
+              <h3><span id="samCenKpiNasaAnnual">--</span><small> GWh</small></h3>
+              <small>NASA POWER 2025</small>
+            </article>
+            <article class="plant-energy-kpi card delta">
+              <p>SAM TMY - CEN DISPONIBLE</p>
+              <h3><span id="samCenKpiTmyDelta">--</span><small> GWh</small></h3>
+              <small id="samCenKpiTmyDeltaPct">-- %</small>
+            </article>
+            <article class="plant-energy-kpi card delta">
+              <p>SAM NASA - CEN DISPONIBLE</p>
+              <h3><span id="samCenKpiNasaDelta">--</span><small> GWh</small></h3>
+              <small id="samCenKpiNasaDeltaPct">-- %</small>
+            </article>
+          </section>
+
+          <section class="plant-energy-chart-grid sam-cen-chart-grid">
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>RESUMEN ANUAL</h3>
+                <small>GWh/año</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="samCenAnnualChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>ENERGÍA MENSUAL SAM VS CEN</h3>
+                <small>Barras lado a lado</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="samCenMonthlyChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>RESIDUO MENSUAL SAM - CEN DISPONIBLE</h3>
+                <small>GWh</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="samCenResidualChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart">
+              <div class="panel-head">
+                <h3>PERFIL HORARIO PROMEDIO SAM VS CEN</h3>
+                <small>MWh promedio por hora</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="samCenHourlyChart"></canvas></div>
+            </article>
+
+            <article class="card plant-energy-chart wide">
+              <div class="panel-head">
+                <h3>CURTAILMENT Y PRECIO PROMEDIO HORARIO</h3>
+                <small>MWh / USD-MWh</small>
+              </div>
+              <div class="plant-chart-box"><canvas id="samCenCurtPriceChart"></canvas></div>
+            </article>
+          </section>
+
+          <section class="card sam-cen-table-card">
+            <div class="panel-head">
+              <div>
+                <h3>INDICADORES COMPLETOS</h3>
+                <small>Comparación horaria desde bloque indicadores</small>
+              </div>
+            </div>
+            <div class="sam-cen-operational-note">
+              Los indicadores de validación se calculan contra CEN disponible, definido como inyección + curtailment.
+              La comparación contra CEN inyección real se interpreta como brecha operacional asociada al curtailment,
+              no como error puro del modelo FV.
+            </div>
+
+            <h4>VALIDACIÓN TÉCNICA FV</h4>
+            <small class="sam-cen-reference">Referencia: CEN disponible = inyección + curtailment</small>
+            <div class="sam-cen-table-wrap">
+              <table class="sam-cen-indicators-table">
+                <thead>
+                  <tr>
+                    <th>Caso</th>
+                    <th>Referencia</th>
+                    <th>Filtro</th>
+                    <th>MBE</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>nRMSE %</th>
+                    <th>r</th>
+                    <th>Δ %</th>
+                  </tr>
+                </thead>
+                <tbody id="samCenTechnicalTableBody"></tbody>
+              </table>
+            </div>
+
+            <h4>BRECHA OPERACIONAL</h4>
+            <small class="sam-cen-reference">Referencia: CEN inyección real</small>
+            <div class="sam-cen-operational-note">
+              Incluye el efecto del curtailment: compara la energía SAM disponible/modelada contra lo que la planta realmente logró inyectar.
+            </div>
+            <div class="sam-cen-table-wrap">
+              <table class="sam-cen-indicators-table">
+                <thead>
+                  <tr>
+                    <th>Caso</th>
+                    <th>Referencia</th>
+                    <th>Filtro</th>
+                    <th>MBE</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>nRMSE %</th>
+                    <th>r</th>
+                    <th>Δ %</th>
+                  </tr>
+                </thead>
+                <tbody id="samCenOperationalTableBody"></tbody>
+              </table>
+            </div>
           </section>
         </div>
       </section>
