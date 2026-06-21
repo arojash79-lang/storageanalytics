@@ -227,6 +227,26 @@ body {
   min-height: 92px;
 }
 
+.scada-data-note {
+  margin-bottom: 9px;
+  padding: 10px 13px;
+  border-color: rgba(49, 183, 255, 0.26);
+  color: #cfe3f8;
+  font-size: 12px;
+  line-height: 1.4;
+  background:
+    linear-gradient(180deg, rgba(7, 26, 47, 0.96), rgba(3, 13, 24, 0.98)),
+    radial-gradient(circle at 96% 20%, rgba(49, 183, 255, 0.08), transparent 30%);
+}
+
+.scada-data-note.error {
+  border-color: rgba(255, 77, 77, 0.45);
+  color: #ffd3d3;
+  background:
+    linear-gradient(180deg, rgba(52, 16, 19, 0.94), rgba(18, 5, 9, 0.98)),
+    radial-gradient(circle at 96% 20%, rgba(255, 77, 77, 0.12), transparent 30%);
+}
+
 .sim-state span:not(.live-dot) {
   color: var(--green);
   font-weight: 700;
