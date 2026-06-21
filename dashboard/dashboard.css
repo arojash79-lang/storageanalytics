@@ -2068,22 +2068,79 @@ tbody tr.highlight {
   height: 100% !important;
 }
 
-.sam-cen-status {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
+.sam-cen-scada-header {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(520px, 1.4fr);
+  gap: 14px;
+  align-items: stretch;
   padding: 14px 16px;
   margin-bottom: 12px;
+  border-color: rgba(49, 183, 255, 0.34);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0/72px 100%,
+    linear-gradient(180deg, rgba(8, 31, 56, 0.98), rgba(3, 13, 25, 0.98));
 }
 
-.sam-cen-status h3 {
+.sam-cen-title h3 {
   margin: 0 0 4px;
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1.15;
 }
 
-.sam-cen-status small {
+.sam-cen-title small {
   color: #b9cce3;
+}
+
+.sam-cen-header-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(92px, 1fr));
+  gap: 8px;
+}
+
+.sam-cen-header-grid > div {
+  min-height: 58px;
+  padding: 9px 10px;
+  border: 1px solid rgba(94, 168, 255, 0.2);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(5, 23, 42, 0.92), rgba(2, 10, 20, 0.96)),
+    radial-gradient(circle at 90% 20%, rgba(49, 183, 255, 0.1), transparent 34%);
+}
+
+.sam-cen-header-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #7ec8ff;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.75px;
+}
+
+.sam-cen-header-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.sam-cen-state-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--green);
+}
+
+.sam-cen-state-pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.sam-cen-state-pill.error {
+  color: var(--danger);
 }
 
 .sam-cen-method {
@@ -2106,6 +2163,240 @@ tbody tr.highlight {
   max-width: 1180px;
   color: #d5e7ff;
   line-height: 1.5;
+}
+
+.sam-cen-flow {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-color: rgba(49, 183, 255, 0.28);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px) 0 0/78px 100%,
+    linear-gradient(180deg, rgba(7, 27, 48, 0.96), rgba(2, 12, 23, 0.98));
+}
+
+.sam-cen-flow-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.sam-cen-flow-head h3 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.25px;
+}
+
+.sam-cen-flow-head > span {
+  color: #8fc9ff;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.sam-cen-flow-grid {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(4, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.sam-cen-flow-node {
+  position: relative;
+  min-height: 110px;
+  padding: 12px 13px;
+  border: 1px solid rgba(94, 168, 255, 0.23);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(4, 20, 37, 0.94), rgba(1, 8, 16, 0.98)),
+    radial-gradient(circle at 94% 12%, rgba(49, 183, 255, 0.1), transparent 36%);
+}
+
+.sam-cen-flow-node:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background: #47b7ff;
+  box-shadow: 0 0 12px rgba(71, 183, 255, 0.78);
+}
+
+.sam-cen-flow-node span {
+  display: block;
+  margin-bottom: 10px;
+  color: #8fc9ff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+}
+
+.sam-cen-flow-node strong {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.sam-cen-flow-node strong + strong {
+  margin-top: 9px;
+}
+
+.sam-cen-flow-node small,
+.sam-cen-flow-node em {
+  color: #b9cce3;
+  font-size: 10px;
+  font-style: normal;
+}
+
+.sam-cen-flow-node em {
+  display: block;
+  margin-top: 9px;
+}
+
+.sam-cen-flow-node.source { border-color: rgba(118, 255, 69, 0.3); }
+.sam-cen-flow-node.available { border-color: rgba(255, 210, 31, 0.34); }
+.sam-cen-flow-node.injection { border-color: rgba(49, 183, 255, 0.34); }
+.sam-cen-flow-node.curtailment { border-color: rgba(255, 138, 0, 0.42); }
+.sam-cen-flow-node.future {
+  border-style: dashed;
+  opacity: 0.82;
+}
+
+.sam-cen-instruments {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr)) minmax(240px, 0.75fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sam-cen-instrument,
+.sam-cen-operational-card {
+  padding: 14px 16px;
+  border-color: rgba(94, 168, 255, 0.23);
+  background:
+    linear-gradient(180deg, rgba(6, 25, 45, 0.96), rgba(2, 10, 19, 0.98)),
+    radial-gradient(circle at 88% 18%, rgba(49, 183, 255, 0.11), transparent 34%);
+}
+
+.sam-cen-instrument.best {
+  border-color: rgba(118, 255, 69, 0.5);
+  box-shadow: 0 0 18px rgba(118, 255, 69, 0.08);
+}
+
+.sam-cen-instrument-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.sam-cen-instrument-head p,
+.sam-cen-operational-card p {
+  margin-bottom: 6px;
+  color: #8fc9ff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+}
+
+.sam-cen-instrument-head strong {
+  color: #ffffff;
+  font-size: 11px;
+  letter-spacing: 0.35px;
+}
+
+.sam-cen-semaphore {
+  min-width: 76px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 900;
+  color: #8fc9ff;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.sam-cen-gauge {
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  margin: 14px auto 12px;
+  border: 7px solid currentColor;
+  border-radius: 50%;
+  color: #8fc9ff;
+  background: radial-gradient(circle, rgba(3, 16, 30, 0.94) 58%, rgba(255, 255, 255, 0.04));
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.04), 0 0 18px rgba(49, 183, 255, 0.08);
+}
+
+.sam-cen-gauge b {
+  color: #ffffff;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.sam-cen-gauge small {
+  color: #b9cce3;
+  font-size: 10px;
+}
+
+.sam-cen-instrument-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sam-cen-instrument-metrics span {
+  padding: 8px 9px;
+  border: 1px solid rgba(94, 168, 255, 0.18);
+  border-radius: 6px;
+  color: #8fc9ff;
+  font-size: 10px;
+  font-weight: 900;
+  background: rgba(0, 7, 15, 0.44);
+}
+
+.sam-cen-instrument-metrics strong {
+  display: block;
+  margin-top: 5px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.sam-cen-instrument.state-ok .sam-cen-gauge,
+.sam-cen-instrument.state-ok .sam-cen-semaphore {
+  color: var(--green);
+}
+
+.sam-cen-instrument.state-warn .sam-cen-gauge,
+.sam-cen-instrument.state-warn .sam-cen-semaphore {
+  color: var(--yellow);
+}
+
+.sam-cen-instrument.state-alarm .sam-cen-gauge,
+.sam-cen-instrument.state-alarm .sam-cen-semaphore {
+  color: var(--danger);
+}
+
+.sam-cen-operational-card {
+  border-color: rgba(255, 138, 0, 0.34);
+}
+
+.sam-cen-operational-card h3 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.sam-cen-operational-card span {
+  color: #d5e7ff;
+  line-height: 1.45;
 }
 
 .sam-cen-kpis .delta h3 {
@@ -2141,6 +2432,17 @@ tbody tr.highlight {
   color: #8fc9ff;
 }
 
+.sam-cen-operational-note {
+  margin-bottom: 8px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 138, 0, 0.24);
+  border-radius: 7px;
+  color: #ffd6ad;
+  background: rgba(110, 55, 0, 0.16);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .sam-cen-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -2151,7 +2453,7 @@ tbody tr.highlight {
 
 .sam-cen-indicators-table {
   width: 100%;
-  min-width: 980px;
+  min-width: 820px;
   border-collapse: collapse;
 }
 
@@ -2177,8 +2479,8 @@ tbody tr.highlight {
   font-size: 12px;
 }
 
-.sam-cen-indicators-table th:nth-child(-n + 3),
-.sam-cen-indicators-table td:nth-child(-n + 3) {
+.sam-cen-indicators-table th:nth-child(-n + 2),
+.sam-cen-indicators-table td:nth-child(-n + 2) {
   text-align: left;
 }
 
@@ -2190,9 +2492,27 @@ tbody tr.highlight {
   background: rgba(49, 183, 255, 0.06);
 }
 
+.sam-cen-indicators-table tr.state-ok td:first-child {
+  box-shadow: inset 3px 0 0 var(--green);
+}
+
+.sam-cen-indicators-table tr.state-warn td:first-child {
+  box-shadow: inset 3px 0 0 var(--yellow);
+}
+
+.sam-cen-indicators-table tr.state-alarm td:first-child {
+  box-shadow: inset 3px 0 0 var(--danger);
+}
+
 @media (max-width: 1450px) {
   .plant-scada-strip { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
   .plant-energy-kpi-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+  .sam-cen-scada-header { grid-template-columns: 1fr; }
+  .sam-cen-header-grid { grid-template-columns: repeat(3, minmax(120px, 1fr)); }
+  .sam-cen-flow-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+  .sam-cen-flow-node:not(:last-child)::after { display: none; }
+  .sam-cen-instruments { grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+  .sam-cen-operational-card { grid-column: 1 / -1; }
   .plant-kpi-grid { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
   .plant-layout-grid,
   .plant-bottom-grid { grid-template-columns: 1fr; }
@@ -2202,6 +2522,10 @@ tbody tr.highlight {
   .plant-head-grid { grid-template-columns: 1fr; }
   .plant-scada-strip { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
   .plant-energy-chart-grid { grid-template-columns: 1fr; }
+  .sam-cen-header-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+  .sam-cen-flow-grid,
+  .sam-cen-instruments { grid-template-columns: 1fr; }
+  .sam-cen-operational-card { grid-column: auto; }
   .plant-kpi-grid { grid-template-columns: 1fr; }
   .plant-tabs { width: 100%; }
   .plant-tab-btn { flex: 1 1 144px; min-width: 144px; }
@@ -2226,12 +2550,31 @@ tbody tr.highlight {
     flex-direction: column;
   }
 
-  .sam-cen-status {
-    align-items: flex-start;
-    flex-direction: column;
+  .plant-energy-kpi-grid {
+    grid-template-columns: 1fr;
   }
 
-  .plant-energy-kpi-grid {
+  .sam-cen-scada-header,
+  .sam-cen-flow,
+  .sam-cen-method,
+  .sam-cen-table-card {
+    padding: 12px;
+  }
+
+  .sam-cen-header-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sam-cen-flow-head {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sam-cen-flow-node {
+    min-height: 0;
+  }
+
+  .sam-cen-instrument-metrics {
     grid-template-columns: 1fr;
   }
 

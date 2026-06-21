@@ -1672,11 +1672,84 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     setText("samCenKpiNasaDeltaPct", `${formatNumber(summaryNasa.sam_menos_cen_disponible_pct, 1)} % vs CEN disponible`);
   }
 
+  function renderSamCenHeader(bundle) {
+    setText("samCenHeaderPlant", bundle.metadata?.planta || "CEME1");
+    setText("samCenHeaderYear", bundle.metadata?.anio || "2025");
+    setText("samCenHeaderBus", "MIRAJE_220");
+  }
+
+  function renderSamCenFlow(bundle) {
+    const cen = bundle.cen_kpis || {};
+    const samTmy = findSamCase(bundle.sam_kpis, /tmy/i);
+    const samNasa = findSamCase(bundle.sam_kpis, /nasa/i);
+
+    setText("samCenFlowTmy", formatNumber(samTmy.energia_ac_neta_gwh, 1));
+    setText("samCenFlowNasa", formatNumber(samNasa.energia_ac_neta_gwh, 1));
+    setText("samCenFlowAvailable", formatNumber(cen.energia_disponible_cen_gwh, 1));
+    setText("samCenFlowInjection", formatNumber(cen.energia_inyectada_cen_gwh, 1));
+    setText("samCenFlowCurtailment", formatNumber(cen.energia_curtailment_cen_gwh, 1));
+  }
+
+  function findTechnicalIndicator(indicators, pattern) {
+    if (!Array.isArray(indicators)) return {};
+
+    return indicators.find((row) =>
+      pattern.test(`${row.caso_sam || ""}`) &&
+      row.referencia === "CEN disponible = inyeccion + curtailment" &&
+      row.filtro === "todas_las_horas"
+    ) || indicators.find((row) =>
+      pattern.test(`${row.caso_sam || ""}`) &&
+      row.referencia === "CEN disponible = inyeccion + curtailment"
+    ) || {};
+  }
+
+  function getNrmseState(nrmse) {
+    const value = Number(nrmse);
+    if (!Number.isFinite(value)) return { className: "state-unknown", label: "--" };
+    if (value < 15) return { className: "state-ok", label: "VERDE" };
+    if (value <= 25) return { className: "state-warn", label: "AMARILLO" };
+    return { className: "state-alarm", label: "ROJO" };
+  }
+
+  function updateInstrument(prefix, cardId, row) {
+    const state = getNrmseState(row.nrmse_pct);
+    const card = byId(cardId);
+    if (card) {
+      card.classList.remove("state-ok", "state-warn", "state-alarm", "state-unknown", "best");
+      card.classList.add(state.className);
+    }
+
+    setText(`${prefix}Semaphore`, state.label);
+    setText(`${prefix}Nrmse`, formatNumber(row.nrmse_pct, 1));
+    setText(`${prefix}Rmse`, formatNumber(row.rmse, 1));
+    setText(`${prefix}Mbe`, formatNumber(row.mbe, 1));
+    setText(`${prefix}Corr`, formatNumber(row.corr_pearson, 3));
+  }
+
+  function renderSamCenInstruments(indicators) {
+    const tmy = findTechnicalIndicator(indicators, /tmy/i);
+    const nasa = findTechnicalIndicator(indicators, /nasa/i);
+    const nasaBetter = Number(nasa.nrmse_pct) < Number(tmy.nrmse_pct) &&
+      Number(nasa.rmse) < Number(tmy.rmse) &&
+      Math.abs(Number(nasa.mbe)) < Math.abs(Number(tmy.mbe));
+
+    updateInstrument("samCenTmy", "samCenTmyInstrument", tmy);
+    updateInstrument("samCenNasa", "samCenNasaInstrument", nasa);
+
+    setText("samCenTmyBadge", "CASO BASE TÍPICO");
+    setText("samCenNasaBadge", nasaBetter ? "MEJOR AJUSTE TÉCNICO" : "SERIE METEOROLÓGICA 2025");
+
+    const nasaCard = byId("samCenNasaInstrument");
+    const tmyCard = byId("samCenTmyInstrument");
+    if (nasaCard) nasaCard.classList.toggle("best", nasaBetter);
+    if (tmyCard) tmyCard.classList.toggle("best", !nasaBetter);
+  }
+
   function appendIndicatorRow(tbody, row) {
     const tr = document.createElement("tr");
+    tr.classList.add(getNrmseState(row.nrmse_pct).className);
     [
       row.caso_sam,
-      row.referencia,
       row.filtro,
       formatNumber(row.mbe, 2),
       formatNumber(row.mae, 2),
@@ -1929,13 +2002,16 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       return;
     }
 
-    setSamCenStatus("DATOS OK");
+    setSamCenStatus("DATA OK");
     setText(
       "samCenMeta",
       `${bundle.metadata?.planta || "CEME1"} · ${bundle.metadata?.comparacion || "SAM vs CEN"} · ${bundle.metadata?.anio || "2025"}`
     );
 
+    renderSamCenHeader(bundle);
+    renderSamCenFlow(bundle);
     renderSamCenKpis(bundle);
+    renderSamCenInstruments(bundle.indicadores);
     renderSamCenIndicators(bundle.indicadores);
     destroySamCenCharts();
     renderSamCenAnnualChart(bundle);
