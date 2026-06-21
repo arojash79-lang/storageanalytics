@@ -1127,6 +1127,15 @@ tbody tr.highlight {
   color: #ffb6b6;
 }
 
+.plant-energy-mode-btn.cen {
+  border-color: rgba(49, 183, 255, 0.48);
+  color: #d9f4ff;
+}
+
+.plant-energy-mode-btn.cen span {
+  color: #98dcff;
+}
+
 .plant-tab-btn.active {
   background: linear-gradient(180deg, #216fd9, #1055ba);
   border-color: #45a5ff;
@@ -1148,6 +1157,12 @@ tbody tr.highlight {
   background: linear-gradient(180deg, rgba(160, 49, 49, 0.96), rgba(91, 22, 30, 0.98));
   border-color: rgba(255, 77, 77, 0.86);
   box-shadow: 0 0 18px rgba(255, 77, 77, 0.15);
+}
+
+.plant-energy-mode-btn.cen.active {
+  background: linear-gradient(180deg, rgba(17, 118, 170, 0.96), rgba(7, 61, 103, 0.98));
+  border-color: rgba(49, 183, 255, 0.88);
+  box-shadow: 0 0 18px rgba(49, 183, 255, 0.16);
 }
 
 .plant-panel {
@@ -2053,6 +2068,128 @@ tbody tr.highlight {
   height: 100% !important;
 }
 
+.sam-cen-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.sam-cen-status h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.sam-cen-status small {
+  color: #b9cce3;
+}
+
+.sam-cen-method {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border-color: rgba(255, 210, 31, 0.26);
+  background:
+    linear-gradient(180deg, rgba(8, 29, 52, 0.96), rgba(4, 15, 28, 0.98)),
+    radial-gradient(circle at 98% 18%, rgba(255, 210, 31, 0.09), transparent 30%);
+}
+
+.sam-cen-method h3 {
+  margin-bottom: 8px;
+  color: var(--yellow);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.sam-cen-method p {
+  max-width: 1180px;
+  color: #d5e7ff;
+  line-height: 1.5;
+}
+
+.sam-cen-kpis .delta h3 {
+  color: var(--cyan);
+}
+
+.sam-cen-chart-grid {
+  margin-bottom: 12px;
+}
+
+.sam-cen-table-card {
+  padding: 14px 16px;
+}
+
+.sam-cen-table-card .panel-head {
+  margin-bottom: 14px;
+}
+
+.sam-cen-table-card h4 {
+  margin: 16px 0 3px;
+  color: #ffffff;
+  font-size: 13px;
+  letter-spacing: 0.45px;
+}
+
+.sam-cen-table-card h4:first-of-type {
+  margin-top: 0;
+}
+
+.sam-cen-reference {
+  display: block;
+  margin-bottom: 8px;
+  color: #8fc9ff;
+}
+
+.sam-cen-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(94, 168, 255, 0.16);
+  border-radius: 7px;
+  background: rgba(2, 12, 24, 0.34);
+}
+
+.sam-cen-indicators-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.sam-cen-indicators-table th,
+.sam-cen-indicators-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(108, 165, 225, 0.13);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sam-cen-indicators-table th {
+  color: #8fc9ff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.45px;
+  text-transform: uppercase;
+  background: rgba(8, 30, 54, 0.78);
+}
+
+.sam-cen-indicators-table td {
+  color: #eaf5ff;
+  font-size: 12px;
+}
+
+.sam-cen-indicators-table th:nth-child(-n + 3),
+.sam-cen-indicators-table td:nth-child(-n + 3) {
+  text-align: left;
+}
+
+.sam-cen-indicators-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.sam-cen-indicators-table tbody tr:hover td {
+  background: rgba(49, 183, 255, 0.06);
+}
+
 @media (max-width: 1450px) {
   .plant-scada-strip { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
   .plant-energy-kpi-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
@@ -2085,6 +2222,11 @@ tbody tr.highlight {
   }
 
   .plant-energy-status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sam-cen-status {
     align-items: flex-start;
     flex-direction: column;
   }

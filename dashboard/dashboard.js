@@ -722,6 +722,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       if (energyPanel && energyPanel.classList.contains("active")) {
         window.renderPlantEnergyView?.();
       }
+
+      const samCenPanel = byId("plant-panel-sam-cen");
+      if (samCenPanel && samCenPanel.classList.contains("active")) {
+        window.renderSamCenView?.();
+      }
     }
 
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1489,6 +1494,462 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
 
 /* ============================================================
+   SAM VS CEN 2025
+   ============================================================ */
+(function () {
+  const SAM_CEN_BUNDLE_URL = "data/sam_tmy_nasa_vs_cen_dashboard_bundle.json";
+
+  const samCenState = {
+    bundle: null,
+    loaded: false,
+    rendered: false,
+    charts: {},
+  };
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function setText(id, value) {
+    const el = byId(id);
+    if (el) el.textContent = value;
+  }
+
+  function formatNumber(value, decimals = 1) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) {
+      return "--";
+    }
+
+    return Number(value).toLocaleString("es-CL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function getCssColor(variableName, fallback) {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+
+    return value || fallback;
+  }
+
+  function setSamCenStatus(text, isError = false) {
+    const statusEl = byId("samCenStatus");
+    if (statusEl) statusEl.classList.toggle("error", isError);
+    setText("samCenStatus", text);
+  }
+
+  function destroySamCenCharts() {
+    Object.values(samCenState.charts).forEach((chart) => {
+      if (chart && typeof chart.destroy === "function") {
+        chart.destroy();
+      }
+    });
+
+    samCenState.charts = {};
+  }
+
+  function chartBaseOptions(extra = {}) {
+    const tickColor = "#b8cbe3";
+    const gridColor = "rgba(140, 170, 210, 0.14)";
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: tickColor,
+            boxWidth: 14,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: "rgba(3, 18, 34, 0.96)",
+          titleColor: "#ffffff",
+          bodyColor: "#d7e8ff",
+          borderColor: "rgba(91, 141, 196, 0.45)",
+          borderWidth: 1,
+        },
+      },
+      scales: {
+        x: {
+          ticks: { color: tickColor },
+          grid: { color: gridColor },
+        },
+        y: {
+          ticks: { color: tickColor },
+          grid: { color: gridColor },
+        },
+      },
+      ...extra,
+    };
+  }
+
+  function barDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      backgroundColor: `${color}cc`,
+      borderColor: color,
+      borderWidth: 1,
+      borderRadius: 4,
+      yAxisID,
+    };
+  }
+
+  function lineDataset(label, data, color, yAxisID = "y") {
+    return {
+      label,
+      data,
+      borderColor: color,
+      backgroundColor: color,
+      borderWidth: 2,
+      pointRadius: 2,
+      pointHoverRadius: 4,
+      tension: 0.28,
+      fill: false,
+      yAxisID,
+    };
+  }
+
+  async function loadSamCenBundle() {
+    if (samCenState.loaded && samCenState.bundle) {
+      return samCenState.bundle;
+    }
+
+    try {
+      const response = await fetch(SAM_CEN_BUNDLE_URL, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const bundle = await response.json();
+      samCenState.bundle = bundle;
+      samCenState.loaded = true;
+      return bundle;
+    } catch (error) {
+      console.error("No se pudo cargar SAM vs CEN 2025:", error);
+      return null;
+    }
+  }
+
+  function findSamCase(rows, pattern) {
+    return Array.isArray(rows)
+      ? rows.find((row) => pattern.test(`${row.caso_sam || ""} ${row.fuente_meteorologica || ""}`)) || {}
+      : {};
+  }
+
+  function splitByCase(rows) {
+    return {
+      tmy: Array.isArray(rows) ? rows.filter((row) => /tmy/i.test(`${row.caso_sam || ""}`)) : [],
+      nasa: Array.isArray(rows) ? rows.filter((row) => /nasa/i.test(`${row.caso_sam || ""}`)) : [],
+    };
+  }
+
+  function renderSamCenKpis(bundle) {
+    const cen = bundle.cen_kpis || {};
+    const samTmy = findSamCase(bundle.sam_kpis, /tmy/i);
+    const samNasa = findSamCase(bundle.sam_kpis, /nasa/i);
+    const summaryTmy = findSamCase(bundle.resumen_anual, /tmy/i);
+    const summaryNasa = findSamCase(bundle.resumen_anual, /nasa/i);
+
+    setText("samCenKpiInjection", formatNumber(cen.energia_inyectada_cen_gwh, 1));
+    setText("samCenKpiCurtailment", formatNumber(cen.energia_curtailment_cen_gwh, 1));
+    setText("samCenKpiAvailable", formatNumber(cen.energia_disponible_cen_gwh, 1));
+    setText("samCenKpiCurtailmentFactor", formatNumber(cen.factor_curtailment_anual_pct, 1));
+    setText("samCenKpiTmyAnnual", formatNumber(samTmy.energia_ac_neta_gwh, 1));
+    setText("samCenKpiNasaAnnual", formatNumber(samNasa.energia_ac_neta_gwh, 1));
+    setText("samCenKpiTmyDelta", formatNumber(summaryTmy.sam_menos_cen_disponible_gwh, 1));
+    setText("samCenKpiTmyDeltaPct", `${formatNumber(summaryTmy.sam_menos_cen_disponible_pct, 1)} % vs CEN disponible`);
+    setText("samCenKpiNasaDelta", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1));
+    setText("samCenKpiNasaDeltaPct", `${formatNumber(summaryNasa.sam_menos_cen_disponible_pct, 1)} % vs CEN disponible`);
+  }
+
+  function appendIndicatorRow(tbody, row) {
+    const tr = document.createElement("tr");
+    [
+      row.caso_sam,
+      row.referencia,
+      row.filtro,
+      formatNumber(row.mbe, 2),
+      formatNumber(row.mae, 2),
+      formatNumber(row.rmse, 2),
+      `${formatNumber(row.nrmse_pct, 1)} %`,
+      formatNumber(row.corr_pearson, 3),
+      `${formatNumber(row.delta_pct, 1)} %`,
+    ].forEach((value) => {
+      const td = document.createElement("td");
+      td.textContent = value || "--";
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  }
+
+  function renderSamCenIndicators(indicators) {
+    const technicalBody = byId("samCenTechnicalTableBody");
+    const operationalBody = byId("samCenOperationalTableBody");
+    if (!technicalBody || !operationalBody) return;
+
+    technicalBody.replaceChildren();
+    operationalBody.replaceChildren();
+
+    (Array.isArray(indicators) ? indicators : []).forEach((row) => {
+      if (row.referencia === "CEN disponible = inyeccion + curtailment") {
+        appendIndicatorRow(technicalBody, row);
+      }
+
+      if (row.referencia === "CEN inyeccion real") {
+        appendIndicatorRow(operationalBody, row);
+      }
+    });
+  }
+
+  function renderSamCenAnnualChart(bundle) {
+    const canvas = byId("samCenAnnualChart");
+    if (!canvas) return;
+
+    const cen = bundle.cen_kpis || {};
+    const samTmy = findSamCase(bundle.sam_kpis, /tmy/i);
+    const samNasa = findSamCase(bundle.sam_kpis, /nasa/i);
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+
+    samCenState.charts.annual = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: ["CEN inyección", "CEN disponible", "SAM TMY", "SAM NASA 2025"],
+        datasets: [{
+          label: "Energía anual",
+          data: [
+            cen.energia_inyectada_cen_gwh,
+            cen.energia_disponible_cen_gwh,
+            samTmy.energia_ac_neta_gwh,
+            samNasa.energia_ac_neta_gwh,
+          ],
+          backgroundColor: [`${cyan}cc`, `${yellow}cc`, `${green}cc`, `${blue}cc`],
+          borderColor: [cyan, yellow, green, blue],
+          borderWidth: 1,
+          borderRadius: 4,
+        }],
+      },
+      options: chartBaseOptions({
+        plugins: {
+          ...chartBaseOptions().plugins,
+          legend: { display: false },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSamCenMonthlyChart(mensual) {
+    const canvas = byId("samCenMonthlyChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const { tmy, nasa } = splitByCase(mensual);
+    const labels = tmy.map((row) => row.mes_nombre || row.mes);
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+
+    samCenState.charts.monthly = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("CEN inyección", tmy.map((row) => row.cen_inyeccion_gwh), cyan),
+          barDataset("CEN disponible", tmy.map((row) => row.cen_disponible_gwh), yellow),
+          { ...lineDataset("SAM TMY", tmy.map((row) => row.sam_e_ac_gwh), green), type: "line" },
+          { ...lineDataset("SAM NASA 2025", nasa.map((row) => row.sam_e_ac_gwh), blue), type: "line" },
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+            stacked: false,
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+            stacked: false,
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSamCenResidualChart(mensual) {
+    const canvas = byId("samCenResidualChart");
+    if (!canvas || !Array.isArray(mensual)) return;
+
+    const { tmy, nasa } = splitByCase(mensual);
+    const labels = tmy.map((row) => row.mes_nombre || row.mes);
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+
+    samCenState.charts.residual = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("SAM TMY - CEN disponible", tmy.map((row) => row.residuo_sam_menos_cen_disp_gwh), green),
+          barDataset("SAM NASA - CEN disponible", nasa.map((row) => row.residuo_sam_menos_cen_disp_gwh), blue),
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "GWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSamCenHourlyChart(perfil) {
+    const canvas = byId("samCenHourlyChart");
+    if (!canvas || !Array.isArray(perfil)) return;
+
+    const { tmy, nasa } = splitByCase(perfil);
+    const labels = tmy.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`);
+    const cyan = getCssColor("--cyan", "#31b7ff");
+    const yellow = getCssColor("--yellow", "#ffd21f");
+    const green = getCssColor("--green", "#76ff45");
+    const blue = getCssColor("--blue", "#2689ff");
+
+    samCenState.charts.hourly = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          lineDataset("CEN inyección", tmy.map((row) => row.cen_inyeccion_prom_mwh), cyan),
+          lineDataset("CEN disponible", tmy.map((row) => row.cen_disponible_prom_mwh), yellow),
+          lineDataset("SAM TMY", tmy.map((row) => row.sam_e_ac_prom_mwh), green),
+          { ...lineDataset("SAM NASA 2025", nasa.map((row) => row.sam_e_ac_prom_mwh), blue), borderDash: [6, 4] },
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3", maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "MWh promedio", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+        },
+      }),
+    });
+  }
+
+  function renderSamCenCurtPriceChart(perfil) {
+    const canvas = byId("samCenCurtPriceChart");
+    if (!canvas || !Array.isArray(perfil)) return;
+
+    const { tmy } = splitByCase(perfil);
+    const labels = tmy.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`);
+    const orange = getCssColor("--orange", "#ff8a00");
+    const purple = getCssColor("--purple", "#b46cff");
+
+    samCenState.charts.curtPrice = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          barDataset("Curtailment CEN", tmy.map((row) => row.cen_curtailment_prom_mwh), orange, "y"),
+          { ...lineDataset("Precio promedio", tmy.map((row) => row.precio_prom_usd_mwh), purple, "y1"), type: "line" },
+        ],
+      },
+      options: chartBaseOptions({
+        scales: {
+          x: {
+            ticks: { color: "#b8cbe3", maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+            grid: { color: "rgba(140, 170, 210, 0.1)" },
+          },
+          y: {
+            title: { display: true, text: "MWh promedio", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { color: "rgba(140, 170, 210, 0.14)" },
+          },
+          y1: {
+            position: "right",
+            title: { display: true, text: "USD/MWh", color: "#b8cbe3" },
+            ticks: { color: "#b8cbe3" },
+            grid: { drawOnChartArea: false },
+          },
+        },
+      }),
+    });
+  }
+
+  window.renderSamCenView = async function renderSamCenView() {
+    if (samCenState.rendered && Object.keys(samCenState.charts).length) return;
+
+    setSamCenStatus("CARGANDO");
+    setText("samCenMeta", "Cargando data/sam_tmy_nasa_vs_cen_dashboard_bundle.json...");
+    const bundle = await loadSamCenBundle();
+
+    if (!bundle) {
+      destroySamCenCharts();
+      samCenState.rendered = false;
+      setSamCenStatus("ERROR DATOS", true);
+      setText("samCenMeta", "No se pudo cargar data/sam_tmy_nasa_vs_cen_dashboard_bundle.json");
+      return;
+    }
+
+    setSamCenStatus("DATOS OK");
+    setText(
+      "samCenMeta",
+      `${bundle.metadata?.planta || "CEME1"} · ${bundle.metadata?.comparacion || "SAM vs CEN"} · ${bundle.metadata?.anio || "2025"}`
+    );
+
+    renderSamCenKpis(bundle);
+    renderSamCenIndicators(bundle.indicadores);
+    destroySamCenCharts();
+    renderSamCenAnnualChart(bundle);
+    renderSamCenMonthlyChart(bundle.mensual);
+    renderSamCenResidualChart(bundle.mensual);
+    renderSamCenHourlyChart(bundle.perfil_horario);
+    renderSamCenCurtPriceChart(bundle.perfil_horario);
+
+    samCenState.rendered = true;
+  };
+})();
+
+
+/* ============================================================
    SUBPESTAÑAS INTERNAS PLANTA FV (SAM)
    ============================================================ */
 (function () {
@@ -1510,6 +1971,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
         if (panelName === "energia") {
           window.renderPlantEnergyView?.(button.dataset.plantEnergyMode);
+        }
+
+        if (panelName === "sam-cen") {
+          window.renderSamCenView?.();
         }
       });
     });
