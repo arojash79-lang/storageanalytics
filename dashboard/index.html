@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260620-2235" />
+  <link rel="stylesheet" href="dashboard.css?v=20260622-0100" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="dashboard.js?v=20260620-2235" defer></script>
+  <script src="dashboard.js?v=20260622-0100" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -1443,6 +1443,20 @@
         </div>
 
         <div id="simulation-energy-panels"></div>
+        <script>
+          (() => {
+            const target = document.getElementById("simulation-energy-panels");
+            const energyPanel = document.getElementById("plant-panel-energia");
+            const samCenPanel = document.getElementById("plant-panel-sam-cen");
+
+            if (target && energyPanel && samCenPanel) {
+              target.appendChild(energyPanel);
+              target.appendChild(samCenPanel);
+              energyPanel.classList.add("active");
+              samCenPanel.classList.remove("active");
+            }
+          })();
+        </script>
       </section>
     </section>
     <!-- FIN VISTA SIMULACIÓN ENERGÉTICA -->
