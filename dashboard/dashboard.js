@@ -7,6 +7,7 @@ let charts = {};
 const $ = (id) => document.getElementById(id);
 const strategySelectValue = () => window.currentStrategyFile || "estrategia_A.json";
 const SCADA_HOURLY_URL = "data/sam_tmy_nasa_vs_cen_horario_scada_lite.json";
+const SCADA_DATA_NOTE = "Los valores FV provienen de SAM; Generación real CEN, Reducciones CEN (curtailment) y precio provienen de CEN/SEN 2025. CEN disponible = Generación real CEN + Reducciones CEN.";
 
 window.addEventListener("DOMContentLoaded", () => {
   buildCharts();
@@ -40,7 +41,7 @@ async function cargarDatosScadaHorario(){
     scadaHourlyRows = Array.isArray(json) ? json : [];
     if(!scadaHourlyRows.length) throw new Error("JSON horario vacío");
     logScadaLoadDiagnostics(scadaHourlyRows);
-    setScadaDataNote("Los valores FV provienen de SAM y los valores de inyección, curtailment y precio provienen de CEN/SEN 2025. CEN disponible se define como inyección + curtailment.");
+    setScadaDataNote(SCADA_DATA_NOTE);
     updateScadaDay(true);
   }catch(e){
     console.error("No se pudo cargar el JSON horario SAM/CEN:", e);
@@ -72,7 +73,7 @@ function updateScadaDay(resetIndex = false){
     setScadaDataNote("Sin datos para la fecha seleccionada y caso SAM seleccionado");
     logScadaNoMatches(selectedDate, selectedCase);
   } else if(scadaHourlyRows.length) {
-    setScadaDataNote("Los valores FV provienen de SAM y los valores de inyección, curtailment y precio provienen de CEN/SEN 2025. CEN disponible se define como inyección + curtailment.");
+    setScadaDataNote(SCADA_DATA_NOTE);
   }
 
   update();
@@ -177,6 +178,31 @@ function logScadaNoMatches(selectedDate, selectedCase){
   });
 }
 
+function displaySamCase(casoSam, fuenteMeteorologica = ""){
+  const raw = `${casoSam || ""} ${fuenteMeteorologica || ""}`;
+  if(/tmy/i.test(raw)) return "SAM TMY Explorador Solar";
+  if(/nasa/i.test(raw)) return "SAM NASA 2025";
+  return casoSam || "--";
+}
+
+function displayReference(reference){
+  if(reference === "CEN disponible = inyeccion + curtailment") {
+    return "CEN disponible = Generación real CEN + Reducciones CEN";
+  }
+  if(reference === "CEN inyeccion real") {
+    return "Generación real CEN (inyección registrada)";
+  }
+  return reference || "--";
+}
+
+function displayComparison(comparison){
+  if(!comparison) return "SAM vs CEN";
+  return String(comparison)
+    .replace(/SAM TMY/g, "SAM TMY Explorador Solar")
+    .replace(/SAM NASA POWER 2025/g, "SAM NASA 2025")
+    .replace(/CEN SEN 2025/g, "CEN disponible 2025");
+}
+
 function setScadaDataNote(message, isError = false){
   const note = $("scadaDataNote");
   if(!note) return;
@@ -212,7 +238,7 @@ function update(){
   const rowsUntil = getRowsUntilCurrentHour(dayRows, d.datetime);
   const date = new Date(d.datetime);
   const hh = validDate(date) ? date.toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"}) : "--:--";
-  const dd = validDate(date) ? `${date.toLocaleDateString("es-CL")} · ${d.caso_sam || ""}` : "Sin datos";
+  const dd = validDate(date) ? `${date.toLocaleDateString("es-CL")} · ${displaySamCase(d.caso_sam, d.fuente_meteorologica)}` : "Sin datos";
 
   set("simHour", hh); set("simDate", dd); set("sliderBubble", hh);
   set("ghi", n(d.ghi)); set("fv", n(d.fv,1)); set("curtailment", n(d.curtailment,1)); set("inyeccion", n(d.inyeccion,1));
@@ -259,14 +285,14 @@ function updateCharts(dayRows, rowsUntil){
 }
 
 function buildCharts(){
-  charts.operation = lineChart("operationChart", ["Producción FV SAM","CEN disponible","Inyección CEN","Curtailment","Precio spot"], ["#76ff45","#ffd21f","#31b7ff","#ff8a00","#b46cff"], false);
+  charts.operation = lineChart("operationChart", ["Generación FV SAM (AC)","CEN disponible","Generación real CEN","Reducciones CEN (curtailment)","Precio spot"], ["#76ff45","#ffd21f","#31b7ff","#ff8a00","#b46cff"], false);
   charts.radiation = lineChart("radiationChart", ["GHI","DNI","DHI"], ["#ffd21f","#ff8a00","#31b7ff"], false);
-  charts.soc = lineChart("socChart", ["Residuo SAM-CEN disp."], ["#ff8a00"], false);
+  charts.soc = lineChart("socChart", ["Residuo SAM − CEN disponible"], ["#ff8a00"], false);
   charts.pmg = lineChart("pmgChart", ["Precio spot"], ["#9b78ff"], false);
   charts.sparkGhi = lineChart("sparkGhi", ["GHI"], ["#ffd21f"], true);
   charts.sparkFv = lineChart("sparkFv", ["FV"], ["#76ff45"], true);
-  charts.sparkCurt = lineChart("sparkCurt", ["Curt"], ["#ff8a00"], true);
-  charts.sparkInj = lineChart("sparkInj", ["Iny"], ["#31b7ff"], true);
+  charts.sparkCurt = lineChart("sparkCurt", ["Reducciones CEN"], ["#ff8a00"], true);
+  charts.sparkInj = lineChart("sparkInj", ["Generación real CEN"], ["#31b7ff"], true);
   charts.sparkCarga = lineChart("sparkCarga", ["Disp"], ["#ffd21f"], true);
   charts.sparkDescarga = lineChart("sparkDescarga", ["Residuo"], ["#ff8a00"], true);
   charts.sparkPmg = lineChart("sparkPmg", ["Precio"], ["#9b78ff"], true);
@@ -843,14 +869,16 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       renderSolarView();
     }
 
-    if (viewName === "planta") {
-      const energyPanel = byId("plant-panel-energia");
-      if (energyPanel && energyPanel.classList.contains("active")) {
-        window.renderPlantEnergyView?.();
+    if (viewName === "simulacion") {
+      const simulationView = byId("view-simulacion");
+      const activeButton = simulationView?.querySelector(".plant-tab-btn.active[data-plant-panel]");
+      const activePanel = activeButton?.dataset.plantPanel || "energia";
+
+      if (activePanel === "energia") {
+        window.renderPlantEnergyView?.(activeButton?.dataset.plantEnergyMode || "tmy");
       }
 
-      const samCenPanel = byId("plant-panel-sam-cen");
-      if (samCenPanel && samCenPanel.classList.contains("active")) {
+      if (activePanel === "sam-cen") {
         window.renderSamCenView?.();
       }
     }
@@ -1989,8 +2017,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     updateInstrument("samCenTmy", "samCenTmyInstrument", tmy);
     updateInstrument("samCenNasa", "samCenNasaInstrument", nasa);
 
-    setText("samCenTmyBadge", "CASO BASE TÍPICO");
-    setText("samCenNasaBadge", nasaBetter ? "MEJOR AJUSTE 2025" : "AÑO HISTÓRICO 2025");
+    setText("samCenTmyBadge", "SAM TMY EXPLORADOR SOLAR");
+    setText("samCenNasaBadge", nasaBetter ? "MEJOR AJUSTE SAM NASA 2025" : "SAM NASA 2025");
 
     const nasaCard = byId("samCenNasaInstrument");
     const tmyCard = byId("samCenTmyInstrument");
@@ -2002,8 +2030,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const tr = document.createElement("tr");
     tr.classList.add(getNrmseState(row.nrmse_pct).className);
     [
-      row.caso_sam,
-      row.referencia,
+      displaySamCase(row.caso_sam, row.fuente_meteorologica),
+      displayReference(row.referencia),
       row.filtro,
       formatNumber(row.mbe, 2),
       formatNumber(row.mae, 2),
@@ -2054,7 +2082,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     samCenState.charts.annual = new Chart(canvas, {
       type: "bar",
       data: {
-        labels: ["CEN inyección", "CEN disponible", "SAM TMY", "SAM NASA 2025"],
+        labels: ["Generación real CEN", "CEN disponible", "SAM TMY Explorador Solar", "SAM NASA 2025"],
         datasets: [{
           label: "Energía anual",
           data: [
@@ -2105,10 +2133,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       data: {
         labels,
         datasets: [
-          { ...lineDataset("SAM TMY", tmy.map((row) => row.sam_e_ac_gwh), green), type: "line" },
+          { ...lineDataset("SAM TMY Explorador Solar", tmy.map((row) => row.sam_e_ac_gwh), green), type: "line" },
           { ...lineDataset("SAM NASA 2025", nasa.map((row) => row.sam_e_ac_gwh), blue), type: "line" },
           barDataset("CEN disponible", tmy.map((row) => row.cen_disponible_gwh), yellow),
-          barDataset("CEN inyección", tmy.map((row) => row.cen_inyeccion_gwh), cyan),
+          barDataset("Generación real CEN", tmy.map((row) => row.cen_inyeccion_gwh), cyan),
         ],
       },
       options: chartBaseOptions({
@@ -2143,8 +2171,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       data: {
         labels,
         datasets: [
-          barDataset("SAM TMY - CEN disponible", tmy.map((row) => row.residuo_sam_menos_cen_disp_gwh), green),
-          barDataset("SAM NASA - CEN disponible", nasa.map((row) => row.residuo_sam_menos_cen_disp_gwh), blue),
+          barDataset("Residuo SAM TMY Explorador Solar − CEN disponible", tmy.map((row) => row.residuo_sam_menos_cen_disp_gwh), green),
+          barDataset("Residuo SAM NASA 2025 − CEN disponible", nasa.map((row) => row.residuo_sam_menos_cen_disp_gwh), blue),
         ],
       },
       options: chartBaseOptions({
@@ -2179,9 +2207,9 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       data: {
         labels,
         datasets: [
-          lineDataset("CEN inyección", tmy.map((row) => row.cen_inyeccion_prom_mwh), cyan),
+          lineDataset("Generación real CEN", tmy.map((row) => row.cen_inyeccion_prom_mwh), cyan),
           lineDataset("CEN disponible", tmy.map((row) => row.cen_disponible_prom_mwh), yellow),
-          lineDataset("SAM TMY", tmy.map((row) => row.sam_e_ac_prom_mwh), green),
+          lineDataset("SAM TMY Explorador Solar", tmy.map((row) => row.sam_e_ac_prom_mwh), green),
           { ...lineDataset("SAM NASA 2025", nasa.map((row) => row.sam_e_ac_prom_mwh), blue), borderDash: [6, 4] },
         ],
       },
@@ -2215,7 +2243,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       data: {
         labels,
         datasets: [
-          barDataset("Curtailment CEN", tmy.map((row) => row.cen_curtailment_prom_mwh), orange, "y"),
+          barDataset("Reducciones CEN (curtailment)", tmy.map((row) => row.cen_curtailment_prom_mwh), orange, "y"),
           { ...lineDataset("Precio promedio", tmy.map((row) => row.precio_prom_usd_mwh), purple, "y1"), type: "line" },
         ],
       },
@@ -2259,7 +2287,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     setSamCenStatus("DATA OK");
     setText(
       "samCenMeta",
-      `${bundle.metadata?.planta || "CEME1"} · ${bundle.metadata?.comparacion || "SAM vs CEN"} · ${bundle.metadata?.anio || "2025"}`
+      `${bundle.metadata?.planta || "CEME1"} · ${displayComparison(bundle.metadata?.comparacion)} · ${bundle.metadata?.anio || "2025"}`
     );
 
     renderSamCenHeader(bundle);
@@ -2280,22 +2308,44 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
 
 /* ============================================================
-   SUBPESTAÑAS INTERNAS PLANTA FV (SAM)
+   SUBPESTAÑAS INTERNAS PLANTA FV / SIMULACIÓN ENERGÉTICA
    ============================================================ */
 (function () {
+  function setupSimulationPanels() {
+    const target = document.getElementById("simulation-energy-panels");
+    const energyPanel = document.getElementById("plant-panel-energia");
+    const samCenPanel = document.getElementById("plant-panel-sam-cen");
+
+    if (!target || !energyPanel || !samCenPanel) return;
+
+    if (energyPanel.parentElement !== target) {
+      target.appendChild(energyPanel);
+    }
+
+    if (samCenPanel.parentElement !== target) {
+      target.appendChild(samCenPanel);
+    }
+
+    energyPanel.classList.add("active");
+    samCenPanel.classList.remove("active");
+  }
+
   function initPlantTabs() {
+    setupSimulationPanels();
+
     const buttons = document.querySelectorAll(".plant-tab-btn[data-plant-panel]");
     if (!buttons.length) return;
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
         const panelName = button.dataset.plantPanel;
+        const scope = button.closest(".dashboard-view") || document;
 
-        buttons.forEach((item) => {
+        scope.querySelectorAll(".plant-tab-btn[data-plant-panel]").forEach((item) => {
           item.classList.toggle("active", item === button);
         });
 
-        document.querySelectorAll(".plant-panel").forEach((panel) => {
+        scope.querySelectorAll(".plant-panel").forEach((panel) => {
           panel.classList.toggle("active", panel.id === `plant-panel-${panelName}`);
         });
 
