@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260622-0100" />
+  <link rel="stylesheet" href="dashboard.css?v=20260622-0115" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="dashboard.js?v=20260622-0100" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
+  <script src="dashboard.js?v=20260622-0115" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -1460,6 +1461,160 @@
       </section>
     </section>
     <!-- FIN VISTA SIMULACIÓN ENERGÉTICA -->
+
+    <!-- INICIO VISTA REPORTES -->
+    <section id="view-reportes" class="dashboard-view">
+      <section class="report-view-shell">
+        <div class="report-view-head">
+          <div>
+            <p class="section-kicker">REPORTES</p>
+            <h2>Reporte Bloque 1 — Modelación FV CEME1 y contraste CEN</h2>
+            <span>Documento técnico exportable para revisión académica.</span>
+          </div>
+          <div class="report-export-actions pdf-hide">
+            <button id="exportReportPdfBtn" class="report-export-btn" type="button">
+              <span>⬇ PDF</span>
+              Exportar reporte PDF
+            </button>
+            <small id="reportPdfStatus" aria-live="polite"></small>
+          </div>
+        </div>
+
+        <article id="reportBloque1Content" class="pdf-report-page report-paper">
+          <header class="pdf-header report-header">
+            <div class="report-brand">
+              <span class="report-brand-mark">⚡</span>
+              <div>
+                <strong>Storage Analytics</strong>
+                <small>CEME1 FV + DUNE BESS</small>
+              </div>
+            </div>
+            <div class="report-date">
+              <span>Fecha de generación</span>
+              <strong id="reportGeneratedAt">--</strong>
+            </div>
+          </header>
+
+          <section class="pdf-section report-title-section">
+            <p>Actividad de Graduación MIE UC</p>
+            <h1>Reporte Bloque 1 — Modelación FV CEME1 y contraste CEN</h1>
+            <span>Modelación energética FV, comparación meteorológica SAM y referencia operacional CEN 2025.</span>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Resumen ejecutivo</h2>
+            <p id="reportExecutiveSummary">
+              Cargando resumen ejecutivo del Bloque 1...
+            </p>
+          </section>
+
+          <section class="pdf-section">
+            <h2>KPIs principales</h2>
+            <div id="reportKpiGrid" class="pdf-kpi-grid report-kpi-grid">
+              <article><span>SAM NASA 2025</span><strong id="reportKpiSamNasa">--</strong><small>GWh/año</small></article>
+              <article><span>CEN disponible</span><strong id="reportKpiCenAvailable">--</strong><small>GWh/año</small></article>
+              <article><span>Residuo SAM − CEN disponible</span><strong id="reportKpiResidual">--</strong><small>GWh/año</small></article>
+              <article><span>Generación real CEN</span><strong id="reportKpiRealGen">--</strong><small>GWh/año</small></article>
+              <article><span>Reducciones CEN (curtailment)</span><strong id="reportKpiReductions">--</strong><small>GWh/año</small></article>
+              <article><span>Factor reducciones CEN</span><strong id="reportKpiReductionFactor">--</strong><small>% CEN disponible</small></article>
+            </div>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Tabla de fuentes de datos</h2>
+            <table class="pdf-table report-table">
+              <thead>
+                <tr><th>Fuente</th><th>Uso en Bloque 1</th><th>Resolución</th><th>Alcance</th></tr>
+              </thead>
+              <tbody id="reportSourcesBody"></tbody>
+            </table>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Tabla de resultados energéticos anuales</h2>
+            <table class="pdf-table report-table">
+              <thead>
+                <tr><th>Indicador</th><th>Valor</th><th>Unidad</th><th>Interpretación</th></tr>
+              </thead>
+              <tbody id="reportAnnualResultsBody"></tbody>
+            </table>
+          </section>
+
+          <section class="pdf-section report-chart-section">
+            <h2>Gráfico mensual principal</h2>
+            <div class="report-chart-card">
+              <canvas id="reportMonthlyChart" height="250"></canvas>
+            </div>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Tabla de métricas de validación</h2>
+            <table class="pdf-table report-table">
+              <thead>
+                <tr><th>Caso</th><th>Referencia</th><th>Filtro</th><th>MBE</th><th>MAE</th><th>RMSE</th><th>nRMSE</th><th>r</th><th>Δ</th></tr>
+              </thead>
+              <tbody id="reportValidationBody"></tbody>
+            </table>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Descomposición operacional del residuo</h2>
+            <p id="reportResidualText"></p>
+            <table class="pdf-table report-table compact">
+              <thead>
+                <tr><th>Componente</th><th>Valor</th><th>Unidad</th></tr>
+              </thead>
+              <tbody id="reportResidualBody"></tbody>
+            </table>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Contraste técnico SAM–PVsyst</h2>
+            <p>
+              El Bloque 1 utiliza SAM como herramienta de simulación horaria FV. El contraste SAM–PVsyst se plantea como
+              verificación técnica complementaria de supuestos de modelación, pérdidas, clipping, configuración DC/AC y
+              respuesta energética mensual. Cuando se incorpore el archivo PVsyst, esta sección podrá cuantificar la brecha
+              entre ambos modelos sin modificar la referencia operacional CEN.
+            </p>
+            <table class="pdf-table report-table">
+              <thead>
+                <tr><th>Eje técnico</th><th>SAM</th><th>PVsyst</th><th>Estado en dashboard</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Meteorología</td><td>TMY Explorador Solar y NASA POWER 2025</td><td>Archivo meteorológico PVsyst por incorporar</td><td>Comparación pendiente</td></tr>
+                <tr><td>Modelo FV</td><td>6 submodelos equivalentes CEME1</td><td>Modelo equivalente por homologar</td><td>Base SAM disponible</td></tr>
+                <tr><td>Resultado esperado</td><td>Energía AC horaria / mensual / anual</td><td>Energía AC PVsyst comparable</td><td>Sin cálculo adicional en esta tarea</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Limitaciones metodológicas</h2>
+            <ul class="report-list">
+              <li>SAM NASA 2025 no incorpora fallas, mantenimientos ni indisponibilidad técnica real de CEME1.</li>
+              <li>El residuo SAM − CEN disponible se interpreta como discrepancia técnico-operacional, no como error puro del modelo.</li>
+              <li>CEN disponible se construye como Generación real CEN + Reducciones CEN.</li>
+              <li>Los resultados dependen de la calidad de las fuentes horarias y de la homologación temporal de los datos.</li>
+              <li>El módulo BESS no forma parte del alcance exportado de Bloque 1.</li>
+            </ul>
+          </section>
+
+          <section class="pdf-section">
+            <h2>Conclusión Bloque 1</h2>
+            <p id="reportConclusion">
+              La modelación FV de CEME1 en SAM entrega una base técnica horaria para contrastar generación potencial,
+              referencia operacional CEN y reducciones registradas, dejando trazable la brecha técnico-operacional que
+              será utilizada en los bloques posteriores del análisis FV + BESS.
+            </p>
+          </section>
+
+          <footer class="pdf-footer report-footer">
+            Storage Analytics — Actividad de Graduación MIE UC — CEME1 FV + BESS
+          </footer>
+        </article>
+      </section>
+    </section>
+    <!-- FIN VISTA REPORTES -->
 
   </main>
 </body>

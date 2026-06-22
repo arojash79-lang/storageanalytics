@@ -883,6 +883,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       }
     }
 
+    if (viewName === "reportes") {
+      window.renderReportesView?.();
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -2304,6 +2308,430 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     samCenState.rendered = true;
   };
+})();
+
+
+/* ============================================================
+   REPORTE BLOQUE 1 + EXPORTACIÓN PDF
+   ============================================================ */
+(function () {
+  const REPORT_DATA_URLS = {
+    tmy: "data/planta_fv_sam_dashboard_bundle.json",
+    nasa: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
+    compare: "data/comparativa_tmy_vs_nasa_2025_dashboard_bundle.json",
+    samCen: "data/sam_tmy_nasa_vs_cen_dashboard_bundle.json",
+  };
+
+  const reportState = {
+    loaded: false,
+    bundles: null,
+    monthlyChart: null,
+    rendering: false,
+  };
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function setText(id, value) {
+    const el = byId(id);
+    if (el) el.textContent = value;
+  }
+
+  function formatNumber(value, decimals = 1) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "--";
+    return Number(value).toLocaleString("es-CL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function formatInteger(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "--";
+    return Number(value).toLocaleString("es-CL", { maximumFractionDigits: 0 });
+  }
+
+  function formatDateTime(date = new Date()) {
+    return date.toLocaleString("es-CL", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  function findCase(rows, pattern) {
+    return Array.isArray(rows)
+      ? rows.find((row) => pattern.test(`${row.caso || ""} ${row.caso_sam || ""} ${row.fuente_meteorologica || ""}`)) || {}
+      : {};
+  }
+
+  function addRows(tbodyId, rows) {
+    const tbody = byId(tbodyId);
+    if (!tbody) return;
+    tbody.replaceChildren();
+
+    rows.forEach((cells) => {
+      const tr = document.createElement("tr");
+      cells.forEach((cell) => {
+        const td = document.createElement("td");
+        td.textContent = cell ?? "--";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function loadJson(url) {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status} al cargar ${url}`);
+    return response.json();
+  }
+
+  async function loadReportBundles() {
+    if (reportState.loaded && reportState.bundles) return reportState.bundles;
+
+    const [tmy, nasa, compare, samCen] = await Promise.all([
+      loadJson(REPORT_DATA_URLS.tmy),
+      loadJson(REPORT_DATA_URLS.nasa),
+      loadJson(REPORT_DATA_URLS.compare),
+      loadJson(REPORT_DATA_URLS.samCen),
+    ]);
+
+    reportState.bundles = { tmy, nasa, compare, samCen };
+    reportState.loaded = true;
+    return reportState.bundles;
+  }
+
+  function renderReportHeader() {
+    setText("reportGeneratedAt", formatDateTime());
+  }
+
+  function renderReportSummary(bundles) {
+    const { nasa, samCen } = bundles;
+    const cen = samCen.cen_kpis || {};
+    const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
+    const indicatorsNasa = (samCen.indicadores || []).find((row) =>
+      /nasa/i.test(`${row.caso_sam || ""}`) &&
+      row.referencia === "CEN disponible = inyeccion + curtailment" &&
+      row.filtro === "todas_las_horas"
+    ) || {};
+
+    setText(
+      "reportExecutiveSummary",
+      `El Bloque 1 consolida la modelación FV horaria de CEME1 en SAM y la contrasta con la referencia operacional CEN 2025. ` +
+      `La simulación SAM NASA 2025 alcanza ${formatNumber(nasa.kpis?.energia_ac_neta_gwh_anio, 1)} GWh/año, mientras que ` +
+      `CEN disponible registra ${formatNumber(cen.energia_disponible_cen_gwh, 1)} GWh/año. El residuo SAM − CEN disponible ` +
+      `es ${formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1)} GWh (${formatNumber(summaryNasa.sam_menos_cen_disponible_pct, 1)} %), ` +
+      `con nRMSE horario de ${formatNumber(indicatorsNasa.nrmse_pct, 1)} %. Este residuo se interpreta como discrepancia técnico-operacional.`
+    );
+
+    setText("reportKpiSamNasa", formatNumber(nasa.kpis?.energia_ac_neta_gwh_anio, 1));
+    setText("reportKpiCenAvailable", formatNumber(cen.energia_disponible_cen_gwh, 1));
+    setText("reportKpiResidual", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1));
+    setText("reportKpiRealGen", formatNumber(cen.energia_inyectada_cen_gwh, 1));
+    setText("reportKpiReductions", formatNumber(cen.energia_curtailment_cen_gwh, 1));
+    setText("reportKpiReductionFactor", formatNumber(cen.factor_curtailment_anual_pct, 1));
+  }
+
+  function renderReportTables(bundles) {
+    const { tmy, nasa, compare, samCen } = bundles;
+    const cen = samCen.cen_kpis || {};
+    const samTmy = findCase(samCen.sam_kpis, /tmy/i);
+    const samNasa = findCase(samCen.sam_kpis, /nasa/i);
+    const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
+
+    addRows("reportSourcesBody", [
+      ["SAM NASA 2025", "Simulación técnica FV horaria bajo meteorología histórica 2025", nasa.metadata?.resolucion || "Horaria", "No incorpora fallas, mantenimientos ni indisponibilidad real"],
+      ["SAM TMY Explorador Solar", "Caso base meteorológico típico para comparación técnica FV", tmy.metadata?.resolucion || "Horaria", "Año meteorológico típico del Explorador Solar"],
+      ["CEN/SEN 2025", "Generación real CEN, Reducciones CEN y CEN disponible", "Horaria / mensual / anual", "Referencia operacional construida desde datos CEN"],
+      ["Comparativa TMY vs NASA 2025", "Contraste meteorológico y energético entre escenarios SAM", compare.metadata?.resolucion || "Horaria", "No modifica fórmulas ni referencias CEN"],
+    ]);
+
+    addRows("reportAnnualResultsBody", [
+      ["SAM TMY Explorador Solar", formatNumber(samTmy.energia_ac_neta_gwh, 1), "GWh/año", "Simulación FV con año meteorológico típico"],
+      ["SAM NASA 2025", formatNumber(samNasa.energia_ac_neta_gwh, 1), "GWh/año", "Simulación FV con meteorología histórica 2025"],
+      ["Generación real CEN", formatNumber(cen.energia_inyectada_cen_gwh, 1), "GWh/año", "Señal de generación real CEN, equivalente a inyección registrada"],
+      ["Reducciones CEN (curtailment)", formatNumber(cen.energia_curtailment_cen_gwh, 1), "GWh/año", "Reducciones operacionales definidas por CEN"],
+      ["CEN disponible", formatNumber(cen.energia_disponible_cen_gwh, 1), "GWh/año", "Generación real CEN + Reducciones CEN"],
+      ["Residuo SAM NASA 2025 − CEN disponible", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), "GWh/año", "Discrepancia técnico-operacional"],
+      ["Factor reducciones CEN", formatNumber(cen.factor_curtailment_anual_pct, 1), "%", "Reducciones CEN / CEN disponible"],
+    ]);
+
+    addRows("reportValidationBody", (samCen.indicadores || []).map((row) => [
+      displaySamCase(row.caso_sam, row.fuente_meteorologica),
+      displayReference(row.referencia),
+      row.filtro || "--",
+      formatNumber(row.mbe, 2),
+      formatNumber(row.mae, 2),
+      formatNumber(row.rmse, 2),
+      `${formatNumber(row.nrmse_pct, 1)} %`,
+      formatNumber(row.corr_pearson, 3),
+      `${formatNumber(row.delta_pct, 1)} %`,
+    ]));
+  }
+
+  function renderResidualSection(bundles) {
+    const { samCen } = bundles;
+    const cen = samCen.cen_kpis || {};
+    const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
+    const samNasa = findCase(samCen.sam_kpis, /nasa/i);
+
+    setText(
+      "reportResidualText",
+      "La descomposición operacional separa la energía disponible CEN en Generación real CEN y Reducciones CEN. " +
+      "El residuo se calcula contra CEN disponible y no contra la inyección registrada, evitando confundir restricciones operacionales con error puro del modelo FV."
+    );
+
+    addRows("reportResidualBody", [
+      ["SAM NASA 2025", formatNumber(samNasa.energia_ac_neta_gwh, 1), "GWh/año"],
+      ["CEN disponible", formatNumber(cen.energia_disponible_cen_gwh, 1), "GWh/año"],
+      ["Residuo SAM NASA 2025 − CEN disponible", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), "GWh/año"],
+      ["Generación real CEN", formatNumber(cen.energia_inyectada_cen_gwh, 1), "GWh/año"],
+      ["Reducciones CEN (curtailment)", formatNumber(cen.energia_curtailment_cen_gwh, 1), "GWh/año"],
+      ["Factor reducciones CEN", formatNumber(cen.factor_curtailment_anual_pct, 1), "% CEN disponible"],
+    ]);
+  }
+
+  function renderReportConclusion(bundles) {
+    const summaryNasa = findCase(bundles.samCen.resumen_anual, /nasa/i);
+    setText(
+      "reportConclusion",
+      `El Bloque 1 deja establecida una referencia técnica y operacional para CEME1. SAM NASA 2025 se usa como simulación ` +
+      `técnica de generación FV y CEN disponible como referencia operacional antes de reducciones. La brecha anual de ` +
+      `${formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1)} GWh debe leerse como discrepancia técnico-operacional ` +
+      `y sirve como base para los análisis posteriores de recuperación energética y operación BESS.`
+    );
+  }
+
+  function destroyMonthlyChart() {
+    if (reportState.monthlyChart && typeof reportState.monthlyChart.destroy === "function") {
+      reportState.monthlyChart.destroy();
+    }
+    reportState.monthlyChart = null;
+  }
+
+  function renderMonthlyChart(bundles) {
+    const canvas = byId("reportMonthlyChart");
+    if (!canvas || typeof Chart === "undefined") return;
+
+    const rows = (bundles.samCen.mensual || []).filter((row) => /nasa/i.test(`${row.caso_sam || ""}`));
+    const labels = rows.map((row) => row.mes_nombre || row.mes);
+
+    destroyMonthlyChart();
+    reportState.monthlyChart = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            type: "line",
+            label: "SAM NASA 2025",
+            data: rows.map((row) => row.sam_e_ac_gwh || 0),
+            borderColor: "#1b6dcc",
+            backgroundColor: "#1b6dcc",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "CEN disponible",
+            data: rows.map((row) => row.cen_disponible_gwh || 0),
+            borderColor: "#c69a00",
+            backgroundColor: "#c69a00",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            label: "Generación real CEN",
+            data: rows.map((row) => row.cen_inyeccion_gwh || 0),
+            backgroundColor: "rgba(49, 120, 196, 0.42)",
+            borderColor: "#3178c4",
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+          {
+            label: "Reducciones CEN (curtailment)",
+            data: rows.map((row) => row.cen_curtailment_gwh || 0),
+            backgroundColor: "rgba(226, 120, 32, 0.42)",
+            borderColor: "#e27820",
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: {
+          legend: {
+            labels: { color: "#16324d", boxWidth: 14, usePointStyle: true },
+          },
+          tooltip: {
+            backgroundColor: "rgba(255,255,255,0.96)",
+            titleColor: "#0b1d31",
+            bodyColor: "#18344f",
+            borderColor: "#bdd1e5",
+            borderWidth: 1,
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: "#18344f", maxRotation: 0 },
+            grid: { color: "rgba(20, 60, 96, 0.08)" },
+          },
+          y: {
+            title: { display: true, text: "GWh/mes", color: "#18344f" },
+            ticks: { color: "#18344f" },
+            grid: { color: "rgba(20, 60, 96, 0.12)" },
+          },
+        },
+      },
+      plugins: [{
+        id: "reportWhiteCanvas",
+        beforeDraw(chart) {
+          const { ctx, width, height } = chart;
+          ctx.save();
+          ctx.globalCompositeOperation = "destination-over";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+          ctx.restore();
+        },
+      }],
+    });
+  }
+
+  async function renderReportesView() {
+    if (reportState.rendering) return;
+    reportState.rendering = true;
+
+    try {
+      renderReportHeader();
+      const bundles = await loadReportBundles();
+      renderReportSummary(bundles);
+      renderReportTables(bundles);
+      renderResidualSection(bundles);
+      renderReportConclusion(bundles);
+      renderMonthlyChart(bundles);
+    } catch (error) {
+      console.error("No se pudo renderizar Reportes:", error);
+      setText("reportPdfStatus", "No se pudieron cargar los datos del reporte");
+    } finally {
+      reportState.rendering = false;
+    }
+  }
+
+  function replaceCanvasesWithImages(original, clone) {
+    const originalCanvases = original.querySelectorAll("canvas");
+    const cloneCanvases = clone.querySelectorAll("canvas");
+
+    originalCanvases.forEach((canvas, index) => {
+      const cloneCanvas = cloneCanvases[index];
+      if (!cloneCanvas) return;
+
+      try {
+        const img = document.createElement("img");
+        img.src = canvas.toDataURL("image/png", 1);
+        img.alt = canvas.getAttribute("aria-label") || "Gráfico del reporte";
+        img.style.width = "100%";
+        img.style.height = "auto";
+        img.style.display = "block";
+        cloneCanvas.replaceWith(img);
+      } catch (error) {
+        console.warn("No se pudo convertir canvas del reporte a imagen:", error);
+      }
+    });
+  }
+
+  async function exportReportPdf() {
+    const button = byId("exportReportPdfBtn");
+    const status = byId("reportPdfStatus");
+    const source = byId("reportBloque1Content");
+
+    if (!source) return;
+
+    if (typeof window.html2pdf !== "function") {
+      if (status) status.textContent = "No se pudo cargar la librería PDF";
+      return;
+    }
+
+    if (button) button.disabled = true;
+    if (status) status.textContent = "Generando PDF...";
+
+    try {
+      await renderReportesView();
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+      const clone = source.cloneNode(true);
+      clone.classList.add("pdf-report-page");
+      const clonedDate = clone.querySelector("#reportGeneratedAt");
+      if (clonedDate) clonedDate.textContent = formatDateTime();
+      clone.querySelectorAll(".pdf-hide").forEach((el) => el.remove());
+      replaceCanvasesWithImages(source, clone);
+
+      const temp = document.createElement("div");
+      temp.className = "pdf-export-mode";
+      temp.style.position = "absolute";
+      temp.style.left = "0";
+      temp.style.top = "0";
+      temp.style.zIndex = "99999";
+      temp.style.background = "#ffffff";
+      temp.style.width = "190mm";
+      temp.appendChild(clone);
+      document.body.appendChild(temp);
+
+      await window.html2pdf()
+        .set({
+          margin: [10, 10, 14, 10],
+          filename: "reporte_bloque1_ceme1_fv_cen.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            logging: false,
+          },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          pagebreak: {
+            mode: ["css", "legacy"],
+            avoid: [".pdf-section", ".pdf-table", ".report-chart-card", ".report-kpi-grid article", "tr"],
+          },
+        })
+        .from(clone)
+        .save();
+
+      temp.remove();
+      if (status) status.textContent = "PDF generado correctamente";
+      setTimeout(() => {
+        if (status && status.textContent === "PDF generado correctamente") status.textContent = "";
+      }, 4500);
+    } catch (error) {
+      console.error("No se pudo exportar el reporte PDF:", error);
+      if (status) status.textContent = "No se pudo generar el PDF";
+    } finally {
+      document.querySelectorAll(".pdf-export-mode").forEach((el) => el.remove());
+      if (button) button.disabled = false;
+    }
+  }
+
+  function initReportModule() {
+    const button = byId("exportReportPdfBtn");
+    if (button) button.addEventListener("click", exportReportPdf);
+  }
+
+  window.renderReportesView = renderReportesView;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initReportModule);
+  } else {
+    initReportModule();
+  }
 })();
 
 
