@@ -2316,6 +2316,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
    ============================================================ */
 (function () {
   const REPORT_DATA_URLS = {
+    validationBundle: "data/validacion_fv_ceme1_dashboard_bundle.json",
+    validationLite: "data/validacion_fv_ceme1_dashboard_lite.json",
     tmy: "data/planta_fv_sam_dashboard_bundle.json",
     nasa: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
     compare: "data/comparativa_tmy_vs_nasa_2025_dashboard_bundle.json",
@@ -2326,6 +2328,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     loaded: false,
     bundles: null,
     monthlyChart: null,
+    waterfallChart: null,
     rendering: false,
   };
 
@@ -2344,6 +2347,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
+  }
+
+  function formatAvailable(value, decimals = 1) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "Dato no disponible";
+    return formatNumber(value, decimals);
   }
 
   function formatInteger(value) {
@@ -2365,6 +2373,82 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     return Array.isArray(rows)
       ? rows.find((row) => pattern.test(`${row.caso || ""} ${row.caso_sam || ""} ${row.fuente_meteorologica || ""}`)) || {}
       : {};
+  }
+
+  function normalizeKey(key) {
+    return String(key || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function getField(obj, candidates) {
+    if (!obj || typeof obj !== "object") return undefined;
+    const direct = candidates.find((key) => Object.prototype.hasOwnProperty.call(obj, key));
+    if (direct) return obj[direct];
+
+    const normalized = new Map(Object.keys(obj).map((key) => [normalizeKey(key), key]));
+    const match = candidates
+      .map(normalizeKey)
+      .map((key) => normalized.get(key))
+      .find(Boolean);
+
+    return match ? obj[match] : undefined;
+  }
+
+  function findFieldByTokens(obj, tokenGroups) {
+    if (!obj || typeof obj !== "object") return undefined;
+    const keys = Object.keys(obj);
+    const found = keys.find((key) => {
+      const normalized = normalizeKey(key);
+      return tokenGroups.every((group) => group.some((token) => normalized.includes(normalizeKey(token))));
+    });
+    return found ? obj[found] : undefined;
+  }
+
+  function readNumber(obj, candidates, tokenGroups = []) {
+    let value = getField(obj, candidates);
+    if (value === undefined && tokenGroups.length) value = findFieldByTokens(obj, tokenGroups);
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function readEnergyGwh(obj, candidates, tokenGroups = []) {
+    let value;
+    let sourceKey = candidates.find((key) => Object.prototype.hasOwnProperty.call(obj || {}, key));
+
+    if (sourceKey) {
+      value = obj[sourceKey];
+    } else if (obj && typeof obj === "object") {
+      const normalized = new Map(Object.keys(obj).map((key) => [normalizeKey(key), key]));
+      const normalizedKey = candidates.map(normalizeKey).map((key) => normalized.get(key)).find(Boolean);
+      sourceKey = normalizedKey;
+      value = normalizedKey ? obj[normalizedKey] : undefined;
+    }
+
+    if (value === undefined && tokenGroups.length && obj && typeof obj === "object") {
+      sourceKey = Object.keys(obj).find((key) => {
+        const normalized = normalizeKey(key);
+        return tokenGroups.every((group) => group.some((token) => normalized.includes(normalizeKey(token))));
+      });
+      value = sourceKey ? obj[sourceKey] : undefined;
+    }
+
+    const number = Number(value);
+    if (!Number.isFinite(number)) return null;
+    return /(^|_)mwh($|_)/i.test(normalizeKey(sourceKey)) ? number / 1000 : number;
+  }
+
+  function asArray(value) {
+    if (Array.isArray(value)) return value;
+    if (value && typeof value === "object") {
+      return Object.entries(value).map(([key, row]) =>
+        row && typeof row === "object" ? { nombre: key, comparacion: key, ...row } : { nombre: key, valor: row }
+      );
+    }
+    return [];
   }
 
   function addRows(tbodyId, rows) {
@@ -2389,8 +2473,33 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     return response.json();
   }
 
+  async function loadOptionalJson(url) {
+    try {
+      return await loadJson(url);
+    } catch (error) {
+      console.warn(error.message || error);
+      return null;
+    }
+  }
+
   async function loadReportBundles() {
     if (reportState.loaded && reportState.bundles) return reportState.bundles;
+
+    console.log("Cargando reporte Bloque 1...");
+
+    const validationBundle = await loadOptionalJson(REPORT_DATA_URLS.validationBundle)
+      || await loadOptionalJson(REPORT_DATA_URLS.validationLite);
+
+    if (validationBundle) {
+      console.log("JSON de validación cargado correctamente");
+      console.log("KPIs detectados:", Object.keys(validationBundle.kpis || {}));
+      console.log("Filas mensuales detectadas:", asArray(validationBundle.mensual).length);
+      console.log("Métricas detectadas:", asArray(validationBundle.metricas || validationBundle.indicadores).length);
+      setText("reportPdfStatus", "");
+      reportState.bundles = { validation: validationBundle };
+      reportState.loaded = true;
+      return reportState.bundles;
+    }
 
     const [tmy, nasa, compare, samCen] = await Promise.all([
       loadJson(REPORT_DATA_URLS.tmy),
@@ -2399,6 +2508,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       loadJson(REPORT_DATA_URLS.samCen),
     ]);
 
+    console.warn("JSON de validación no encontrado; usando bundles actuales del dashboard para Reportes.");
+    setText("reportPdfStatus", "JSON de validación no encontrado; usando bundles actuales.");
+    console.log("KPIs detectados:", Object.keys({ ...(nasa.kpis || {}), ...(samCen.cen_kpis || {}) }));
+    console.log("Filas mensuales detectadas:", asArray(samCen.mensual).length);
+    console.log("Métricas detectadas:", asArray(samCen.indicadores).length);
     reportState.bundles = { tmy, nasa, compare, samCen };
     reportState.loaded = true;
     return reportState.bundles;
@@ -2408,7 +2522,197 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     setText("reportGeneratedAt", formatDateTime());
   }
 
+  function validationKpiValue(kpis, key) {
+    const map = {
+      samNasa: {
+        candidates: ["energia_anual_sam_nasa_2025_gwh", "sam_nasa_2025_gwh", "sam_nasa_2025_anual_gwh", "energia_sam_nasa_2025_gwh", "sam_nasa_2025_mwh", "sam_nasa_mwh"],
+        tokens: [["sam"], ["nasa"], ["gwh", "mwh", "energia"]],
+      },
+      samTmy: {
+        candidates: ["energia_anual_sam_tmy_explorador_solar_gwh", "sam_tmy_explorador_solar_gwh", "sam_tmy_gwh", "sam_tmy_mwh"],
+        tokens: [["sam"], ["tmy"], ["gwh", "mwh", "energia"]],
+      },
+      centralizado: {
+        candidates: ["energia_anual_pronostico_centralizado_cen_gwh", "pronostico_centralizado_cen_gwh", "centralizado_cen_gwh", "pronostico_centralizado_cen_mwh"],
+        tokens: [["pronostico", "centralizado"], ["cen"], ["gwh", "mwh", "energia"]],
+      },
+      cenDisponible: {
+        candidates: ["cen_disponible_anual_gwh", "cen_disponible_gwh", "energia_disponible_cen_gwh", "cen_disponible_mwh"],
+        tokens: [["cen"], ["disponible"], ["gwh", "mwh", "energia"]],
+      },
+      generacionReal: {
+        candidates: ["generacion_real_cen_anual_gwh", "generacion_real_cen_gwh", "energia_inyectada_cen_gwh", "cen_inyeccion_gwh", "generacion_real_cen_mwh"],
+        tokens: [["generacion", "inyeccion"], ["real", "cen"], ["gwh", "mwh", "energia"]],
+      },
+      reducciones: {
+        candidates: ["reducciones_cen_anuales_gwh", "reducciones_cen_gwh", "energia_curtailment_cen_gwh", "cen_curtailment_gwh", "reducciones_cen_mwh"],
+        tokens: [["reducciones", "curtailment"], ["cen"], ["gwh", "mwh", "energia"]],
+      },
+      residuo: {
+        candidates: ["residuo_sam_nasa_2025_menos_cen_disponible_gwh", "sam_nasa_menos_cen_disponible_gwh", "residuo_sam_cen_disponible_gwh", "residuo_sam_nasa_2025_menos_cen_disponible_mwh"],
+        tokens: [["residuo", "diferencia"], ["sam"], ["cen"], ["disponible"]],
+      },
+      delta1: {
+        candidates: ["delta_e1_sam_nasa_2025_menos_pronostico_centralizado_cen_gwh", "delta_e1_gwh", "de1_gwh", "sam_nasa_menos_pronostico_centralizado_cen_gwh", "delta_e1_mwh"],
+        tokens: [["delta_e1", "de1", "e1"], ["gwh", "mwh", "energia"]],
+      },
+      delta2: {
+        candidates: ["delta_e2_pronostico_centralizado_cen_menos_cen_disponible_gwh", "delta_e2_gwh", "de2_gwh", "centralizado_menos_cen_disponible_gwh", "delta_e2_mwh"],
+        tokens: [["delta_e2", "de2", "e2"], ["gwh", "mwh", "energia"]],
+      },
+      delta3: {
+        candidates: ["delta_e3_reducciones_cen_gwh", "delta_e3_gwh", "de3_gwh", "reducciones_cen_gwh", "delta_e3_mwh"],
+        tokens: [["delta_e3", "de3", "e3", "reducciones", "curtailment"], ["gwh", "mwh", "energia"]],
+      },
+      factorReducciones: {
+        candidates: ["factor_reducciones_cen_pct", "factor_curtailment_anual_pct", "factor_curtailment_pct", "reducciones_cen_pct"],
+        tokens: [["factor"], ["reducciones", "curtailment"]],
+      },
+    };
+
+    const config = map[key];
+    if (!config) return null;
+    return key === "factorReducciones"
+      ? readNumber(kpis, config.candidates, config.tokens)
+      : readEnergyGwh(kpis, config.candidates, config.tokens);
+  }
+
+  function getDeltaValue(validation, key, fallbackKpis) {
+    const deltas = validation.deltas || {};
+    const rows = asArray(deltas);
+    const direct = validationKpiValue(deltas, key);
+    if (direct !== null) return direct;
+    const row = rows.find((item) => normalizeKey(`${item.nombre || ""} ${item.eslabon || ""} ${item.comparacion || ""}`).includes(key.replace("delta", "e")));
+    if (row) {
+      return readEnergyGwh(row, ["energia_anual_gwh", "valor_gwh", "delta_gwh", "energia_gwh", "valor_mwh", "delta_mwh"], [["gwh", "mwh", "energia", "valor", "delta"]]);
+    }
+    return validationKpiValue(fallbackKpis, key);
+  }
+
+  function renderValidationReportSummary(validation) {
+    const kpis = validation.kpis || {};
+    const samNasa = validationKpiValue(kpis, "samNasa");
+    const cenDisponible = validationKpiValue(kpis, "cenDisponible");
+    const centralizado = validationKpiValue(kpis, "centralizado");
+    const residuo = validationKpiValue(kpis, "residuo");
+
+    setText(
+      "reportExecutiveSummary",
+      `El Bloque 1 consolida la comparación entre SAM NASA 2025, SAM TMY Explorador Solar, Pronóstico centralizado CEN y CEN disponible. ` +
+      `SAM NASA 2025 registra ${formatAvailable(samNasa, 1)} GWh, el Pronóstico centralizado CEN ${formatAvailable(centralizado, 1)} GWh ` +
+      `y CEN disponible ${formatAvailable(cenDisponible, 1)} GWh. El residuo SAM NASA 2025 − CEN disponible es ${formatAvailable(residuo, 1)} GWh. ` +
+      `La lectura técnica separa simulación, pronóstico operacional y reducciones CEN como eslabones del residuo.`
+    );
+
+    setText("reportKpiSamNasa", formatAvailable(samNasa, 1));
+    setText("reportKpiSamTmy", formatAvailable(validationKpiValue(kpis, "samTmy"), 1));
+    setText("reportKpiCentralized", formatAvailable(centralizado, 1));
+    setText("reportKpiCenAvailable", formatAvailable(cenDisponible, 1));
+    setText("reportKpiRealGen", formatAvailable(validationKpiValue(kpis, "generacionReal"), 1));
+    setText("reportKpiReductions", formatAvailable(validationKpiValue(kpis, "reducciones"), 1));
+    setText("reportKpiReductionFactor", formatAvailable(validationKpiValue(kpis, "factorReducciones"), 1));
+    setText("reportKpiResidual", formatAvailable(residuo, 1));
+    setText("reportKpiDelta1", formatAvailable(getDeltaValue(validation, "delta1", kpis), 1));
+    setText("reportKpiDelta2", formatAvailable(getDeltaValue(validation, "delta2", kpis), 1));
+    setText("reportKpiDelta3", formatAvailable(getDeltaValue(validation, "delta3", kpis), 1));
+  }
+
+  function renderValidationAnnualTable(validation) {
+    const rows = asArray(validation.resumen_anual);
+    if (!rows.length) {
+      addRows("reportAnnualResultsBody", [["Dato no disponible", "Dato no disponible", "Dato no disponible", "Dato no disponible", "No se encontró resumen_anual en el JSON"]]);
+      return;
+    }
+
+    addRows("reportAnnualResultsBody", rows.map((row) => [
+      getField(row, ["senal", "señal", "signal", "nombre", "variable", "caso", "caso_sam", "comparacion"]) || "Dato no disponible",
+      formatAvailable(readEnergyGwh(row, ["energia_anual_gwh", "energia_gwh", "valor_gwh", "energia_anual_mwh", "valor_mwh"], [["energia", "valor"], ["gwh", "mwh"]]), 1),
+      formatAvailable(readEnergyGwh(row, ["diferencia_contra_cen_disponible_gwh", "diff_cen_disponible_gwh", "delta_cen_disponible_gwh", "diferencia_gwh"], [["diferencia", "delta"], ["cen"], ["disponible"]]), 1),
+      formatAvailable(readNumber(row, ["diferencia_contra_cen_disponible_pct", "diff_cen_disponible_pct", "delta_pct", "diferencia_pct"], [["diferencia", "delta"], ["pct", "porcentaje"]]), 1),
+      getField(row, ["interpretacion", "interpretación", "descripcion", "descripción", "nota"]) || "Dato no disponible",
+    ]));
+  }
+
+  function renderValidationMetrics(validation) {
+    const rows = asArray(validation.metricas || validation.indicadores);
+    if (!rows.length) {
+      addRows("reportValidationBody", [["Dato no disponible", "Dato no disponible", "Dato no disponible", "Dato no disponible", "Dato no disponible", "Dato no disponible", "Dato no disponible"]]);
+      return;
+    }
+
+    addRows("reportValidationBody", rows.map((row) => [
+      getField(row, ["comparacion", "comparación", "nombre", "caso", "caso_sam", "referencia"]) || "Dato no disponible",
+      formatAvailable(readNumber(row, ["mbe_mwh", "mbe"], [["mbe"]]), 2),
+      formatAvailable(readNumber(row, ["mae_mwh", "mae"], [["mae"]]), 2),
+      formatAvailable(readNumber(row, ["rmse_mwh", "rmse"], [["rmse"]]), 2),
+      formatAvailable(readNumber(row, ["nrmse_pct", "nrmse"], [["nrmse"]]), 1),
+      formatAvailable(readNumber(row, ["correlacion_r", "corr_pearson", "r"], [["correlacion", "corr", "pearson", "r"]]), 3),
+      formatAvailable(readNumber(row, ["sesgo_anual_pct", "delta_pct", "bias_pct"], [["sesgo", "bias", "delta"], ["pct"]]), 1),
+    ]));
+  }
+
+  function renderValidationSources() {
+    addRows("reportSourcesBody", [
+      ["SAM NASA 2025", "sam_nasa_2025_mwh", "Simulación técnica FV 2025", "No incorpora fallas, mantenimientos ni indisponibilidad real"],
+      ["SAM TMY Explorador Solar", "sam_tmy_mwh", "Caso meteorológico típico", "Base de caracterización solar"],
+      ["Pronóstico centralizado CEN", "pronostico_centralizado_cen_mwh", "Referencia operacional CEN", "Archivos Centralizado CEME1 2025"],
+      ["Generación real CEN", "generacion_real_cen_mwh", "Producción efectiva", "Equivale a RealSolar / señal CEN validada"],
+      ["Reducciones CEN", "reducciones_cen_mwh", "Energía reducida", "Equivale al curtailment CEN"],
+      ["CEN disponible", "cen_disponible_mwh", "Generación real + reducciones", "Referencia operacional principal"],
+      ["Precio spot Mirage 220", "precio_spot_usd_mwh", "Valorización económica", "Puente hacia análisis BESS"],
+    ]);
+  }
+
+  function getMonthlyValue(row, key) {
+    const map = {
+      samNasa: [["sam_nasa_2025_gwh", "sam_nasa_gwh", "sam_nasa_2025_mwh"], [["sam"], ["nasa"]]],
+      samTmy: [["sam_tmy_gwh", "sam_tmy_explorador_solar_gwh", "sam_tmy_mwh"], [["sam"], ["tmy"]]],
+      centralizado: [["pronostico_centralizado_cen_gwh", "centralizado_cen_gwh", "pronostico_centralizado_cen_mwh"], [["pronostico", "centralizado"], ["cen"]]],
+      cenDisponible: [["cen_disponible_gwh", "energia_disponible_cen_gwh", "cen_disponible_mwh"], [["cen"], ["disponible"]]],
+      generacionReal: [["generacion_real_cen_gwh", "cen_inyeccion_gwh", "generacion_real_cen_mwh"], [["generacion", "inyeccion"], ["cen"]]],
+      reducciones: [["reducciones_cen_gwh", "cen_curtailment_gwh", "reducciones_cen_mwh"], [["reducciones", "curtailment"], ["cen"]]],
+    };
+    const [candidates, tokens] = map[key] || [[], []];
+    return readEnergyGwh(row, candidates, tokens);
+  }
+
+  function renderValidationResidual(validation) {
+    const kpis = validation.kpis || {};
+    const delta1 = getDeltaValue(validation, "delta1", kpis);
+    const delta2 = getDeltaValue(validation, "delta2", kpis);
+    const delta3 = getDeltaValue(validation, "delta3", kpis);
+    const residuoTotal = validationKpiValue(kpis, "samNasa") !== null && validationKpiValue(kpis, "generacionReal") !== null
+      ? validationKpiValue(kpis, "samNasa") - validationKpiValue(kpis, "generacionReal")
+      : null;
+
+    setText(
+      "reportResidualText",
+      "La descomposición operacional separa la brecha entre simulación técnica, pronóstico operacional, disponibilidad observada y reducciones CEN."
+    );
+
+    const rows = [
+      ["ΔE1", "SAM NASA 2025 − Pronóstico centralizado CEN", delta1, "Brecha entre simulación técnica SAM y referencia operacional seleccionada por el CEN."],
+      ["ΔE2", "Pronóstico centralizado CEN − CEN disponible", delta2, "Desviación entre pronóstico centralizado CEN y disponibilidad operacional observada."],
+      ["ΔE3", "CEN disponible − Generación real CEN", delta3, "Reducciones CEN, equivalentes al curtailment operacional y a la oportunidad energética para el BESS."],
+      ["Residuo total", "SAM NASA 2025 − Generación real CEN", residuoTotal, "Brecha total entre simulación SAM NASA 2025 y generación real CEN."],
+    ];
+
+    addRows("reportResidualBody", rows.map(([label, comparison, value, interpretation]) => [
+      label,
+      comparison,
+      formatAvailable(value, 1),
+      interpretation,
+    ]));
+
+    renderWaterfallChart(rows.map(([label, , value]) => ({ label, value })));
+  }
+
   function renderReportSummary(bundles) {
+    if (bundles.validation) {
+      renderValidationReportSummary(bundles.validation);
+      return;
+    }
+
     const { nasa, samCen } = bundles;
     const cen = samCen.cen_kpis || {};
     const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
@@ -2428,14 +2732,26 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     );
 
     setText("reportKpiSamNasa", formatNumber(nasa.kpis?.energia_ac_neta_gwh_anio, 1));
+    setText("reportKpiSamTmy", formatNumber(findCase(samCen.sam_kpis, /tmy/i).energia_ac_neta_gwh, 1));
+    setText("reportKpiCentralized", "Dato no disponible");
     setText("reportKpiCenAvailable", formatNumber(cen.energia_disponible_cen_gwh, 1));
     setText("reportKpiResidual", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1));
     setText("reportKpiRealGen", formatNumber(cen.energia_inyectada_cen_gwh, 1));
     setText("reportKpiReductions", formatNumber(cen.energia_curtailment_cen_gwh, 1));
     setText("reportKpiReductionFactor", formatNumber(cen.factor_curtailment_anual_pct, 1));
+    setText("reportKpiDelta1", "Dato no disponible");
+    setText("reportKpiDelta2", "Dato no disponible");
+    setText("reportKpiDelta3", formatNumber(cen.energia_curtailment_cen_gwh, 1));
   }
 
   function renderReportTables(bundles) {
+    if (bundles.validation) {
+      renderValidationSources();
+      renderValidationAnnualTable(bundles.validation);
+      renderValidationMetrics(bundles.validation);
+      return;
+    }
+
     const { tmy, nasa, compare, samCen } = bundles;
     const cen = samCen.cen_kpis || {};
     const samTmy = findCase(samCen.sam_kpis, /tmy/i);
@@ -2443,26 +2759,24 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
 
     addRows("reportSourcesBody", [
-      ["SAM NASA 2025", "Simulación técnica FV horaria bajo meteorología histórica 2025", nasa.metadata?.resolucion || "Horaria", "No incorpora fallas, mantenimientos ni indisponibilidad real"],
-      ["SAM TMY Explorador Solar", "Caso base meteorológico típico para comparación técnica FV", tmy.metadata?.resolucion || "Horaria", "Año meteorológico típico del Explorador Solar"],
-      ["CEN/SEN 2025", "Generación real CEN, Reducciones CEN y CEN disponible", "Horaria / mensual / anual", "Referencia operacional construida desde datos CEN"],
-      ["Comparativa TMY vs NASA 2025", "Contraste meteorológico y energético entre escenarios SAM", compare.metadata?.resolucion || "Horaria", "No modifica fórmulas ni referencias CEN"],
+      ["SAM NASA 2025", "sam_nasa_2025_mwh", "Simulación técnica FV horaria bajo meteorología histórica 2025", "No incorpora fallas, mantenimientos ni indisponibilidad real"],
+      ["SAM TMY Explorador Solar", "sam_tmy_mwh", "Caso base meteorológico típico para comparación técnica FV", "Año meteorológico típico del Explorador Solar"],
+      ["CEN/SEN 2025", "cen_disponible_mwh", "Generación real CEN, Reducciones CEN y CEN disponible", "Referencia operacional construida desde datos CEN"],
+      ["Comparativa TMY vs NASA 2025", "comparativa_sam", "Contraste meteorológico y energético entre escenarios SAM", "No modifica fórmulas ni referencias CEN"],
     ]);
 
     addRows("reportAnnualResultsBody", [
-      ["SAM TMY Explorador Solar", formatNumber(samTmy.energia_ac_neta_gwh, 1), "GWh/año", "Simulación FV con año meteorológico típico"],
-      ["SAM NASA 2025", formatNumber(samNasa.energia_ac_neta_gwh, 1), "GWh/año", "Simulación FV con meteorología histórica 2025"],
-      ["Generación real CEN", formatNumber(cen.energia_inyectada_cen_gwh, 1), "GWh/año", "Señal de generación real CEN, equivalente a inyección registrada"],
-      ["Reducciones CEN (curtailment)", formatNumber(cen.energia_curtailment_cen_gwh, 1), "GWh/año", "Reducciones operacionales definidas por CEN"],
-      ["CEN disponible", formatNumber(cen.energia_disponible_cen_gwh, 1), "GWh/año", "Generación real CEN + Reducciones CEN"],
-      ["Residuo SAM NASA 2025 − CEN disponible", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), "GWh/año", "Discrepancia técnico-operacional"],
-      ["Factor reducciones CEN", formatNumber(cen.factor_curtailment_anual_pct, 1), "%", "Reducciones CEN / CEN disponible"],
+      ["SAM TMY Explorador Solar", formatNumber(samTmy.energia_ac_neta_gwh, 1), formatNumber((samTmy.energia_ac_neta_gwh || 0) - (cen.energia_disponible_cen_gwh || 0), 1), "Dato no disponible", "Simulación FV con año meteorológico típico"],
+      ["SAM NASA 2025", formatNumber(samNasa.energia_ac_neta_gwh, 1), formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), formatNumber(summaryNasa.sam_menos_cen_disponible_pct, 1), "Simulación FV con meteorología histórica 2025"],
+      ["Generación real CEN", formatNumber(cen.energia_inyectada_cen_gwh, 1), formatNumber((cen.energia_inyectada_cen_gwh || 0) - (cen.energia_disponible_cen_gwh || 0), 1), "Dato no disponible", "Señal de generación real CEN, equivalente a inyección registrada"],
+      ["Reducciones CEN (curtailment)", formatNumber(cen.energia_curtailment_cen_gwh, 1), "Dato no disponible", "Dato no disponible", "Reducciones operacionales definidas por CEN"],
+      ["CEN disponible", formatNumber(cen.energia_disponible_cen_gwh, 1), "0,0", "0,0", "Generación real CEN + Reducciones CEN"],
+      ["Residuo SAM NASA 2025 − CEN disponible", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), formatNumber(summaryNasa.sam_menos_cen_disponible_pct, 1), "Discrepancia técnico-operacional"],
+      ["Factor reducciones CEN", formatNumber(cen.factor_curtailment_anual_pct, 1), "Dato no disponible", "Dato no disponible", "Reducciones CEN / CEN disponible"],
     ]);
 
     addRows("reportValidationBody", (samCen.indicadores || []).map((row) => [
-      displaySamCase(row.caso_sam, row.fuente_meteorologica),
-      displayReference(row.referencia),
-      row.filtro || "--",
+      `${displaySamCase(row.caso_sam, row.fuente_meteorologica)} vs ${displayReference(row.referencia)} (${row.filtro || "--"})`,
       formatNumber(row.mbe, 2),
       formatNumber(row.mae, 2),
       formatNumber(row.rmse, 2),
@@ -2473,6 +2787,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   }
 
   function renderResidualSection(bundles) {
+    if (bundles.validation) {
+      renderValidationResidual(bundles.validation);
+      return;
+    }
+
     const { samCen } = bundles;
     const cen = samCen.cen_kpis || {};
     const summaryNasa = findCase(samCen.resumen_anual, /nasa/i);
@@ -2484,17 +2803,31 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       "El residuo se calcula contra CEN disponible y no contra la inyección registrada, evitando confundir restricciones operacionales con error puro del modelo FV."
     );
 
+    const residuoTotal = (samNasa.energia_ac_neta_gwh || 0) - (cen.energia_inyectada_cen_gwh || 0);
     addRows("reportResidualBody", [
-      ["SAM NASA 2025", formatNumber(samNasa.energia_ac_neta_gwh, 1), "GWh/año"],
-      ["CEN disponible", formatNumber(cen.energia_disponible_cen_gwh, 1), "GWh/año"],
-      ["Residuo SAM NASA 2025 − CEN disponible", formatNumber(summaryNasa.sam_menos_cen_disponible_gwh, 1), "GWh/año"],
-      ["Generación real CEN", formatNumber(cen.energia_inyectada_cen_gwh, 1), "GWh/año"],
-      ["Reducciones CEN (curtailment)", formatNumber(cen.energia_curtailment_cen_gwh, 1), "GWh/año"],
-      ["Factor reducciones CEN", formatNumber(cen.factor_curtailment_anual_pct, 1), "% CEN disponible"],
+      ["ΔE1", "SAM NASA 2025 − Pronóstico centralizado CEN", "Dato no disponible", "Brecha entre simulación técnica SAM y referencia operacional seleccionada por el CEN."],
+      ["ΔE2", "Pronóstico centralizado CEN − CEN disponible", "Dato no disponible", "Desviación entre pronóstico centralizado CEN y disponibilidad operacional observada."],
+      ["ΔE3", "CEN disponible − Generación real CEN", formatNumber(cen.energia_curtailment_cen_gwh, 1), "Reducciones CEN, equivalentes al curtailment operacional y a la oportunidad energética para el BESS."],
+      ["Residuo total", "SAM NASA 2025 − Generación real CEN", formatNumber(residuoTotal, 1), "Brecha total entre simulación SAM NASA 2025 y generación real CEN."],
+    ]);
+
+    renderWaterfallChart([
+      { label: "ΔE1", value: null },
+      { label: "ΔE2", value: null },
+      { label: "ΔE3", value: cen.energia_curtailment_cen_gwh },
+      { label: "Residuo total", value: residuoTotal },
     ]);
   }
 
   function renderReportConclusion(bundles) {
+    if (bundles.validation) {
+      setText(
+        "reportConclusion",
+        "La comparación entre SAM NASA 2025, el pronóstico centralizado CEN y el CEN disponible permite cerrar el bloque FV mediante una descomposición operacional del residuo. Esta estructura separa la brecha entre simulación técnica, pronóstico operacional y reducciones CEN, entregando una base consistente para avanzar hacia la simulación del BESS y la valorización de energía reducida."
+      );
+      return;
+    }
+
     const summaryNasa = findCase(bundles.samCen.resumen_anual, /nasa/i);
     setText(
       "reportConclusion",
@@ -2512,11 +2845,75 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     reportState.monthlyChart = null;
   }
 
+  function destroyWaterfallChart() {
+    if (reportState.waterfallChart && typeof reportState.waterfallChart.destroy === "function") {
+      reportState.waterfallChart.destroy();
+    }
+    reportState.waterfallChart = null;
+  }
+
+  function renderWaterfallChart(rows) {
+    const canvas = byId("reportWaterfallChart");
+    if (!canvas || typeof Chart === "undefined") return;
+
+    destroyWaterfallChart();
+    reportState.waterfallChart = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: rows.map((row) => row.label),
+        datasets: [{
+          label: "Energía anual [GWh]",
+          data: rows.map((row) => Number.isFinite(Number(row.value)) ? Number(row.value) : 0),
+          backgroundColor: ["#1b6dcc", "#8d63c7", "#e27820", "#174a7c"],
+          borderColor: ["#1b6dcc", "#8d63c7", "#e27820", "#174a7c"],
+          borderWidth: 1,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "rgba(255,255,255,0.96)",
+            titleColor: "#0b1d31",
+            bodyColor: "#18344f",
+            borderColor: "#bdd1e5",
+            borderWidth: 1,
+          },
+        },
+        scales: {
+          x: { ticks: { color: "#18344f" }, grid: { color: "rgba(20, 60, 96, 0.08)" } },
+          y: {
+            title: { display: true, text: "GWh/año", color: "#18344f" },
+            ticks: { color: "#18344f" },
+            grid: { color: "rgba(20, 60, 96, 0.12)" },
+          },
+        },
+      },
+      plugins: [{
+        id: "reportWaterfallWhiteCanvas",
+        beforeDraw(chart) {
+          const { ctx, width, height } = chart;
+          ctx.save();
+          ctx.globalCompositeOperation = "destination-over";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+          ctx.restore();
+        },
+      }],
+    });
+  }
+
   function renderMonthlyChart(bundles) {
     const canvas = byId("reportMonthlyChart");
     if (!canvas || typeof Chart === "undefined") return;
 
-    const rows = (bundles.samCen.mensual || []).filter((row) => /nasa/i.test(`${row.caso_sam || ""}`));
+    const validation = bundles.validation;
+    const rows = validation
+      ? asArray(validation.mensual)
+      : (bundles.samCen.mensual || []).filter((row) => /nasa/i.test(`${row.caso_sam || ""}`));
     const labels = rows.map((row) => row.mes_nombre || row.mes);
 
     destroyMonthlyChart();
@@ -2524,7 +2921,71 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       type: "bar",
       data: {
         labels,
-        datasets: [
+        datasets: validation ? [
+          {
+            type: "line",
+            label: "SAM NASA 2025",
+            data: rows.map((row) => getMonthlyValue(row, "samNasa") || 0),
+            borderColor: "#1b6dcc",
+            backgroundColor: "#1b6dcc",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "SAM TMY Explorador Solar",
+            data: rows.map((row) => getMonthlyValue(row, "samTmy") || 0),
+            borderColor: "#1e8f49",
+            backgroundColor: "#1e8f49",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "Pronóstico centralizado CEN",
+            data: rows.map((row) => getMonthlyValue(row, "centralizado") || 0),
+            borderColor: "#8d63c7",
+            backgroundColor: "#8d63c7",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "CEN disponible",
+            data: rows.map((row) => getMonthlyValue(row, "cenDisponible") || 0),
+            borderColor: "#c69a00",
+            backgroundColor: "#c69a00",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "Generación real CEN",
+            data: rows.map((row) => getMonthlyValue(row, "generacionReal") || 0),
+            borderColor: "#3178c4",
+            backgroundColor: "#3178c4",
+            borderWidth: 2,
+            pointRadius: 2,
+            tension: 0.25,
+            yAxisID: "y",
+          },
+          {
+            label: "Reducciones CEN",
+            data: rows.map((row) => getMonthlyValue(row, "reducciones") || 0),
+            backgroundColor: "rgba(226, 120, 32, 0.34)",
+            borderColor: "#e27820",
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+        ] : [
           {
             type: "line",
             label: "SAM NASA 2025",
@@ -2640,7 +3101,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         img.src = canvas.toDataURL("image/png", 1);
         img.alt = canvas.getAttribute("aria-label") || "Gráfico del reporte";
         img.style.width = "100%";
-        img.style.height = "auto";
+        img.style.height = "100%";
+        img.style.objectFit = "contain";
         img.style.display = "block";
         cloneCanvas.replaceWith(img);
       } catch (error) {
@@ -2670,6 +3132,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
       const clone = source.cloneNode(true);
       clone.classList.add("pdf-report-page");
+      clone.style.width = "186mm";
       const clonedDate = clone.querySelector("#reportGeneratedAt");
       if (clonedDate) clonedDate.textContent = formatDateTime();
       clone.querySelectorAll(".pdf-hide").forEach((el) => el.remove());
@@ -2682,13 +3145,14 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       temp.style.top = "0";
       temp.style.zIndex = "99999";
       temp.style.background = "#ffffff";
-      temp.style.width = "190mm";
+      temp.style.width = "186mm";
       temp.appendChild(clone);
       document.body.appendChild(temp);
+      const captureWidth = Math.ceil(temp.getBoundingClientRect().width);
 
       await window.html2pdf()
         .set({
-          margin: [10, 10, 14, 10],
+          margin: [8, 8, 12, 8],
           filename: "reporte_bloque1_ceme1_fv_cen.pdf",
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: {
@@ -2696,11 +3160,13 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
             useCORS: true,
             backgroundColor: "#ffffff",
             logging: false,
+            windowWidth: captureWidth,
+            width: captureWidth,
           },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
           pagebreak: {
             mode: ["css", "legacy"],
-            avoid: [".pdf-section", ".pdf-table", ".report-chart-card", ".report-kpi-grid article", "tr"],
+            avoid: [".report-chart-card", ".report-kpi-grid article", ".report-table tr"],
           },
         })
         .from(clone)

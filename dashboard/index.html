@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260622-0115" />
+  <link rel="stylesheet" href="dashboard.css?v=20260622-0130" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
-  <script src="dashboard.js?v=20260622-0115" defer></script>
+  <script src="dashboard.js?v=20260622-0130" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -1511,20 +1511,25 @@
           <section class="pdf-section">
             <h2>KPIs principales</h2>
             <div id="reportKpiGrid" class="pdf-kpi-grid report-kpi-grid">
-              <article><span>SAM NASA 2025</span><strong id="reportKpiSamNasa">--</strong><small>GWh/año</small></article>
-              <article><span>CEN disponible</span><strong id="reportKpiCenAvailable">--</strong><small>GWh/año</small></article>
-              <article><span>Residuo SAM − CEN disponible</span><strong id="reportKpiResidual">--</strong><small>GWh/año</small></article>
-              <article><span>Generación real CEN</span><strong id="reportKpiRealGen">--</strong><small>GWh/año</small></article>
-              <article><span>Reducciones CEN (curtailment)</span><strong id="reportKpiReductions">--</strong><small>GWh/año</small></article>
-              <article><span>Factor reducciones CEN</span><strong id="reportKpiReductionFactor">--</strong><small>% CEN disponible</small></article>
+              <article><span>Energía anual SAM NASA 2025</span><strong id="reportKpiSamNasa">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>Energía anual SAM TMY Explorador Solar</span><strong id="reportKpiSamTmy">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>Pronóstico centralizado CEN</span><strong id="reportKpiCentralized">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>CEN disponible anual</span><strong id="reportKpiCenAvailable">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>Generación real CEN anual</span><strong id="reportKpiRealGen">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>Reducciones CEN anuales</span><strong id="reportKpiReductions">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>Factor reducciones CEN</span><strong id="reportKpiReductionFactor">Dato no disponible</strong><small>%</small></article>
+              <article><span>Residuo SAM NASA 2025 − CEN disponible</span><strong id="reportKpiResidual">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>ΔE1 SAM NASA 2025 − Pronóstico centralizado CEN</span><strong id="reportKpiDelta1">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>ΔE2 Centralizado CEN − CEN disponible</span><strong id="reportKpiDelta2">Dato no disponible</strong><small>GWh</small></article>
+              <article><span>ΔE3 Reducciones CEN</span><strong id="reportKpiDelta3">Dato no disponible</strong><small>GWh</small></article>
             </div>
           </section>
 
           <section class="pdf-section">
             <h2>Tabla de fuentes de datos</h2>
-            <table class="pdf-table report-table">
+            <table class="pdf-table report-table report-sources-table">
               <thead>
-                <tr><th>Fuente</th><th>Uso en Bloque 1</th><th>Resolución</th><th>Alcance</th></tr>
+                <tr><th>Fuente</th><th>Variable dashboard</th><th>Uso en Bloque 1</th><th>Observación</th></tr>
               </thead>
               <tbody id="reportSourcesBody"></tbody>
             </table>
@@ -1532,9 +1537,9 @@
 
           <section class="pdf-section">
             <h2>Tabla de resultados energéticos anuales</h2>
-            <table class="pdf-table report-table">
+            <table class="pdf-table report-table report-annual-table">
               <thead>
-                <tr><th>Indicador</th><th>Valor</th><th>Unidad</th><th>Interpretación</th></tr>
+                <tr><th>Señal</th><th>Energía anual [GWh]</th><th>Diferencia contra CEN disponible [GWh]</th><th>Diferencia contra CEN disponible [%]</th><th>Interpretación</th></tr>
               </thead>
               <tbody id="reportAnnualResultsBody"></tbody>
             </table>
@@ -1542,6 +1547,7 @@
 
           <section class="pdf-section report-chart-section">
             <h2>Gráfico mensual principal</h2>
+            <p class="report-chart-caption">Comparación mensual de generación simulada, pronosticada y operacional.</p>
             <div class="report-chart-card">
               <canvas id="reportMonthlyChart" height="250"></canvas>
             </div>
@@ -1549,9 +1555,9 @@
 
           <section class="pdf-section">
             <h2>Tabla de métricas de validación</h2>
-            <table class="pdf-table report-table">
+            <table class="pdf-table report-table report-validation-table">
               <thead>
-                <tr><th>Caso</th><th>Referencia</th><th>Filtro</th><th>MBE</th><th>MAE</th><th>RMSE</th><th>nRMSE</th><th>r</th><th>Δ</th></tr>
+                <tr><th>Comparación</th><th>MBE [MWh]</th><th>MAE [MWh]</th><th>RMSE [MWh]</th><th>nRMSE [%]</th><th>Correlación r</th><th>Sesgo anual [%]</th></tr>
               </thead>
               <tbody id="reportValidationBody"></tbody>
             </table>
@@ -1559,52 +1565,39 @@
 
           <section class="pdf-section">
             <h2>Descomposición operacional del residuo</h2>
+            <ul class="report-definitions">
+              <li>ΔE1 = SAM NASA 2025 − Pronóstico centralizado CEN</li>
+              <li>ΔE2 = Pronóstico centralizado CEN − CEN disponible</li>
+              <li>ΔE3 = CEN disponible − Generación real CEN</li>
+              <li>Residuo total = SAM NASA 2025 − Generación real CEN</li>
+            </ul>
             <p id="reportResidualText"></p>
-            <table class="pdf-table report-table compact">
+            <div class="report-chart-card report-waterfall-card">
+              <canvas id="reportWaterfallChart" height="220"></canvas>
+            </div>
+            <table class="pdf-table report-table compact report-residual-table">
               <thead>
-                <tr><th>Componente</th><th>Valor</th><th>Unidad</th></tr>
+                <tr><th>Eslabón</th><th>Comparación</th><th>Energía anual [GWh]</th><th>Interpretación</th></tr>
               </thead>
               <tbody id="reportResidualBody"></tbody>
             </table>
           </section>
 
           <section class="pdf-section">
-            <h2>Contraste técnico SAM–PVsyst</h2>
-            <p>
-              El Bloque 1 utiliza SAM como herramienta de simulación horaria FV. El contraste SAM–PVsyst se plantea como
-              verificación técnica complementaria de supuestos de modelación, pérdidas, clipping, configuración DC/AC y
-              respuesta energética mensual. Cuando se incorpore el archivo PVsyst, esta sección podrá cuantificar la brecha
-              entre ambos modelos sin modificar la referencia operacional CEN.
-            </p>
-            <table class="pdf-table report-table">
-              <thead>
-                <tr><th>Eje técnico</th><th>SAM</th><th>PVsyst</th><th>Estado en dashboard</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Meteorología</td><td>TMY Explorador Solar y NASA POWER 2025</td><td>Archivo meteorológico PVsyst por incorporar</td><td>Comparación pendiente</td></tr>
-                <tr><td>Modelo FV</td><td>6 submodelos equivalentes CEME1</td><td>Modelo equivalente por homologar</td><td>Base SAM disponible</td></tr>
-                <tr><td>Resultado esperado</td><td>Energía AC horaria / mensual / anual</td><td>Energía AC PVsyst comparable</td><td>Sin cálculo adicional en esta tarea</td></tr>
-              </tbody>
-            </table>
-          </section>
-
-          <section class="pdf-section">
             <h2>Limitaciones metodológicas</h2>
             <ul class="report-list">
-              <li>SAM NASA 2025 no incorpora fallas, mantenimientos ni indisponibilidad técnica real de CEME1.</li>
-              <li>El residuo SAM − CEN disponible se interpreta como discrepancia técnico-operacional, no como error puro del modelo.</li>
-              <li>CEN disponible se construye como Generación real CEN + Reducciones CEN.</li>
-              <li>Los resultados dependen de la calidad de las fuentes horarias y de la homologación temporal de los datos.</li>
-              <li>El módulo BESS no forma parte del alcance exportado de Bloque 1.</li>
+              <li>No se dispone de irradiancia in situ en CEME1.</li>
+              <li>La validación es indirecta, usando referencias operacionales oficiales del CEN.</li>
+              <li>SAM no modela fallas reales, mantenimientos no informados ni indisponibilidad técnica histórica.</li>
+              <li>Las reducciones CEN se interpretan como curtailment operacional recuperable potencialmente por el BESS.</li>
+              <li>El pronóstico centralizado CEN es una referencia operacional, no una verdad física absoluta.</li>
             </ul>
           </section>
 
           <section class="pdf-section">
             <h2>Conclusión Bloque 1</h2>
             <p id="reportConclusion">
-              La modelación FV de CEME1 en SAM entrega una base técnica horaria para contrastar generación potencial,
-              referencia operacional CEN y reducciones registradas, dejando trazable la brecha técnico-operacional que
-              será utilizada en los bloques posteriores del análisis FV + BESS.
+              La comparación entre SAM NASA 2025, el pronóstico centralizado CEN y el CEN disponible permite cerrar el bloque FV mediante una descomposición operacional del residuo. Esta estructura separa la brecha entre simulación técnica, pronóstico operacional y reducciones CEN, entregando una base consistente para avanzar hacia la simulación del BESS y la valorización de energía reducida.
             </p>
           </section>
 
