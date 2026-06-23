@@ -2910,7 +2910,8 @@ tbody tr.highlight {
 }
 
 .pdf-export-mode {
-  width: 186mm;
+  width: 760px;
+  max-width: 760px;
   padding: 0;
   color: #0d2238;
   background: #ffffff;
@@ -2921,8 +2922,10 @@ tbody tr.highlight {
   box-sizing: border-box;
 }
 
-.pdf-export-mode .pdf-report-page {
-  width: 186mm;
+.pdf-export-mode .pdf-report-page,
+.pdf-export-mode.pdf-report-page {
+  width: 760px;
+  max-width: 760px;
   padding: 0;
   border-radius: 0;
   box-shadow: none;

@@ -2331,6 +2331,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     waterfallChart: null,
     rendering: false,
   };
+  const PDF_EXPORT_WIDTH_PX = 760;
 
   function byId(id) {
     return document.getElementById(id);
@@ -2533,19 +2534,19 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         tokens: [["sam"], ["tmy"], ["gwh", "mwh", "energia"]],
       },
       centralizado: {
-        candidates: ["energia_anual_pronostico_centralizado_cen_gwh", "pronostico_centralizado_cen_gwh", "centralizado_cen_gwh", "pronostico_centralizado_cen_mwh"],
+        candidates: ["energia_anual_pronostico_centralizado_cen_gwh", "energia_pronostico_centralizado_cen_gwh", "pronostico_centralizado_cen_gwh", "centralizado_cen_gwh", "pronostico_centralizado_cen_mwh"],
         tokens: [["pronostico", "centralizado"], ["cen"], ["gwh", "mwh", "energia"]],
       },
       cenDisponible: {
-        candidates: ["cen_disponible_anual_gwh", "cen_disponible_gwh", "energia_disponible_cen_gwh", "cen_disponible_mwh"],
+        candidates: ["cen_disponible_anual_gwh", "energia_cen_disponible_gwh", "cen_disponible_gwh", "energia_disponible_cen_gwh", "cen_disponible_mwh"],
         tokens: [["cen"], ["disponible"], ["gwh", "mwh", "energia"]],
       },
       generacionReal: {
-        candidates: ["generacion_real_cen_anual_gwh", "generacion_real_cen_gwh", "energia_inyectada_cen_gwh", "cen_inyeccion_gwh", "generacion_real_cen_mwh"],
+        candidates: ["generacion_real_cen_anual_gwh", "energia_generacion_real_cen_gwh", "generacion_real_cen_gwh", "energia_inyectada_cen_gwh", "cen_inyeccion_gwh", "generacion_real_cen_mwh"],
         tokens: [["generacion", "inyeccion"], ["real", "cen"], ["gwh", "mwh", "energia"]],
       },
       reducciones: {
-        candidates: ["reducciones_cen_anuales_gwh", "reducciones_cen_gwh", "energia_curtailment_cen_gwh", "cen_curtailment_gwh", "reducciones_cen_mwh"],
+        candidates: ["reducciones_cen_anuales_gwh", "energia_reducciones_cen_gwh", "reducciones_cen_gwh", "energia_curtailment_cen_gwh", "cen_curtailment_gwh", "reducciones_cen_mwh"],
         tokens: [["reducciones", "curtailment"], ["cen"], ["gwh", "mwh", "energia"]],
       },
       residuo: {
@@ -2553,15 +2554,15 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         tokens: [["residuo", "diferencia"], ["sam"], ["cen"], ["disponible"]],
       },
       delta1: {
-        candidates: ["delta_e1_sam_nasa_2025_menos_pronostico_centralizado_cen_gwh", "delta_e1_gwh", "de1_gwh", "sam_nasa_menos_pronostico_centralizado_cen_gwh", "delta_e1_mwh"],
+        candidates: ["delta_1_sam_centralizado_gwh", "delta_e1_sam_nasa_2025_menos_pronostico_centralizado_cen_gwh", "delta_e1_gwh", "de1_gwh", "sam_nasa_menos_pronostico_centralizado_cen_gwh", "delta_e1_mwh"],
         tokens: [["delta_e1", "de1", "e1"], ["gwh", "mwh", "energia"]],
       },
       delta2: {
-        candidates: ["delta_e2_pronostico_centralizado_cen_menos_cen_disponible_gwh", "delta_e2_gwh", "de2_gwh", "centralizado_menos_cen_disponible_gwh", "delta_e2_mwh"],
+        candidates: ["delta_2_centralizado_disponible_gwh", "delta_e2_pronostico_centralizado_cen_menos_cen_disponible_gwh", "delta_e2_gwh", "de2_gwh", "centralizado_menos_cen_disponible_gwh", "delta_e2_mwh"],
         tokens: [["delta_e2", "de2", "e2"], ["gwh", "mwh", "energia"]],
       },
       delta3: {
-        candidates: ["delta_e3_reducciones_cen_gwh", "delta_e3_gwh", "de3_gwh", "reducciones_cen_gwh", "delta_e3_mwh"],
+        candidates: ["delta_3_reducciones_gwh", "delta_e3_reducciones_cen_gwh", "delta_e3_gwh", "de3_gwh", "energia_reducciones_cen_gwh", "reducciones_cen_gwh", "delta_e3_mwh"],
         tokens: [["delta_e3", "de3", "e3", "reducciones", "curtailment"], ["gwh", "mwh", "energia"]],
       },
       factorReducciones: {
@@ -2577,6 +2578,18 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       : readEnergyGwh(kpis, config.candidates, config.tokens);
   }
 
+  function derivedDeltaFromKpis(kpis, key) {
+    const samNasa = validationKpiValue(kpis, "samNasa");
+    const centralizado = validationKpiValue(kpis, "centralizado");
+    const cenDisponible = validationKpiValue(kpis, "cenDisponible");
+    const generacionReal = validationKpiValue(kpis, "generacionReal");
+
+    if (key === "delta1" && samNasa !== null && centralizado !== null) return samNasa - centralizado;
+    if (key === "delta2" && centralizado !== null && cenDisponible !== null) return centralizado - cenDisponible;
+    if (key === "delta3" && cenDisponible !== null && generacionReal !== null) return cenDisponible - generacionReal;
+    return null;
+  }
+
   function getDeltaValue(validation, key, fallbackKpis) {
     const deltas = validation.deltas || {};
     const rows = asArray(deltas);
@@ -2586,7 +2599,9 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     if (row) {
       return readEnergyGwh(row, ["energia_anual_gwh", "valor_gwh", "delta_gwh", "energia_gwh", "valor_mwh", "delta_mwh"], [["gwh", "mwh", "energia", "valor", "delta"]]);
     }
-    return validationKpiValue(fallbackKpis, key);
+    const directKpi = validationKpiValue(fallbackKpis, key);
+    if (directKpi !== null) return directKpi;
+    return derivedDeltaFromKpis(fallbackKpis, key);
   }
 
   function renderValidationReportSummary(validation) {
@@ -3131,24 +3146,27 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
       const clone = source.cloneNode(true);
-      clone.classList.add("pdf-report-page");
-      clone.style.width = "186mm";
+      clone.classList.add("pdf-report-page", "pdf-export-mode");
+      clone.style.width = `${PDF_EXPORT_WIDTH_PX}px`;
+      clone.style.maxWidth = `${PDF_EXPORT_WIDTH_PX}px`;
       const clonedDate = clone.querySelector("#reportGeneratedAt");
       if (clonedDate) clonedDate.textContent = formatDateTime();
       clone.querySelectorAll(".pdf-hide").forEach((el) => el.remove());
       replaceCanvasesWithImages(source, clone);
 
       const temp = document.createElement("div");
-      temp.className = "pdf-export-mode";
-      temp.style.position = "absolute";
+      temp.className = "pdf-export-host";
+      temp.style.position = "fixed";
       temp.style.left = "0";
       temp.style.top = "0";
       temp.style.zIndex = "99999";
       temp.style.background = "#ffffff";
-      temp.style.width = "186mm";
+      temp.style.width = `${PDF_EXPORT_WIDTH_PX}px`;
+      temp.style.maxWidth = `${PDF_EXPORT_WIDTH_PX}px`;
+      temp.style.overflow = "hidden";
       temp.appendChild(clone);
       document.body.appendChild(temp);
-      const captureWidth = Math.ceil(temp.getBoundingClientRect().width);
+      const captureWidth = Math.ceil(clone.getBoundingClientRect().width) || PDF_EXPORT_WIDTH_PX;
 
       await window.html2pdf()
         .set({
@@ -3162,6 +3180,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
             logging: false,
             windowWidth: captureWidth,
             width: captureWidth,
+            scrollX: 0,
+            scrollY: 0,
+            x: 0,
+            y: 0,
           },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
           pagebreak: {
@@ -3181,7 +3203,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       console.error("No se pudo exportar el reporte PDF:", error);
       if (status) status.textContent = "No se pudo generar el PDF";
     } finally {
-      document.querySelectorAll(".pdf-export-mode").forEach((el) => el.remove());
+      document.querySelectorAll(".pdf-export-host").forEach((el) => el.remove());
       if (button) button.disabled = false;
     }
   }
