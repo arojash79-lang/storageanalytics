@@ -1406,8 +1406,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 (function () {
   const PLANT_ENERGY_SOURCES = {
     tmy: {
-      url: "data/validacion_fv_ceme1_dashboard_bundle.json",
-      fallback: "data/validacion_fv_ceme1_dashboard_lite.json",
+      url: "data/planta_fv_sam_dashboard_bundle.json",
+      fallback: null,
       type: "single",
       kicker: "RESULTADOS SAM — TMY",
       title: "Desempeño energético anual equivalente",
@@ -1415,8 +1415,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       metaLabel: "TMY Explorador Solar de Chile",
     },
     nasa: {
-      url: "data/validacion_fv_ceme1_dashboard_bundle.json",
-      fallback: "data/validacion_fv_ceme1_dashboard_lite.json",
+      url: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
+      fallback: null,
       type: "single",
       kicker: "RESULTADOS SAM — NASA POWER 2025",
       title: "Desempeño energético anual equivalente · serie 2025",
@@ -1765,11 +1765,48 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     };
   }
 
+  function enrichPlantBundleData(bundle) {
+    if (!bundle || typeof bundle !== "object") return bundle;
+    const kpis = bundle.kpis || {};
+    const acAnnual = plantNumber(kpis.energia_ac_neta_gwh_anio ?? kpis.energia_ac_positiva_gwh_anio);
+    const dcAnnual = plantNumber(kpis.energia_dc_gwh_anio);
+    const dcAcRatio = acAnnual && dcAnnual ? dcAnnual / acAnnual : null;
+
+    if (Array.isArray(bundle.mensual)) {
+      bundle.mensual = bundle.mensual.map((row) => {
+        const next = { ...row };
+        const ac = plantNumber(next.energia_ac_neta_gwh ?? next.energia_ac_positiva_gwh ?? next.energia_ac_gwh);
+        if (plantNumber(next.energia_ac_neta_gwh) === null && ac !== null) next.energia_ac_neta_gwh = ac;
+        if (plantNumber(next.energia_dc_gwh) === null && ac !== null && dcAcRatio !== null) {
+          next.energia_dc_gwh = ac * dcAcRatio;
+          next.energia_dc_gwh_estimado = true;
+        }
+        return next;
+      });
+    }
+
+    if (Array.isArray(bundle.perfil_horario)) {
+      bundle.perfil_horario = bundle.perfil_horario.map((row) => {
+        const next = { ...row };
+        const ac = plantNumber(next.potencia_ac_prom_mw ?? next.energia_ac_prom_mwh ?? next.p_ac_prom_mw ?? next.total_mwh);
+        if (plantNumber(next.potencia_ac_prom_mw) === null && ac !== null) next.potencia_ac_prom_mw = ac;
+        if (plantNumber(next.potencia_dc_prom_mw) === null && ac !== null && dcAcRatio !== null) {
+          next.potencia_dc_prom_mw = ac * dcAcRatio;
+          next.potencia_dc_prom_mw_estimado = true;
+        }
+        if (!next.hora_label && next.hora !== undefined) next.hora_label = `${String(next.hora).padStart(2, "0")}:00`;
+        return next;
+      });
+    }
+
+    return bundle;
+  }
+
   function normalizePlantBundle(raw, mode) {
-    if (!raw?.sam_resumen_casos) return raw;
-    return mode === "compare"
-      ? buildComparePlantBundleFromValidation(raw)
-      : buildSinglePlantBundleFromValidation(raw, mode);
+    const bundle = raw?.sam_resumen_casos
+      ? (mode === "compare" ? buildComparePlantBundleFromValidation(raw) : buildSinglePlantBundleFromValidation(raw, mode))
+      : raw;
+    return enrichPlantBundleData(bundle);
   }
 
   async function loadPlantBundle(mode) {
@@ -2032,14 +2069,42 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const green = getCssColor("--green", "#76ff45");
     const orange = getCssColor("--orange", "#ff8a00");
     const labels = mensual.map((row) => row.mes_nombre || row.mes_corto || row.mes);
+    const east = mensual.map((row) => plantNumber(row.poa_este_kwh_m2));
+    const west = mensual.map((row) => plantNumber(row.poa_oeste_kwh_m2));
+    const hasPoa = [...east, ...west].some((value) => value !== null && value !== undefined);
+
+    if (!hasPoa) {
+      plantEnergyState.charts.poaOrientation = new Chart(canvas, {
+        type: "line",
+        data: { labels: ["Sin dato"], datasets: [] },
+        options: chartBaseOptions({
+          plugins: {
+            ...chartBaseOptions().plugins,
+            legend: { display: false },
+            title: {
+              display: true,
+              text: "POA Este/Oeste mensual no disponible en los JSON SAM actuales",
+              color: "#b8cbe3",
+              font: { size: 13, weight: "700" },
+              padding: { top: 70 },
+            },
+          },
+          scales: {
+            x: { display: false },
+            y: { display: false, beginAtZero: true },
+          },
+        }),
+      });
+      return;
+    }
 
     plantEnergyState.charts.poaOrientation = new Chart(canvas, {
       type: "line",
       data: {
         labels,
         datasets: [
-          lineDataset("POA Este", mensual.map((row) => row.poa_este_kwh_m2), green),
-          lineDataset("POA Oeste", mensual.map((row) => row.poa_oeste_kwh_m2), orange),
+          lineDataset("POA Este", east, green),
+          lineDataset("POA Oeste", west, orange),
         ],
       },
       options: chartBaseOptions({
