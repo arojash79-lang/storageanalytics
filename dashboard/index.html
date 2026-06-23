@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260622-0300" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="dashboard.css?v=20260623-0430" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
-  <script src="dashboard.js?v=20260622-0300" defer></script>
+  <script src="dashboard.js?v=20260623-0430" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -318,11 +318,11 @@
   <a href="#" data-view="planta"><span>♜</span> Planta FV (SAM)</a>
   <a href="#" data-view="simulacion"><span>▤</span> Simulación energética</a>
   <a href="#" data-view="sam-cen"><span>≈</span> SAM vs CEN</a>
+  <a href="#" data-view="reportes"><span>▤</span> Reportes</a>
   <a href="#" data-view="bess"><span>▣</span> Operación BESS</a>
   <a href="#" data-view="economia"><span>$</span> Economía</a>
   <a href="#" data-view="estrategias"><span>▦</span> Estrategias</a>
   <a href="#" data-view="comparador"><span>⌁</span> Comparador</a>
-  <a href="#" data-view="reportes"><span>▤</span> Reportes</a>
   <a href="#" data-view="configuracion"><span>⚙</span> Configuración</a>
   <a href="#" data-view="ayuda"><span>?</span> Ayuda</a>
 </nav>
@@ -1600,6 +1600,14 @@
             </table>
           </section>
 
+          <section class="pdf-section report-chart-section report-profile-section">
+            <h2>Perfil horario Este/Oeste</h2>
+            <p id="reportEastWestNote" class="report-chart-caption">Perfil horario representativo de producción FV — configuración Este/Oeste.</p>
+            <div class="report-chart-card">
+              <canvas id="reportEastWestChart" height="230"></canvas>
+            </div>
+          </section>
+
           <section class="pdf-section">
             <h2>Descomposición operacional del residuo</h2>
             <ul class="report-definitions">
@@ -1622,7 +1630,7 @@
 
           <section class="pdf-section">
             <h2>Limitaciones metodológicas</h2>
-            <ul class="report-list">
+            <ul id="reportLimitationsList" class="report-list">
               <li>No se dispone de irradiancia in situ en CEME1.</li>
               <li>La validación es indirecta, usando referencias operacionales oficiales del CEN.</li>
               <li>SAM no modela fallas reales, mantenimientos no informados ni indisponibilidad técnica histórica.</li>

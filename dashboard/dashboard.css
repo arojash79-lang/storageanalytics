@@ -41,10 +41,13 @@ body {
   top: 0;
   bottom: 0;
   width: 224px;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(180deg, #07182b, #020813);
   border-right: 1px solid rgba(107, 169, 255, 0.14);
   padding: 18px 16px;
   z-index: 20;
+  overflow: hidden;
 }
 
 .brand {
@@ -77,7 +80,23 @@ body {
 .side-nav {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 7px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 181, 255, 0.45) transparent;
+}
+
+.side-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.side-nav::-webkit-scrollbar-thumb {
+  background: rgba(96, 181, 255, 0.45);
+  border-radius: 999px;
 }
 
 .side-nav a {
@@ -103,10 +122,8 @@ body {
 }
 
 .active-strategy {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 18px;
+  position: static;
+  flex: 0 0 auto;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(139, 184, 255, 0.15);
   border-radius: 10px;
@@ -725,6 +742,7 @@ tbody tr.highlight {
     position: relative;
     width: 100%;
     height: auto;
+    overflow: visible;
   }
 
   .active-strategy {
@@ -771,6 +789,7 @@ tbody tr.highlight {
   .side-nav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    overflow: visible;
   }
 }
 
@@ -2920,8 +2939,8 @@ tbody tr.highlight {
 }
 
 .pdf-export-mode {
-  width: 760px;
-  max-width: 760px;
+  width: 740px;
+  max-width: 740px;
   padding: 0;
   color: #0d2238;
   background: #ffffff;
@@ -2934,8 +2953,8 @@ tbody tr.highlight {
 
 .pdf-export-mode .pdf-report-page,
 .pdf-export-mode.pdf-report-page {
-  width: 760px;
-  max-width: 760px;
+  width: 740px;
+  max-width: 740px;
   padding: 0;
   border-radius: 0;
   box-shadow: none;
@@ -3012,6 +3031,11 @@ tbody tr.highlight {
   padding: 7px;
 }
 
+.pdf-export-mode .report-profile-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .pdf-export-mode .report-waterfall-card {
   height: 170px;
   margin: 8px 0;
@@ -3034,8 +3058,8 @@ tbody tr.highlight {
 .pdf-export-mode .report-table th,
 .pdf-export-mode .report-table td {
   padding: 3.5px 4px;
-  font-size: 7.4px;
-  line-height: 1.18;
+  font-size: 7.2px;
+  line-height: 1.22;
   white-space: normal;
   word-break: normal;
   overflow-wrap: anywhere;
