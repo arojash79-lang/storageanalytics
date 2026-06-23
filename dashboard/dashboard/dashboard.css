@@ -2920,8 +2920,8 @@ tbody tr.highlight {
 }
 
 .pdf-export-mode {
-  width: 760px;
-  max-width: 760px;
+  width: 740px;
+  max-width: 740px;
   padding: 0;
   color: #0d2238;
   background: #ffffff;
@@ -2934,8 +2934,8 @@ tbody tr.highlight {
 
 .pdf-export-mode .pdf-report-page,
 .pdf-export-mode.pdf-report-page {
-  width: 760px;
-  max-width: 760px;
+  width: 740px;
+  max-width: 740px;
   padding: 0;
   border-radius: 0;
   box-shadow: none;
@@ -3012,6 +3012,11 @@ tbody tr.highlight {
   padding: 7px;
 }
 
+.pdf-export-mode .report-profile-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .pdf-export-mode .report-waterfall-card {
   height: 170px;
   margin: 8px 0;
@@ -3034,8 +3039,8 @@ tbody tr.highlight {
 .pdf-export-mode .report-table th,
 .pdf-export-mode .report-table td {
   padding: 3.5px 4px;
-  font-size: 7.4px;
-  line-height: 1.18;
+  font-size: 7.2px;
+  line-height: 1.22;
   white-space: normal;
   word-break: normal;
   overflow-wrap: anywhere;
@@ -3150,8 +3155,8 @@ tbody tr.highlight {
 
 @media print {
   @page {
-    size: letter portrait;
-    margin: 10mm;
+    size: A4 portrait;
+    margin: 8mm;
   }
 
   body {
