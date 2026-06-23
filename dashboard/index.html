@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260622-0145" />
+  <link rel="stylesheet" href="dashboard.css?v=20260622-0200" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
-  <script src="dashboard.js?v=20260622-0145" defer></script>
+  <script src="dashboard.js?v=20260622-0200" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -314,9 +314,10 @@
 
     <nav class="side-nav">
   <a class="active" href="#" data-view="general"><span>⌂</span> Vista General</a>
-  <a href="#" data-view="solar"><span>☼</span> Recurso Solar (TMY)</a>
+  <a href="#" data-view="solar"><span>☼</span> Recurso Solar</a>
   <a href="#" data-view="planta"><span>♜</span> Planta FV (SAM)</a>
   <a href="#" data-view="simulacion"><span>▤</span> Simulación energética</a>
+  <a href="#" data-view="sam-cen"><span>≈</span> SAM vs CEN</a>
   <a href="#" data-view="bess"><span>▣</span> Operación BESS</a>
   <a href="#" data-view="economia"><span>$</span> Economía</a>
   <a href="#" data-view="estrategias"><span>▦</span> Estrategias</a>
@@ -518,9 +519,9 @@
     <section id="view-solar" class="dashboard-view">
       <section class="solar-header card">
         <div>
-          <p class="section-eyebrow">RECURSO SOLAR — AÑO METEOROLÓGICO TÍPICO</p>
-          <h2>Caracterización meteorológica TMY — María Elena</h2>
-          <p>
+          <p id="solarEyebrow" class="section-eyebrow">RECURSO SOLAR — AÑO METEOROLÓGICO TÍPICO</p>
+          <h2 id="solarTitle">Caracterización meteorológica TMY — María Elena</h2>
+          <p id="solarIntro">
             Visualización de GHI, DNI, DHI, temperatura ambiente y velocidad del viento
             a partir del archivo TMY del Explorador Solar.
           </p>
@@ -534,6 +535,12 @@
           </span>
         </div>
       </section>
+
+      <div class="plant-tabs solar-tabs card">
+        <button class="plant-tab-btn solar-mode-btn active" type="button" data-solar-mode="tmy">TMY Explorador Solar</button>
+        <button class="plant-tab-btn solar-mode-btn nasa" type="button" data-solar-mode="nasa">NASA POWER 2025</button>
+        <button class="plant-tab-btn solar-mode-btn compare" type="button" data-solar-mode="compare">Comparativa TMY vs NASA</button>
+      </div>
 
       <section class="solar-kpi-row" id="solarKpiCards">
         <article class="kpi-card yellow">
@@ -923,23 +930,32 @@
                   <thead>
                     <tr>
                       <th>Submodelo</th>
-                      <th>Módulo</th>
+                      <th>Familia</th>
                       <th>Orientación</th>
+                      <th>Módulo FV</th>
+                      <th>Potencia módulo [Wp]</th>
                       <th>Strings</th>
+                      <th>Módulos/string</th>
+                      <th>Módulos totales</th>
+                      <th>Cálculo potencia DC</th>
+                      <th>Potencia DC [MWp]</th>
                       <th>Inversores</th>
-                      <th>Cadenas / inversor</th>
+                      <th>Potencia AC equivalente [MWac]</th>
+                      <th>Código SAM</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td>SC01</td><td>540 Wp</td><td>Este</td><td>2.976</td><td>12</td><td>248</td></tr>
-                    <tr><td>SC02</td><td>540 Wp</td><td>Oeste</td><td>2.976</td><td>12</td><td>248</td></tr>
-                    <tr><td>SC03</td><td>545 Wp</td><td>Este</td><td>5.040</td><td>21</td><td>240</td></tr>
-                    <tr><td>SC04</td><td>545 Wp</td><td>Oeste</td><td>5.040</td><td>21</td><td>240</td></tr>
-                    <tr><td>SC05</td><td>545 Wp</td><td>Este</td><td>6.696</td><td>27</td><td>248</td></tr>
-                    <tr><td>SC06</td><td>545 Wp</td><td>Oeste</td><td>6.696</td><td>27</td><td>248</td></tr>
+                    <tr><td>SC01</td><td>Familia A</td><td>Este</td><td>Módulo 540 Wp</td><td>540</td><td>2.976</td><td>30</td><td>89.280</td><td>89.280 × 540 Wp</td><td>48,2112</td><td>12</td><td>37,5</td><td>CEME1_SC01_540W_ESTE</td></tr>
+                    <tr><td>SC02</td><td>Familia A</td><td>Oeste</td><td>Módulo 540 Wp</td><td>540</td><td>2.976</td><td>30</td><td>89.280</td><td>89.280 × 540 Wp</td><td>48,2112</td><td>12</td><td>37,5</td><td>CEME1_SC02_540W_OESTE</td></tr>
+                    <tr><td>SC03</td><td>Familia B</td><td>Este</td><td>Módulo 545 Wp</td><td>545</td><td>5.040</td><td>30</td><td>151.200</td><td>151.200 × 545 Wp</td><td>82,4040</td><td>21</td><td>65,6</td><td>CEME1_SC03_545W_ESTE</td></tr>
+                    <tr><td>SC04</td><td>Familia B</td><td>Oeste</td><td>Módulo 545 Wp</td><td>545</td><td>5.040</td><td>30</td><td>151.200</td><td>151.200 × 545 Wp</td><td>82,4040</td><td>21</td><td>65,6</td><td>CEME1_SC04_545W_OESTE</td></tr>
+                    <tr><td>SC05</td><td>Familia C</td><td>Este</td><td>Módulo 545 Wp</td><td>545</td><td>6.696</td><td>30</td><td>200.880</td><td>200.880 × 545 Wp</td><td>109,4796</td><td>27</td><td>84,4</td><td>CEME1_SC05_545W_ESTE</td></tr>
+                    <tr><td>SC06</td><td>Familia C</td><td>Oeste</td><td>Módulo 545 Wp</td><td>545</td><td>6.696</td><td>30</td><td>200.880</td><td>200.880 × 545 Wp</td><td>109,4796</td><td>27</td><td>84,4</td><td>CEME1_SC06_545W_OESTE</td></tr>
+                    <tr class="total-row"><td>Total</td><td>--</td><td>Este/Oeste</td><td>--</td><td>--</td><td>29.424</td><td>30</td><td>882.720</td><td>Suma SC01-SC06</td><td>480,1896</td><td>120</td><td>412,4</td><td>Arquitectura equivalente</td></tr>
                   </tbody>
                 </table>
               </div>
+              <p class="plant-table-note">La potencia DC total se obtiene multiplicando la cantidad de módulos por la potencia nominal de cada familia. La suma de las tres familias entrega 480,1896 MWp, coherente con la arquitectura equivalente de CEME1.</p>
             </article>
 
             <article class="card plant-balance-card">
@@ -1153,7 +1169,7 @@
             <div class="sam-cen-title">
               <p class="section-kicker">SAM VS CEN 2025</p>
               <h3>Validación energética FV contra operación CEN</h3>
-              <small id="samCenMeta">Cargando data/sam_tmy_nasa_vs_cen_dashboard_bundle.json...</small>
+              <small id="samCenMeta">Cargando data/validacion_fv_ceme1_dashboard_bundle.json...</small>
             </div>
             <div class="sam-cen-header-grid" aria-label="Cabecera SCADA SAM vs CEN">
               <div><span>PLANTA</span><strong id="samCenHeaderPlant">CEME1</strong></div>
@@ -1282,9 +1298,9 @@
               <small>Reducciones CEN / CEN disponible</small>
             </article>
             <article class="plant-energy-kpi card">
-              <p>SAM TMY EXPLORADOR SOLAR</p>
+              <p>PRONÓSTICO CENTRALIZADO CEN</p>
               <h3><span id="samCenKpiTmyAnnual">--</span><small> GWh</small></h3>
-              <small>Explorador Solar</small>
+              <small>Programación operacional CEN</small>
             </article>
             <article class="plant-energy-kpi card">
               <p>SAM NASA 2025 ANUAL</p>
@@ -1292,14 +1308,19 @@
               <small>NASA POWER 2025</small>
             </article>
             <article class="plant-energy-kpi card delta">
-              <p>RESIDUO SAM TMY − CEN DISPONIBLE</p>
+              <p>ΔE₁ SAM NASA 2025 − PRONÓSTICO CENTRALIZADO CEN</p>
               <h3><span id="samCenKpiTmyDelta">--</span><small> GWh</small></h3>
-              <small id="samCenKpiTmyDeltaPct">-- %</small>
+              <small id="samCenKpiTmyDeltaPct">Simulación técnica vs expectativa operacional</small>
             </article>
             <article class="plant-energy-kpi card delta">
-              <p>RESIDUO SAM NASA 2025 − CEN DISPONIBLE</p>
+              <p>ΔE₂ PRONÓSTICO CENTRALIZADO CEN − CEN DISPONIBLE</p>
               <h3><span id="samCenKpiNasaDelta">--</span><small> GWh</small></h3>
-              <small id="samCenKpiNasaDeltaPct">-- %</small>
+              <small id="samCenKpiNasaDeltaPct">Pronóstico CEN vs disponibilidad observada</small>
+            </article>
+            <article class="plant-energy-kpi card delta">
+              <p>ΔE₃ REDUCCIONES CEN</p>
+              <h3><span id="samCenKpiDelta3">--</span><small> GWh</small></h3>
+              <small>CEN disponible − Generación real CEN</small>
             </article>
           </section>
 
@@ -1413,10 +1434,10 @@
       <section class="plant-sam-shell">
         <div class="plant-head-grid">
           <article class="plant-title-card card">
-            <p class="section-kicker">SIMULACIÓN ENERGÉTICA — SAM / CEN</p>
+            <p class="section-kicker">SIMULACIÓN ENERGÉTICA — SAM</p>
             <h2>Simulación energética FV CEME1</h2>
             <p>
-              Resultados energéticos de SAM, comparación meteorológica TMY versus NASA 2025 y contraste operacional con la referencia CEN.
+              Resultados energéticos de SAM y comparación meteorológica TMY versus NASA POWER 2025, sin validación operacional CEN.
             </p>
           </article>
 
@@ -1430,16 +1451,16 @@
 
         <div class="plant-tabs card">
           <button class="plant-tab-btn plant-energy-mode-btn tmy active" type="button" data-plant-panel="energia" data-plant-energy-mode="tmy">
-            Simulación energética SAM
+            SAM TMY Explorador Solar
             <span>Caso base TMY</span>
+          </button>
+          <button class="plant-tab-btn plant-energy-mode-btn nasa" type="button" data-plant-panel="energia" data-plant-energy-mode="nasa">
+            SAM NASA POWER 2025
+            <span>Meteorología histórica 2025</span>
           </button>
           <button class="plant-tab-btn plant-energy-mode-btn compare" type="button" data-plant-panel="energia" data-plant-energy-mode="compare">
             Comparativa TMY vs NASA 2025
             <span>Meteorología SAM</span>
-          </button>
-          <button class="plant-tab-btn plant-energy-mode-btn cen" type="button" data-plant-panel="sam-cen">
-            SAM vs CEN 2025
-            <span>Validación CEN</span>
           </button>
         </div>
 
@@ -1448,19 +1469,35 @@
           (() => {
             const target = document.getElementById("simulation-energy-panels");
             const energyPanel = document.getElementById("plant-panel-energia");
-            const samCenPanel = document.getElementById("plant-panel-sam-cen");
 
-            if (target && energyPanel && samCenPanel) {
+            if (target && energyPanel) {
               target.appendChild(energyPanel);
-              target.appendChild(samCenPanel);
               energyPanel.classList.add("active");
-              samCenPanel.classList.remove("active");
             }
           })();
         </script>
       </section>
     </section>
     <!-- FIN VISTA SIMULACIÓN ENERGÉTICA -->
+
+    <!-- INICIO VISTA SAM VS CEN -->
+    <section id="view-sam-cen" class="dashboard-view">
+      <section class="plant-sam-shell">
+        <div id="sam-cen-panel-host"></div>
+        <script>
+          (() => {
+            const host = document.getElementById("sam-cen-panel-host");
+            const samCenPanel = document.getElementById("plant-panel-sam-cen");
+
+            if (host && samCenPanel) {
+              host.appendChild(samCenPanel);
+              samCenPanel.classList.add("active");
+            }
+          })();
+        </script>
+      </section>
+    </section>
+    <!-- FIN VISTA SAM VS CEN -->
 
     <!-- INICIO VISTA REPORTES -->
     <section id="view-reportes" class="dashboard-view">
@@ -1605,6 +1642,10 @@
             Storage Analytics — Actividad de Graduación MIE UC — CEME1 FV + BESS
           </footer>
         </article>
+      </section>
+
+      <section id="solarCompareConclusion" class="plant-method-note card" hidden>
+        TMY se utiliza como referencia meteorológica típica para caracterización del recurso solar, mientras que NASA POWER 2025 se utiliza como base de contraste operacional frente a datos CEN 2025 por corresponder al mismo año calendario.
       </section>
     </section>
     <!-- FIN VISTA REPORTES -->

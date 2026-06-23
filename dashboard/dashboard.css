@@ -182,6 +182,10 @@ body {
   gap: 9px;
 }
 
+.top-controls.hidden {
+  display: none;
+}
+
 .control,
 .date-pill input {
   background: #071323;
@@ -1839,7 +1843,7 @@ tbody tr.highlight {
 .plant-submodel-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 680px;
+  min-width: 1180px;
 }
 
 .plant-submodel-table th,
@@ -1859,6 +1863,12 @@ tbody tr.highlight {
 .plant-submodel-table td:first-child,
 .plant-submodel-table th:first-child {
   text-align: left;
+  font-weight: 900;
+}
+
+.plant-submodel-table .total-row {
+  color: #ffffff;
+  background: rgba(38, 137, 255, 0.16);
   font-weight: 900;
 }
 
