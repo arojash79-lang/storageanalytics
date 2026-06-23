@@ -83,8 +83,8 @@ function normalizeScadaRow(row){
   const timestamp = normalizeTimestamp(row.timestamp);
   const fvPower = toNumber(row.sam_p_ac_mw);
   const fvEnergy = toNumber(row.sam_e_ac_mwh);
-  const inyeccion = toNumber(row.cen_inyeccion_mwh);
-  const curtailment = toNumber(row.cen_curtailment_mwh);
+  const inyeccion = toNumber(row.generacion_real_cen_mwh, toNumber(row.cen_inyeccion_mwh));
+  const curtailment = toNumber(row.reducciones_cen_mwh, toNumber(row.cen_curtailment_mwh));
   const disponible = toNumber(row.cen_disponible_mwh, inyeccion + curtailment);
   const precio = toNumber(row.precio_spot_usd_mwh);
 
@@ -340,8 +340,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 (() => {
   const SOLAR_DATA_URLS = {
     tmy: "data/recurso_solar_tmy_dashboard_bundle.json",
-    nasa: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
-    compare: "data/comparativa_tmy_vs_nasa_2025_dashboard_bundle.json",
+    nasa: "data/recurso_solar_nasa_2025_dashboard_bundle.json",
+    compare: "data/comparativa_recurso_solar_tmy_vs_nasa_dashboard_bundle.json",
   };
 
   const solarState = {
@@ -2160,10 +2160,12 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
           cen_curtailment_gwh: row.energia_reducciones_cen_gwh ?? row.reducciones_cen_gwh,
           cen_disponible_gwh: row.energia_cen_disponible_gwh ?? row.cen_disponible_gwh,
           pronostico_centralizado_cen_gwh: row.energia_pronostico_centralizado_cen_gwh ?? row.pronostico_centralizado_cen_gwh,
+          residuo_sam_nasa_cen_disp_gwh: row.residuo_sam_nasa_vs_cen_disponible_gwh ?? ((row.sam_nasa_2025_gwh != null && row.cen_disponible_gwh != null) ? Number(row.sam_nasa_2025_gwh) - Number(row.cen_disponible_gwh) : null),
+          residuo_sam_tmy_cen_disp_gwh: row.residuo_sam_tmy_vs_cen_disponible_gwh ?? ((row.sam_tmy_gwh != null && row.cen_disponible_gwh != null) ? Number(row.sam_tmy_gwh) - Number(row.cen_disponible_gwh) : null),
         };
         return [
-          { ...base, caso_sam: "SAM_TMY", fuente_meteorologica: "SAM TMY Explorador Solar", sam_e_ac_gwh: row.energia_sam_tmy_explorador_solar_gwh ?? row.sam_tmy_gwh },
-          { ...base, caso_sam: "SAM_NASA_2025", fuente_meteorologica: "SAM NASA 2025", sam_e_ac_gwh: row.energia_sam_nasa_2025_gwh ?? row.sam_nasa_2025_gwh },
+          { ...base, caso_sam: "SAM_TMY", fuente_meteorologica: "SAM TMY Explorador Solar", sam_e_ac_gwh: row.energia_sam_tmy_explorador_solar_gwh ?? row.sam_tmy_gwh, residuo_sam_menos_cen_disp_gwh: base.residuo_sam_tmy_cen_disp_gwh },
+          { ...base, caso_sam: "SAM_NASA_2025", fuente_meteorologica: "SAM NASA 2025", sam_e_ac_gwh: row.energia_sam_nasa_2025_gwh ?? row.sam_nasa_2025_gwh, residuo_sam_menos_cen_disp_gwh: base.residuo_sam_nasa_cen_disp_gwh },
         ];
       }),
       perfil_horario: [],
@@ -2239,15 +2241,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
   function findTechnicalIndicator(indicators, pattern) {
     if (!Array.isArray(indicators)) return {};
-
     return indicators.find((row) =>
-      pattern.test(`${row.caso_sam || ""}`) &&
-      row.referencia === "CEN disponible = inyeccion + curtailment" &&
-      row.filtro === "todas_las_horas"
-    ) || indicators.find((row) =>
-      pattern.test(`${row.caso_sam || ""}`) &&
-      row.referencia === "CEN disponible = inyeccion + curtailment"
-    ) || {};
+      pattern.test(`${row.caso_sam || ""} ${row.comparacion || ""}`) &&
+      /cen disponible/i.test(`${row.referencia || row.comparacion || ""}`) &&
+      !/pron[oó]stico/i.test(`${row.comparacion || ""}`)
+    ) || indicators.find((row) => pattern.test(`${row.caso_sam || ""} ${row.comparacion || ""}`)) || {};
   }
 
   function getNrmseState(nrmse) {
@@ -2268,11 +2266,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     setText(`${prefix}Semaphore`, state.label);
     setText(`${prefix}Nrmse`, formatNumber(row.nrmse_pct, 1));
-    setText(`${prefix}Rmse`, formatNumber(row.rmse, 1));
-    setText(`${prefix}Mbe`, formatNumber(row.mbe, 1));
-    setText(`${prefix}Mae`, formatNumber(row.mae, 1));
+    setText(`${prefix}Rmse`, formatNumber(row.rmse_mwh ?? row.rmse, 1));
+    setText(`${prefix}Mbe`, formatNumber(row.mbe_mwh ?? row.mbe, 1));
+    setText(`${prefix}Mae`, formatNumber(row.mae_mwh ?? row.mae, 1));
     setText(`${prefix}Corr`, formatNumber(row.corr_pearson, 3));
-    setText(`${prefix}Delta`, `${formatNumber(row.delta_pct, 1)} %`);
+    setText(`${prefix}Delta`, `${formatNumber(row.delta_pct ?? row.diferencia_pct, 1)} %`);
   }
 
   function renderSamCenInstruments(indicators) {
@@ -2301,12 +2299,12 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       displaySamCase(row.caso_sam, row.fuente_meteorologica),
       displayReference(row.referencia),
       row.filtro,
-      formatNumber(row.mbe, 2),
-      formatNumber(row.mae, 2),
-      formatNumber(row.rmse, 2),
+      formatNumber(row.mbe_mwh ?? row.mbe, 2),
+      formatNumber(row.mae_mwh ?? row.mae, 2),
+      formatNumber(row.rmse_mwh ?? row.rmse, 2),
       `${formatNumber(row.nrmse_pct, 1)} %`,
       formatNumber(row.corr_pearson, 3),
-      `${formatNumber(row.delta_pct, 1)} %`,
+      `${formatNumber(row.delta_pct ?? row.diferencia_pct, 1)} %`,
     ].forEach((value) => {
       const td = document.createElement("td");
       td.textContent = value || "--";
@@ -2325,11 +2323,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     operationalBody.replaceChildren();
 
     (Array.isArray(indicators) ? indicators : []).forEach((row) => {
-      if (row.referencia === "CEN disponible = inyeccion + curtailment") {
+      if (/cen disponible/i.test(`${row.referencia || row.comparacion || ""}`)) {
         appendIndicatorRow(technicalBody, row);
       }
 
-      if (row.referencia === "CEN inyeccion real") {
+      if (/generaci[oó]n real|inyecci[oó]n real/i.test(`${row.referencia || row.comparacion || ""}`)) {
         appendIndicatorRow(operationalBody, row);
       }
     });
@@ -2587,8 +2585,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     validationBundle: "data/validacion_fv_ceme1_dashboard_bundle.json",
     validationLite: "data/validacion_fv_ceme1_dashboard_lite.json",
     tmy: "data/planta_fv_sam_dashboard_bundle.json",
-    nasa: "data/planta_fv_sam_nasa_2025_dashboard_bundle.json",
-    compare: "data/comparativa_tmy_vs_nasa_2025_dashboard_bundle.json",
+    nasa: "data/recurso_solar_nasa_2025_dashboard_bundle.json",
+    compare: "data/comparativa_recurso_solar_tmy_vs_nasa_dashboard_bundle.json",
     samCen: "data/sam_tmy_nasa_vs_cen_dashboard_bundle.json",
   };
 
@@ -3060,12 +3058,12 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     addRows("reportValidationBody", (samCen.indicadores || []).map((row) => [
       `${displaySamCase(row.caso_sam, row.fuente_meteorologica)} vs ${displayReference(row.referencia)} (${row.filtro || "--"})`,
-      formatNumber(row.mbe, 2),
-      formatNumber(row.mae, 2),
-      formatNumber(row.rmse, 2),
+      formatNumber(row.mbe_mwh ?? row.mbe, 2),
+      formatNumber(row.mae_mwh ?? row.mae, 2),
+      formatNumber(row.rmse_mwh ?? row.rmse, 2),
       `${formatNumber(row.nrmse_pct, 1)} %`,
       formatNumber(row.corr_pearson, 3),
-      `${formatNumber(row.delta_pct, 1)} %`,
+      `${formatNumber(row.delta_pct ?? row.diferencia_pct, 1)} %`,
     ]));
   }
 
