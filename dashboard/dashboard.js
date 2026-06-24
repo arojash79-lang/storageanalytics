@@ -2682,8 +2682,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const delta1Direct = readKpi(kpis, ["delta_1_sam_centralizado_gwh", "delta_e1_gwh"]);
     const delta2Direct = readKpi(kpis, ["delta_2_centralizado_disponible_gwh", "delta_e2_gwh"]);
     const delta3Direct = readKpi(kpis, ["delta_3_reducciones_gwh", "delta_e3_gwh"]);
-    const delta1 = annualDisplayDelta(samNasa, centralizado) ?? delta1Direct;
-    const delta2 = annualDisplayDelta(centralizado, disponible) ?? delta2Direct;
+    const delta1 = delta1Direct ?? (samNasa !== null && centralizado !== null ? samNasa - centralizado : null);
+    const delta2 = delta2Direct ?? (centralizado !== null && disponible !== null ? centralizado - disponible : null);
     const delta3 = disponible !== null && real !== null ? disponible - real : (reducciones ?? delta3Direct);
     const residuoDisponible = readKpi(kpis, ["residuo_sam_nasa_vs_cen_disponible_gwh", "residuo_sam_nasa_2025_menos_cen_disponible_gwh"]) ?? (samNasa !== null && disponible !== null ? samNasa - disponible : null);
     const residuoTotal = readKpi(kpis, ["residuo_total_sam_nasa_generacion_real_gwh", "residuo_total_sam_real_gwh"]) ?? (samNasa !== null && real !== null ? samNasa - real : null);
@@ -2772,8 +2772,16 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const summaryTmy = findSamCase(bundle.resumen_anual, /tmy/i);
     const summaryNasa = findSamCase(bundle.resumen_anual, /nasa/i);
     const centralizado = cen.energia_pronostico_centralizado_cen_gwh;
-    const delta1 = annualDisplayDelta(samNasa.energia_ac_neta_gwh, centralizado) ?? cen.delta_1_sam_centralizado_gwh;
-    const delta2 = annualDisplayDelta(centralizado, cen.energia_disponible_cen_gwh) ?? cen.delta_2_centralizado_disponible_gwh;
+    const delta1 = cen.delta_1_sam_centralizado_gwh ?? (
+      Number.isFinite(Number(samNasa.energia_ac_neta_gwh)) && Number.isFinite(Number(centralizado))
+        ? Number(samNasa.energia_ac_neta_gwh) - Number(centralizado)
+        : null
+    );
+    const delta2 = cen.delta_2_centralizado_disponible_gwh ?? (
+      Number.isFinite(Number(centralizado)) && Number.isFinite(Number(cen.energia_disponible_cen_gwh))
+        ? Number(centralizado) - Number(cen.energia_disponible_cen_gwh)
+        : null
+    );
     const delta3 = Number.isFinite(Number(cen.energia_disponible_cen_gwh)) && Number.isFinite(Number(cen.energia_inyectada_cen_gwh))
       ? Number(cen.energia_disponible_cen_gwh) - Number(cen.energia_inyectada_cen_gwh)
       : (cen.energia_curtailment_cen_gwh ?? cen.delta_3_reducciones_gwh);
@@ -3445,26 +3453,27 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const cenDisponible = validationKpiValue(kpis, "cenDisponible");
     const generacionReal = validationKpiValue(kpis, "generacionReal");
 
-    if (key === "delta1" && samNasa !== null && centralizado !== null) return annualDisplayDelta(samNasa, centralizado);
-    if (key === "delta2" && centralizado !== null && cenDisponible !== null) return annualDisplayDelta(centralizado, cenDisponible);
+    if (key === "delta1" && samNasa !== null && centralizado !== null) return samNasa - centralizado;
+    if (key === "delta2" && centralizado !== null && cenDisponible !== null) return centralizado - cenDisponible;
     if (key === "delta3" && cenDisponible !== null && generacionReal !== null) return cenDisponible - generacionReal;
     return null;
   }
 
   function getDeltaValue(validation, key, fallbackKpis) {
+    const deltas = validation.deltas || {};
+    const rows = asArray(deltas);
+    const directKpi = validationKpiValue(fallbackKpis, key);
+    if (directKpi !== null) return directKpi;
+
     const derived = derivedDeltaFromKpis(fallbackKpis, key);
     if (derived !== null) return derived;
 
-    const deltas = validation.deltas || {};
-    const rows = asArray(deltas);
     const direct = validationKpiValue(deltas, key);
     if (direct !== null) return direct;
     const row = rows.find((item) => normalizeKey(`${item.nombre || ""} ${item.eslabon || ""} ${item.comparacion || ""}`).includes(key.replace("delta", "e")));
     if (row) {
       return readEnergyGwh(row, ["energia_anual_gwh", "valor_gwh", "delta_gwh", "energia_gwh", "valor_mwh", "delta_mwh"], [["gwh", "mwh", "energia", "valor", "delta"]]);
     }
-    const directKpi = validationKpiValue(fallbackKpis, key);
-    if (directKpi !== null) return directKpi;
     return null;
   }
 
@@ -3477,7 +3486,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const energiaGeneracionReal = validationKpiValue(kpis, "generacionReal");
     const energiaReducciones = validationKpiValue(kpis, "reducciones");
     const factorReducciones = validationKpiValue(kpis, "factorReducciones");
-    const deltaSamPronostico = annualDisplayDelta(energiaSamNasa, energiaPronostico);
+    const deltaSamPronostico = getDeltaValue(validation, "delta1", kpis);
     const deltaSamPronosticoPct = deltaSamPronostico !== null && energiaPronostico !== null && energiaPronostico !== 0
       ? (deltaSamPronostico / energiaPronostico) * 100
       : null;
@@ -4216,7 +4225,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
             x: 0,
             y: 0,
           },
-          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
           pagebreak: {
             mode: ["css", "legacy"],
             avoid: [".report-chart-card", ".report-kpi-grid article", ".report-table tr", ".report-profile-section"],
@@ -4495,8 +4504,70 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     if (!state.simBundle) state.simBundle = await fetchJson(SIM_URL, SIM_FALLBACK);
     return state.simBundle;
   }
+  function normalizeReportRows(value) {
+    if (Array.isArray(value)) return value;
+    if (value && typeof value === "object") {
+      return Object.entries(value).map(([key, row]) => (
+        row && typeof row === "object"
+          ? { nombre: key, eslabon: key, ...row }
+          : { nombre: key, eslabon: key, energia_anual_gwh: row }
+      ));
+    }
+    return [];
+  }
+  function normalizeReportValidationBundle(bundle) {
+    const normalized = { ...(bundle || {}) };
+    const k = { ...(normalized.kpis || {}) };
+    normalized.kpis = k;
+
+    const samNasa = n(k.energia_sam_nasa_2025_gwh);
+    const centralizado = n(k.energia_pronostico_centralizado_cen_gwh);
+    const cenDisponible = n(k.energia_cen_disponible_gwh);
+    const generacionReal = n(k.energia_generacion_real_cen_gwh);
+    const reducciones = n(k.energia_reducciones_cen_gwh);
+
+    const setIfMissing = (key, value) => {
+      if (n(k[key]) === null && value !== null && Number.isFinite(value)) k[key] = value;
+    };
+
+    setIfMissing("delta_1_sam_centralizado_gwh", samNasa !== null && centralizado !== null ? samNasa - centralizado : null);
+    setIfMissing("delta_2_centralizado_disponible_gwh", centralizado !== null && cenDisponible !== null ? centralizado - cenDisponible : null);
+    setIfMissing("delta_3_reducciones_gwh", cenDisponible !== null && generacionReal !== null ? cenDisponible - generacionReal : reducciones);
+    setIfMissing("residuo_sam_nasa_vs_cen_disponible_gwh", samNasa !== null && cenDisponible !== null ? samNasa - cenDisponible : null);
+    setIfMissing("residuo_total_sam_nasa_generacion_real_gwh", samNasa !== null && generacionReal !== null ? samNasa - generacionReal : null);
+
+    const officialDeltas = {
+      delta1: k.delta_1_sam_centralizado_gwh,
+      delta2: k.delta_2_centralizado_disponible_gwh,
+      delta3: k.delta_3_reducciones_gwh,
+      total: k.residuo_total_sam_nasa_generacion_real_gwh,
+    };
+    const defaultDeltas = [
+      { eslabon: "ΔE1", comparacion: "SAM NASA 2025 − Pronóstico centralizado CEN", energia_anual_gwh: officialDeltas.delta1, interpretacion: "Brecha entre simulación técnica SAM y referencia operacional seleccionada por el CEN." },
+      { eslabon: "ΔE2", comparacion: "Pronóstico centralizado CEN − CEN disponible", energia_anual_gwh: officialDeltas.delta2, interpretacion: "Desviación entre pronóstico centralizado CEN y disponibilidad operacional observada." },
+      { eslabon: "ΔE3", comparacion: "CEN disponible − Generación real CEN", energia_anual_gwh: officialDeltas.delta3, interpretacion: "Reducciones CEN, equivalentes al curtailment operacional y a la oportunidad energética para BESS." },
+      { eslabon: "Residuo total", comparacion: "SAM NASA 2025 − Generación real CEN", energia_anual_gwh: officialDeltas.total, interpretacion: "Brecha total entre simulación técnica y generación real CEN." },
+    ];
+
+    const currentDeltas = normalizeReportRows(normalized.deltas);
+    normalized.deltas = (currentDeltas.length ? currentDeltas : defaultDeltas).map((row) => {
+      const label = `${row.eslabon || ""} ${row.comparacion || ""}`;
+      const key = /residuo|total/i.test(label)
+        ? "total"
+        : /ΔE1|E1|sam.*pron[oó]stico/i.test(label)
+        ? "delta1"
+        : /ΔE2|E2|centralizado.*disponible/i.test(label)
+          ? "delta2"
+          : /ΔE3|E3|reducciones|generaci[oó]n real/i.test(label)
+            ? "delta3"
+            : null;
+      return key ? { ...row, energia_anual_gwh: officialDeltas[key] } : row;
+    });
+
+    return normalized;
+  }
   async function getValidationBundle() {
-    if (!state.validationBundle) state.validationBundle = await fetchJson(VALIDACION_URL, VALIDACION_FALLBACK);
+    if (!state.validationBundle) state.validationBundle = normalizeReportValidationBundle(await fetchJson(VALIDACION_URL, VALIDACION_FALLBACK));
     return state.validationBundle;
   }
   async function getProfileBundle() {
@@ -4777,6 +4848,32 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       },
     };
   }
+  function valueLabelPlugin(id, formatter = (value) => fmt(value, 1)) {
+    return {
+      id,
+      afterDatasetsDraw(chart) {
+        const dataset = chart?.data?.datasets?.[0];
+        const meta = chart.getDatasetMeta(0);
+        if (!dataset || !meta?.data?.length) return;
+        const { ctx, chartArea } = chart;
+        ctx.save();
+        ctx.font = "700 10px Arial, Helvetica, sans-serif";
+        ctx.fillStyle = "#1f2937";
+        ctx.textAlign = "center";
+        meta.data.forEach((element, index) => {
+          const value = n(dataset.data[index]);
+          if (value === null || !element) return;
+          const pos = element.tooltipPosition ? element.tooltipPosition() : element;
+          ctx.textBaseline = value >= 0 ? "bottom" : "top";
+          const y = value >= 0
+            ? Math.max(chartArea.top + 12, pos.y - 6)
+            : Math.min(chartArea.bottom - 2, pos.y + 10);
+          ctx.fillText(formatter(value), pos.x, y);
+        });
+        ctx.restore();
+      },
+    };
+  }
   function sum(rows, key) { return (Array.isArray(rows) ? rows : []).reduce((acc, r) => acc + (n(r[key]) || 0), 0); }
   function avg(rows, key) {
     const vals = (Array.isArray(rows) ? rows : []).map((r) => n(r[key])).filter((v) => v !== null);
@@ -4788,20 +4885,34 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       if (!caseFilter.test(`${r.caso_sam || ""} ${r.fuente_meteorologica || ""}`)) return;
       const dt = new Date(String(r.timestamp).replace(" ", "T"));
       const h = Number.isFinite(dt.getHours()) ? dt.getHours() : Number(String(r.timestamp).slice(11, 13));
+      const ghi = n(r.meteo_ghi_wm2);
+      const samEnergy = n(r.sam_e_ac_mwh);
+      const isSolarHour = ghi !== null
+        ? ghi > 0
+        : samEnergy !== null
+          ? samEnergy > 0
+          : h >= 7 && h <= 19;
       if (!map.has(h)) map.set(h, []);
-      map.get(h).push(r);
+      map.get(h).push({
+        ...r,
+        reducciones_cen_plot_mwh: isSolarHour ? n(r.reducciones_cen_mwh) || 0 : 0,
+      });
     });
     return Array.from({ length: 24 }, (_, h) => ({
       hora: h,
       hora_label: `${String(h).padStart(2, "0")}:00`,
       reducciones_cen_mwh: avg(map.get(h) || [], "reducciones_cen_mwh"),
+      reducciones_cen_plot_mwh: avg(map.get(h) || [], "reducciones_cen_plot_mwh"),
       precio_spot_usd_mwh: avg(map.get(h) || [], "precio_spot_usd_mwh"),
       sam_e_ac_mwh: avg(map.get(h) || [], "sam_e_ac_mwh"),
       meteo_ghi_wm2: avg(map.get(h) || [], "meteo_ghi_wm2"),
     }));
   }
-  function reportSection(num, title, body) {
-    return `<section class="sa-report-section"><h2><span>${num}</span>${title}</h2>${body}</section>`;
+  function reportSection(num, title, body, className = "") {
+    const autoClass = num === "1." ? "" : "sa-page-break";
+    const specialClass = num === "9." ? "sa-conclusion-section" : num === "A." ? "sa-annex-section" : "";
+    const classes = ["sa-report-section", autoClass, specialClass, className].filter(Boolean).join(" ");
+    return `<section class="${classes}"><h2><span>${num}</span>${title}</h2><div class="sa-section-body">${body}</div></section>`;
   }
   function kpiCard(title, value, unit, sub, accent = "") {
     return `<article class="sa-report-kpi ${accent}"><p>${escapeHtml(title)}</p><strong>${escapeHtml(value)}</strong><small>${escapeHtml(unit)}${sub ? ` — ${escapeHtml(sub)}` : ""}</small></article>`;
@@ -4821,10 +4932,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const limitaciones = validation.limitaciones || [];
     const samNasa = k.energia_sam_nasa_2025_gwh;
     const central = k.energia_pronostico_centralizado_cen_gwh;
-    const convPct = samNasa && central ? Math.abs((samNasa - central) / central * 100) : null;
-    const convPctDisplay = samNasa && central
-      ? Math.abs((Math.round(samNasa * 10) / 10 - Math.round(central * 10) / 10) / (Math.round(central * 10) / 10) * 100)
-      : convPct;
+    const delta1Official = n(k.delta_1_sam_centralizado_gwh);
+    const convPct = delta1Official !== null && central ? Math.abs(delta1Official / central * 100) : null;
 
     const intro = `El Bloque 1 establece la base de simulación técnica de CEME1 y su contraste con la operación real del sistema eléctrico chileno durante 2025. El resultado central es que <b>SAM NASA 2025 alcanza ${fmt(samNasa, 1)} GWh/año</b>, equivalente al <b>${fmt(100 - (convPct || 0), 1)}%</b> del <b>Pronóstico centralizado CEN de ${fmt(central, 1)} GWh/año</b>. El residuo de ${fmt(k.residuo_sam_nasa_vs_cen_disponible_gwh, 1)} GWh frente a CEN disponible se interpreta como discrepancia técnico-operacional. Las Reducciones CEN de ${fmt(k.energia_reducciones_cen_gwh, 1)} GWh (${fmt(k.factor_reducciones_cen_pct, 1)}% del CEN disponible) constituyen la oportunidad energética que fundamenta el análisis BESS del Bloque 2.`;
 
@@ -4836,17 +4945,34 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       ${kpiCard("GENERACIÓN REAL CEN ANUAL", fmt(k.energia_generacion_real_cen_gwh, 1), "GWh/año", "Producción efectiva registrada")}
       ${kpiCard("REDUCCIONES CEN (CURTAILMENT)", fmt(k.energia_reducciones_cen_gwh, 1), "GWh/año", `${fmt(k.factor_reducciones_cen_pct, 1)}% del CEN disponible`, "red")}
       ${kpiCard("RESIDUO SAM NASA VS CEN DISPONIBLE", fmt(k.residuo_sam_nasa_vs_cen_disponible_gwh, 1), "GWh", `${fmt(k.residuo_sam_nasa_vs_cen_disponible_gwh / k.energia_cen_disponible_gwh * 100, 1)}% sobre CEN disponible`, "orange")}
-      ${kpiCard("CONVERGENCIA SAM NASA VS PRONÓSTICO", fmt(convPctDisplay, 2), "%", "Diferencia anual", "green")}
+      ${kpiCard("CONVERGENCIA SAM NASA VS PRONÓSTICO", fmt(convPct, 2), "%", "Diferencia anual desde ΔE1 oficial", "green")}
     </div>`;
 
     const fuentesRows = fuentes.map((r) => [escapeHtml(r.fuente), `<code>${escapeHtml(r.variable_dashboard)}</code>`, escapeHtml(r.uso_bloque1), escapeHtml(r.observacion)]);
     const resumenRows = resumen.map((r) => {
       const isReducciones = /reducciones|curtailment/i.test(r.senal || "");
-      const diffGwh = isReducciones ? -Math.abs(n(k.energia_reducciones_cen_gwh) ?? n(r.energia_anual_gwh) ?? 0) : n(r.diferencia_vs_cen_disponible_gwh);
-      const diffPct = isReducciones ? -Math.abs(n(k.factor_reducciones_cen_pct) ?? n(r.diferencia_vs_cen_disponible_pct) ?? 0) : n(r.diferencia_vs_cen_disponible_pct);
-      const diffTxt = isReducciones ? `${fmt(diffGwh, 1)}` : `${diffGwh > 0 ? "+" : ""}${fmt(diffGwh, 1)}`;
-      const pctTxt = isReducciones ? `${fmt(diffPct, 1)}%` : `${diffPct > 0 ? "+" : ""}${fmt(diffPct, 1)}%`;
-      return [escapeHtml(r.senal), `<b>${fmt(r.energia_anual_gwh, 1)}</b>`, diffTxt, pctTxt, escapeHtml(r.interpretacion)];
+      const isGeneracionReal = /generaci[oó]n real|inyecci[oó]n/i.test(r.senal || "");
+      const reducciones = n(k.energia_reducciones_cen_gwh) ?? n(r.energia_anual_gwh) ?? 0;
+      const factorReducciones = n(k.factor_reducciones_cen_pct) ?? n(r.diferencia_vs_cen_disponible_pct) ?? 0;
+      const generacionReal = n(k.energia_generacion_real_cen_gwh);
+      const cenDisponible = n(k.energia_cen_disponible_gwh);
+      const realDiffGwh = isGeneracionReal && generacionReal !== null && cenDisponible !== null
+        ? generacionReal - cenDisponible
+        : n(r.diferencia_vs_cen_disponible_gwh);
+      const realDiffPct = isGeneracionReal && cenDisponible
+        ? (realDiffGwh / cenDisponible) * 100
+        : n(r.diferencia_vs_cen_disponible_pct);
+      const diffGwh = isReducciones ? -Math.abs(reducciones) : realDiffGwh;
+      const diffPct = isReducciones ? -Math.abs(factorReducciones) : realDiffPct;
+      const diffTxt = `${diffGwh > 0 ? "+" : ""}${fmt(diffGwh, 1)}`;
+      const pctTxt = `${diffPct > 0 ? "+" : ""}${fmt(diffPct, 1)}%`;
+      return [
+        escapeHtml(r.senal),
+        `<b>${fmt(isReducciones ? reducciones : r.energia_anual_gwh, 1)}</b>`,
+        diffTxt,
+        pctTxt,
+        escapeHtml(isReducciones ? "Curtailment operacional / oportunidad BESS" : r.interpretacion),
+      ];
     });
     const metricRows = metricas.map((r) => [escapeHtml(r.comparacion), fmt(r.mbe_mwh, 2), fmt(r.mae_mwh, 2), fmt(r.rmse_mwh, 2), `<b>${fmt(r.nrmse_pct, 1)}</b>`, fmt(r.corr_pearson, 3), `${n(r.delta_pct) > 0 ? "+" : ""}${fmt(r.delta_pct, 1)}%`]);
     const deltaRows = deltas.map((r) => [escapeHtml(r.eslabon), escapeHtml(r.comparacion), `<b>${fmt(r.energia_anual_gwh, 1)}</b>`, escapeHtml(r.interpretacion)]);
@@ -4875,7 +5001,7 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         ${reportSection("1.", "Indicadores ejecutivos principales", kpisHtml)}
         ${reportSection("2.", "Fuentes de datos y alcance metodológico", table(["Fuente", "Variable", "Uso en Bloque 1", "Observación crítica"], fuentesRows, "sources") + `<p class="sa-report-note"><b>Definición central:</b> CEN disponible = Generación real CEN + Reducciones CEN. El residuo SAM − CEN disponible no se interpreta como error puro del modelo FV, sino como discrepancia técnico-operacional frente a una referencia oficial construida con datos CEN.</p>`)}
         ${reportSection("3.", "Resultados energéticos anuales y evolución mensual", table(["Señal", "Energía anual [GWh]", "Δ vs CEN disponible [GWh]", "Δ vs CEN disponible [%]", "Interpretación"], resumenRows, "annual") + `<p class="sa-report-figure-title">Figura 1 — Comparación mensual: simulación SAM, pronóstico y operación CEN 2025</p><div class="sa-report-chart"><canvas id="saReportMonthlyChart"></canvas></div><p class="sa-report-note">Lectura: SAM NASA 2025 y el Pronóstico centralizado CEN se contrastan contra CEN disponible. La brecha entre CEN disponible y Generación real corresponde a Reducciones CEN.</p>`)}
-        ${reportSection("4.", "Perfil horario — Arquitectura V invertida Este/Oeste", `<p>La configuración Este/Oeste con inclinación 5° genera un perfil de doble peak diario, característico de esta arquitectura. El perfil separa subarrays Este y Oeste y permite verificar la simetría operacional del modelo.</p><p class="sa-report-figure-title">Figura 2 — Perfil horario promedio anual SAM NASA 2025 (subarrays Este y Oeste)</p><div class="sa-report-chart"><canvas id="saReportEastWestChart"></canvas></div><p class="sa-report-note">El doble peak es la firma técnica de la V invertida. Al promediar todo el año, el efecto Este/Oeste puede suavizarse por la baja inclinación de 5°. Para defensa, el perfil anual confirma la separación de submodelos y puede complementarse con un día representativo de verano si se requiere una firma más marcada.</p>`)}
+        ${reportSection("4.", "Perfil horario — Arquitectura V invertida Este/Oeste", `<p>La configuración Este/Oeste con inclinación 5° genera un perfil de doble peak diario, característico de esta arquitectura. El perfil separa subarrays Este y Oeste y permite verificar la simetría operacional del modelo.</p><p class="sa-report-figure-title">Figura 2 — Perfil horario promedio anual SAM NASA 2025 (subarrays Este y Oeste)</p><div class="sa-report-chart"><canvas id="saReportEastWestChart"></canvas></div><p class="sa-report-note">Al promediar todo el año, el efecto Este/Oeste se suaviza por la baja inclinación de 5°. Aun así, la separación entre submodelos Este y Oeste permite verificar la arquitectura V invertida y la simetría operacional del modelo.</p>`)}
         ${reportSection("5.", "Métricas de validación y benchmark operacional", `<p>Las métricas permiten comparar SAM NASA 2025, SAM TMY y Pronóstico centralizado CEN frente a CEN disponible y Generación real CEN.</p>${table(["Comparación", "MBE [MWh]", "MAE [MWh]", "RMSE [MWh]", "nRMSE [%]", "Correlación r", "Sesgo anual [%]"], metricRows, "metrics")}<p class="sa-report-figure-title">Figura 3 — nRMSE y correlación de Pearson por comparación</p><div class="sa-report-chart"><canvas id="saReportMetricsChart"></canvas></div>`)}
         ${reportSection("6.", "Descomposición operacional del residuo", `<p>La brecha total entre SAM NASA 2025 y la Generación real CEN se descompone en tres eslabones causales con interpretación específica.</p>${table(["Eslabón", "Fórmula", "Energía anual [GWh]", "Interpretación"], deltaRows, "deltas")}<p class="sa-report-figure-title">Figura 4 — Descomposición operacional del residuo SAM NASA 2025 − Generación real CEN</p><div class="sa-report-chart"><canvas id="saReportDeltasChart"></canvas></div>`)}
         ${reportSection("7.", "Perfil de curtailment y precio marginal — Señal de entrada al BESS", `<p>El perfil horario de las Reducciones CEN permite identificar la ventana de carga potencial del BESS y su relación con el precio marginal Mirage 220 kV.</p><p class="sa-report-figure-title">Figura 5 — Curtailment horario promedio y precio marginal Mirage 220 kV (2025)</p><div class="sa-report-chart"><canvas id="saReportCurtailmentPriceChart"></canvas></div>`)}
@@ -4901,10 +5027,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const deltas = validation.deltas || [];
     const pRows = (profile.perfil_horario || profile.perfil_este_oeste_sam || []).filter((r) => /nasa|2025/i.test(`${r.caso_sam || ""} ${r.fuente_meteorologica || ""}`));
     const hRows = groupByHour(scadaRows || [], /nasa|2025/i);
-    const hRowsCurtailment = hRows.map((row) => {
-      const hasSolarSignal = (n(row.sam_e_ac_mwh) || 0) > 0 || (n(row.meteo_ghi_wm2) || 0) > 0;
-      return { ...row, reducciones_cen_mwh: hasSolarSignal ? row.reducciones_cen_mwh : 0 };
-    });
+    const hRowsCurtailment = hRows.map((row) => ({
+      ...row,
+      reducciones_cen_mwh: n(row.reducciones_cen_plot_mwh) ?? 0,
+    }));
     const colors = { teal: "#22c7ad", cyan: "#38bdf8", navy: "#1f4773", gold: "#f6c64a", purple: "#9b59b6", red: "#e83f52", orange: "#f59e0b", green: "#2dd4bf" };
 
     const monthlyCanvas = byId("saReportMonthlyChart");
@@ -4924,7 +5050,31 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     if (metricsCanvas) state.reportCharts.metrics = new Chart(metricsCanvas, { type: "bar", data: { labels: metrics.map((r) => (r.comparacion || "").replace(/ vs /g, "\nvs ")), datasets: [barDs("nRMSE [%]", metrics.map((r) => r.nrmse_pct), colors.teal, "y"), lineDs("Correlación r", metrics.map((r) => r.corr_pearson), colors.orange, "y1")] }, options: whiteChartOptions({ scales: { y: { title: { display: true, text: "nRMSE [%]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } }, y1: { position: "right", min: 0.85, max: 1, title: { display: true, text: "Pearson r", color: "#334155" }, ticks: { color: "#334155" }, grid: { drawOnChartArea: false } } } }), plugins: [whiteCanvasPlugin("metricsWhiteBg")] });
 
     const deltaCanvas = byId("saReportDeltasChart");
-    if (deltaCanvas) state.reportCharts.deltas = new Chart(deltaCanvas, { type: "bar", data: { labels: deltas.map((r) => r.eslabon), datasets: [barDs("Energía anual", deltas.map((r) => r.energia_anual_gwh), colors.navy)] }, options: whiteChartOptions({ scales: { y: { title: { display: true, text: "GWh/año", color: "#334155" }, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } } } }), plugins: [whiteCanvasPlugin("deltasWhiteBg")] });
+    if (deltaCanvas) {
+      const deltaColors = deltas.map((r) => {
+        const label = `${r.eslabon || ""} ${r.comparacion || ""}`;
+        if (/ΔE1|delta\s*1|sam.*pron[oó]stico/i.test(label)) return colors.teal;
+        if (/ΔE2|delta\s*2|centralizado.*disponible/i.test(label)) return colors.orange;
+        if (/ΔE3|delta\s*3|reducciones|generaci[oó]n real/i.test(label)) return colors.red;
+        return colors.navy;
+      });
+      state.reportCharts.deltas = new Chart(deltaCanvas, {
+        type: "bar",
+        data: {
+          labels: deltas.map((r) => r.eslabon),
+          datasets: [{
+            label: "Energía anual",
+            data: deltas.map((r) => r.energia_anual_gwh),
+            backgroundColor: deltaColors.map((color) => `${color}cc`),
+            borderColor: deltaColors,
+            borderWidth: 1,
+            borderRadius: 6,
+          }],
+        },
+        options: whiteChartOptions({ scales: { y: { title: { display: true, text: "GWh/año", color: "#334155" }, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } } } }),
+        plugins: [whiteCanvasPlugin("deltasWhiteBg"), valueLabelPlugin("deltaValueLabels", (value) => `${value > 0 ? "+" : ""}${fmt(value, 1)}`)],
+      });
+    }
 
     const cpCanvas = byId("saReportCurtailmentPriceChart");
     if (cpCanvas) state.reportCharts.cp = new Chart(cpCanvas, { type: "bar", data: { labels: hRows.map((r) => r.hora_label), datasets: [barDs("Reducciones CEN", hRowsCurtailment.map((r) => r.reducciones_cen_mwh), colors.gold, "y"), lineDs("Precio marginal", hRows.map((r) => r.precio_spot_usd_mwh), colors.purple, "y1")] }, options: whiteChartOptions({ scales: { y: { title: { display: true, text: "Curtailment promedio [MWh/h]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } }, y1: { position: "right", title: { display: true, text: "Precio marginal [USD/MWh]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { drawOnChartArea: false } } } }), plugins: [whiteCanvasPlugin("cpWhiteBg")] });
@@ -4937,6 +5087,135 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     style.textContent = `
       .sa-report-doc{background:#fff;color:#1f2937;font-family:Arial,Helvetica,sans-serif;padding:26px 30px;line-height:1.42;max-width:1180px;margin:0 auto;border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.25)}
       .sa-report-main-title p{color:#0fc8aa;font-weight:800;letter-spacing:.03em;margin:0 0 10px}.sa-report-main-title h1{font-size:42px;line-height:1;color:#1f3f67;margin:0 0 10px}.sa-report-main-title h3{font-size:24px;font-weight:500;color:#64748b;margin:0 0 28px}.sa-report-line{height:4px;background:#0fc8aa;margin:18px 0 26px}.sa-report-summary-box{background:#eaf7f3;border:1px solid #cbded9;padding:18px 20px;margin:28px 0;color:#1f2937;font-size:16px}.sa-report-section{break-inside:avoid;margin:28px 0}.sa-report-section h2{background:#1f4773;color:white;border-radius:6px;padding:12px 18px;font-size:23px;margin:0 0 14px;display:flex;gap:20px;align-items:center}.sa-report-section h2 span{color:#0fc8aa;font-weight:900}.sa-report-kpi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sa-report-kpi{background:#f3f6fa;border-left:5px solid #1f4773;border-radius:6px;padding:12px 14px}.sa-report-kpi.green{border-left-color:#0fc8aa}.sa-report-kpi.purple{border-left-color:#9b59b6}.sa-report-kpi.red{border-left-color:#e83f52}.sa-report-kpi.orange{border-left-color:#ff7a3d}.sa-report-kpi p{font-weight:800;font-size:12px;color:#1f4773;margin:0 0 4px;text-transform:uppercase}.sa-report-kpi strong{display:block;font-size:32px;line-height:1;color:#111827}.sa-report-kpi small{display:block;color:#64748b;margin-top:8px}.sa-report-table{width:100%;border-collapse:collapse;margin:10px 0 12px;font-size:14px}.sa-report-table th{background:#1f4773;color:#fff;text-align:left;padding:10px;border:1px solid #d3dce8}.sa-report-table td{padding:9px 10px;border:1px solid #d3dce8;vertical-align:top}.sa-report-table tr:nth-child(even) td{background:#f3f6fa}.sa-report-table.sources th:nth-child(1),.sa-report-table.sources td:nth-child(1){width:22%}.sa-report-table.sources th:nth-child(2),.sa-report-table.sources td:nth-child(2){width:22%}.sa-report-table.sources th:nth-child(3),.sa-report-table.sources td:nth-child(3){width:24%}.sa-report-table.sources th:nth-child(4),.sa-report-table.sources td:nth-child(4){width:32%}.sa-report-table.defense th:nth-child(1),.sa-report-table.defense td:nth-child(1){width:34%}.sa-report-table.defense th:nth-child(2),.sa-report-table.defense td:nth-child(2){width:66%}.sa-report-table.metrics{font-size:12.2px}.sa-report-table.annual{font-size:13.2px}.sa-report-table td,.sa-report-table th{white-space:normal;overflow:visible;text-overflow:clip;word-break:normal;overflow-wrap:anywhere}.sa-report-table.plain th{display:none}.sa-report-table.plain td:first-child{background:#f3f6fa;color:#1f4773;width:250px}.sa-report-note{color:#5b6777;margin:12px 0;font-size:15px}.sa-report-figure-title{text-align:center;color:#64748b;font-style:italic;margin:15px 0 8px}.sa-report-chart{height:300px;background:#fff;border:1px solid #d9e3ef;border-radius:8px;padding:12px;margin:8px 0 12px}.sa-report-list{margin:8px 0 0 24px}.sa-report-list li{margin:8px 0}.sa-report-decision{background:#1f4773;color:#fff;border:2px solid #0fc8aa;padding:18px 22px;margin-top:18px}.sa-report-decision b{color:#0fc8aa}.sa-report-footer{text-align:center;margin-top:28px;padding-top:16px;border-top:1px solid #cbd5e1;color:#4b5f78;font-weight:700}.report-view-shell .sa-report-doc canvas{max-width:100%}@media print{.pdf-hide,.side-nav,.top-controls{display:none!important}.sa-report-doc{box-shadow:none;border-radius:0}.sa-report-section{page-break-inside:avoid}.sa-report-chart{break-inside:avoid}}
+    `;
+    style.textContent += `
+      .pdf-export-mode,.pdf-report-page{background:#fff!important;color:#111827!important}
+      .pdf-export-mode .pdf-hide{display:none!important}
+      .pdf-header,.pdf-footer,.pdf-section,.pdf-table,.pdf-kpi-grid{break-inside:avoid;page-break-inside:avoid}
+      .sa-report-doc{
+        width:1040px;
+        max-width:1040px;
+        padding:22px 26px;
+        background:#fff;
+        color:#111827;
+        box-sizing:border-box;
+      }
+      .sa-report-section{
+        margin:20px 0 0;
+        break-inside:auto;
+        page-break-inside:auto;
+      }
+      .sa-report-section.sa-page-break{
+        break-before:page;
+        page-break-before:always;
+      }
+      .sa-report-section h2{
+        break-after:avoid;
+        page-break-after:avoid;
+        margin:0 0 10px;
+        padding:9px 16px;
+        font-size:20px;
+        line-height:1.18;
+        border-radius:5px;
+      }
+      .sa-section-body{
+        break-before:avoid;
+        page-break-before:avoid;
+      }
+      .sa-report-main-title h1{font-size:37px}
+      .sa-report-main-title h3{font-size:21px;margin-bottom:18px}
+      .sa-report-summary-box{font-size:14px;line-height:1.45;margin:18px 0;padding:14px 16px}
+      .sa-report-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;break-inside:avoid;page-break-inside:avoid}
+      .sa-report-kpi{padding:9px 11px;break-inside:avoid;page-break-inside:avoid}
+      .sa-report-kpi p{font-size:10px}
+      .sa-report-kpi strong{font-size:26px}
+      .sa-report-kpi small{font-size:11px;line-height:1.25}
+      .sa-report-table{
+        width:100%;
+        table-layout:fixed;
+        border-collapse:collapse;
+        font-size:10.4px;
+        line-height:1.3;
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .sa-report-table thead,.sa-report-table tbody,.sa-report-table tr{
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .sa-report-table th,.sa-report-table td{
+        padding:7px 8px;
+        white-space:normal!important;
+        overflow:visible!important;
+        text-overflow:unset!important;
+        word-break:normal!important;
+        overflow-wrap:break-word!important;
+        hyphens:none;
+        vertical-align:top;
+      }
+      .sa-report-table code{
+        white-space:normal!important;
+        overflow-wrap:anywhere!important;
+        word-break:break-word!important;
+        font-size:.92em;
+      }
+      .sa-report-table.sources{font-size:9.6px}
+      .sa-report-table.sources th:nth-child(1),.sa-report-table.sources td:nth-child(1){width:18%}
+      .sa-report-table.sources th:nth-child(2),.sa-report-table.sources td:nth-child(2){width:22%}
+      .sa-report-table.sources th:nth-child(3),.sa-report-table.sources td:nth-child(3){width:24%}
+      .sa-report-table.sources th:nth-child(4),.sa-report-table.sources td:nth-child(4){width:36%}
+      .sa-report-table.annual{font-size:9.9px}
+      .sa-report-table.annual th:nth-child(1),.sa-report-table.annual td:nth-child(1){width:23%}
+      .sa-report-table.annual th:nth-child(2),.sa-report-table.annual td:nth-child(2){width:16%}
+      .sa-report-table.annual th:nth-child(3),.sa-report-table.annual td:nth-child(3){width:17%}
+      .sa-report-table.annual th:nth-child(4),.sa-report-table.annual td:nth-child(4){width:17%}
+      .sa-report-table.annual th:nth-child(5),.sa-report-table.annual td:nth-child(5){width:27%}
+      .sa-report-table.metrics{font-size:8.9px;line-height:1.22}
+      .sa-report-table.metrics th,.sa-report-table.metrics td{padding:6px 6px}
+      .sa-report-table.metrics th:nth-child(1),.sa-report-table.metrics td:nth-child(1){width:34%}
+      .sa-report-table.metrics th:nth-child(2),.sa-report-table.metrics td:nth-child(2){width:10%}
+      .sa-report-table.metrics th:nth-child(3),.sa-report-table.metrics td:nth-child(3){width:10%}
+      .sa-report-table.metrics th:nth-child(4),.sa-report-table.metrics td:nth-child(4){width:10%}
+      .sa-report-table.metrics th:nth-child(5),.sa-report-table.metrics td:nth-child(5){width:10%}
+      .sa-report-table.metrics th:nth-child(6),.sa-report-table.metrics td:nth-child(6){width:12%}
+      .sa-report-table.metrics th:nth-child(7),.sa-report-table.metrics td:nth-child(7){width:14%}
+      .sa-report-table.deltas{font-size:9.8px}
+      .sa-report-table.deltas th:nth-child(1),.sa-report-table.deltas td:nth-child(1){width:13%}
+      .sa-report-table.deltas th:nth-child(2),.sa-report-table.deltas td:nth-child(2){width:33%}
+      .sa-report-table.deltas th:nth-child(3),.sa-report-table.deltas td:nth-child(3){width:17%}
+      .sa-report-table.deltas th:nth-child(4),.sa-report-table.deltas td:nth-child(4){width:37%}
+      .sa-report-table.defense{font-size:8.9px;line-height:1.25}
+      .sa-report-table.defense th,.sa-report-table.defense td{padding:6px 7px}
+      .sa-report-table.defense th:nth-child(1),.sa-report-table.defense td:nth-child(1){width:34%}
+      .sa-report-table.defense th:nth-child(2),.sa-report-table.defense td:nth-child(2){width:66%}
+      .sa-report-note{font-size:12px;line-height:1.35;margin:8px 0}
+      .sa-report-figure-title{font-size:11px;margin:9px 0 6px;break-after:avoid;page-break-after:avoid}
+      .sa-report-chart{
+        height:252px;
+        padding:9px;
+        margin:6px 0 8px;
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .sa-conclusion-section,.sa-annex-section{
+        break-before:page;
+        page-break-before:always;
+      }
+      .sa-conclusion-section .sa-section-body,.sa-conclusion-section .sa-report-decision{
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .sa-conclusion-section p{font-size:12.8px;line-height:1.42}
+      .sa-report-decision{padding:12px 16px;margin-top:12px;font-size:12px;line-height:1.32}
+      .sa-report-footer{font-size:11px;margin-top:18px}
+      @media print{
+        body{background:#fff!important}
+        .app-sidebar,.app-topbar,.side-nav,.top-controls,.report-view-head,.pdf-hide{display:none!important}
+        .sa-report-doc{box-shadow:none!important;border-radius:0!important;margin:0!important;width:100%!important;max-width:none!important;padding:0!important}
+        .sa-page-break{break-before:page;page-break-before:always}
+        .sa-report-section h2{break-after:avoid;page-break-after:avoid}
+        .sa-section-body,.sa-report-table,.sa-report-chart,.sa-report-kpi,.sa-report-decision{break-inside:avoid;page-break-inside:avoid}
+      }
     `;
     document.head.appendChild(style);
   }
@@ -4951,21 +5230,50 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     setText("reportPdfStatus", "Reporte cargado desde JSON");
     setTimeout(() => renderReportCharts(validation, profile, scadaRows), 100);
     const button = byId("exportReportPdfBtn");
-    if (button) {
-      button.onclick = async () => {
+    if (button && button.dataset.saReportExportBound !== "true") {
+      button.dataset.saReportExportBound = "true";
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
         const target = byId("reportBloque1Content");
         if (!target || typeof html2pdf === "undefined") return;
         setText("reportPdfStatus", "Generando PDF...");
-        await html2pdf().set({
-          margin: [8, 8, 8, 8],
-          filename: "reporte_bloque1_ceme1_storage_analytics.pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-          pagebreak: { mode: ["css", "legacy"], avoid: [".sa-report-chart", ".sa-report-table", ".sa-report-kpi"] },
-        }).from(target).save();
-        setText("reportPdfStatus", "PDF generado");
-      };
+        target.classList.add("pdf-export-mode");
+        try {
+          const pdfWorker = html2pdf().set({
+            margin: [7, 8, 8, 8],
+            filename: "reporte_bloque1_ceme1_fv_cen.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", windowWidth: 1040, scrollX: 0, scrollY: 0 },
+            jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+            pagebreak: {
+              mode: ["css", "legacy"],
+              before: [".sa-page-break"],
+              avoid: [".sa-report-section h2", ".sa-section-body", ".sa-report-chart", ".sa-report-table", ".sa-report-table tr", ".sa-report-kpi", ".sa-report-decision"],
+            },
+          }).from(target).toPdf();
+          await pdfWorker.get("pdf").then((pdf) => {
+            const pageCount = pdf.internal.getNumberOfPages();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            for (let page = 1; page <= pageCount; page += 1) {
+              pdf.setPage(page);
+              pdf.setTextColor(15, 39, 66);
+              pdf.setFontSize(7);
+              pdf.text("Storage Analytics | Reporte Bloque 1", 8, 5);
+              pdf.text(`Pagina ${page} de ${pageCount}`, pageWidth - 8, pageHeight - 5, { align: "right" });
+              pdf.text("Storage Analytics - Actividad de Graduacion MIE UC - CEME1 FV + BESS", 8, pageHeight - 5);
+            }
+          });
+          await pdfWorker.save();
+          setText("reportPdfStatus", "PDF generado correctamente");
+        } catch (error) {
+          console.error("No se pudo generar el PDF del Bloque 1", error);
+          setText("reportPdfStatus", "No se pudo generar el PDF");
+        } finally {
+          target.classList.remove("pdf-export-mode");
+        }
+      }, true);
     }
   }
 
