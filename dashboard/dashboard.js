@@ -5100,6 +5100,16 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         color:#111827;
         box-sizing:border-box;
       }
+      .sa-report-doc.sa-pdf-export-doc{
+        width:740px!important;
+        max-width:740px!important;
+        min-width:740px!important;
+        margin:0!important;
+        padding:18px 20px!important;
+        border-radius:0!important;
+        box-shadow:none!important;
+        overflow:visible!important;
+      }
       .sa-report-section{
         margin:20px 0 0;
         break-inside:auto;
@@ -5125,6 +5135,9 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       .sa-report-main-title h1{font-size:37px}
       .sa-report-main-title h3{font-size:21px;margin-bottom:18px}
       .sa-report-summary-box{font-size:14px;line-height:1.45;margin:18px 0;padding:14px 16px}
+      .sa-pdf-export-doc .sa-report-main-title h1{font-size:29px;line-height:1.08}
+      .sa-pdf-export-doc .sa-report-main-title h3{font-size:17px;margin-bottom:12px}
+      .sa-pdf-export-doc .sa-report-summary-box{font-size:11px;line-height:1.36;margin:12px 0;padding:10px 12px}
       .sa-report-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;break-inside:avoid;page-break-inside:avoid}
       .sa-report-kpi{padding:9px 11px;break-inside:avoid;page-break-inside:avoid}
       .sa-report-kpi p{font-size:10px}
@@ -5132,6 +5145,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       .sa-report-kpi small{font-size:11px;line-height:1.25}
       .sa-report-table{
         width:100%;
+        min-width:0!important;
+        max-width:100%!important;
         table-layout:fixed;
         border-collapse:collapse;
         font-size:10.4px;
@@ -5139,6 +5154,21 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         break-inside:avoid;
         page-break-inside:avoid;
       }
+      .sa-pdf-export-doc .sa-report-section{margin-top:16px}
+      .sa-pdf-export-doc .sa-report-section h2{font-size:16px;padding:8px 11px;gap:10px}
+      .sa-pdf-export-doc .sa-report-kpi{padding:7px 8px}
+      .sa-pdf-export-doc .sa-report-kpi p{font-size:8.8px;line-height:1.18}
+      .sa-pdf-export-doc .sa-report-kpi strong{font-size:20px}
+      .sa-pdf-export-doc .sa-report-kpi small{font-size:9px;line-height:1.18}
+      .sa-pdf-export-doc .sa-report-table{width:100%!important;min-width:0!important;max-width:100%!important;font-size:8.4px;line-height:1.2}
+      .sa-pdf-export-doc .sa-report-table th,.sa-pdf-export-doc .sa-report-table td{padding:5px 5px}
+      .sa-pdf-export-doc .sa-report-table.sources{font-size:7.9px}
+      .sa-pdf-export-doc .sa-report-table.metrics{font-size:7.7px}
+      .sa-pdf-export-doc .sa-report-table.defense{font-size:7.7px}
+      .sa-pdf-export-doc .sa-report-note{font-size:9.5px;line-height:1.25}
+      .sa-pdf-export-doc .sa-report-figure-title{font-size:9px}
+      .sa-pdf-export-doc .sa-report-chart{height:210px;padding:7px}
+      .sa-pdf-export-doc .sa-report-decision{font-size:10px;padding:10px 12px}
       .sa-report-table thead,.sa-report-table tbody,.sa-report-table tr{
         break-inside:avoid;
         page-break-inside:avoid;
@@ -5220,6 +5250,49 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     document.head.appendChild(style);
   }
 
+  function cloneReportForPdf(sourceDoc) {
+    const clone = sourceDoc.cloneNode(true);
+    clone.id = "saReportDocPdfClone";
+    clone.classList.add("sa-pdf-export-doc", "pdf-export-mode");
+    clone.querySelectorAll("[id]").forEach((el) => {
+      el.id = `${el.id}PdfClone`;
+    });
+
+    const sourceCanvases = Array.from(sourceDoc.querySelectorAll("canvas"));
+    const cloneCanvases = Array.from(clone.querySelectorAll("canvas"));
+    sourceCanvases.forEach((canvas, index) => {
+      const cloneCanvas = cloneCanvases[index];
+      if (!cloneCanvas) return;
+      try {
+        const img = document.createElement("img");
+        img.src = canvas.toDataURL("image/png", 1);
+        img.alt = canvas.getAttribute("aria-label") || "Grafico del reporte";
+        img.style.display = "block";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "contain";
+        cloneCanvas.replaceWith(img);
+      } catch (error) {
+        console.warn("No se pudo convertir un grafico del reporte a imagen para PDF:", error);
+      }
+    });
+
+    const host = document.createElement("div");
+    host.className = "sa-pdf-export-host";
+    host.style.position = "fixed";
+    host.style.left = "0";
+    host.style.top = "0";
+    host.style.zIndex = "99999";
+    host.style.width = "740px";
+    host.style.maxWidth = "740px";
+    host.style.background = "#ffffff";
+    host.style.overflow = "visible";
+    host.style.pointerEvents = "none";
+    host.appendChild(clone);
+    document.body.appendChild(host);
+    return { host, clone };
+  }
+
   async function renderReportesViewPatched() {
     installReportStyles();
     const content = byId("reportBloque1Content") || byId("view-reportes");
@@ -5235,16 +5308,31 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       button.addEventListener("click", async (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
-        const target = byId("reportBloque1Content");
-        if (!target || typeof html2pdf === "undefined") return;
+        const sourceDoc = byId("saReportDoc");
+        if (!sourceDoc || typeof html2pdf === "undefined") return;
         setText("reportPdfStatus", "Generando PDF...");
-        target.classList.add("pdf-export-mode");
+        button.disabled = true;
+        let exportHost = null;
         try {
+          await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          const prepared = cloneReportForPdf(sourceDoc);
+          exportHost = prepared.host;
+          const target = prepared.clone;
           const pdfWorker = html2pdf().set({
             margin: [7, 8, 8, 8],
             filename: "reporte_bloque1_ceme1_fv_cen.pdf",
             image: { type: "jpeg", quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", windowWidth: 1040, scrollX: 0, scrollY: 0 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: "#ffffff",
+              windowWidth: 740,
+              width: 740,
+              scrollX: 0,
+              scrollY: 0,
+              x: 0,
+              y: 0,
+            },
             jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
             pagebreak: {
               mode: ["css", "legacy"],
@@ -5271,7 +5359,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
           console.error("No se pudo generar el PDF del Bloque 1", error);
           setText("reportPdfStatus", "No se pudo generar el PDF");
         } finally {
-          target.classList.remove("pdf-export-mode");
+          if (exportHost) exportHost.remove();
+          button.disabled = false;
         }
       }, true);
     }

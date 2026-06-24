@@ -3174,7 +3174,7 @@ tbody tr.highlight {
 
 @media print {
   @page {
-    size: A4 portrait;
+    size: letter portrait;
     margin: 8mm;
   }
 
