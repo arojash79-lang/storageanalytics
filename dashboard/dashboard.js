@@ -9,6 +9,25 @@ const $ = (id) => document.getElementById(id);
 const strategySelectValue = () => window.currentStrategyFile || "estrategia_A.json";
 const SCADA_HOURLY_URL = "data/sam_tmy_nasa_vs_cen_horario_scada_lite.json";
 const SCADA_DATA_NOTE = "Los valores FV provienen de SAM; Generación real CEN, Reducciones CEN (curtailment) y precio provienen de CEN/SEN 2025. CEN disponible = Generación real CEN + Reducciones CEN.";
+const DEBUG_SCADA = true;
+const SCADA_FIELD_CANDIDATES = {
+  timestamp: ["timestamp", "fecha_hora", "datetime", "date_time"],
+  caso_sam: ["caso_sam", "caso", "sam_case"],
+  fuente_meteorologica: ["fuente_meteorologica", "fuente", "meteorologia"],
+  sam_e_ac_mwh: ["sam_e_ac_mwh", "sam_ac_mwh", "energia_sam_mwh", "energia_ac_mwh"],
+  sam_p_ac_mw: ["sam_p_ac_mw", "sam_ac_mw", "potencia_sam_mw", "potencia_ac_mw"],
+  generacion_real_cen_mwh: ["generacion_real_cen_mwh", "generacion_real_mwh", "generacion_cen_mwh", "real_cen_mwh", "cen_real_mwh", "inyeccion_cen_mwh", "inyeccion_mwh", "energia_real_cen_mwh", "cen_inyeccion_mwh", "cen_inyeccion_sen_mwh"],
+  reducciones_cen_mwh: ["reducciones_cen_mwh", "reducciones_cen_curtailment_mwh", "curtailment_mwh", "cen_curtailment_mwh", "reducciones_mwh", "vertimiento_mwh", "energia_reducida_mwh", "reduccion_cen_mwh"],
+  cen_disponible_mwh: ["cen_disponible_mwh", "energia_cen_disponible_mwh", "disponible_cen_mwh", "energia_disponible_cen_mwh"],
+  pronostico_centralizado_cen_mwh: ["pronostico_centralizado_cen_mwh", "centralizado_cen_mwh", "pronostico_cen_mwh", "forecast_cen_mwh"],
+  precio_spot_usd_mwh: ["precio_spot_usd_mwh", "precio_prom_usd_mwh", "precio_mirage_220_usd_mwh", "precio_marginal_usd_mwh"],
+  ingreso_generacion_real_cen_usd: ["ingreso_generacion_real_cen_usd", "cen_ingreso_inyeccion_usd"],
+  valor_reducciones_cen_usd: ["valor_reducciones_cen_usd", "cen_valor_curtailment_usd"],
+  residuo_sam_menos_cen_disponible_mwh: ["residuo_sam_menos_cen_disponible_mwh", "residuo_sam_menos_cen_disp_mwh", "residuo_sam_cen_disponible_mwh"],
+  meteo_ghi_wm2: ["meteo_ghi_wm2", "ghi_wm2", "ghi"],
+  meteo_dni_wm2: ["meteo_dni_wm2", "dni_wm2", "dni"],
+  meteo_dhi_wm2: ["meteo_dhi_wm2", "dhi_wm2", "dhi"],
+};
 
 window.addEventListener("DOMContentLoaded", () => {
   buildCharts();
@@ -62,10 +81,56 @@ function pick(obj, keys, fallback = null) {
   return fallback;
 }
 
+function findFirstField(obj, keys) {
+  if (!obj) return { key: null, value: null };
+  const candidates = Array.isArray(keys) ? keys : [keys];
+  for (const key of candidates) {
+    if (
+      Object.prototype.hasOwnProperty.call(obj, key) &&
+      obj[key] !== undefined &&
+      obj[key] !== null &&
+      obj[key] !== ""
+    ) {
+      return { key, value: obj[key] };
+    }
+  }
+  return { key: null, value: null };
+}
+
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === "") return null;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+
+  let cleaned = String(value).trim().replace(/\s|\u00a0/g, "");
+  if (!cleaned) return null;
+
+  const lastComma = cleaned.lastIndexOf(",");
+  const lastDot = cleaned.lastIndexOf(".");
+  if (lastComma >= 0 && lastDot >= 0) {
+    cleaned = lastComma > lastDot
+      ? cleaned.replace(/\./g, "").replace(",", ".")
+      : cleaned.replace(/,/g, "");
+  } else if (lastComma >= 0) {
+    cleaned = cleaned.replace(",", ".");
+  }
+
+  cleaned = cleaned.replace(/[^0-9+\-.eE]/g, "");
+  const number = Number(cleaned);
+  return Number.isFinite(number) ? number : null;
+}
+
 function toNumber(value, fallback = null) {
-  if (value === null || value === undefined || value === "") return fallback;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : fallback;
+  const number = toNumberOrNull(value);
+  return number === null ? fallback : number;
+}
+
+function scadaField(row, canonicalName) {
+  return findFirstField(row, SCADA_FIELD_CANDIDATES[canonicalName] || [canonicalName]);
+}
+
+function scadaNumber(row, canonicalName) {
+  const field = scadaField(row, canonicalName);
+  return { key: field.key, value: toNumberOrNull(field.value) };
 }
 
 function fmt(value, decimals = 1, unit = "") {
@@ -117,10 +182,14 @@ function updateScadaDay(resetIndex = false){
   pause();
   const selectedDate = normalizeDate($("dateInput").value || "2025-05-15");
   const selectedCase = $("samCaseSelect").value || "SAM_NASA_2025";
-  const rows = scadaHourlyRows
-    .filter((row) => normalizeDate(row.timestamp) === selectedDate && String(row.caso_sam || "").trim() === selectedCase)
-    .sort((a,b) => getTimestampTime(a.timestamp) - getTimestampTime(b.timestamp))
-    .map(normalizeScadaRow);
+  const rawRows = scadaHourlyRows
+    .filter((row) => {
+      const timestamp = scadaField(row, "timestamp").value;
+      const casoSam = scadaField(row, "caso_sam").value;
+      return normalizeDate(timestamp) === selectedDate && String(casoSam || "").trim() === selectedCase;
+    })
+    .sort((a,b) => getTimestampTime(scadaField(a, "timestamp").value) - getTimestampTime(scadaField(b, "timestamp").value));
+  const rows = rawRows.map(normalizeScadaRow);
 
   datos = rows;
   indiceActual = resetIndex ? 0 : Math.min(indiceActual, Math.max(0, datos.length - 1));
@@ -134,40 +203,82 @@ function updateScadaDay(resetIndex = false){
     setScadaDataNote(SCADA_DATA_NOTE);
   }
 
+  logScadaDayDiagnostics(selectedDate, selectedCase, rawRows, rows);
   update();
 }
 
 function normalizeScadaRow(row){
-  const timestamp = normalizeTimestamp(row.timestamp);
-  const fvPower = toNumber(row.sam_p_ac_mw);
-  const fvEnergy = toNumber(row.sam_e_ac_mwh);
-  const inyeccion = toNumber(pick(row, ["generacion_real_cen_mwh", "cen_inyeccion_mwh", "cen_inyeccion_sen_mwh"]), 0);
-  const curtailment = toNumber(pick(row, ["reducciones_cen_mwh", "cen_curtailment_mwh", "curtailment_cen_mwh"]), 0);
-  const disponible = toNumber(pick(row, ["cen_disponible_mwh", "energia_cen_disponible_mwh"]), inyeccion + curtailment);
-  const precio = toNumber(pick(row, ["precio_spot_usd_mwh", "precio_prom_usd_mwh", "precio_mirage_220_usd_mwh"]), 0);
-  const residuo = toNumber(
-    pick(row, ["residuo_sam_menos_cen_disponible_mwh", "residuo_sam_menos_cen_disp_mwh", "residuo_sam_cen_disponible_mwh"]),
-    fvEnergy - disponible
-  );
+  const timestampRaw = scadaField(row, "timestamp");
+  const casoSamRaw = scadaField(row, "caso_sam");
+  const fuenteMeteoRaw = scadaField(row, "fuente_meteorologica");
+  const timestamp = normalizeTimestamp(timestampRaw.value);
+  const fvPower = scadaNumber(row, "sam_p_ac_mw");
+  const fvEnergy = scadaNumber(row, "sam_e_ac_mwh");
+  const ghi = scadaNumber(row, "meteo_ghi_wm2");
+  const dni = scadaNumber(row, "meteo_dni_wm2");
+  const dhi = scadaNumber(row, "meteo_dhi_wm2");
+  const generacionReal = scadaNumber(row, "generacion_real_cen_mwh");
+  const reducciones = scadaNumber(row, "reducciones_cen_mwh");
+  const disponibleRaw = scadaNumber(row, "cen_disponible_mwh");
+  const pronostico = scadaNumber(row, "pronostico_centralizado_cen_mwh");
+  const precio = scadaNumber(row, "precio_spot_usd_mwh");
+  const residuoRaw = scadaNumber(row, "residuo_sam_menos_cen_disponible_mwh");
+  const disponible = disponibleRaw.value !== null
+    ? disponibleRaw.value
+    : (generacionReal.value !== null || reducciones.value !== null
+      ? (generacionReal.value || 0) + (reducciones.value || 0)
+      : null);
+  const residuo = residuoRaw.value !== null
+    ? residuoRaw.value
+    : (fvEnergy.value !== null && disponible !== null ? fvEnergy.value - disponible : null);
+  const precioValorizacion = precio.value || 0;
+  const ingreso = scadaNumber(row, "ingreso_generacion_real_cen_usd").value;
+  const valorReducciones = scadaNumber(row, "valor_reducciones_cen_usd").value;
 
   return {
     datetime: timestamp,
-    caso_sam: row.caso_sam,
-    fuente_meteorologica: row.fuente_meteorologica,
-    rawTimestamp: row.timestamp,
-    ghi: toNumber(row.meteo_ghi_wm2),
-    dni: toNumber(row.meteo_dni_wm2),
-    dhi: toNumber(row.meteo_dhi_wm2),
-    fv: fvPower,
-    fvPower,
-    fvEnergy,
-    inyeccion,
-    curtailment,
+    caso_sam: casoSamRaw.value,
+    fuente_meteorologica: fuenteMeteoRaw.value,
+    rawTimestamp: timestampRaw.value,
+    ghi: ghi.value,
+    dni: dni.value,
+    dhi: dhi.value,
+    meteo_ghi_wm2: ghi.value,
+    meteo_dni_wm2: dni.value,
+    meteo_dhi_wm2: dhi.value,
+    sam_p_ac_mw: fvPower.value,
+    sam_e_ac_mwh: fvEnergy.value,
+    generacion_real_cen_mwh: generacionReal.value,
+    reducciones_cen_mwh: reducciones.value,
+    cen_disponible_mwh: disponible,
+    pronostico_centralizado_cen_mwh: pronostico.value,
+    precio_spot_usd_mwh: precio.value,
+    residuo_sam_menos_cen_disponible_mwh: residuo,
+    fv: fvPower.value,
+    fvPower: fvPower.value,
+    fvEnergy: fvEnergy.value,
+    inyeccion: generacionReal.value,
+    curtailment: reducciones.value,
     disponible,
     residuo,
-    pmg: precio,
-    ingreso_inyeccion_usd: toNumber(pick(row, ["ingreso_generacion_real_cen_usd", "cen_ingreso_inyeccion_usd"]), inyeccion * precio),
-    valor_curtailment_usd: toNumber(pick(row, ["valor_reducciones_cen_usd", "cen_valor_curtailment_usd"]), curtailment * precio),
+    pmg: precio.value,
+    ingreso_inyeccion_usd: ingreso !== null
+      ? ingreso
+      : (generacionReal.value !== null ? generacionReal.value * precioValorizacion : null),
+    valor_curtailment_usd: valorReducciones !== null
+      ? valorReducciones
+      : (reducciones.value !== null ? reducciones.value * precioValorizacion : null),
+    __scadaFields: {
+      timestamp: timestampRaw.key,
+      caso_sam: casoSamRaw.key,
+      sam_e_ac_mwh: fvEnergy.key,
+      sam_p_ac_mw: fvPower.key,
+      generacion_real_cen_mwh: generacionReal.key,
+      reducciones_cen_mwh: reducciones.key,
+      cen_disponible_mwh: disponibleRaw.key,
+      pronostico_centralizado_cen_mwh: pronostico.key,
+      precio_spot_usd_mwh: precio.key,
+    },
   };
 }
 
@@ -208,19 +319,19 @@ function getTimestampTime(value){
 }
 
 function getAvailableScadaDates(){
-  return [...new Set(scadaHourlyRows.map((row) => normalizeDate(row.timestamp)).filter(Boolean))].sort();
+  return [...new Set(scadaHourlyRows.map((row) => normalizeDate(scadaField(row, "timestamp").value)).filter(Boolean))].sort();
 }
 
 function getAvailableScadaCases(){
-  return [...new Set(scadaHourlyRows.map((row) => String(row.caso_sam || "").trim()).filter(Boolean))].sort();
+  return [...new Set(scadaHourlyRows.map((row) => String(scadaField(row, "caso_sam").value || "").trim()).filter(Boolean))].sort();
 }
 
 function logScadaLoadDiagnostics(data){
   console.log("SCADA lite cargado:", data.length);
   console.log("Primer registro:", data[0]);
   console.log("Campos disponibles:", Object.keys(data[0] || {}));
-  console.log("Casos disponibles:", [...new Set(data.map((row) => row.caso_sam))]);
-  console.log("Fechas ejemplo:", data.slice(0, 5).map((row) => row.timestamp));
+  console.log("Casos disponibles:", [...new Set(data.map((row) => scadaField(row, "caso_sam").value))]);
+  console.log("Fechas ejemplo:", data.slice(0, 5).map((row) => scadaField(row, "timestamp").value));
 }
 
 function logScadaNoMatches(selectedDate, selectedCase){
@@ -232,6 +343,52 @@ function logScadaNoMatches(selectedDate, selectedCase){
     fechaMaximaDisponible: dates[dates.length - 1] || null,
     casosDisponibles: getAvailableScadaCases(),
     primerRegistro: scadaHourlyRows[0] || null,
+  });
+}
+
+function logScadaDayDiagnostics(selectedDate, selectedCase, rawRows, normalizedRows){
+  if(!DEBUG_SCADA) return;
+
+  if(!normalizedRows.length){
+    console.warn("[SCADA] Dia sin filas normalizadas", {
+      selectedDate,
+      selectedCase,
+      filasCrudas: rawRows.length,
+    });
+    return;
+  }
+
+  const sumField = (key) => normalizedRows.reduce((acc, row) => {
+    const value = toNumberOrNull(row[key]);
+    return value === null ? acc : acc + value;
+  }, 0);
+  const maxField = (key) => normalizedRows.reduce((acc, row) => {
+    const value = toNumberOrNull(row[key]);
+    return value === null ? acc : Math.max(acc, value);
+  }, 0);
+  const firstPositive = (key) => normalizedRows.find((row) => (toNumberOrNull(row[key]) || 0) > 0) || null;
+  const maxIdentityError = normalizedRows.reduce((acc, row) => {
+    const disponible = toNumberOrNull(row.cen_disponible_mwh);
+    const generacion = toNumberOrNull(row.generacion_real_cen_mwh);
+    const reducciones = toNumberOrNull(row.reducciones_cen_mwh);
+    if(disponible === null || generacion === null || reducciones === null) return acc;
+    return Math.max(acc, Math.abs(disponible - (generacion + reducciones)));
+  }, 0);
+
+  console.log(`[SCADA] Dia ${selectedDate} / ${selectedCase}: ${normalizedRows.length} registros normalizados`);
+  console.log("[SCADA] Campos usados:", normalizedRows[0].__scadaFields || {});
+  console.log("[SCADA] Reducciones CEN (curtailment):", {
+    suma_mwh: sumField("reducciones_cen_mwh"),
+    max_mwh: maxField("reducciones_cen_mwh"),
+    primer_registro_positivo: firstPositive("reducciones_cen_mwh"),
+  });
+  console.log("[SCADA] Generacion real CEN:", {
+    suma_mwh: sumField("generacion_real_cen_mwh"),
+    max_mwh: maxField("generacion_real_cen_mwh"),
+    primer_registro_positivo: firstPositive("generacion_real_cen_mwh"),
+  });
+  console.log("[SCADA] Control CEN disponible = Generacion real CEN + Reducciones CEN:", {
+    max_error_absoluto_mwh: maxIdentityError,
   });
 }
 
@@ -298,28 +455,28 @@ function update(){
   const dd = validDate(date) ? `${date.toLocaleDateString("es-CL")} · ${displaySamCase(d.caso_sam, d.fuente_meteorologica)}` : "Sin datos";
 
   set("simHour", hh); set("simDate", dd); set("sliderBubble", hh);
-  set("ghi", n(d.ghi)); set("fv", n(d.fv,1)); set("curtailment", n(d.curtailment,1)); set("inyeccion", n(d.inyeccion,1));
-  set("carga", n(d.disponible,1)); set("descarga", n(d.residuo,1)); set("soc", "--"); set("pmg", n(d.pmg,1));
+  set("ghi", n(d.meteo_ghi_wm2 ?? d.ghi)); set("fv", n(d.sam_p_ac_mw ?? d.fv,1)); set("curtailment", n(d.reducciones_cen_mwh,1)); set("inyeccion", n(d.generacion_real_cen_mwh,1));
+  set("carga", n(d.cen_disponible_mwh,1)); set("descarga", n(d.residuo_sam_menos_cen_disponible_mwh,1)); set("soc", "--"); set("pmg", n(d.precio_spot_usd_mwh,1));
   set("socLarge", "--"); set("energiaAlmacenada", "En desarrollo");
   set("energiaNominal", "No disponibles"); set("pMaxCarga", "--"); set("pMaxDescarga", "--"); set("eficiencia", "--");
   set("temperatura", "--"); set("soh", "--"); set("sohActual", "No disponible"); set("efc", "--");
   set("perdidaCapacidad", "No validada"); set("costoDeg2", "No calculado"); set("beneficio", "Módulo en desarrollo");
 
-  set("ghiSub", `Máx. día: ${n(max(dayRows,"ghi"))} W/m²`);
-  set("fvSub", `Máx. día: ${n(max(dayRows,"fvPower"),1)} MW`);
-  const pctCurt = d.disponible ? (d.curtailment/d.disponible)*100 : 0;
-  const pctInj = d.disponible ? (d.inyeccion/d.disponible)*100 : 0;
+  set("ghiSub", `Máx. día: ${n(max(dayRows,"meteo_ghi_wm2"))} W/m²`);
+  set("fvSub", `Máx. día: ${n(max(dayRows,"sam_p_ac_mw"),1)} MW`);
+  const pctCurt = d.cen_disponible_mwh ? (d.reducciones_cen_mwh/d.cen_disponible_mwh)*100 : 0;
+  const pctInj = d.cen_disponible_mwh ? (d.generacion_real_cen_mwh/d.cen_disponible_mwh)*100 : 0;
   set("curtSub", `${n(pctCurt,1)}% de CEN disponible`);
   set("injSub", `${n(pctInj,1)}% de CEN disponible`);
-  set("pmgSub", `Promedio día: ${n(avg(dayRows,"pmg"),1)}`);
+  set("pmgSub", `Promedio día: ${n(avg(dayRows,"precio_spot_usd_mwh"),1)}`);
 
-  set("energiaFvDia", `${n(sum(dayRows,"fvEnergy"),1)} MWh`);
-  set("energiaDispDia", `${n(sum(dayRows,"disponible"),1)} MWh`);
-  set("energiaInyDia", `${n(sum(dayRows,"inyeccion"),1)} MWh`);
-  set("curtailmentDia", `${n(sum(dayRows,"curtailment"),1)} MWh`);
+  set("energiaFvDia", `${n(sum(dayRows,"sam_e_ac_mwh"),1)} MWh`);
+  set("energiaDispDia", `${n(sum(dayRows,"cen_disponible_mwh"),1)} MWh`);
+  set("energiaInyDia", `${n(sum(dayRows,"generacion_real_cen_mwh"),1)} MWh`);
+  set("curtailmentDia", `${n(sum(dayRows,"reducciones_cen_mwh"),1)} MWh`);
   set("ingreso", `USD ${money(sum(dayRows,"ingreso_inyeccion_usd"))}`);
   set("valorCurtDia", `USD ${money(sum(dayRows,"valor_curtailment_usd"))}`);
-  set("curtRecDia", `${n(sum(dayRows,"residuo"),1)} MWh`);
+  set("curtRecDia", `${n(sum(dayRows,"residuo_sam_menos_cen_disponible_mwh"),1)} MWh`);
 
   if($("batteryFill")) $("batteryFill").style.height = "0%";
   updateCharts(dayRows, rowsUntil);
@@ -333,17 +490,17 @@ function updateCharts(dayRows, rowsUntil){
 
   const labels = dayRows.map(x => hourLabel(x.datetime));
   const labelsUntil = rowsUntil.map(x => hourLabel(x.datetime));
-  setChart(charts.operation, labels, ["fvEnergy","disponible","inyeccion","curtailment","pmg"].map(k => dayRows.map(x => x[k] || 0)));
-  setChart(charts.radiation, labels, ["ghi","dni","dhi"].map(k => dayRows.map(x => x[k] || 0)));
-  setChart(charts.soc, labels, [dayRows.map(x => x.residuo || 0)]);
-  setChart(charts.pmg, labels, [dayRows.map(x => x.pmg || 0)]);
-  setChart(charts.sparkGhi, labelsUntil, [rowsUntil.map(x=>x.ghi||0)]);
-  setChart(charts.sparkFv, labelsUntil, [rowsUntil.map(x=>x.fvPower||0)]);
-  setChart(charts.sparkCurt, labelsUntil, [rowsUntil.map(x=>x.curtailment||0)]);
-  setChart(charts.sparkInj, labelsUntil, [rowsUntil.map(x=>x.inyeccion||0)]);
-  setChart(charts.sparkCarga, labelsUntil, [rowsUntil.map(x=>x.disponible||0)]);
-  setChart(charts.sparkDescarga, labelsUntil, [rowsUntil.map(x=>x.residuo||0)]);
-  setChart(charts.sparkPmg, labelsUntil, [rowsUntil.map(x=>x.pmg||0)]);
+  setChart(charts.operation, labels, ["sam_e_ac_mwh","cen_disponible_mwh","generacion_real_cen_mwh","reducciones_cen_mwh","precio_spot_usd_mwh"].map(k => dayRows.map(x => toNumberOrNull(x[k]) ?? 0)));
+  setChart(charts.radiation, labels, ["meteo_ghi_wm2","meteo_dni_wm2","meteo_dhi_wm2"].map(k => dayRows.map(x => toNumberOrNull(x[k]) ?? 0)));
+  setChart(charts.soc, labels, [dayRows.map(x => toNumberOrNull(x.residuo_sam_menos_cen_disponible_mwh) ?? 0)]);
+  setChart(charts.pmg, labels, [dayRows.map(x => toNumberOrNull(x.precio_spot_usd_mwh) ?? 0)]);
+  setChart(charts.sparkGhi, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.meteo_ghi_wm2) ?? 0)]);
+  setChart(charts.sparkFv, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.sam_p_ac_mw) ?? 0)]);
+  setChart(charts.sparkCurt, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.reducciones_cen_mwh) ?? 0)]);
+  setChart(charts.sparkInj, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.generacion_real_cen_mwh) ?? 0)]);
+  setChart(charts.sparkCarga, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.cen_disponible_mwh) ?? 0)]);
+  setChart(charts.sparkDescarga, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.residuo_sam_menos_cen_disponible_mwh) ?? 0)]);
+  setChart(charts.sparkPmg, labelsUntil, [rowsUntil.map(x=>toNumberOrNull(x.precio_spot_usd_mwh) ?? 0)]);
 }
 
 function buildCharts(){
@@ -370,7 +527,64 @@ function buildCharts(){
 function lineChart(id, labels, colors, spark=false){
   const ctx = $(id);
   if (!ctx || typeof Chart === "undefined") return null;
-  return new Chart(ctx, {type:"line",data:{labels:[],datasets:labels.map((label,i)=>({label,data:[],borderColor:colors[i],backgroundColor:colors[i]+"22",borderWidth:spark?1.5:2,pointRadius:0,tension:.28,fill:false}))},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:!spark,labels:{color:"#dbe9fa",boxWidth:18,font:{size:10}}},tooltip:{enabled:!spark}},scales:{x:{display:!spark,ticks:{color:"#b9c7d8",maxTicksLimit:9,font:{size:10}},grid:{color:"rgba(255,255,255,.05)"}},y:{display:!spark,ticks:{color:"#b9c7d8",font:{size:10}},grid:{color:"rgba(255,255,255,.06)"}}}}});
+  const isOperationChart = id === "operationChart";
+  const scales = {
+    x: {
+      display: !spark,
+      ticks: { color: "#b9c7d8", maxTicksLimit: 9, font: { size: 10 } },
+      grid: { color: "rgba(255,255,255,.05)" },
+    },
+    y: {
+      display: !spark,
+      ticks: { color: "#b9c7d8", font: { size: 10 } },
+      grid: { color: "rgba(255,255,255,.06)" },
+    },
+  };
+
+  if (isOperationChart) {
+    scales.y.title = { display: true, text: "MWh", color: "#b9c7d8" };
+    scales.y1 = {
+      display: true,
+      position: "right",
+      ticks: { color: "#b9c7d8", font: { size: 10 } },
+      grid: { drawOnChartArea: false },
+      title: { display: true, text: "USD/MWh", color: "#b9c7d8" },
+    };
+  }
+
+  return new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: labels.map((label, i) => {
+        const isPrice = isOperationChart && i === 4;
+        const isGeneracionReal = isOperationChart && i === 2;
+        return {
+          label,
+          data: [],
+          borderColor: colors[i],
+          backgroundColor: `${colors[i]}22`,
+          borderWidth: isGeneracionReal ? 3 : (spark ? 1.5 : 2),
+          pointRadius: isGeneracionReal && !spark ? 1.5 : 0,
+          pointHoverRadius: isGeneracionReal && !spark ? 3 : 0,
+          tension: .28,
+          fill: false,
+          yAxisID: isPrice ? "y1" : "y",
+          order: isGeneracionReal ? 0 : i + 1,
+        };
+      }),
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: !spark, labels: { color: "#dbe9fa", boxWidth: 18, font: { size: 10 } } },
+        tooltip: { enabled: !spark },
+      },
+      scales,
+    },
+  });
 }
 function setChart(chart, labels, arrays){
   if (!chart || !chart.data || !Array.isArray(chart.data.datasets) || typeof chart.update !== "function") return;
@@ -400,10 +614,10 @@ function getRowsUntilCurrentHour(rows, dt){ const t = new Date(dt).getTime(); re
 function hourLabel(dt){ const d=new Date(dt); return validDate(d)?d.toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"}):"--"; }
 function validDate(d){ return d instanceof Date && !isNaN(d.getTime()); }
 function set(id,value){ const el=$(id); if(el) el.textContent = value ?? "--"; }
-function n(v,dec=0){ if(v===undefined||v===null||Number.isNaN(Number(v))) return "--"; return Number(v).toLocaleString("es-CL",{maximumFractionDigits:dec,minimumFractionDigits:dec}); }
-function money(v){ if(v===undefined||v===null||Number.isNaN(Number(v))) return "--"; return Number(v).toLocaleString("es-CL",{maximumFractionDigits:0}); }
-function sum(rows,k){ return rows.reduce((a,b)=>a+(Number(b[k])||0),0); }
-function max(rows,k){ return rows.reduce((m,b)=>Math.max(m,Number(b[k])||0),0); }
+function n(v,dec=0){ const value = toNumberOrNull(v); if(value === null) return "--"; return value.toLocaleString("es-CL",{maximumFractionDigits:dec,minimumFractionDigits:dec}); }
+function money(v){ const value = toNumberOrNull(v); if(value === null) return "--"; return value.toLocaleString("es-CL",{maximumFractionDigits:0}); }
+function sum(rows,k){ return rows.reduce((a,b)=>{ const value = toNumberOrNull(b[k]); return value === null ? a : a + value; },0); }
+function max(rows,k){ return rows.reduce((m,b)=>{ const value = toNumberOrNull(b[k]); return value === null ? m : Math.max(m,value); },0); }
 function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 /* ============================================================
    MÓDULO RECURSO SOLAR (TMY)
@@ -425,6 +639,10 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     compare: {
       primary: "data/comparativa_recurso_solar_tmy_vs_nasa_dashboard_bundle.json",
       fallback: "data/comparativa_recurso_solar_tmy_vs_nasa_dashboard_lite.json",
+    },
+    ceme1: {
+      primary: "data/recurso_solar_ceme1_dashboard_bundle.json",
+      fallback: null,
     },
   };
 
@@ -722,8 +940,85 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   }
 
   function solarNumeric(value) {
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
+    return toNumberOrNull(value);
+  }
+
+  function solarMetadataObjects(bundle) {
+    const objects = [];
+    const add = (value) => {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        objects.push(value);
+      }
+    };
+
+    add(bundle?.metadata);
+    add(bundle?.location);
+    add(bundle?.sitio);
+    add(bundle?.estacion);
+    add(bundle?.kpis);
+    add(bundle);
+    return objects;
+  }
+
+  function readSolarMetadataValue(bundle, keys) {
+    const candidates = Array.isArray(keys) ? keys : [keys];
+    for (const source of solarMetadataObjects(bundle)) {
+      const field = findFirstField(source, candidates);
+      if (field.value !== null && field.value !== undefined && field.value !== "") {
+        return field.value;
+      }
+    }
+    return null;
+  }
+
+  function getSolarLocationMetadata(bundleTmy, bundleNasa, bundleCompare, bundleCeme1) {
+    const bundles = [bundleCompare, bundleTmy, bundleNasa, bundleCeme1];
+    const read = (keys) => {
+      for (const bundle of bundles) {
+        const value = readSolarMetadataValue(bundle, keys);
+        if (value !== null && value !== undefined && value !== "") return value;
+      }
+      return null;
+    };
+
+    return {
+      ubicacion: read(["ubicacion", "location_name", "nombre_ubicacion", "sitio"]) || "No disponible",
+      latitud: toNumberOrNull(read(["latitud", "latitude", "lat", "lat_decimal", "latitud_decimal"])),
+      longitud: toNumberOrNull(read(["longitud", "longitude", "lon", "lng", "long_decimal", "longitud_decimal"])),
+      elevacion_m: toNumberOrNull(read(["elevacion_m", "elevation_m", "elevacion", "elevation", "altitud_m", "altitude_m", "altitud"])),
+    };
+  }
+
+  function buildSolarMetadataForMode(mode, currentBundle, tmyBundle, nasaBundle, compareBundle, ceme1Bundle) {
+    const location = getSolarLocationMetadata(tmyBundle, nasaBundle, compareBundle, ceme1Bundle);
+    const currentMetadata = currentBundle?.metadata || {};
+    const modeCopy = {
+      tmy: {
+        fuente: "Explorador Solar de Chile",
+        tipo_dato: "TMY",
+      },
+      nasa: {
+        fuente: "NASA POWER",
+        tipo_dato: "Año calendario 2025",
+      },
+      compare: {
+        fuente: "Explorador Solar de Chile / NASA POWER",
+        tipo_dato: "TMY / Año calendario 2025",
+      },
+    }[mode] || {};
+
+    return {
+      ...currentMetadata,
+      fuente: modeCopy.fuente || currentMetadata.fuente || "No disponible",
+      tipo_dato: modeCopy.tipo_dato || currentMetadata.tipo_dato || "No disponible",
+      ubicacion: location.ubicacion || currentMetadata.ubicacion || "No disponible",
+      latitude: location.latitud,
+      longitude: location.longitud,
+      elevation_m: location.elevacion_m,
+      latitud: location.latitud,
+      longitud: location.longitud,
+      elevacion_m: location.elevacion_m,
+    };
   }
 
   function solarAverage(values) {
@@ -924,21 +1219,25 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   function renderSolarMetadata(metadata) {
     if (!metadata) return;
 
-    setText("solarMetaFuente", metadata.fuente || "Explorador Solar");
-    setText("solarMetaTipo", metadata.tipo_dato || "TMY");
-    setText("solarMetaUbicacion", metadata.ubicacion || "María Elena / CEME1");
+    setText("solarMetaFuente", metadata.fuente || "No disponible");
+    setText("solarMetaTipo", metadata.tipo_dato || "No disponible");
+    setText("solarMetaUbicacion", metadata.ubicacion || "No disponible");
 
-    const lat = metadata.latitude !== null && metadata.latitude !== undefined
-      ? `${formatNumber(metadata.latitude, 4)}°`
-      : "--";
+    const latValue = metadata.latitud ?? metadata.latitude;
+    const lonValue = metadata.longitud ?? metadata.longitude;
+    const elevValue = metadata.elevacion_m ?? metadata.elevation_m;
 
-    const lon = metadata.longitude !== null && metadata.longitude !== undefined
-      ? `${formatNumber(metadata.longitude, 4)}°`
-      : "--";
+    const lat = latValue !== null && latValue !== undefined
+      ? `${formatNumber(latValue, 4)}°`
+      : "No disponible";
 
-    const elev = metadata.elevation_m !== null && metadata.elevation_m !== undefined
-      ? `${formatNumber(metadata.elevation_m, 0)} m`
-      : "--";
+    const lon = lonValue !== null && lonValue !== undefined
+      ? `${formatNumber(lonValue, 4)}°`
+      : "No disponible";
+
+    const elev = elevValue !== null && elevValue !== undefined
+      ? `${formatNumber(elevValue, 0)} m`
+      : "No disponible";
 
     setText("solarMetaLat", lat);
     setText("solarMetaLon", lon);
@@ -1253,13 +1552,24 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     let bundle;
     if (solarState.currentMode === "compare") {
-      const [tmyBundle, nasaBundle] = await Promise.all([
+      const [tmyBundle, nasaBundle, ceme1Bundle] = await Promise.all([
         loadSolarBundle("tmy"),
         loadSolarBundle("nasa"),
+        loadSolarBundle("ceme1"),
       ]);
       bundle = normalizeCompareSolarBundleV2(rawBundle, tmyBundle, nasaBundle);
+      bundle.metadata = buildSolarMetadataForMode("compare", rawBundle, tmyBundle, nasaBundle, rawBundle, ceme1Bundle);
     } else {
+      const ceme1Bundle = await loadSolarBundle("ceme1");
       bundle = normalizeSolarResourceBundleV2(rawBundle);
+      bundle.metadata = buildSolarMetadataForMode(
+        solarState.currentMode,
+        rawBundle,
+        solarState.currentMode === "tmy" ? rawBundle : null,
+        solarState.currentMode === "nasa" ? rawBundle : null,
+        null,
+        ceme1Bundle
+      );
     }
 
     solarState.renderedBundle = bundle;
