@@ -970,6 +970,108 @@ tbody tr.highlight {
   height: 100% !important;
 }
 
+.solar-compare-metrics {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.solar-compare-metrics-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(75, 142, 205, 0.36);
+  border-radius: 8px;
+  background: rgba(5, 19, 36, 0.78);
+}
+
+.solar-compare-metrics-table {
+  width: 100%;
+  min-width: 780px;
+  border-collapse: collapse;
+  color: #dbe9fa;
+  font-size: 0.74rem;
+}
+
+.solar-compare-metrics-table th,
+.solar-compare-metrics-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(75, 142, 205, 0.22);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.solar-compare-metrics-table th {
+  background: rgba(18, 64, 107, 0.92);
+  color: #ffffff;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.solar-compare-metrics-table th:first-child,
+.solar-compare-metrics-table td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: rgba(5, 19, 36, 0.98);
+}
+
+.solar-compare-metrics-table th:first-child {
+  background: rgba(18, 64, 107, 0.98);
+}
+
+.solar-compare-metrics-table tbody tr:nth-child(even) td {
+  background-color: rgba(16, 44, 78, 0.42);
+}
+
+.solar-compare-metrics-table tbody tr:hover td {
+  background-color: rgba(42, 108, 166, 0.28);
+}
+
+.solar-compare-metrics-var {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.solar-compare-metrics-var strong {
+  color: #ffffff;
+  font-size: 0.78rem;
+}
+
+.solar-compare-metrics-var small {
+  color: #8fb4d8;
+  font-size: 0.66rem;
+}
+
+.solar-compare-metrics-empty {
+  padding: 28px 18px;
+  min-height: 190px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(75, 142, 205, 0.42);
+  border-radius: 8px;
+  color: #b8cbe3;
+  text-align: center;
+  background: rgba(5, 19, 36, 0.58);
+}
+
+.solar-compare-metrics-empty-cell {
+  height: 190px;
+  color: #b8cbe3;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+.solar-compare-metrics-note {
+  margin: 0;
+  color: #a9c2dd;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
 
 /* ============================================================
    TARJETA FUENTE Y ALCANCE
@@ -1031,6 +1133,10 @@ tbody tr.highlight {
   .heatmap-box {
     height: 250px;
   }
+
+  .solar-compare-metrics {
+    min-height: 250px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1049,6 +1155,15 @@ tbody tr.highlight {
   .chart-box.chart-medium,
   .heatmap-box {
     height: 230px;
+  }
+
+  .solar-compare-metrics {
+    min-height: 230px;
+  }
+
+  .solar-compare-metrics-table th,
+  .solar-compare-metrics-table td {
+    padding: 8px 9px;
   }
 }
 

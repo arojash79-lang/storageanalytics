@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260624-0025" />
+  <link rel="stylesheet" href="dashboard.css?v=20260627-0011" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
-  <script src="dashboard.js?v=20260627-0010" defer></script>
+  <script src="dashboard.js?v=20260627-0011" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -633,11 +633,34 @@
 
         <article class="card solar-chart-card">
           <div class="panel-head">
-            <h3>MAPA DE CALOR GHI</h3>
-            <small>Hora del día vs día del año típico</small>
+            <h3 id="solarComparePanelTitle">MAPA DE CALOR GHI</h3>
+            <small id="solarComparePanelSubtitle">Hora del día vs día del año típico</small>
           </div>
-          <div class="heatmap-box">
+          <div id="solarHeatmapPanel" class="heatmap-box">
             <canvas id="solarHeatmapGhi"></canvas>
+          </div>
+          <div id="solarCompareMetricsPanel" class="solar-compare-metrics" hidden>
+            <div class="solar-compare-metrics-table-wrap">
+              <table class="solar-compare-metrics-table">
+                <thead>
+                  <tr>
+                    <th>Variable</th>
+                    <th>MBE</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>nRMSE (%)</th>
+                    <th>MAPE (%)</th>
+                    <th>Correlación r</th>
+                    <th>R²</th>
+                    <th>Sesgo (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="solarCompareMetricsBody"></tbody>
+              </table>
+            </div>
+            <p class="solar-compare-metrics-note">
+              La comparación no constituye una validación meteorológica, sino un contraste entre una serie típica de largo plazo (TMY) y una serie anual histórica 2025 (NASA POWER).
+            </p>
           </div>
         </article>
       </section>

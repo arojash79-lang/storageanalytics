@@ -645,9 +645,12 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       fallback: null,
     },
   };
+  const SOLAR_COMPARE_METRICS_URL = "data/comparativa_recurso_solar_tmy_vs_nasa_metricas_dashboard.json";
 
   const solarState = {
     bundles: {},
+    compareMetricsBundle: null,
+    compareMetricsLoaded: false,
     renderedBundle: null,
     currentMode: "tmy",
     charts: {},
@@ -791,6 +794,22 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       console.error(`No se pudo cargar el JSON de recurso solar (${source.primary}):`, error);
       return null;
     }
+  }
+
+  async function loadSolarCompareMetricsBundle() {
+    if (solarState.compareMetricsLoaded) {
+      return solarState.compareMetricsBundle;
+    }
+
+    solarState.compareMetricsLoaded = true;
+    try {
+      solarState.compareMetricsBundle = await loadJsonWithFallback(SOLAR_COMPARE_METRICS_URL);
+    } catch (error) {
+      console.warn("No se pudo cargar el JSON de metricas comparativas TMY vs NASA:", error);
+      solarState.compareMetricsBundle = null;
+    }
+
+    return solarState.compareMetricsBundle;
   }
 
   function setSolarHeader(mode) {
@@ -1434,6 +1453,94 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     });
   }
 
+  function escapeSolarHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function formatSolarMetric(value, decimals = 2) {
+    const number = solarNumeric(value);
+    if (number === null) return "--";
+    return number.toLocaleString("es-CL", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function getSolarCompareMetricRows(metricsBundle) {
+    const rows = Array.isArray(metricsBundle?.metricas_dashboard)
+      ? metricsBundle.metricas_dashboard
+      : (Array.isArray(metricsBundle?.metricas) ? metricsBundle.metricas : []);
+    const variables = ["GHI", "DNI", "DHI"];
+
+    return variables
+      .map((variable) => rows.find((row) =>
+        String(row.variable || "").toUpperCase() === variable &&
+        /horaria/i.test(String(row.escala || ""))
+      ) || rows.find((row) => String(row.variable || "").toUpperCase() === variable))
+      .filter(Boolean);
+  }
+
+  function setSolarComparePanelMode(isCompareMode) {
+    setText(
+      "solarComparePanelTitle",
+      isCompareMode ? "Métricas comparativas TMY vs NASA POWER 2025" : "MAPA DE CALOR GHI"
+    );
+    setText(
+      "solarComparePanelSubtitle",
+      isCompareMode ? "Contraste horario NASA POWER 2025 − TMY Explorador Solar" : "Hora del día vs día del año típico"
+    );
+
+    byId("solarHeatmapPanel")?.toggleAttribute("hidden", isCompareMode);
+    byId("solarCompareMetricsPanel")?.toggleAttribute("hidden", !isCompareMode);
+  }
+
+  function renderSolarCompareMetricsMessage(message) {
+    const tbody = byId("solarCompareMetricsBody");
+    if (!tbody) return;
+    tbody.innerHTML = `<tr><td class="solar-compare-metrics-empty-cell" colspan="9">${escapeSolarHtml(message)}</td></tr>`;
+  }
+
+  function renderSolarCompareMetricsTable(metricsBundle) {
+    setSolarComparePanelMode(true);
+    const tbody = byId("solarCompareMetricsBody");
+    if (!tbody) return;
+
+    const rows = getSolarCompareMetricRows(metricsBundle);
+    const hasValues = rows.some((row) =>
+      ["mbe_nasa_menos_tmy", "mae", "rmse", "nrmse_pct_media_tmy", "mape_pct", "correlacion_r", "r2", "sesgo_pct_media_tmy"]
+        .some((key) => solarNumeric(row[key]) !== null)
+    );
+
+    if (!rows.length || !hasValues) {
+      renderSolarCompareMetricsMessage("Métricas comparativas no disponibles. Ejecute nuevamente el script de recurso solar.");
+      return;
+    }
+
+    tbody.innerHTML = rows.map((row) => `
+      <tr>
+        <td>
+          <span class="solar-compare-metrics-var">
+            <strong>${escapeSolarHtml(row.variable)}</strong>
+            <small>${escapeSolarHtml(row.unidad || "")}</small>
+          </span>
+        </td>
+        <td>${formatSolarMetric(row.mbe_nasa_menos_tmy, 2)}</td>
+        <td>${formatSolarMetric(row.mae, 2)}</td>
+        <td>${formatSolarMetric(row.rmse, 2)}</td>
+        <td>${formatSolarMetric(row.nrmse_pct_media_tmy, 2)}</td>
+        <td>${formatSolarMetric(row.mape_pct, 2)}</td>
+        <td>${formatSolarMetric(row.correlacion_r, 3)}</td>
+        <td>${formatSolarMetric(row.r2, 3)}</td>
+        <td>${formatSolarMetric(row.sesgo_pct_media_tmy, 2)}</td>
+      </tr>
+    `).join("");
+  }
+
   function colorForGhi(value, maxValue) {
     if (!value || value <= 0) return "rgba(4, 13, 27, 0.95)";
 
@@ -1551,12 +1658,14 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     }
 
     let bundle;
+    let compareMetricsBundle = null;
     if (solarState.currentMode === "compare") {
       const [tmyBundle, nasaBundle, ceme1Bundle] = await Promise.all([
         loadSolarBundle("tmy"),
         loadSolarBundle("nasa"),
         loadSolarBundle("ceme1"),
       ]);
+      compareMetricsBundle = await loadSolarCompareMetricsBundle();
       bundle = normalizeCompareSolarBundleV2(rawBundle, tmyBundle, nasaBundle);
       bundle.metadata = buildSolarMetadataForMode("compare", rawBundle, tmyBundle, nasaBundle, rawBundle, ceme1Bundle);
     } else {
@@ -1576,6 +1685,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     renderSolarKpis(bundle.kpis);
     renderSolarMetadata(bundle.metadata);
+    if (solarState.currentMode === "compare") {
+      renderSolarCompareMetricsTable(compareMetricsBundle);
+    } else {
+      setSolarComparePanelMode(false);
+    }
 
     destroySolarCharts();
     if (typeof Chart === "undefined") {
@@ -1589,9 +1703,11 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     renderSolarTemperatura(bundle.mensual);
     renderSolarViento(bundle.mensual);
 
-    setTimeout(() => {
-      renderSolarHeatmap(bundle.horario);
-    }, 50);
+    if (solarState.currentMode !== "compare") {
+      setTimeout(() => {
+        renderSolarHeatmap(bundle.horario);
+      }, 50);
+    }
   }
 
   function showDashboardView(viewName) {
@@ -1664,6 +1780,9 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
       const solarView = byId("view-solar");
 
       if (!solarView || !solarView.classList.contains("active")) {
+        return;
+      }
+      if (solarState.currentMode === "compare") {
         return;
       }
 
