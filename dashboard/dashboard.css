@@ -1065,6 +1065,18 @@ tbody tr.highlight {
   white-space: normal !important;
 }
 
+.solar-compare-metrics-interpretation {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(75, 142, 205, 0.32);
+  border-left: 3px solid #31b7ff;
+  border-radius: 8px;
+  background: rgba(9, 31, 56, 0.72);
+  color: #dbe9fa;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
 .solar-compare-metrics-note {
   margin: 0;
   color: #a9c2dd;

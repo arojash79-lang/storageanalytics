@@ -1464,11 +1464,58 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
   function formatSolarMetric(value, decimals = 2) {
     const number = solarNumeric(value);
-    if (number === null) return "--";
+    if (number === null) return "N/D";
     return number.toLocaleString("es-CL", {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
+  }
+
+  function readSolarMetricNumber(row, keys) {
+    const value = pick(row, keys, null);
+    return solarNumeric(value);
+  }
+
+  function getSolarAnnualDeltaPct(row) {
+    const direct = readSolarMetricNumber(row, [
+      "delta_anual_pct",
+      "delta_pct_anual",
+      "delta_pct_nasa_respecto_tmy",
+      "diferencia_anual_pct",
+      "variacion_anual_pct",
+      "sesgo_anual_pct",
+    ]);
+    if (direct !== null) return direct;
+
+    const tmyAnnual = readSolarMetricNumber(row, [
+      "tmy_anual",
+      "tmy_anual_kwh_m2",
+      "tmy_annual",
+      "ghi_anual_tmy",
+      "dni_anual_tmy",
+      "dhi_anual_tmy",
+      "tmy_total",
+      "tmy_media",
+    ]);
+    const nasaAnnual = readSolarMetricNumber(row, [
+      "nasa_anual",
+      "nasa_anual_kwh_m2",
+      "nasa_annual",
+      "ghi_anual_nasa",
+      "dni_anual_nasa",
+      "dhi_anual_nasa",
+      "nasa_total",
+      "nasa_media",
+    ]);
+
+    if (tmyAnnual === null || nasaAnnual === null || tmyAnnual === 0) return null;
+    return ((nasaAnnual - tmyAnnual) / tmyAnnual) * 100;
+  }
+
+  function getSolarIrradianceUnit(row) {
+    const variable = String(row?.variable || "").toUpperCase();
+    if (["GHI", "DNI", "DHI"].includes(variable)) return "W/m²";
+    return row?.unidad || "";
   }
 
   function getSolarCompareMetricRows(metricsBundle) {
@@ -1503,6 +1550,28 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const tbody = byId("solarCompareMetricsBody");
     if (!tbody) return;
     tbody.innerHTML = `<tr><td class="solar-compare-metrics-empty-cell" colspan="9">${escapeSolarHtml(message)}</td></tr>`;
+    setText("solarCompareMetricsInterpretation", "");
+  }
+
+  function renderSolarCompareMetricsInterpretation(rows) {
+    const ghi = rows.find((row) => String(row.variable || "").toUpperCase() === "GHI") || rows[0];
+    const highestNrmse = rows
+      .map((row) => ({ row, nrmse: solarNumeric(row.nrmse_pct_media_tmy) }))
+      .filter((item) => item.nrmse !== null)
+      .sort((a, b) => b.nrmse - a.nrmse)[0]?.row || null;
+
+    if (!ghi || !highestNrmse) {
+      setText("solarCompareMetricsInterpretation", "");
+      return;
+    }
+
+    const bias = formatSolarMetric(ghi.sesgo_pct_media_tmy, 1);
+    const corr = formatSolarMetric(ghi.correlacion_r, 3);
+    const variable = highestNrmse.variable || "N/D";
+    setText(
+      "solarCompareMetricsInterpretation",
+      `NASA POWER 2025 presenta un sesgo de ${bias} % respecto al TMY para GHI, manteniendo una correlación r = ${corr}. Las mayores diferencias se observan en ${variable}.`
+    );
   }
 
   function renderSolarCompareMetricsTable(metricsBundle) {
@@ -1512,8 +1581,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     const rows = getSolarCompareMetricRows(metricsBundle);
     const hasValues = rows.some((row) =>
-      ["mbe_nasa_menos_tmy", "mae", "rmse", "nrmse_pct_media_tmy", "mape_pct", "correlacion_r", "r2", "sesgo_pct_media_tmy"]
-        .some((key) => solarNumeric(row[key]) !== null)
+      ["mbe_nasa_menos_tmy", "mae", "rmse", "nrmse_pct_media_tmy", "correlacion_r", "r2", "sesgo_pct_media_tmy"]
+        .some((key) => solarNumeric(row[key]) !== null) || getSolarAnnualDeltaPct(row) !== null
     );
 
     if (!rows.length || !hasValues) {
@@ -1526,19 +1595,20 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         <td>
           <span class="solar-compare-metrics-var">
             <strong>${escapeSolarHtml(row.variable)}</strong>
-            <small>${escapeSolarHtml(row.unidad || "")}</small>
+            <small>${escapeSolarHtml(getSolarIrradianceUnit(row))}</small>
           </span>
         </td>
+        <td>${formatSolarMetric(getSolarAnnualDeltaPct(row), 2)}</td>
+        <td>${formatSolarMetric(row.sesgo_pct_media_tmy, 2)}</td>
         <td>${formatSolarMetric(row.mbe_nasa_menos_tmy, 2)}</td>
         <td>${formatSolarMetric(row.mae, 2)}</td>
         <td>${formatSolarMetric(row.rmse, 2)}</td>
         <td>${formatSolarMetric(row.nrmse_pct_media_tmy, 2)}</td>
-        <td>${formatSolarMetric(row.mape_pct, 2)}</td>
         <td>${formatSolarMetric(row.correlacion_r, 3)}</td>
         <td>${formatSolarMetric(row.r2, 3)}</td>
-        <td>${formatSolarMetric(row.sesgo_pct_media_tmy, 2)}</td>
       </tr>
     `).join("");
+    renderSolarCompareMetricsInterpretation(rows);
   }
 
   function colorForGhi(value, maxValue) {

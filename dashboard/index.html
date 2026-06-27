@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Storage Analytics | CEME1 FV + DUNE BESS</title>
-  <link rel="stylesheet" href="dashboard.css?v=20260627-0011" />
+  <link rel="stylesheet" href="dashboard.css?v=20260627-0012" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
-  <script src="dashboard.js?v=20260627-0011" defer></script>
+  <script src="dashboard.js?v=20260627-0012" defer></script>
   <style id="dashboard-live-fixes">
     .sim-strip {
       padding: 11px 16px;
@@ -645,21 +645,22 @@
                 <thead>
                   <tr>
                     <th>Variable</th>
+                    <th>Δ anual (%)</th>
+                    <th>Sesgo (%)</th>
                     <th>MBE</th>
                     <th>MAE</th>
                     <th>RMSE</th>
                     <th>nRMSE (%)</th>
-                    <th>MAPE (%)</th>
-                    <th>Correlación r</th>
+                    <th>r</th>
                     <th>R²</th>
-                    <th>Sesgo (%)</th>
                   </tr>
                 </thead>
                 <tbody id="solarCompareMetricsBody"></tbody>
               </table>
             </div>
+            <p id="solarCompareMetricsInterpretation" class="solar-compare-metrics-interpretation"></p>
             <p class="solar-compare-metrics-note">
-              La comparación no constituye una validación meteorológica, sino un contraste entre una serie típica de largo plazo (TMY) y una serie anual histórica 2025 (NASA POWER).
+              La comparación corresponde a un análisis exploratorio entre un Año Meteorológico Típico (TMY) y una serie correspondiente al año calendario 2025 (NASA POWER). Por lo tanto, las métricas describen diferencias entre ambas representaciones del recurso solar y no constituyen una validación frente a mediciones de terreno.
             </p>
           </div>
         </article>
