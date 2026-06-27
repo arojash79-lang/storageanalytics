@@ -4856,6 +4856,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   const PERFIL_EO_URL = "data/perfil_este_oeste_sam_dashboard_bundle.json";
   const PERFIL_EO_FALLBACK = "data/perfil_este_oeste_sam_dashboard_lite.json";
   const SCADA_URL = "data/sam_tmy_nasa_vs_cen_horario_scada_lite.json";
+  const REPORT_COMPARE_METRICS_URL = "data/comparativa_recurso_solar_tmy_vs_nasa_metricas_dashboard.json";
+  const REPORT_CLIPPING_URL = "data/clipping_sam.json";
 
   const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   const SOURCE_META = {
@@ -4895,6 +4897,8 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     validationBundle: null,
     profileBundle: null,
     scadaRows: null,
+    reportCompareMetricsBundle: null,
+    reportClippingBundle: null,
     plantCharts: {},
     reportCharts: {},
     currentPlantMode: "tmy",
@@ -5076,6 +5080,26 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   async function getScadaRows() {
     if (!state.scadaRows) state.scadaRows = await fetchJson(SCADA_URL, null);
     return state.scadaRows;
+  }
+  async function getReportCompareMetricsBundle() {
+    if (state.reportCompareMetricsBundle !== null) return state.reportCompareMetricsBundle;
+    try {
+      state.reportCompareMetricsBundle = await fetchJson(REPORT_COMPARE_METRICS_URL, null);
+    } catch (error) {
+      console.warn("Metricas comparativas TMY vs NASA no disponibles para reporte PDF:", error);
+      state.reportCompareMetricsBundle = null;
+    }
+    return state.reportCompareMetricsBundle;
+  }
+  async function getReportClippingBundle() {
+    if (state.reportClippingBundle !== null) return state.reportClippingBundle;
+    try {
+      state.reportClippingBundle = await fetchJson(REPORT_CLIPPING_URL, null);
+    } catch (error) {
+      console.warn("Datos de clipping no disponibles para reporte PDF:", error);
+      state.reportClippingBundle = null;
+    }
+    return state.reportClippingBundle;
   }
 
   function rowsForCase(rows, mode) {
@@ -5422,7 +5446,130 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
   function findMetric(metrics, regex) { return (metrics || []).find((r) => regex.test(r.comparacion || "")) || {}; }
   function findDelta(deltas, regex) { return (deltas || []).find((r) => regex.test(`${r.eslabon || ""} ${r.comparacion || ""}`)) || {}; }
 
-  function buildReportHtml(validation) {
+  function reportUnavailablePage(message = "Información no disponible. Ejecute nuevamente el script correspondiente.") {
+    return `<p class="sa-report-note"><b>${escapeHtml(message)}</b></p>`;
+  }
+  function reportMetricValue(value, decimals = 2, fallback = "N/D") {
+    const num = n(value);
+    if (num === null) return fallback;
+    return fmt(num, decimals);
+  }
+  function reportMetricNumber(row, keys) {
+    for (const key of keys) {
+      const value = n(row?.[key]);
+      if (value !== null) return value;
+    }
+    return null;
+  }
+  function reportCompareRows(metricsBundle) {
+    const rows = Array.isArray(metricsBundle?.metricas_dashboard)
+      ? metricsBundle.metricas_dashboard
+      : (Array.isArray(metricsBundle?.metricas) ? metricsBundle.metricas : []);
+    return ["GHI", "DNI", "DHI"]
+      .map((variable) => rows.find((row) =>
+        String(row.variable || "").toUpperCase() === variable &&
+        /horaria/i.test(String(row.escala || ""))
+      ) || rows.find((row) => String(row.variable || "").toUpperCase() === variable))
+      .filter(Boolean);
+  }
+  function reportAnnualDeltaPct(row) {
+    const direct = reportMetricNumber(row, [
+      "delta_anual_pct",
+      "delta_pct_anual",
+      "delta_pct_nasa_respecto_tmy",
+      "diferencia_anual_pct",
+      "sesgo_anual_pct",
+    ]);
+    if (direct !== null) return direct;
+    const tmy = reportMetricNumber(row, ["tmy_anual", "tmy_anual_kwh_m2", "tmy_total", "tmy_media"]);
+    const nasa = reportMetricNumber(row, ["nasa_anual", "nasa_anual_kwh_m2", "nasa_total", "nasa_media"]);
+    if (tmy === null || nasa === null || tmy === 0) return null;
+    return ((nasa - tmy) / tmy) * 100;
+  }
+  function buildReportCompareInterpretation(rows) {
+    const valid = rows.filter((row) => row && row.variable);
+    if (!valid.length) return "Información no disponible. Ejecute nuevamente el script correspondiente.";
+    const maxNrmse = valid
+      .map((row) => ({ row, value: n(row.nrmse_pct_media_tmy) }))
+      .filter((item) => item.value !== null)
+      .sort((a, b) => b.value - a.value)[0]?.row;
+    const bestCorr = valid
+      .map((row) => ({ row, value: n(row.correlacion_r) }))
+      .filter((item) => item.value !== null)
+      .sort((a, b) => b.value - a.value)[0]?.row;
+    const maxBias = valid
+      .map((row) => ({ row, value: Math.abs(n(row.sesgo_pct_media_tmy) ?? 0) }))
+      .sort((a, b) => b.value - a.value)[0]?.row;
+    const parts = [];
+    if (maxNrmse) parts.push(`Las diferencias relativas más importantes se observan en ${escapeHtml(maxNrmse.variable)} (nRMSE ${reportMetricValue(maxNrmse.nrmse_pct_media_tmy, 1)}%).`);
+    if (bestCorr) parts.push(`${escapeHtml(bestCorr.variable)} presenta la mayor concordancia entre fuentes (r = ${reportMetricValue(bestCorr.correlacion_r, 3)}).`);
+    if (maxBias) parts.push(`El sesgo porcentual más alto en valor absoluto corresponde a ${escapeHtml(maxBias.variable)} (${reportMetricValue(maxBias.sesgo_pct_media_tmy, 1)}%).`);
+    return parts.join(" ");
+  }
+  function buildReportCompareMetricsSection(metricsBundle) {
+    const rows = reportCompareRows(metricsBundle);
+    const hasData = rows.some((row) => [
+      reportAnnualDeltaPct(row),
+      n(row.sesgo_pct_media_tmy),
+      n(row.mbe_nasa_menos_tmy),
+      n(row.mae),
+      n(row.rmse),
+      n(row.nrmse_pct_media_tmy),
+      n(row.correlacion_r),
+      n(row.r2),
+    ].some((value) => value !== null));
+    if (!rows.length || !hasData) return reportUnavailablePage();
+    const tableRows = rows.map((row) => [
+      `<b>${escapeHtml(row.variable)}</b>`,
+      reportMetricValue(reportAnnualDeltaPct(row), 2),
+      reportMetricValue(row.sesgo_pct_media_tmy, 2),
+      reportMetricValue(row.mbe_nasa_menos_tmy, 2),
+      reportMetricValue(row.mae, 2),
+      reportMetricValue(row.rmse, 2),
+      reportMetricValue(row.nrmse_pct_media_tmy, 2),
+      reportMetricValue(row.correlacion_r, 3),
+      reportMetricValue(row.r2, 3),
+    ]);
+    return `
+      <p><b>TMY Explorador Solar vs NASA POWER 2025</b></p>
+      ${table(["Variable", "Δ anual (%)", "Sesgo (%)", "MBE", "MAE", "RMSE", "nRMSE (%)", "Correlación r", "R²"], tableRows, "meteo-metrics")}
+      <p class="sa-report-note"><b>Interpretación automática:</b> ${buildReportCompareInterpretation(rows)}</p>
+      <p class="sa-report-note">La comparación corresponde a un análisis exploratorio entre un Año Meteorológico Típico (TMY) y una serie histórica correspondiente al año 2025 (NASA POWER). Estas métricas describen diferencias entre ambas representaciones del recurso solar y no constituyen una validación frente a mediciones de terreno.</p>
+    `;
+  }
+  function reportRowsForCase(rows, regex = /nasa|2025/i) {
+    return (Array.isArray(rows) ? rows : []).filter((row) => regex.test(`${row.caso_sam || ""} ${row.nombre_caso || ""} ${row.fuente_meteorologica || ""}`));
+  }
+  function reportPrimaryClippingKpi(clippingBundle) {
+    return reportRowsForCase(clippingBundle?.kpis, /nasa|2025/i)[0] || (Array.isArray(clippingBundle?.kpis) ? clippingBundle.kpis[0] : null);
+  }
+  function buildReportClippingSection(clippingBundle) {
+    const kpi = reportPrimaryClippingKpi(clippingBundle);
+    const monthly = Array.isArray(clippingBundle?.monthly) ? clippingBundle.monthly : [];
+    const dcVsAc = Array.isArray(clippingBundle?.dc_vs_ac) ? clippingBundle.dc_vs_ac : [];
+    if (!clippingBundle || !kpi || !monthly.length) return reportUnavailablePage();
+    const kpisHtml = `<div class="sa-report-kpi-grid">
+      ${kpiCard("ENERGÍA PERDIDA POR CLIPPING", fmt(kpi.energia_clipping_mwh, 1), "MWh", kpi.nombre_caso || "Caso SAM", "orange")}
+      ${kpiCard("CLIPPING", fmt(kpi.clipping_pct_vs_ac_mas_clip ?? kpi.clipping_pct_vs_dc, 2), "%", "Respecto a energía FV modelada", "red")}
+      ${kpiCard("POTENCIA MÁXIMA RECORTADA", fmt(kpi.potencia_clipping_max_mw, 1), "MW", "Máximo horario", "purple")}
+      ${kpiCard("HORAS CON CLIPPING", fmtInt(kpi.horas_con_clipping), "h", "Horas anuales", "green")}
+      ${kpiCard("MES CON MAYOR CLIPPING", kpi.mes_mayor_clipping || "N/D", "", "Mayor pérdida mensual", "orange")}
+    </div>`;
+    const compareRows = [[
+      "Fenómeno interno<br>Antes del punto de conexión<br>Limitación física del inversor<br>Calculado por SAM<br>No depende del CEN",
+      "Fenómeno externo<br>Después del inversor<br>Orden operacional del CEN<br>Obtenido desde registros históricos<br>Energía potencialmente recuperable por el BESS",
+    ]];
+    return `
+      ${kpisHtml}
+      <p class="sa-report-figure-title">Pérdidas mensuales por clipping</p>
+      <div class="sa-report-chart"><canvas id="saReportClippingMonthlyChart"></canvas></div>
+      ${dcVsAc.length ? `<p class="sa-report-figure-title">Perfil horario DC vs AC</p><div class="sa-report-chart"><canvas id="saReportClippingDcAcChart"></canvas></div>` : ""}
+      <p class="sa-report-note">El clipping corresponde a una pérdida interna de la planta fotovoltaica originada cuando la potencia DC disponible supera la capacidad máxima de conversión de los inversores. Este fenómeno es modelado automáticamente por SAM y forma parte de la energía AC simulada (Egrid).</p>
+      ${table(["CLIPPING", "CURTAILMENT"], compareRows, "clipping-compare")}
+    `;
+  }
+
+  function buildReportHtml(validation, compareMetricsBundle = null, clippingBundle = null) {
     const k = validation.kpis || {};
     const fuentes = validation.fuentes_datos || [];
     const resumen = validation.resumen_anual || [];
@@ -5514,11 +5661,13 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
           ["<b>¿Por qué usar NASA POWER y TMY?</b>", `TMY caracteriza el recurso típico; NASA POWER 2025 permite contraste con el año operacional CEN 2025.`],
           ["<b>¿La V invertida quedó modelada?</b>", `El perfil Este/Oeste del JSON muestra la separación horaria de subarrays, útil para validar la arquitectura.`],
         ], "defense"))}
+        ${reportSection("B.", "Métricas comparativas entre fuentes meteorológicas", buildReportCompareMetricsSection(compareMetricsBundle))}
+        ${reportSection("C.", "Análisis del clipping de la planta fotovoltaica", buildReportClippingSection(clippingBundle))}
         <footer class="sa-report-footer">Storage Analytics · Actividad de Graduación MIE UC · CEME1 FV + DUNE BESS · Reporte Bloque 1</footer>
       </div>`;
   }
 
-  function renderReportCharts(validation, profile, scadaRows) {
+  function renderReportCharts(validation, profile, scadaRows, compareMetricsBundle = null, clippingBundle = null) {
     destroyCharts(state.reportCharts);
     if (typeof Chart === "undefined") return;
     const monthly = validation.mensual || [];
@@ -5577,6 +5726,64 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
 
     const cpCanvas = byId("saReportCurtailmentPriceChart");
     if (cpCanvas) state.reportCharts.cp = new Chart(cpCanvas, { type: "bar", data: { labels: hRows.map((r) => r.hora_label), datasets: [barDs("Reducciones CEN", hRowsCurtailment.map((r) => r.reducciones_cen_mwh), colors.gold, "y"), lineDs("Precio marginal", hRows.map((r) => r.precio_spot_usd_mwh), colors.purple, "y1")] }, options: whiteChartOptions({ scales: { y: { title: { display: true, text: "Curtailment promedio [MWh/h]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } }, y1: { position: "right", title: { display: true, text: "Precio marginal [USD/MWh]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { drawOnChartArea: false } } } }), plugins: [whiteCanvasPlugin("cpWhiteBg")] });
+
+    const clippingMonthlyCanvas = byId("saReportClippingMonthlyChart");
+    const clippingMonthly = Array.isArray(clippingBundle?.monthly) ? clippingBundle.monthly : [];
+    if (clippingMonthlyCanvas && clippingMonthly.length) {
+      const labels = MONTHS;
+      const tmyRows = reportRowsForCase(clippingMonthly, /tmy/i);
+      const nasaRows = reportRowsForCase(clippingMonthly, /nasa|2025/i);
+      const valueForMonth = (rows, monthIndex) => {
+        const row = rows.find((item) => (n(item.mes) || MONTHS.indexOf(item.mes_nombre) + 1) === monthIndex);
+        return row ? n(row.energia_clipping_mwh) || 0 : 0;
+      };
+      const clippingDatasets = [];
+      if (tmyRows.length) clippingDatasets.push(barDs("SAM TMY Explorador Solar", labels.map((_, i) => valueForMonth(tmyRows, i + 1)), colors.navy));
+      if (nasaRows.length) clippingDatasets.push(barDs("SAM NASA 2025", labels.map((_, i) => valueForMonth(nasaRows, i + 1)), colors.orange));
+      if (!clippingDatasets.length) {
+        const firstCase = clippingMonthly[0]?.caso_sam || clippingMonthly[0]?.nombre_caso || "";
+        const firstRows = clippingMonthly.filter((row) => `${row.caso_sam || row.nombre_caso || ""}` === firstCase);
+        clippingDatasets.push(barDs(firstRows[0]?.nombre_caso || firstRows[0]?.caso_sam || "Clipping SAM", labels.map((_, i) => valueForMonth(firstRows, i + 1)), colors.orange));
+      }
+      state.reportCharts.clippingMonthly = new Chart(clippingMonthlyCanvas, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: clippingDatasets,
+        },
+        options: whiteChartOptions({ scales: { y: { title: { display: true, text: "MWh/mes", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } } } }),
+        plugins: [whiteCanvasPlugin("clippingMonthlyWhiteBg")],
+      });
+    }
+
+    const clippingDcAcCanvas = byId("saReportClippingDcAcChart");
+    const dcVsAcAll = Array.isArray(clippingBundle?.dc_vs_ac) ? clippingBundle.dc_vs_ac : [];
+    const dcVsAcNasaRows = reportRowsForCase(dcVsAcAll, /nasa|2025/i);
+    const firstDcCase = dcVsAcAll[0]?.caso_sam || dcVsAcAll[0]?.nombre_caso || "";
+    const dcVsAcRows = dcVsAcNasaRows.length
+      ? dcVsAcNasaRows
+      : dcVsAcAll.filter((row) => `${row.caso_sam || row.nombre_caso || ""}` === firstDcCase);
+    if (clippingDcAcCanvas && dcVsAcRows.length) {
+      state.reportCharts.clippingDcAc = new Chart(clippingDcAcCanvas, {
+        type: "line",
+        data: {
+          labels: dcVsAcRows.map((row) => row.hora_label || `${String(row.hora).padStart(2, "0")}:00`),
+          datasets: [
+            lineDs("Potencia DC promedio", dcVsAcRows.map((row) => row.p_dc_prom_mw), colors.teal),
+            lineDs("Potencia AC promedio", dcVsAcRows.map((row) => row.p_ac_prom_mw), colors.navy),
+            { ...lineDs("Límite AC inversores", dcVsAcRows.map((row) => row.p_ac_limit_mw), colors.red), borderDash: [6, 4], pointRadius: 0 },
+            barDs("Clipping promedio", dcVsAcRows.map((row) => row.p_clipping_prom_mw), colors.orange, "y1"),
+          ],
+        },
+        options: whiteChartOptions({
+          scales: {
+            y: { title: { display: true, text: "Potencia DC / AC [MW]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { color: "rgba(148,163,184,.22)" } },
+            y1: { position: "right", title: { display: true, text: "Clipping [MW]", color: "#334155" }, beginAtZero: true, ticks: { color: "#334155" }, grid: { drawOnChartArea: false } },
+          },
+        }),
+        plugins: [whiteCanvasPlugin("clippingDcAcWhiteBg")],
+      });
+    }
   }
 
   function installReportStyles() {
@@ -5746,6 +5953,22 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
         .sa-section-body,.sa-report-table,.sa-report-chart,.sa-report-kpi,.sa-report-decision{break-inside:avoid;page-break-inside:avoid}
       }
     `;
+    style.textContent += `
+      .sa-report-table.meteo-metrics{font-size:10.5px;line-height:1.2}
+      .sa-report-table.meteo-metrics th,.sa-report-table.meteo-metrics td{padding:6px 5px}
+      .sa-report-table.meteo-metrics th:nth-child(1),.sa-report-table.meteo-metrics td:nth-child(1){width:12%}
+      .sa-report-table.meteo-metrics th:nth-child(2),.sa-report-table.meteo-metrics td:nth-child(2),
+      .sa-report-table.meteo-metrics th:nth-child(3),.sa-report-table.meteo-metrics td:nth-child(3),
+      .sa-report-table.meteo-metrics th:nth-child(4),.sa-report-table.meteo-metrics td:nth-child(4),
+      .sa-report-table.meteo-metrics th:nth-child(5),.sa-report-table.meteo-metrics td:nth-child(5),
+      .sa-report-table.meteo-metrics th:nth-child(6),.sa-report-table.meteo-metrics td:nth-child(6),
+      .sa-report-table.meteo-metrics th:nth-child(7),.sa-report-table.meteo-metrics td:nth-child(7),
+      .sa-report-table.meteo-metrics th:nth-child(8),.sa-report-table.meteo-metrics td:nth-child(8),
+      .sa-report-table.meteo-metrics th:nth-child(9),.sa-report-table.meteo-metrics td:nth-child(9){width:11%}
+      .sa-report-table.clipping-compare th,.sa-report-table.clipping-compare td{width:50%;font-size:12px;line-height:1.35}
+      .sa-pdf-export-doc .sa-report-table.meteo-metrics{font-size:7.3px}
+      .sa-pdf-export-doc .sa-report-table.clipping-compare th,.sa-pdf-export-doc .sa-report-table.clipping-compare td{font-size:8.5px}
+    `;
     document.head.appendChild(style);
   }
 
@@ -5797,10 +6020,16 @@ function avg(rows,k){ return rows.length ? sum(rows,k)/rows.length : 0; }
     const content = byId("reportBloque1Content") || byId("view-reportes");
     if (!content) return;
     setText("reportPdfStatus", "Cargando JSON...");
-    const [validation, profile, scadaRows] = await Promise.all([getValidationBundle(), getProfileBundle(), getScadaRows()]);
-    content.innerHTML = buildReportHtml(validation);
+    const [validation, profile, scadaRows, compareMetricsBundle, clippingBundle] = await Promise.all([
+      getValidationBundle(),
+      getProfileBundle(),
+      getScadaRows(),
+      getReportCompareMetricsBundle(),
+      getReportClippingBundle(),
+    ]);
+    content.innerHTML = buildReportHtml(validation, compareMetricsBundle, clippingBundle);
     setText("reportPdfStatus", "Reporte cargado desde JSON");
-    setTimeout(() => renderReportCharts(validation, profile, scadaRows), 100);
+    setTimeout(() => renderReportCharts(validation, profile, scadaRows, compareMetricsBundle, clippingBundle), 100);
     const button = byId("exportReportPdfBtn");
     if (button && button.dataset.saReportExportBound !== "true") {
       button.dataset.saReportExportBound = "true";
